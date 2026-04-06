@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>フローリングは何枚必要？必要枚数の計算方法とロス率の考え方 | 林材木店ブログ</title>
+  <meta name="description" content="桧フローリング・羽目板の必要枚数の計算方法をわかりやすく解説。ロス率・セット数・畳数換算など、注文前に必ず確認したいポイントを全解説。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .article-wrap { max-width:780px; margin:0 auto; padding:48px 40px 80px; }
+    .article-cat { display:inline-block; font-size:0.72rem; font-weight:700; color:var(--green-mid); background:#e8f5e9; padding:4px 12px; border-radius:20px; margin-bottom:14px; }
+    .article-title { font-size:clamp(1.4rem,3vw,2rem); color:var(--wood-dark); line-height:1.4; margin-bottom:16px; }
+    .article-meta { font-size:0.78rem; color:var(--text-light); display:flex; gap:16px; flex-wrap:wrap; margin-bottom:40px; }
+    .article-body h2 { font-size:1.3rem; color:var(--wood-dark); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid #e8ddd0; }
+    .article-body h3 { font-size:1.05rem; color:var(--wood-dark); margin:28px 0 12px; }
+    .article-body p { font-size:0.9rem; color:var(--text-mid); line-height:1.95; margin-bottom:16px; }
+    .article-body ul,.article-body ol { margin:12px 0 20px 24px; font-size:0.88rem; color:var(--text-mid); line-height:1.9; }
+    .calc-box { background:#f0f8f0; border:1px solid var(--green-light); border-radius:10px; padding:24px; margin:24px 0; }
+    .calc-box h4 { font-size:0.95rem; color:var(--green-dark); margin-bottom:14px; font-weight:700; }
+    .calc-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:0.85rem; color:var(--text-mid); flex-wrap:wrap; }
+    .calc-row label { min-width:90px; }
+    .calc-input { width:90px; padding:6px 10px; border:1px solid #c8e0c8; border-radius:4px; font-size:0.9rem; text-align:center; }
+    .calc-result-box { background:var(--green-dark); color:#fff; border-radius:6px; padding:14px 18px; margin-top:12px; font-size:0.9rem; line-height:1.8; display:none; }
+    .calc-result-box strong { font-size:1.3rem; }
+    .tatami-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.85rem; }
+    .tatami-table th { background:var(--wood-dark); color:#fff; padding:10px 14px; text-align:left; }
+    .tatami-table td { padding:10px 14px; border-bottom:1px solid #e8ddd0; color:var(--text-mid); }
+    .tatami-table tr:nth-child(even) td { background:var(--wood-cream); }
+    .warning-box { background:#fff8e1; border-left:4px solid #f0a500; padding:16px 20px; border-radius:0 6px 6px 0; margin:20px 0; font-size:0.85rem; color:#7a5c00; line-height:1.8; }
+    .article-cta { background:linear-gradient(135deg,var(--wood-dark),var(--green-dark)); border-radius:12px; padding:32px; text-align:center; margin-top:48px; color:var(--white); }
+    .article-cta h3 { color:var(--white); margin-bottom:8px; }
+    .article-cta p { color:rgba(255,255,255,0.8); font-size:0.85rem; margin-bottom:20px; }
+    @media(max-width:768px){ .article-wrap{padding:32px 20px 60px;} }
+  </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"フローリングは何枚必要？必要枚数の計算方法とロス率の考え方","datePublished":"2026-01-20","author":{"@type":"Organization","name":"林材木店"}}</script>
+</head>
+<body>
+<div id="site-header"></div>
+<nav class="breadcrumb">
+  <a href="../index.html">トップ</a><span class="sep">›</span>
+  <a href="../blog.html">ブログ</a><span class="sep">›</span>
+  <span>計算・見積もり</span>
+</nav>
+<article class="article-wrap">
+  <span class="article-cat">計算・見積もり</span>
+  <h1 class="article-title">フローリングは何枚必要？<br>必要枚数の計算方法とロス率の考え方</h1>
+  <div class="article-meta">
+    <span>📅 2026年1月20日</span><span>✍ 林材木店スタッフ</span><span>⏱ 読了約5分</span>
+  </div>
+  <div class="article-body">
+    <p>フローリングを注文する際、「何枚（何セット）注文すればいいの？」というご質問は非常に多いです。少なすぎると後で追加注文が必要になり、多すぎると無駄が出ます。この記事では、必要枚数の正しい計算方法を解説します。</p>
+
+    <h2>基本的な計算式</h2>
+    <p>必要セット数 ＝ 床面積（㎡） ÷ 1セットあたりの面積（㎡） × ロス率</p>
+    <p>これだけです。ひとつずつ解説します。</p>
+
+    <h3>① 床面積を測る</h3>
+    <p>施工する部屋の縦×横（メートル）を測って㎡を計算します。<br>例：6畳間の場合 → 約3.6m × 2.7m ≒ <strong>9.72㎡</strong></p>
+
+    <h3>② 1セットあたりの面積を確認する</h3>
+    <p>商品ページの「寸法」と「セット枚数」から計算できます。<br>例：108mm幅 × 1820mm長 × 20枚 → 0.108 × 1.820 × 20 ≒ <strong>3.93㎡/セット</strong></p>
+
+    <h3>③ ロス率を加える</h3>
+    <p>カットした端材や施工ミスの分を考慮してロス率を掛けます。</p>
+
+    <h2>ロス率の目安</h2>
+    <table class="tatami-table">
+      <thead><tr><th>施工方法</th><th>ロス率</th><th>備考</th></tr></thead>
+      <tbody>
+        <tr><td>直張り（並べて張る）</td><td>5%</td><td>最もロスが少ない</td></tr>
+        <tr><td>斜め張り（45度）</td><td>10〜15%</td><td>カット量が増える</td></tr>
+        <tr><td>ヘリンボーン張り</td><td>15〜20%</td><td>複雑な形状でロスが多い</td></tr>
+        <tr><td>部屋が複雑な形状</td><td>+5%</td><td>出隅・入隅が多い場合は追加</td></tr>
+      </tbody>
+    </table>
+
+    <h2>📐 かんたん計算ツール</h2>
+    <div class="calc-box">
+      <h4>必要セット数を計算する</h4>
+      <div class="calc-row">
+        <label>床面積</label>
+        <input class="calc-input" id="b-area" type="number" min="1" placeholder="20" step="0.5">
+        <span>㎡</span>
+      </div>
+      <div class="calc-row">
+        <label>1枚の幅</label>
+        <input class="calc-input" id="b-width" type="number" placeholder="108" value="108">
+        <span>mm</span>
+      </div>
+      <div class="calc-row">
+        <label>1枚の長さ</label>
+        <input class="calc-input" id="b-length" type="number" placeholder="1820" value="1820">
+        <span>mm</span>
+      </div>
+      <div class="calc-row">
+        <label>セット枚数</label>
+        <input class="calc-input" id="b-qty" type="number" placeholder="20" value="20">
+        <span>枚/セット</span>
+      </div>
+      <div class="calc-row">
+        <label>ロス率</label>
+        <select class="calc-input" id="b-loss" style="width:130px;">
+          <option value="1.05">5%（直張り）</option>
+          <option value="1.10" selected>10%（斜め張り）</option>
+          <option value="1.15">15%（複雑）</option>
+          <option value="1.20">20%（ヘリンボーン）</option>
+        </select>
+      </div>
+      <button class="btn btn-outline" style="margin-top:6px;font-size:0.82rem;" onclick="blogCalc()">計算する</button>
+      <div class="calc-result-box" id="b-result"></div>
+    </div>
+
+    <div class="warning-box">
+      <strong>⚠ 注意：少し多めに注文を</strong><br>
+      計算結果ぴったりではなく、1〜2セット多めに注文することをおすすめします。
+      後から同じ商品を追加注文した際、木の色・乾燥状態が微妙に異なることがあるためです。
+      余った分は補修用に保管しておくのがベストです。
+    </div>
+
+    <h2>畳数から㎡を計算する</h2>
+    <table class="tatami-table">
+      <thead><tr><th>畳数</th><th>㎡（目安）</th></tr></thead>
+      <tbody>
+        <tr><td>4.5畳</td><td>約7.3㎡</td></tr>
+        <tr><td>6畳</td><td>約9.9㎡</td></tr>
+        <tr><td>8畳</td><td>約13.2㎡</td></tr>
+        <tr><td>10畳</td><td>約16.5㎡</td></tr>
+        <tr><td>12畳</td><td>約19.8㎡</td></tr>
+        <tr><td>LDK 20畳</td><td>約33㎡</td></tr>
+      </tbody>
+    </table>
+
+    <p>迷ったら電話・LINEでお問い合わせください。部屋の広さを教えていただければ、スタッフが必要枚数をお伝えします。</p>
+
+    <div class="article-cta">
+      <h3>📐 枚数が決まったら注文へ</h3>
+      <p>計算で必要なセット数がわかったら、まずはサンプルで質感を確認してからご注文を。</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="../sample.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">🎁 無料サンプル</a>
+        <a href="../products.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">商品一覧を見る</a>
+      </div>
+    </div>
+  </div>
+</article>
+<div id="site-footer"></div>
+<script src="../data/products.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/components.js"></script>
+<script>
+function blogCalc() {
+  const area = parseFloat(document.getElementById('b-area').value);
+  const width = parseFloat(document.getElementById('b-width').value);
+  const length = parseFloat(document.getElementById('b-length').value);
+  const qty = parseInt(document.getElementById('b-qty').value);
+  const loss = parseFloat(document.getElementById('b-loss').value);
+  if (!area || !width || !length || !qty) return;
+  const oneSheet = (width * length) / 1_000_000;
+  const setArea = oneSheet * qty;
+  const needed = area * loss;
+  const sets = Math.ceil(needed / setArea);
+  const sheets = sets * qty;
+  const totalArea = (setArea * sets).toFixed(2);
+  const r = document.getElementById('b-result');
+  r.style.display = '';
+  r.innerHTML = `必要セット数：<strong>${sets}セット</strong>（${sheets}枚）<br>カバー面積：約${totalArea}㎡（余裕：${((setArea*sets-area)/area*100).toFixed(0)}%）<br><small>※余裕を持って1〜2セット多めの注文をおすすめします</small>`;
+}
+</script>
+</body>
+</html>

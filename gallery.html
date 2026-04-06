@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>施工事例 | 林材木店 桧フローリング・羽目板</title>
+  <meta name="description" content="林材木店の桧フローリング・羽目板を使った施工事例をご紹介。リビング・寝室・和室・子ども部屋・廊下など様々な空間の実例写真。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .gallery-filter {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+    .gallery-filter-btn {
+      padding: 8px 20px;
+      border: 1px solid #e8ddd0;
+      border-radius: 20px;
+      background: var(--white);
+      color: var(--text-mid);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .gallery-filter-btn.active,
+    .gallery-filter-btn:hover {
+      background: var(--wood-dark);
+      color: var(--white);
+      border-color: var(--wood-dark);
+    }
+
+    /* 木目風グラデーション（画像プレースホルダー） */
+    .gal-bg-living    { background: linear-gradient(160deg, #c8a882 0%, #a07850 40%, #7a5c3e 100%); }
+    .gal-bg-bedroom   { background: linear-gradient(160deg, #d4b896 0%, #b08060 40%, #8a6848 100%); }
+    .gal-bg-washitsu  { background: linear-gradient(160deg, #a8c5a0 0%, #7a9a78 40%, #5a7a58 100%); }
+    .gal-bg-kids      { background: linear-gradient(160deg, #f0d9be 0%, #c8a882 40%, #a07850 100%); }
+    .gal-bg-hallway   { background: linear-gradient(160deg, #b89878 0%, #8a6840 40%, #6a4820 100%); }
+    .gal-bg-wall      { background: linear-gradient(160deg, #d8c8b8 0%, #b0986a 40%, #906838 100%); }
+    .gal-bg-bathroom  { background: linear-gradient(160deg, #c0d8e0 0%, #88b0c0 40%, #5888a0 100%); }
+    .gal-bg-office    { background: linear-gradient(160deg, #e0d0c0 0%, #c0a080 40%, #907050 100%); }
+    .gal-bg-diy       { background: linear-gradient(160deg, #d0c8a0 0%, #a09868 40%, #786838 100%); }
+
+    .gallery-card-img-placeholder {
+      position: relative;
+    }
+    .gallery-card-img-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.05) 40px,
+        rgba(255,255,255,0.05) 41px
+      );
+    }
+    .gallery-card-img-placeholder .gal-icon {
+      position: relative;
+      z-index: 1;
+      font-size: 3rem;
+      opacity: 0.8;
+    }
+
+    /* モーダル */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--white);
+      border-radius: 12px;
+      max-width: 760px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      animation: modalIn 0.22s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px; right: 16px;
+      background: rgba(0,0,0,0.4);
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-img-area {
+      width: 100%;
+      height: 360px;
+    }
+    .modal-info { padding: 20px 24px 24px; }
+    .modal-info h3 {
+      font-size: 1.1rem;
+      color: var(--wood-dark);
+      margin-bottom: 8px;
+    }
+    .modal-info p {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+    .modal-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .modal-tag {
+      font-size: 0.72rem;
+      background: var(--wood-pale);
+      color: var(--wood-mid);
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+    }
+
+    /* CTA banner */
+    .gallery-cta {
+      background: linear-gradient(135deg, var(--wood-dark), var(--green-dark));
+      color: var(--white);
+      text-align: center;
+      padding: 64px 40px;
+    }
+    .gallery-cta h2 {
+      font-size: 1.6rem;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .gallery-cta p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 32px;
+    }
+  </style>
+
+  <!-- Schema.org: 施工事例ページ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "施工事例 | 林材木店",
+    "description": "桧フローリング・羽目板の施工事例集",
+    "url": "https://hayazai.com/gallery.html",
+    "publisher": {
+      "@type": "LocalBusiness",
+      "name": "林材木店",
+      "telephone": "0538-58-2395",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "磐田市",
+        "addressRegion": "静岡県",
+        "addressCountry": "JP"
+      }
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>施工事例</h1>
+  <p>桧フローリング・羽目板を使った実際の空間をご覧ください</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <span>施工事例</span>
+</nav>
+
+<section>
+  <div class="section-inner" style="padding-top:48px;">
+    <p class="section-label">Case Studies</p>
+    <h2 class="section-title">施工事例ギャラリー</h2>
+    <p class="section-desc">リビング・寝室・和室・子ども部屋・廊下など、様々な空間への施工事例をご紹介します。素材の選び方のご参考にどうぞ。</p>
+
+    <!-- フィルター -->
+    <div class="gallery-filter">
+      <button class="gallery-filter-btn active" data-filter="all">すべて</button>
+      <button class="gallery-filter-btn" data-filter="flooring">フローリング</button>
+      <button class="gallery-filter-btn" data-filter="panel">羽目板</button>
+      <button class="gallery-filter-btn" data-filter="living">リビング</button>
+      <button class="gallery-filter-btn" data-filter="bedroom">寝室</button>
+      <button class="gallery-filter-btn" data-filter="kids">子ども部屋</button>
+      <button class="gallery-filter-btn" data-filter="washitsu">和室</button>
+      <button class="gallery-filter-btn" data-filter="diy">DIY</button>
+    </div>
+
+    <!-- ギャラリーグリッド -->
+    <div class="gallery-grid" id="gallery-grid"></div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="gallery-cta">
+  <h2>あなたの空間にも桧を</h2>
+  <p>「どのグレードにすればいい？」「何枚必要？」—— お気軽にご相談ください。<br>まずは無料サンプルで本物の質感をお確かめください。</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <a href="sample.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">🎁 無料サンプル請求</a>
+    <a href="products.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">商品一覧を見る</a>
+    <a href="https://lin.ee/469dvgvz" target="_blank" rel="noopener" class="btn btn-lg" style="background:#06C755;color:#fff;">💬 LINEで相談</a>
+  </div>
+</div>
+
+<!-- モーダル -->
+<div class="modal-overlay" id="gallery-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="modal-img-area" id="modal-img"></div>
+    <div class="modal-info">
+      <h3 id="modal-title"></h3>
+      <p id="modal-desc"></p>
+      <div class="modal-tags" id="modal-tags"></div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="data/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/components.js"></script>
+<script>
+const GALLERY_ITEMS = [
+  {
+    id: 1,
+    title: 'リビング・フローリング施工（無節）',
+    cat: ['flooring', 'living'],
+    bg: 'gal-bg-living',
+    icon: '🏠',
+    product: 'フローリング 15mm 無節 A級品',
+    location: '静岡県浜松市 個人宅',
+    desc: '20畳のリビングに無節A級品を施工。木目が均一で美しく、来客にも「高級感がある」と好評。床暖房対応の15mm厚を採用。',
+    tags: ['フローリング15mm', '無節', 'リビング', '個人宅'],
+  },
+  {
+    id: 2,
+    title: '寝室・フローリング施工（小節）',
+    cat: ['flooring', 'bedroom'],
+    bg: 'gal-bg-bedroom',
+    icon: '🛏',
+    product: 'フローリング 15mm 小節 A級品',
+    location: '愛知県名古屋市 注文住宅',
+    desc: '寝室に小節A級品を使用。桧の優しい香りが心地よい眠りを誘い、冬でも素足で歩けると施主様から大変喜ばれました。',
+    tags: ['フローリング15mm', '小節', '寝室', '注文住宅'],
+  },
+  {
+    id: 3,
+    title: '和室・羽目板施工（全面）',
+    cat: ['panel', 'washitsu'],
+    bg: 'gal-bg-washitsu',
+    icon: '🎋',
+    product: '羽目板 12mm 小節 A級品',
+    location: '静岡県磐田市 新築一戸建て',
+    desc: '和室の壁面を全面桧羽目板で仕上げ。天井まで届く桧の壁は圧倒的な存在感。季節を問わず調湿効果が実感できると好評。',
+    tags: ['羽目板', '小節', '和室', '壁面'],
+  },
+  {
+    id: 4,
+    title: '子ども部屋・フローリング施工',
+    cat: ['flooring', 'kids'],
+    bg: 'gal-bg-kids',
+    icon: '🧸',
+    product: 'フローリング 15mm 節有 B級品',
+    location: '神奈川県横浜市 リフォーム',
+    desc: '子どもが床で遊ぶことを考え、柔らかく温かい桧を選択。節有B級品でコストを抑えながら、素足感触は最高との声をいただきました。',
+    tags: ['フローリング15mm', '節有', '子ども部屋', 'リフォーム'],
+  },
+  {
+    id: 5,
+    title: '廊下・フローリング施工（長尺）',
+    cat: ['flooring'],
+    bg: 'gal-bg-hallway',
+    icon: '🚶',
+    product: 'フローリング 12mm 小節 A級品',
+    location: '東京都世田谷区 マンションリフォーム',
+    desc: '廊下に12mm厚・長尺タイプを施工。薄型のため既存の床高との段差もなく、長い廊下に木目が映える仕上がりになりました。',
+    tags: ['フローリング12mm', '小節', '廊下', 'マンション'],
+  },
+  {
+    id: 6,
+    title: '壁面・羽目板施工（リビング）',
+    cat: ['panel', 'living'],
+    bg: 'gal-bg-wall',
+    icon: '🪵',
+    product: '羽目板 12mm 特上小 A級品',
+    location: '大阪府大阪市 店舗内装',
+    desc: 'カフェの壁面に特上小A級品の羽目板を施工。自然素材の温もりがお客様にも好評で、「木の香りがする」と来店者に話題に。',
+    tags: ['羽目板', '特上小', 'リビング', '店舗'],
+  },
+  {
+    id: 7,
+    title: 'DIY施工・フローリング張り替え',
+    cat: ['flooring', 'diy'],
+    bg: 'gal-bg-diy',
+    icon: '🔨',
+    product: 'フローリング 15mm 節有 B級品',
+    location: '千葉県船橋市 DIYリフォーム',
+    desc: '施主様自身でDIY施工。「超仕上げ」の仕上がりのよさで素人でも扱いやすく、フローリング施工が初めてでも綺麗に仕上がったとのこと。',
+    tags: ['フローリング15mm', '節有', 'DIY', '個人宅'],
+  },
+  {
+    id: 8,
+    title: '浴室前・脱衣所フローリング',
+    cat: ['flooring'],
+    bg: 'gal-bg-bathroom',
+    icon: '🛁',
+    product: 'フローリング 12mm 無節 A級品',
+    location: '静岡県静岡市 工務店施工',
+    desc: '脱衣所に無節A級品を採用。桧は水に強い木材で、素足での気持ちよさが特に脱衣所で実感できます。防カビ処理を施した仕上げ。',
+    tags: ['フローリング12mm', '無節', '脱衣所', '工務店'],
+  },
+  {
+    id: 9,
+    title: 'ホームオフィス・フローリング施工',
+    cat: ['flooring'],
+    bg: 'gal-bg-office',
+    icon: '💻',
+    product: 'フローリング 15mm 小節 A級品',
+    location: '東京都港区 在宅ワークスペース',
+    desc: '自宅オフィスに桧フローリングを採用。木の香りと温かみが集中力を高めるとのお声をいただきました。椅子キャスターも問題なし。',
+    tags: ['フローリング15mm', '小節', 'オフィス', '個人宅'],
+  },
+];
+
+let currentFilter = 'all';
+
+function renderGallery() {
+  const grid = document.getElementById('gallery-grid');
+  const filtered = currentFilter === 'all'
+    ? GALLERY_ITEMS
+    : GALLERY_ITEMS.filter(item => item.cat.includes(currentFilter));
+
+  grid.innerHTML = filtered.map(item => `
+    <div class="gallery-card" onclick="openModal(${item.id})">
+      <div class="gallery-card-img-placeholder ${item.bg}">
+        <span class="gal-icon">${item.icon}</span>
+      </div>
+      <div class="gallery-card-body">
+        <div class="gallery-card-tag">${item.tags.slice(0, 2).join(' · ')}</div>
+        <div class="gallery-card-title">${item.title}</div>
+        <div class="gallery-card-desc">${item.location}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openModal(id) {
+  const item = GALLERY_ITEMS.find(x => x.id === id);
+  if (!item) return;
+  document.getElementById('modal-img').className = `modal-img-area ${item.bg}`;
+  document.getElementById('modal-img').style.display = 'flex';
+  document.getElementById('modal-img').style.alignItems = 'center';
+  document.getElementById('modal-img').style.justifyContent = 'center';
+  document.getElementById('modal-img').style.fontSize = '5rem';
+  document.getElementById('modal-img').textContent = item.icon;
+  document.getElementById('modal-title').textContent = item.title;
+  document.getElementById('modal-desc').innerHTML =
+    `<strong>使用商品：</strong>${item.product}<br>` +
+    `<strong>施工場所：</strong>${item.location}<br><br>${item.desc}`;
+  document.getElementById('modal-tags').innerHTML =
+    item.tags.map(t => `<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('gallery-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('gallery-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// フィルター
+document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderGallery();
+  });
+});
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('gallery-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('gallery-modal')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.addEventListener('DOMContentLoaded', renderGallery);
+</script>
+</body>
+</html>

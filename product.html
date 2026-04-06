@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <!-- Schema.org: Product（JS側で動的に書き換える） -->
+  <script id="product-schema" type="application/ld+json">{}</script>
   <style>
     .product-detail {
       max-width: 1100px;
@@ -196,9 +198,35 @@
 
     <div style="display:flex;gap:12px;margin-top:12px;">
       <a href="cart.html" class="btn btn-outline" style="flex:1;justify-content:center;">カートを見る</a>
-      <a href="contact.html#sample" class="btn btn-green" style="flex:1;justify-content:center;">サンプル請求</a>
+      <a href="sample.html" class="btn btn-green" style="flex:1;justify-content:center;">🎁 サンプル請求</a>
+    </div>
+
+    <!-- 枚数計算ツール -->
+    <div class="qty-calc-box" id="qty-calc-box">
+      <h4>📐 必要枚数かんたん計算</h4>
+      <div class="qty-calc-row">
+        <label>床面積</label>
+        <input class="qty-calc-input" id="calc-area" type="number" min="1" placeholder="20" step="0.5">
+        <span>㎡</span>
+      </div>
+      <div class="qty-calc-row">
+        <label>ロス率</label>
+        <select class="qty-calc-input" id="calc-loss" style="width:120px;">
+          <option value="1.05">5%（直張り）</option>
+          <option value="1.10" selected>10%（斜め張り）</option>
+          <option value="1.15">15%（複雑な形）</option>
+        </select>
+      </div>
+      <button class="btn btn-outline" style="margin-top:6px;font-size:0.82rem;" onclick="calcQty()">計算する</button>
+      <div class="qty-calc-result" id="calc-result" style="display:none;"></div>
     </div>
   </div>
+</div>
+
+<!-- よく一緒に購入される商品 -->
+<div class="recommend-section" id="recommend-section" style="display:none;">
+  <h2>🛒 よく一緒に購入される商品</h2>
+  <div class="product-grid" id="recommend-grid"></div>
 </div>
 
 <!-- 関連商品 -->
@@ -249,6 +277,24 @@ function initProduct() {
 
   currentProduct = p;
   document.title = `${p.name} | 林材木店`;
+
+  // Schema.org Product 構造化データ
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": p.name,
+    "description": `国産無垢桧${p.cat.startsWith('flooring')?'フローリング':'羽目板'} ${p.thick}×${p.width}×${p.length}mm ${p.qty}枚入 ${p.quality}`,
+    "brand": { "@type": "Brand", "name": "林材木店" },
+    "offers": {
+      "@type": "Offer",
+      "price": p.price,
+      "priceCurrency": "JPY",
+      "availability": p.outOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+      "seller": { "@type": "Organization", "name": "林材木店" }
+    }
+  };
+  if (p.img) schema.image = p.img;
+  document.getElementById('product-schema').textContent = JSON.stringify(schema);
   document.getElementById('breadcrumb-name').textContent = p.name;
 
   // 画像
@@ -328,6 +374,66 @@ function initProduct() {
       </div>
     </div>
   `).join('');
+
+  // よく一緒に購入される商品（異カテゴリから相性の良い商品）
+  // フローリング → 羽目板、羽目板 → フローリング を優先
+  const crossCat = p.cat.startsWith('flooring') ? 'panel' : 'flooring15';
+  const recommend = PRODUCTS
+    .filter(x => x.cat === crossCat && x.quality === p.quality && !x.outOfStock && x.id !== p.id)
+    .slice(0, 3);
+
+  if (recommend.length > 0) {
+    document.getElementById('recommend-section').style.display = '';
+    document.getElementById('recommend-grid').innerHTML = recommend.map(r => `
+      <div class="product-card">
+        <img class="product-card-img" src="${r.img}" alt="${r.name}"
+          onerror="this.style.background='#f5ede0';this.removeAttribute('src')">
+        <div class="product-card-body">
+          <div class="product-card-badges">
+            <span class="badge badge-grade-${r.grade.toLowerCase()}">${r.grade}級品</span>
+            <span class="badge badge-quality">${r.quality}</span>
+          </div>
+          <div class="product-card-name">${r.name}</div>
+          <div class="product-card-spec">${r.thick}×${r.width}×${r.length}mm / ${r.qty}枚</div>
+          <div class="product-card-price">¥${r.price.toLocaleString()} <span>（税込）</span></div>
+          <div class="product-card-actions">
+            <a href="product.html?id=${r.id}" class="btn btn-outline btn-sm">詳細</a>
+            <button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}');this.textContent='追加済';">カートへ</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 枚数計算ツールに商品情報を紐付け
+  window._currentProduct = p;
+}
+
+function calcQty() {
+  const area = parseFloat(document.getElementById('calc-area').value);
+  const loss = parseFloat(document.getElementById('calc-loss').value);
+  const p = window._currentProduct;
+  if (!area || area <= 0 || !p) return;
+
+  // 1枚の面積（㎡） = 幅(mm) × 長さ(mm) / 1,000,000
+  const oneSheet = (p.width * p.length) / 1_000_000;
+  // セットあたりの面積
+  const setArea = oneSheet * p.qty;
+  // 必要面積（ロス込み）
+  const needed = area * loss;
+  // 必要セット数（切り上げ）
+  const sets = Math.ceil(needed / setArea);
+  const totalSheets = sets * p.qty;
+  const totalPrice = sets * p.price;
+  const totalArea = (setArea * sets).toFixed(2);
+
+  const result = document.getElementById('calc-result');
+  result.style.display = '';
+  result.innerHTML = `
+    必要セット数：<strong>${sets}セット</strong>（${totalSheets}枚）<br>
+    合計面積：約 ${totalArea}㎡（余裕：約${((setArea*sets - area)*100/area).toFixed(0)}%）<br>
+    合計金額目安：<strong>¥${totalPrice.toLocaleString()}</strong>（税込・送料別）
+  `;
 }
 
 document.addEventListener('DOMContentLoaded', initProduct);
