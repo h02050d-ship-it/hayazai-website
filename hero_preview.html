@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ヒーロー画像候補</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&family=Noto+Sans+JP:wght@400&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: #111; }
+
+    h1 { color:#fff; text-align:center; padding:32px; font-size:1rem; letter-spacing:.1em; opacity:.6; }
+
+    .candidates { display:flex; flex-direction:column; gap:0; }
+
+    .candidate {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 60px 80px;
+    }
+
+    .candidate::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background: linear-gradient(135deg, rgba(61,43,31,0.72) 0%, rgba(45,74,45,0.55) 100%);
+    }
+
+    .label {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      z-index: 10;
+    }
+
+    .choose-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: #fff;
+      color: #3d2b1f;
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      z-index: 10;
+      transition: background .2s;
+    }
+    .choose-btn:hover { background: #f0d9be; }
+    .choose-btn.selected { background: #4a7c59; color: #fff; }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content p {
+      font-size: .72rem;
+      letter-spacing: .3em;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .content h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2.8rem;
+      color: #fff;
+      line-height: 1.35;
+      margin-bottom: 20px;
+    }
+
+    .content h2 em { font-style:normal; color:#f0d9be; }
+
+    /* 各候補の背景 - 木床・木壁が主役 */
+    .c1 { background: url('https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=1600&q=80') center/cover no-repeat; }
+    .c2 { background: url('https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1600&q=80') center/cover no-repeat; }
+    .c3 { background: url('https://images.unsplash.com/photo-1560440021-33f9b867899d?w=1600&q=80') center/cover no-repeat; }
+    .c4 { background: url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1600&q=80') center/cover no-repeat; }
+    .c5 { background: url('https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?w=1600&q=80') center/cover no-repeat; }
+    .c6 { background: url('https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=1600&q=80') center/cover no-repeat; }
+  </style>
+</head>
+<body>
+
+<h1>▼ スクロールして好きな画像を選んでください</h1>
+
+<div class="candidates">
+
+  <div class="candidate c1">
+    <div class="label">候補 1：落ち着いた木床リビング</div>
+    <button class="choose-btn" onclick="select(this,'1')">これを選ぶ</button>
+    <div class="content">
+      <p>Hinoki Wood Specialist Since 1968</p>
+      <h2>桧のある暮らし、<br><em>本物の木</em>をあなたへ。</h2>
+    </div>
+  </div>
+
+  <div class="candidate c2">
+    <div class="label">候補 2：木床ダイニング・明るい空間</div>
+    <button class="choose-btn" onclick="select(this,'2')">これを選ぶ</button>
+    <div class="content">
+      <p>Hinoki Wood Specialist Since 1968</p>
+      <h2>桧のある暮らし、<br><em>本物の木</em>をあなたへ。</h2>
+    </div>
+  </div>
+
+  <div class="candidate c3">
+    <div class="label">候補 3：木壁パネルが映える部屋</div>
+    <button class="choose-btn" onclick="select(this,'3')">これを選ぶ</button>
+    <div class="content">
+      <p>Hinoki Wood Specialist Since 1968</p>
+      <h2>桧のある暮らし、<br><em>本物の木</em>をあなたへ。</h2>
+    </div>
+  </div>
+
+  <div class="candidate c4">
+    <div class="label">候補 4：木床寝室・自然光</div>
+    <button class="choose-btn" onclick="select(this,'4')">これを選ぶ</button>
+    <div class="content">
+      <p>Hinoki Wood Specialist Since 1968</p>
+      <h2>桧のある暮らし、<br><em>本物の木</em>をあなたへ。</h2>
+    </div>
+  </div>
+
+  <div class="candidate c5">
+    <div class="label">候補 5：木天井＋木壁の和モダン空間</div>
+    <button class="choose-btn" onclick="select(this,'5')">これを選ぶ</button>
+    <div class="content">
+      <p>Hinoki Wood Specialist Since 1968</p>
+      <h2>桧のある暮らし、<br><em>本物の木</em>をあなたへ。</h2>
+    </div>
+  </div>
+
+  <div class="candidate c6">
+    <div class="label">候補 6：開放的な木床リビング</div>
+    <button class="choose-btn" onclick="select(this,'6')">これを選ぶ</button>
+    <div class="content">
+      <p>Hinoki Wood Specialist Since 1968</p>
+      <h2>桧のある暮らし、<br><em>本物の木</em>をあなたへ。</h2>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const urls = {
+  '1': 'https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=1600&q=80',
+  '2': 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1600&q=80',
+  '3': 'https://images.unsplash.com/photo-1560440021-33f9b867899d?w=1600&q=80',
+  '4': 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1600&q=80',
+  '5': 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?w=1600&q=80',
+  '6': 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=1600&q=80',
+};
+
+function select(btn, num) {
+  document.querySelectorAll('.choose-btn').forEach(b => {
+    b.textContent = 'これを選ぶ';
+    b.classList.remove('selected');
+  });
+  btn.textContent = '✓ 選択済み';
+  btn.classList.add('selected');
+  alert('候補 ' + num + ' を選択しました！\nチャットに「候補○番」と送ってください。');
+}
+</script>
+</body>
+</html>

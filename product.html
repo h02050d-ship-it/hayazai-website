@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品詳細 | 林材木店</title>
+  <meta name="description" content="国産無垢桧フローリング・羽目板の商品詳細ページ。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .product-detail {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .product-img-wrap {
+      position: sticky;
+      top: 88px;
+    }
+
+    .product-main-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--wood-pale);
+      display: block;
+    }
+
+    .product-info-badges {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .product-info h1 {
+      font-size: 1.3rem;
+      color: var(--wood-dark);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .product-spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.85rem;
+    }
+
+    .product-spec-table th,
+    .product-spec-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e8ddd0;
+      text-align: left;
+    }
+
+    .product-spec-table th {
+      width: 38%;
+      background: var(--wood-pale);
+      font-weight: 700;
+      color: var(--wood-dark);
+    }
+
+    .product-price-box {
+      background: var(--wood-cream);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .product-price-label {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .product-price-main {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      line-height: 1.2;
+    }
+
+    .product-price-sub {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .add-to-cart-section {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .product-quality-desc {
+      background: #f0f8f0;
+      border-left: 4px solid var(--green-mid);
+      padding: 16px 20px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin: 20px 0;
+    }
+
+    .related-products {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    .related-products h2 {
+      font-size: 1.1rem;
+      color: var(--wood-dark);
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .product-detail {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 24px 20px 60px;
+      }
+      .product-img-wrap { position: static; }
+      .related-products { padding: 0 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <a href="products.html">商品一覧</a>
+  <span class="sep">›</span>
+  <span id="breadcrumb-name">商品詳細</span>
+</nav>
+
+<div class="product-detail">
+  <!-- 画像 -->
+  <div class="product-img-wrap">
+    <img class="product-main-img" id="product-img" src="" alt="">
+    <div style="margin-top:16px;">
+      <a id="yahoo-link" href="#" target="_blank" rel="noopener"
+        class="btn btn-outline" style="width:100%;justify-content:center;margin-top:0;">
+        Yahoo!ショッピングでも購入できます →
+      </a>
+    </div>
+  </div>
+
+  <!-- 情報 -->
+  <div class="product-info">
+    <div class="product-info-badges" id="product-badges"></div>
+    <h1 id="product-name"></h1>
+
+    <table class="product-spec-table" id="product-spec"></table>
+
+    <div class="product-quality-desc" id="quality-desc"></div>
+
+    <div class="product-price-box">
+      <div class="product-price-label">販売価格（税込・送料別）</div>
+      <div class="product-price-main" id="product-price"></div>
+      <div class="product-price-sub">※送料は別途ご案内します。まとめてご注文いただくとお得です。</div>
+    </div>
+
+    <div class="notice-box">
+      <h4>お支払いについて</h4>
+      銀行振込のみ対応。ご注文後にメールにて振込先をご案内します。<br>
+      遠州信用金庫 普通 ***REDACTED*** ***REDACTED***
+    </div>
+
+    <div class="add-to-cart-section">
+      <div class="qty-input">
+        <button class="qty-btn" onclick="changeDetailQty(-1)">−</button>
+        <input class="qty-num" type="number" id="detail-qty" value="1" min="1">
+        <button class="qty-btn" onclick="changeDetailQty(1)">＋</button>
+      </div>
+      <button id="add-to-cart-btn" class="btn btn-primary btn-lg" style="flex:1;" onclick="addDetailToCart()">
+        カートに入れる
+      </button>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-top:12px;">
+      <a href="cart.html" class="btn btn-outline" style="flex:1;justify-content:center;">カートを見る</a>
+      <a href="contact.html#sample" class="btn btn-green" style="flex:1;justify-content:center;">サンプル請求</a>
+    </div>
+  </div>
+</div>
+
+<!-- 関連商品 -->
+<div class="related-products">
+  <h2>同カテゴリの商品</h2>
+  <div class="product-grid" id="related-grid"></div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="data/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/components.js"></script>
+<script>
+const CAT_LABELS = {
+  flooring15: 'フローリング 15mm',
+  flooring12: 'フローリング 12mm',
+  panel:      '羽目板',
+  sale:       'お買い得品',
+};
+
+function changeDetailQty(delta) {
+  const input = document.getElementById('detail-qty');
+  input.value = Math.max(1, parseInt(input.value || 1) + delta);
+}
+
+let currentProduct = null;
+
+function addDetailToCart() {
+  if (!currentProduct || currentProduct.outOfStock) return;
+  const qty = parseInt(document.getElementById('detail-qty').value) || 1;
+  addToCart(currentProduct.id, qty);
+  const btn = document.getElementById('add-to-cart-btn');
+  btn.textContent = '✓ カートに追加しました';
+  setTimeout(() => { btn.textContent = 'カートに入れる'; }, 2000);
+}
+
+function initProduct() {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const p = PRODUCTS.find(x => x.id === id);
+
+  if (!p) {
+    document.querySelector('.product-detail').innerHTML =
+      '<p style="color:var(--text-light);padding:40px;">商品が見つかりませんでした。</p>';
+    return;
+  }
+
+  currentProduct = p;
+  document.title = `${p.name} | 林材木店`;
+  document.getElementById('breadcrumb-name').textContent = p.name;
+
+  // 画像
+  const img = document.getElementById('product-img');
+  img.src = p.img;
+  img.alt = p.name;
+  img.onerror = () => { img.style.background = '#f5ede0'; img.removeAttribute('src'); };
+
+  // Yahooリンク
+  document.getElementById('yahoo-link').href = p.yahooUrl;
+
+  // バッジ
+  document.getElementById('product-badges').innerHTML = `
+    <span class="badge badge-grade-${p.grade.toLowerCase()}">${p.grade}級品</span>
+    <span class="badge badge-quality">${p.quality}</span>
+    ${p.cat === 'sale' ? '<span class="badge badge-sale">お買い得</span>' : ''}
+    ${p.outOfStock ? '<span class="badge" style="background:#eee;color:#aaa;">在庫なし</span>' : ''}
+  `;
+
+  // 商品名
+  document.getElementById('product-name').textContent = p.name;
+
+  // 仕様表
+  document.getElementById('product-spec').innerHTML = `
+    <tr><th>カテゴリ</th><td>${CAT_LABELS[p.cat] || p.cat}</td></tr>
+    <tr><th>樹種</th><td>国産桧（ヒノキ）</td></tr>
+    <tr><th>グレード</th><td>${p.grade}級品</td></tr>
+    <tr><th>節</th><td>${p.quality}</td></tr>
+    <tr><th>寸法</th><td>${p.thick}mm × ${p.width}mm × ${p.length}mm</td></tr>
+    <tr><th>セット枚数</th><td>${p.qty}枚入</td></tr>
+    <tr><th>仕上げ</th><td>超仕上げ（カンナ仕上げ）</td></tr>
+    <tr><th>乾燥方法</th><td>天然乾燥</td></tr>
+    <tr><th>産地</th><td>国産材</td></tr>
+  `;
+
+  // グレード説明
+  const qd = QUALITY_DESC[p.quality];
+  if (qd) {
+    document.getElementById('quality-desc').innerHTML =
+      `<strong>${qd.label}について：</strong>${qd.desc}`;
+  }
+
+  // 価格
+  document.getElementById('product-price').textContent =
+    `¥${p.price.toLocaleString()}`;
+
+  // 在庫なし
+  if (p.outOfStock) {
+    const btn = document.getElementById('add-to-cart-btn');
+    btn.textContent = '在庫なし';
+    btn.disabled = true;
+    btn.style.background = '#ccc';
+    btn.style.cursor = 'not-allowed';
+  }
+
+  // 関連商品（同カテゴリ 最大4件）
+  const related = PRODUCTS
+    .filter(x => x.cat === p.cat && x.id !== p.id && !x.outOfStock)
+    .slice(0, 4);
+
+  document.getElementById('related-grid').innerHTML = related.map(r => `
+    <div class="product-card">
+      <img class="product-card-img" src="${r.img}" alt="${r.name}"
+        onerror="this.style.background='#f5ede0';this.removeAttribute('src')">
+      <div class="product-card-body">
+        <div class="product-card-badges">
+          <span class="badge badge-grade-${r.grade.toLowerCase()}">${r.grade}級品</span>
+          <span class="badge badge-quality">${r.quality}</span>
+        </div>
+        <div class="product-card-name">${r.name}</div>
+        <div class="product-card-spec">${r.thick}×${r.width}×${r.length}mm / ${r.qty}枚</div>
+        <div class="product-card-price">¥${r.price.toLocaleString()} <span>（税込）</span></div>
+        <div class="product-card-actions">
+          <a href="product.html?id=${r.id}" class="btn btn-outline btn-sm">詳細</a>
+          <button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}');this.textContent='追加済';">カートへ</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', initProduct);
+</script>
+</body>
+</html>

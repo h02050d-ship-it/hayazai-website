@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>無垢桧フローリング・羽目板専門 | 林材木店（静岡県磐田市）</title>
+  <meta name="description" content="創業昭和43年。自社工場で製造する国産無垢桧フローリング・羽目板を直販。天然乾燥・超仕上げ。全国発送。無料サンプル請求受付中。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 92vh;
+      background:
+        linear-gradient(135deg, rgba(61,43,31,0.72) 0%, rgba(45,74,45,0.55) 100%),
+        url('images/hero.png') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      padding: 80px 40px;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      color: #fff;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: #f0d9be;
+    }
+
+    .hero-desc {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+      line-height: 1.9;
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.5);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-align: center;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar {
+      background: var(--wood-dark);
+      color: var(--white);
+    }
+
+    .stats-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center;
+    }
+
+    .stat-item {
+      padding: 28px 20px;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--wood-light);
+      line-height: 1.2;
+    }
+
+    .stat-num sub {
+      font-size: 0.8rem;
+      vertical-align: middle;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    /* ===== FEATURES ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 1px solid #e8ddd0;
+      border-radius: 8px;
+      padding: 36px 28px;
+      text-align: center;
+    }
+
+    .feature-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--wood-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      color: var(--wood-dark);
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+
+    /* ===== GRADE GUIDE ===== */
+    .grade-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+
+    .grade-card {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e8ddd0;
+    }
+
+    .grade-card-head {
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .grade-card-head h3 {
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .grade-card-head p {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .grade-card-body {
+      padding: 16px;
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+
+    /* ===== PRODUCTS PREVIEW ===== */
+    .products-preview {
+      background: var(--wood-cream);
+    }
+
+    /* ===== HOW TO ORDER ===== */
+    .how-to-order {
+      background: var(--wood-pale);
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .review-card {
+      background: var(--white);
+      border: 1px solid #e8ddd0;
+      border-radius: 8px;
+      padding: 28px 24px;
+    }
+
+    .review-stars {
+      color: #f0a500;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    .review-text {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+
+    .review-author {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      font-weight: 700;
+    }
+
+    /* ===== CTA BANNER ===== */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--wood-dark) 0%, var(--green-dark) 100%);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .cta-banner h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .cta-banner p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 36px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hero { min-height: 80vh; padding: 60px 20px; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .features-grid { grid-template-columns: 1fr; gap: 16px; }
+      .grade-grid { grid-template-columns: repeat(2, 1fr); }
+      .reviews-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .grade-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" style="position:relative;">
+  <div class="hero-inner">
+    <p class="hero-label">Hinoki Wood Specialist Since 1968</p>
+    <h1 class="hero-title">
+      桧のある暮らし、<br>
+      <em>本物の木</em>をあなたへ。
+    </h1>
+    <p class="hero-desc">
+      創業昭和43年。静岡県磐田市の自社工場で製造した国産無垢桧フローリング・羽目板を
+      工務店・個人のお客様へ直販。天然乾燥・超仕上げで、長年愛される品質をお届けします。
+    </p>
+    <div class="hero-actions">
+      <a href="products.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">商品を見る</a>
+      <a href="contact.html#sample" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">無料サンプル請求</a>
+    </div>
+  </div>
+  <div class="hero-scroll">↓ スクロール</div>
+</section>
+
+<!-- ===== STATS ===== -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num">55<sub>年以上</sub></div>
+      <div class="stat-label">創業からの実績</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4.97</div>
+      <div class="stat-label">Yahoo評価（30件）</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">78<sub>種類</sub></div>
+      <div class="stat-label">取り扱い商品数</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">全国</div>
+      <div class="stat-label">発送対応</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FEATURES ===== -->
+<section>
+  <div class="section-inner">
+    <p class="section-label">Why Hayazai</p>
+    <h2 class="section-title">林材木店が選ばれる理由</h2>
+    <p class="section-desc">50年以上、桧材一筋で培ってきた品質と信頼。工場から直接お届けするからできる、本物の木の家づくりを支えます。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏭</div>
+        <h3>自社工場での一貫製造</h3>
+        <p>原木の仕入れから乾燥・加工・仕上げまで自社一貫。中間業者を排除し、高品質を適正価格でお届けします。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌳</div>
+        <h3>天然乾燥・超仕上げ</h3>
+        <p>急激な乾燥による割れや反りを防ぐ天然乾燥。さらに超仕上げ加工で滑らかな表面に仕上げています。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📐</div>
+        <h3>豊富なサイズ展開</h3>
+        <p>厚み・幅・長さを多数ご用意。910mm〜4000mmの長さ、A級・B級など、用途に合わせてお選びいただけます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>全国配送対応</h3>
+        <p>北海道から沖縄まで全国へ発送対応。まとめてご注文いただくほど送料がお得になります。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎁</div>
+        <h3>無料サンプル請求</h3>
+        <p>実際の質感・香り・色味を手で確かめてからご注文いただけます。まずはサンプルをお申し込みください。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>丁寧なご相談対応</h3>
+        <p>「どのグレードを選べばいい？」「何枚必要？」など、電話・LINE・メールでお気軽にご相談ください。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GRADE GUIDE ===== -->
+<section style="background:var(--wood-cream);">
+  <div class="section-inner">
+    <p class="section-label">Grade Guide</p>
+    <h2 class="section-title">グレード（節）の選び方</h2>
+    <p class="section-desc">桧フローリングは節の有無によってグレードが異なります。用途・予算・お好みで選んでください。</p>
+    <div class="grade-grid">
+      <div class="grade-card">
+        <div class="grade-card-head" style="background:#7a5c3e;">
+          <h3>節有</h3>
+          <p>もっとも手頃</p>
+        </div>
+        <div class="grade-card-body">
+          木の節がある自然な風合い。強度は十分で価格を抑えたい方・DIYに最適。自然素材らしい表情が出ます。
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-card-head" style="background:#5a7a5c;">
+          <h3>小節</h3>
+          <p>バランス型</p>
+        </div>
+        <div class="grade-card-body">
+          小さな節が少量ある程度。整った見た目と手頃な価格のバランスが良く、一般住宅に多く使われます。
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-card-head" style="background:#3d5a7a;">
+          <h3>特上小</h3>
+          <p>高品質</p>
+        </div>
+        <div class="grade-card-body">
+          小節の中でも特に厳選した上質品。見た目が美しく、こだわりの空間づくりに最適な選択肢。
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-card-head" style="background:#7a3d3d;">
+          <h3>無節</h3>
+          <p>最高グレード</p>
+        </div>
+        <div class="grade-card-body">
+          節が一切なく均一で美しい木肌。リビング・寝室・茶室など、最もこだわりたい空間に。
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;">
+      <a href="faq.html" class="btn btn-outline">グレードの詳しい選び方を見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS PREVIEW ===== -->
+<section class="products-preview">
+  <div class="section-inner">
+    <p class="section-label">Products</p>
+    <h2 class="section-title">人気商品</h2>
+    <p class="section-desc">よくご注文いただく定番の商品をご紹介します。</p>
+    <div class="product-grid" id="featured-products"></div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="products.html" class="btn btn-primary btn-lg">全商品を見る（78種類）</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW TO ORDER ===== -->
+<section class="how-to-order">
+  <div class="section-inner">
+    <p class="section-label">How to Order</p>
+    <h2 class="section-title">ご注文の流れ</h2>
+    <p class="section-desc">お支払いは銀行振込。シンプルな手順でご注文いただけます。</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">🛒</div>
+        <p class="step-num">STEP 01</p>
+        <h3>カートに入れる</h3>
+        <p>商品ページから気になる商品を選んでカートへ。</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">📝</div>
+        <p class="step-num">STEP 02</p>
+        <h3>注文情報を入力</h3>
+        <p>お名前・住所・配送先などをフォームに入力。</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🏦</div>
+        <p class="step-num">STEP 03</p>
+        <h3>振込案内が届く</h3>
+        <p>ご注文確認後、振込先をメールでお知らせします。</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">📦</div>
+        <p class="step-num">STEP 04</p>
+        <h3>発送・お届け</h3>
+        <p>入金確認後、順次発送。全国対応。</p>
+      </div>
+    </div>
+    <div class="notice-box" style="margin-top:40px;">
+      <h4>お支払い情報</h4>
+      銀行振込：遠州信用金庫　普通預金　口座番号 ***REDACTED***　***REDACTED***<br>
+      ※振込手数料はお客様負担となります。ご了承ください。
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section>
+  <div class="section-inner">
+    <p class="section-label">Reviews</p>
+    <h2 class="section-title">お客様の声</h2>
+    <p class="section-desc">Yahoo!ショッピング評価 4.97（30件）。実際にご利用いただいたお客様の声をご紹介します。</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">「木の香りが素晴らしく、張った後も家中がいい香りです。品質も想像以上で大満足。また購入したいです。」</p>
+        <div class="review-author">工務店 Y様（神奈川県）</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">「DIYで自宅のリビングに張りましたが、仕上げが綺麗で素人でも施工しやすかった。価格も手頃で助かりました。」</p>
+        <div class="review-author">個人のお客様 T様（愛知県）</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">「注文から発送まで迅速で、梱包も丁寧でした。商品の品質も申し分なく、複数回リピートしています。」</p>
+        <div class="review-author">設計事務所 K様（東京都）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-banner">
+  <div class="section-inner" style="text-align:center;">
+    <h2>まずは無料サンプルをお試しください</h2>
+    <p>実際の質感・香り・色を確かめてから安心してご注文いただけます。<br>桧フローリングに関するご相談もお気軽にどうぞ。</p>
+    <div class="cta-actions">
+      <a href="contact.html#sample" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">無料サンプル請求</a>
+      <a href="products.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">商品一覧を見る</a>
+      <a href="tel:0538582395" class="btn btn-lg" style="background:var(--green-mid);color:#fff;">📞 電話で相談</a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="data/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/components.js"></script>
+<script>
+// 人気商品 6件を表示（フローリング15mm 節有・小節・無節、羽目板 節有・小節・無節）
+const featuredIds = [
+  'ff151082000a', 'fk151082000a', 'fm151082000a',
+  'pf121032000a', 'pk121032000a', 'pm121032000a',
+];
+
+function renderFeatured() {
+  const container = document.getElementById('featured-products');
+  if (!container) return;
+
+  container.innerHTML = featuredIds.map(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return '';
+    return `
+      <div class="product-card${p.outOfStock ? ' out-of-stock' : ''}">
+        <img class="product-card-img"
+          src="${p.img}"
+          alt="${p.name}"
+          onerror="this.style.background='#f5ede0';this.removeAttribute('src')">
+        <div class="product-card-body">
+          <div class="product-card-badges">
+            <span class="badge badge-grade-${p.grade.toLowerCase()}">${p.grade}級品</span>
+            <span class="badge badge-quality">${p.quality}</span>
+          </div>
+          <div class="product-card-name">${p.name}</div>
+          <div class="product-card-spec">${p.thick}×${p.width}×${p.length}mm / ${p.qty}枚入</div>
+          <div class="product-card-price">¥${p.price.toLocaleString()} <span>（税込・送料別）</span></div>
+          <div class="product-card-actions">
+            <a href="product.html?id=${p.id}" class="btn btn-outline btn-sm">詳細</a>
+            <button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}'); this.textContent='追加済';">カートへ</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', renderFeatured);
+</script>
+</body>
+</html>

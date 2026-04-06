@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カート | 林材木店</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .cart-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .cart-summary-box {
+      background: var(--wood-cream);
+      border-radius: 8px;
+      padding: 28px;
+      position: sticky;
+      top: 88px;
+    }
+
+    .cart-summary-box h2 {
+      font-size: 1rem;
+      color: var(--wood-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e8ddd0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      color: var(--text-mid);
+    }
+
+    .summary-row.total {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      border-top: 1px solid #e8ddd0;
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .overflow-x {
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      .cart-layout {
+        grid-template-columns: 1fr;
+        padding: 24px 20px 60px;
+      }
+      .cart-summary-box { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>カート</h1>
+  <p>ご注文内容をご確認ください</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <a href="products.html">商品一覧</a>
+  <span class="sep">›</span>
+  <span>カート</span>
+</nav>
+
+<div class="cart-layout">
+  <div>
+    <div class="overflow-x">
+      <div id="cart-items"></div>
+    </div>
+    <div style="margin-top:20px;">
+      <a href="products.html" class="btn btn-outline btn-sm">← 買い物を続ける</a>
+    </div>
+  </div>
+
+  <div id="cart-summary">
+    <div class="cart-summary-box">
+      <h2>ご注文合計</h2>
+      <div class="summary-row">
+        <span>小計</span>
+        <span id="cart-total">¥0</span>
+      </div>
+      <div class="summary-row">
+        <span>送料</span>
+        <span>別途ご案内</span>
+      </div>
+      <div class="summary-row total">
+        <span>合計（税込）</span>
+        <span id="cart-total-2">¥0</span>
+      </div>
+
+      <div class="notice-box" style="margin:16px 0;font-size:0.78rem;">
+        お支払いは銀行振込のみです。ご注文後にメールにてご案内します。
+      </div>
+
+      <a href="order.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px;">
+        注文手続きへ進む
+      </a>
+      <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">
+        ご相談・見積もり依頼
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="data/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/components.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderCart();
+  // 合計を2か所同期
+  const t = document.getElementById('cart-total');
+  const t2 = document.getElementById('cart-total-2');
+  if (t && t2) {
+    const observer = new MutationObserver(() => { t2.textContent = t.textContent; });
+    observer.observe(t, { childList: true, characterData: true, subtree: true });
+    t2.textContent = t.textContent;
+  }
+});
+</script>
+</body>
+</html>

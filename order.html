@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注文手続き | 林材木店</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .order-layout {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .order-summary-box {
+      background: var(--wood-cream);
+      border-radius: 8px;
+      padding: 24px;
+      position: sticky;
+      top: 88px;
+    }
+
+    .order-summary-box h3 {
+      font-size: 0.95rem;
+      color: var(--wood-dark);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e8ddd0;
+    }
+
+    .order-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin-bottom: 16px;
+    }
+
+    .order-items-table th,
+    .order-items-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid #e8ddd0;
+    }
+
+    .order-items-table th {
+      font-weight: 700;
+      color: var(--wood-mid);
+      font-size: 0.72rem;
+    }
+
+    .order-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--wood-dark);
+      padding-top: 12px;
+      border-top: 2px solid #e8ddd0;
+    }
+
+    @media (max-width: 768px) {
+      .order-layout {
+        grid-template-columns: 1fr;
+        padding: 24px 20px 60px;
+      }
+      .order-summary-box { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>注文手続き</h1>
+  <p>お届け先・お客様情報をご入力ください</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <a href="cart.html">カート</a>
+  <span class="sep">›</span>
+  <span>注文手続き</span>
+</nav>
+
+<div class="order-layout">
+  <!-- フォーム -->
+  <div>
+    <form id="order-form" action="order.php" method="post" onsubmit="return validateOrder()">
+      <input type="hidden" id="cart-json" name="cart_json" value="">
+
+      <h2 style="font-size:1.1rem;color:var(--wood-dark);margin-bottom:24px;padding-bottom:10px;border-bottom:2px solid #e8ddd0;">
+        お客様情報
+      </h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">お名前 <span class="req">必須</span></label>
+          <input type="text" name="name" class="form-input" placeholder="山田 太郎" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">会社名</label>
+          <input type="text" name="company" class="form-input" placeholder="株式会社〇〇">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">メールアドレス <span class="req">必須</span></label>
+          <input type="email" name="email" class="form-input" placeholder="info@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">電話番号 <span class="req">必須</span></label>
+          <input type="tel" name="tel" class="form-input" placeholder="090-0000-0000" required>
+        </div>
+      </div>
+
+      <h2 style="font-size:1.1rem;color:var(--wood-dark);margin:32px 0 24px;padding-bottom:10px;border-bottom:2px solid #e8ddd0;">
+        お届け先
+      </h2>
+
+      <div class="form-group">
+        <label class="form-label">郵便番号 <span class="req">必須</span></label>
+        <input type="text" name="zip" class="form-input" placeholder="430-0000" required style="max-width:200px;">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">都道府県 <span class="req">必須</span></label>
+        <select name="prefecture" class="form-select" required style="max-width:200px;">
+          <option value="">選択してください</option>
+          <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option>
+          <option>秋田県</option><option>山形県</option><option>福島県</option><option>茨城県</option>
+          <option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option>
+          <option>東京都</option><option>神奈川県</option><option>新潟県</option><option>富山県</option>
+          <option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option>
+          <option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option>
+          <option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option>
+          <option>奈良県</option><option>和歌山県</option><option>鳥取県</option><option>島根県</option>
+          <option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option>
+          <option>香川県</option><option>愛媛県</option><option>高知県</option><option>福岡県</option>
+          <option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option>
+          <option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">市区町村・番地 <span class="req">必須</span></label>
+        <input type="text" name="address1" class="form-input" placeholder="磐田市大久保1234" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">建物名・部屋番号</label>
+        <input type="text" name="address2" class="form-input" placeholder="〇〇マンション 101号室">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">備考・ご要望</label>
+        <textarea name="note" class="form-textarea" placeholder="納期のご希望、施工場所のご説明など何でもお書きください。"></textarea>
+      </div>
+
+      <div class="notice-box green" style="margin-bottom:24px;">
+        <h4>お支払い方法：銀行振込</h4>
+        ご注文確認後、振込先をメールにてご案内します。<br>
+        <strong>遠州信用金庫 普通 ***REDACTED*** ***REDACTED***</strong><br>
+        振込確認後に発送いたします（振込手数料はお客様負担）。
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">
+        注文を確定する
+      </button>
+    </form>
+  </div>
+
+  <!-- 注文サマリー -->
+  <div class="order-summary-box">
+    <h3>ご注文内容</h3>
+    <div style="overflow-x:auto;">
+      <table class="order-items-table">
+        <thead>
+          <tr>
+            <th>商品</th>
+            <th style="text-align:right;">単価</th>
+            <th style="text-align:center;">数量</th>
+            <th style="text-align:right;">小計</th>
+          </tr>
+        </thead>
+        <tbody id="order-items"></tbody>
+      </table>
+    </div>
+    <div class="order-total-row">
+      <span>合計（税込）</span>
+      <span id="order-total"></span>
+    </div>
+    <p style="font-size:0.72rem;color:var(--text-light);margin-top:10px;">※送料は別途ご案内します</p>
+    <a href="cart.html" class="btn btn-outline btn-sm" style="margin-top:16px;width:100%;justify-content:center;">
+      ← カートに戻る
+    </a>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="data/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/components.js"></script>
+<script>
+function validateOrder() {
+  const cart = getCart();
+  if (cart.length === 0) {
+    alert('カートが空です。商品を追加してからご注文ください。');
+    return false;
+  }
+  return true;
+}
+
+document.addEventListener('DOMContentLoaded', renderOrderSummary);
+</script>
+</body>
+</html>

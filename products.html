@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品一覧 | 林材木店 無垢桧フローリング・羽目板</title>
+  <meta name="description" content="国産無垢桧フローリング・羽目板の全商品一覧。厚み・長さ・グレード（節有/小節/特上小/無節）で絞り込み検索できます。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .products-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 40px 80px;
+    }
+
+    .result-count {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .products-layout { padding: 24px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>商品一覧</h1>
+  <p>国産無垢桧フローリング・羽目板 全78種類</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <span>商品一覧</span>
+</nav>
+
+<div class="products-layout">
+
+  <!-- カテゴリタブ -->
+  <div class="cat-tabs" id="cat-tabs">
+    <button class="cat-tab active" data-cat="all">すべて</button>
+    <button class="cat-tab" data-cat="flooring15">フローリング 15mm</button>
+    <button class="cat-tab" data-cat="flooring12">フローリング 12mm</button>
+    <button class="cat-tab" data-cat="panel">羽目板</button>
+    <button class="cat-tab" data-cat="sale">お買い得品</button>
+  </div>
+
+  <!-- フィルター -->
+  <div class="filter-bar">
+    <label>グレード</label>
+    <select class="filter-select" id="filter-grade">
+      <option value="">すべて</option>
+      <option value="A">A級品</option>
+      <option value="B">B級品</option>
+    </select>
+
+    <label>節</label>
+    <select class="filter-select" id="filter-quality">
+      <option value="">すべて</option>
+      <option value="節有">節有</option>
+      <option value="小節">小節</option>
+      <option value="特上小">特上小</option>
+      <option value="無節">無節</option>
+    </select>
+
+    <label>長さ</label>
+    <select class="filter-select" id="filter-length">
+      <option value="">すべて</option>
+      <option value="910">910mm</option>
+      <option value="1820">1820mm</option>
+      <option value="3000">3000mm</option>
+      <option value="4000">4000mm</option>
+    </select>
+
+    <label>並び替え</label>
+    <select class="filter-select" id="filter-sort">
+      <option value="default">標準</option>
+      <option value="price-asc">価格が安い順</option>
+      <option value="price-desc">価格が高い順</option>
+    </select>
+
+    <button class="btn btn-outline btn-sm" onclick="resetFilters()">リセット</button>
+  </div>
+
+  <p class="result-count" id="result-count"></p>
+
+  <div class="product-grid" id="product-grid"></div>
+
+</div>
+
+<div id="site-footer"></div>
+
+<script src="data/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/components.js"></script>
+<script>
+let currentCat = 'all';
+
+function getFilters() {
+  return {
+    cat:     currentCat,
+    grade:   document.getElementById('filter-grade').value,
+    quality: document.getElementById('filter-quality').value,
+    length:  document.getElementById('filter-length').value,
+    sort:    document.getElementById('filter-sort').value,
+  };
+}
+
+function applyFilters() {
+  const f = getFilters();
+  let list = PRODUCTS.filter(p => {
+    if (f.cat !== 'all' && p.cat !== f.cat) return false;
+    if (f.grade   && p.grade   !== f.grade)             return false;
+    if (f.quality && p.quality !== f.quality)            return false;
+    if (f.length  && p.length  !== parseInt(f.length))  return false;
+    return true;
+  });
+
+  if (f.sort === 'price-asc')  list.sort((a,b) => a.price - b.price);
+  if (f.sort === 'price-desc') list.sort((a,b) => b.price - a.price);
+
+  renderGrid(list);
+
+  const countEl = document.getElementById('result-count');
+  countEl.textContent = `${list.length}件の商品`;
+}
+
+function renderGrid(list) {
+  const grid = document.getElementById('product-grid');
+  if (list.length === 0) {
+    grid.innerHTML = '<p style="color:var(--text-light);padding:40px 0;">該当する商品がありませんでした。条件を変えてお試しください。</p>';
+    return;
+  }
+
+  grid.innerHTML = list.map(p => `
+    <div class="product-card${p.outOfStock ? ' out-of-stock' : ''}">
+      <img class="product-card-img"
+        src="${p.img}"
+        alt="${p.name}"
+        onerror="this.style.background='#f5ede0';this.removeAttribute('src')">
+      <div class="product-card-body">
+        <div class="product-card-badges">
+          <span class="badge badge-grade-${p.grade.toLowerCase()}">${p.grade}級品</span>
+          <span class="badge badge-quality">${p.quality}</span>
+          ${p.cat === 'sale' ? '<span class="badge badge-sale">お買い得</span>' : ''}
+          ${p.outOfStock ? '<span class="badge" style="background:#eee;color:#aaa;">在庫なし</span>' : ''}
+        </div>
+        <div class="product-card-name">${p.name}</div>
+        <div class="product-card-spec">${p.thick}×${p.width}×${p.length}mm / ${p.qty}枚入</div>
+        <div class="product-card-price">¥${p.price.toLocaleString()} <span>（税込・送料別）</span></div>
+        <div class="product-card-actions">
+          <a href="product.html?id=${p.id}" class="btn btn-outline btn-sm">詳細</a>
+          ${p.outOfStock
+            ? '<button class="btn btn-sm" style="background:#eee;color:#aaa;cursor:not-allowed;" disabled>在庫なし</button>'
+            : `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}');this.textContent='追加済';">カートへ</button>`
+          }
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function resetFilters() {
+  document.getElementById('filter-grade').value   = '';
+  document.getElementById('filter-quality').value = '';
+  document.getElementById('filter-length').value  = '';
+  document.getElementById('filter-sort').value    = 'default';
+  applyFilters();
+}
+
+// カテゴリタブ
+document.getElementById('cat-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-tab');
+  if (!btn) return;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCat = btn.dataset.cat;
+  applyFilters();
+});
+
+// フィルター変更
+['filter-grade','filter-quality','filter-length','filter-sort'].forEach(id => {
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+// URLパラメータでカテゴリ初期化
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(location.search);
+  const cat = params.get('cat');
+  if (cat) {
+    currentCat = cat;
+    document.querySelectorAll('.cat-tab').forEach(b => {
+      b.classList.toggle('active', b.dataset.cat === cat);
+    });
+  }
+  applyFilters();
+});
+</script>
+</body>
+</html>
