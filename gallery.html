@@ -204,11 +204,8 @@
       <button class="gallery-filter-btn active" data-filter="all">すべて</button>
       <button class="gallery-filter-btn" data-filter="flooring">フローリング</button>
       <button class="gallery-filter-btn" data-filter="panel">羽目板</button>
-      <button class="gallery-filter-btn" data-filter="living">リビング</button>
-      <button class="gallery-filter-btn" data-filter="bedroom">寝室</button>
-      <button class="gallery-filter-btn" data-filter="kids">子ども部屋</button>
-      <button class="gallery-filter-btn" data-filter="washitsu">和室</button>
-      <button class="gallery-filter-btn" data-filter="diy">DIY</button>
+      <button class="gallery-filter-btn" data-filter="completed">完成写真</button>
+      <button class="gallery-filter-btn" data-filter="process">施工中</button>
     </div>
 
     <!-- ギャラリーグリッド -->
@@ -250,102 +247,133 @@
 const GALLERY_ITEMS = [
   {
     id: 1,
-    title: 'リビング・フローリング施工（無節）',
-    cat: ['flooring', 'living'],
-    bg: 'gal-bg-living',
-    icon: '🏠',
-    product: 'フローリング 15mm 無節 A級品',
-    location: '静岡県浜松市 個人宅',
-    desc: '20畳のリビングに無節A級品を施工。木目が均一で美しく、来客にも「高級感がある」と好評。床暖房対応の15mm厚を採用。',
-    tags: ['フローリング15mm', '無節', 'リビング', '個人宅'],
+    title: '炉裏部屋・羽目板腰板施工（完成）',
+    cat: ['panel', 'completed'],
+    img: 'images/gallery/IMG00584_HDR.jpg',
+    product: '羽目板 12mm',
+    location: '個人宅 炉裏部屋',
+    desc: '炉裏のある特注和室に桧羽目板を腰板として全面施工。段付き構造の腰掛け・床面にも桧フローリングを使用し、統一感のある上質な空間に仕上がりました。',
+    tags: ['羽目板', '腰板', '炉裏', '個人宅'],
   },
   {
     id: 2,
-    title: '寝室・フローリング施工（小節）',
-    cat: ['flooring', 'bedroom'],
-    bg: 'gal-bg-bedroom',
-    icon: '🛏',
-    product: 'フローリング 15mm 小節 A級品',
-    location: '愛知県名古屋市 注文住宅',
-    desc: '寝室に小節A級品を使用。桧の優しい香りが心地よい眠りを誘い、冬でも素足で歩けると施主様から大変喜ばれました。',
-    tags: ['フローリング15mm', '小節', '寝室', '注文住宅'],
+    title: '炉裏部屋・天井・壁羽目板施工（完成）',
+    cat: ['panel', 'completed'],
+    img: 'images/gallery/IMG00607_HDR.jpg',
+    product: '羽目板 12mm',
+    location: '個人宅 炉裏部屋',
+    desc: '天井と壁の腰板部分に桧羽目板を施工した完成写真。桧の淡い黄白色と緑の左官壁が見事なコントラストを生み出しています。炉裏の鉤（かぎ）も印象的です。',
+    tags: ['羽目板', '天井', '壁面', '炉裏'],
   },
   {
     id: 3,
-    title: '和室・羽目板施工（全面）',
-    cat: ['panel', 'washitsu'],
-    bg: 'gal-bg-washitsu',
-    icon: '🎋',
-    product: '羽目板 12mm 小節 A級品',
-    location: '静岡県磐田市 新築一戸建て',
-    desc: '和室の壁面を全面桧羽目板で仕上げ。天井まで届く桧の壁は圧倒的な存在感。季節を問わず調湿効果が実感できると好評。',
-    tags: ['羽目板', '小節', '和室', '壁面'],
+    title: '天井羽目板施工（完成クローズアップ）',
+    cat: ['panel', 'completed'],
+    img: 'images/gallery/IMG00608_HDR.jpg',
+    product: '羽目板 12mm',
+    location: '個人宅 炉裏部屋 天井',
+    desc: '天井面の桧羽目板施工アップ。柾目・板目が混在した自然な木目が美しく、経年とともに飴色に変化していく様子が楽しみな仕上がりです。',
+    tags: ['羽目板', '天井', 'クローズアップ'],
   },
   {
     id: 4,
-    title: '子ども部屋・フローリング施工',
-    cat: ['flooring', 'kids'],
-    bg: 'gal-bg-kids',
-    icon: '🧸',
-    product: 'フローリング 15mm 節有 B級品',
-    location: '神奈川県横浜市 リフォーム',
-    desc: '子どもが床で遊ぶことを考え、柔らかく温かい桧を選択。節有B級品でコストを抑えながら、素足感触は最高との声をいただきました。',
-    tags: ['フローリング15mm', '節有', '子ども部屋', 'リフォーム'],
+    title: 'フローリング施工中・作業の様子',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板2.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中',
+    desc: '桧フローリングの施工作業中の一コマ。本実加工により板同士がしっかりと噛み合い、施工のしやすさも桧フローリングの魅力の一つです。',
+    tags: ['フローリング', '施工中', '本実加工'],
   },
   {
     id: 5,
-    title: '廊下・フローリング施工（長尺）',
-    cat: ['flooring'],
-    bg: 'gal-bg-hallway',
-    icon: '🚶',
-    product: 'フローリング 12mm 小節 A級品',
-    location: '東京都世田谷区 マンションリフォーム',
-    desc: '廊下に12mm厚・長尺タイプを施工。薄型のため既存の床高との段差もなく、長い廊下に木目が映える仕上がりになりました。',
-    tags: ['フローリング12mm', '小節', '廊下', 'マンション'],
+    title: 'フローリング施工中・床張り',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板3.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中',
+    desc: '桧フローリングを均等に並べながら施工している様子。木目の方向を揃えることで、完成後の美しさが格段に増します。',
+    tags: ['フローリング', '施工中', '床張り'],
   },
   {
     id: 6,
-    title: '壁面・羽目板施工（リビング）',
-    cat: ['panel', 'living'],
-    bg: 'gal-bg-wall',
-    icon: '🪵',
-    product: '羽目板 12mm 特上小 A級品',
-    location: '大阪府大阪市 店舗内装',
-    desc: 'カフェの壁面に特上小A級品の羽目板を施工。自然素材の温もりがお客様にも好評で、「木の香りがする」と来店者に話題に。',
-    tags: ['羽目板', '特上小', 'リビング', '店舗'],
+    title: '炉裏・段付き構造の施工',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板6.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中 炉裏部屋',
+    desc: '炉裏部屋の段付き腰掛け部分。床面・立ち上がり・腰掛け面すべてに桧フローリングを使用。複雑な形状にも対応できる加工精度が光ります。',
+    tags: ['フローリング', '施工中', '炉裏', '造作'],
   },
   {
     id: 7,
-    title: 'DIY施工・フローリング張り替え',
-    cat: ['flooring', 'diy'],
-    bg: 'gal-bg-diy',
-    icon: '🔨',
-    product: 'フローリング 15mm 節有 B級品',
-    location: '千葉県船橋市 DIYリフォーム',
-    desc: '施主様自身でDIY施工。「超仕上げ」の仕上がりのよさで素人でも扱いやすく、フローリング施工が初めてでも綺麗に仕上がったとのこと。',
-    tags: ['フローリング15mm', '節有', 'DIY', '個人宅'],
+    title: '炉裏・収納付き造作施工',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板4.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中 炉裏部屋',
+    desc: '炉裏の収納スペースを内包した造作の施工中。床面から立ち上がりまで同じ桧材で仕上げることで、完成後の統一感が生まれます。',
+    tags: ['フローリング', '施工中', '造作', '収納'],
   },
   {
     id: 8,
-    title: '浴室前・脱衣所フローリング',
-    cat: ['flooring'],
-    bg: 'gal-bg-bathroom',
-    icon: '🛁',
-    product: 'フローリング 12mm 無節 A級品',
-    location: '静岡県静岡市 工務店施工',
-    desc: '脱衣所に無節A級品を採用。桧は水に強い木材で、素足での気持ちよさが特に脱衣所で実感できます。防カビ処理を施した仕上げ。',
-    tags: ['フローリング12mm', '無節', '脱衣所', '工務店'],
+    title: '炉裏・床下構造の施工',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板10.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中 炉裏部屋',
+    desc: '炉のくぼみ部分の骨組みと床張りの施工中。桧フローリングは床下構造から仕上げ面まで一貫して使用でき、職人技が光る場面です。',
+    tags: ['フローリング', '施工中', '炉裏', '床下'],
   },
   {
     id: 9,
-    title: 'ホームオフィス・フローリング施工',
-    cat: ['flooring'],
-    bg: 'gal-bg-office',
-    icon: '💻',
-    product: 'フローリング 15mm 小節 A級品',
-    location: '東京都港区 在宅ワークスペース',
-    desc: '自宅オフィスに桧フローリングを採用。木の香りと温かみが集中力を高めるとのお声をいただきました。椅子キャスターも問題なし。',
-    tags: ['フローリング15mm', '小節', 'オフィス', '個人宅'],
+    title: '炉裏・収納蓋の施工',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板9.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中 炉裏部屋',
+    desc: '収納スペースの蓋部分も同じ桧フローリング材で作成。開閉できる収納蓋も木材で統一することで、完成時の見た目が美しくなります。',
+    tags: ['フローリング', '施工中', '造作', '収納'],
+  },
+  {
+    id: 10,
+    title: '炉裏・壁造作の施工中',
+    cat: ['panel', 'process'],
+    img: 'images/gallery/檜板1.jpg',
+    product: '羽目板 12mm',
+    location: '施工中 炉裏部屋',
+    desc: '丸窓の障子飾りと壁造作の施工中。羽目板張りの前段階として、下地の骨組みが整えられています。完成後の変貌ぶりが楽しみな段階です。',
+    tags: ['羽目板', '施工中', '造作', '壁面'],
+  },
+  {
+    id: 11,
+    title: 'フローリング施工中・全体',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板5.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中',
+    desc: '部屋全体にフローリングを敷き詰めている施工中の様子。桧フローリングの明るい色味が部屋全体を温かく明るく見せてくれます。',
+    tags: ['フローリング', '施工中', '全体'],
+  },
+  {
+    id: 12,
+    title: '炉裏・段付き床の施工中',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板7.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中 炉裏部屋',
+    desc: '炉裏部屋の段差部分の施工中。フローリングを段差に沿って丁寧に張ることで、炉を囲んで座る空間が自然に作られます。',
+    tags: ['フローリング', '施工中', '炉裏', '段差'],
+  },
+  {
+    id: 13,
+    title: '炉裏・収納詳細の施工中',
+    cat: ['flooring', 'process'],
+    img: 'images/gallery/檜板8.jpg',
+    product: 'フローリング 15mm',
+    location: '施工中 炉裏部屋',
+    desc: '炉裏の収納部分の詳細施工中。限られたスペースを最大限に活用する工夫と、桧材の使いこなしが職人の腕の見せどころです。',
+    tags: ['フローリング', '施工中', '炉裏', '収納'],
   },
 ];
 
@@ -359,8 +387,8 @@ function renderGallery() {
 
   grid.innerHTML = filtered.map(item => `
     <div class="gallery-card" onclick="openModal(${item.id})">
-      <div class="gallery-card-img-placeholder ${item.bg}">
-        <span class="gal-icon">${item.icon}</span>
+      <div class="gallery-card-img-placeholder" style="padding:0;overflow:hidden;">
+        <img src="${item.img}" alt="${item.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
       <div class="gallery-card-body">
         <div class="gallery-card-tag">${item.tags.slice(0, 2).join(' · ')}</div>
@@ -374,12 +402,10 @@ function renderGallery() {
 function openModal(id) {
   const item = GALLERY_ITEMS.find(x => x.id === id);
   if (!item) return;
-  document.getElementById('modal-img').className = `modal-img-area ${item.bg}`;
-  document.getElementById('modal-img').style.display = 'flex';
-  document.getElementById('modal-img').style.alignItems = 'center';
-  document.getElementById('modal-img').style.justifyContent = 'center';
-  document.getElementById('modal-img').style.fontSize = '5rem';
-  document.getElementById('modal-img').textContent = item.icon;
+  const imgArea = document.getElementById('modal-img');
+  imgArea.className = 'modal-img-area';
+  imgArea.style.cssText = 'padding:0;overflow:hidden;';
+  imgArea.innerHTML = `<img src="${item.img}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
   document.getElementById('modal-title').textContent = item.title;
   document.getElementById('modal-desc').innerHTML =
     `<strong>使用商品：</strong>${item.product}<br>` +
