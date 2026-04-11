@@ -19,10 +19,6 @@ function renderHeader() {
         <a href="sample.html" class="nav-sample-link">🎁 無料サンプル</a>
       </nav>
       <div class="header-actions">
-        <a href="cart.html" class="cart-btn">
-          🛒 カート
-          <span class="cart-count hidden">0</span>
-        </a>
         <button class="hamburger" id="hamburger" aria-label="メニューを開く">
           <span></span><span></span><span></span>
         </button>
@@ -40,7 +36,6 @@ function renderHeader() {
       <a href="blog.html">ブログ</a>
       <a href="contact.html">お問い合わせ</a>
       <a href="sample.html">🎁 無料サンプル請求</a>
-      <a href="cart.html">カート</a>
     </div>
   </div>`;
 
@@ -83,7 +78,6 @@ function renderFooter() {
             <li><a href="blog.html">ブログ・コラム</a></li>
             <li><a href="faq.html">よくある質問</a></li>
             <li><a href="contact.html">お問い合わせ</a></li>
-            <li><a href="cart.html">カート</a></li>
           </ul>
         </div>
       </div>

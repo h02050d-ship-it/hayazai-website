@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>商品一覧 | 林材木店 無垢桧フローリング・羽目板</title>
-  <meta name="description" content="国産無垢桧フローリング・羽目板の全商品一覧。厚み・長さ・グレード（節有/小節/特上小/無節）で絞り込み検索できます。">
+  <title>価格表 | 林材木店 無垢桧フローリング・羽目板</title>
+  <meta name="description" content="国産無垢桧フローリング・羽目板の全商品価格一覧。厚み・グレード（節有/小節/特上小/無節）別の価格表。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -16,14 +16,128 @@
       padding: 32px 40px 80px;
     }
 
+    .price-note {
+      background: #fdf8f2;
+      border-left: 3px solid var(--wood-mid);
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      margin-bottom: 28px;
+      line-height: 1.8;
+    }
+
+    .price-note strong {
+      color: var(--wood-dark);
+    }
+
     .result-count {
       font-size: 0.82rem;
       color: var(--text-light);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+    }
+
+    /* 価格表テーブル */
+    .price-table-wrap {
+      overflow-x: auto;
+      margin-bottom: 40px;
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      min-width: 700px;
+    }
+
+    .price-table thead th {
+      background: var(--wood-dark);
+      color: #fff;
+      padding: 11px 14px;
+      text-align: left;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .price-table thead th.num {
+      text-align: right;
+    }
+
+    .price-table tbody tr {
+      border-bottom: 1px solid #ede4d8;
+    }
+
+    .price-table tbody tr:hover {
+      background: #fdf8f2;
+    }
+
+    .price-table tbody tr.out-of-stock {
+      opacity: 0.5;
+    }
+
+    .price-table tbody td {
+      padding: 10px 14px;
+      vertical-align: middle;
+    }
+
+    .price-table tbody td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .price-table .td-name {
+      font-weight: 500;
+      color: var(--wood-dark);
+    }
+
+    .price-table .td-spec {
+      color: var(--text-light);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .price-table .td-furisell {
+      color: var(--text-mid);
+    }
+
+    .price-table .td-sell {
+      font-weight: 600;
+      color: var(--wood-dark);
+    }
+
+    .price-table .td-sell small {
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    .price-table .td-badge {
+      white-space: nowrap;
+    }
+
+    .price-table .badge-oos {
+      display: inline-block;
+      background: #eee;
+      color: #aaa;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .section-divider {
+      background: var(--cream);
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--wood-dark);
+      border-top: 2px solid var(--wood-mid);
+      border-bottom: 1px solid #ede4d8;
     }
 
     @media (max-width: 768px) {
-      .products-layout { padding: 24px 20px 60px; }
+      .products-layout { padding: 24px 16px 60px; }
+      .price-table { font-size: 0.8rem; }
+      .price-table thead th, .price-table tbody td { padding: 8px 10px; }
     }
   </style>
 </head>
@@ -32,17 +146,22 @@
 <div id="site-header"></div>
 
 <div class="page-hero">
-  <h1>商品一覧</h1>
-  <p>国産無垢桧フローリング・羽目板 全78種類</p>
+  <h1>価格表</h1>
+  <p>国産無垢桧フローリング・羽目板 全商品一覧</p>
 </div>
 
 <nav class="breadcrumb">
   <a href="index.html">トップ</a>
   <span class="sep">›</span>
-  <span>商品一覧</span>
+  <span>価格表</span>
 </nav>
 
 <div class="products-layout">
+
+  <div class="price-note">
+    <strong>価格について：</strong>表示価格は税込です（消費税10%込み）。別途送料がかかります。<br>
+    ご注文は <a href="contact.html">お問い合わせフォーム</a>、お電話（0538-58-2395）、または <a href="https://lin.ee/469dvgvz" target="_blank" rel="noopener">LINE</a> にてお気軽にご相談ください。
+  </div>
 
   <!-- カテゴリタブ -->
   <div class="cat-tabs" id="cat-tabs">
@@ -80,29 +199,41 @@
       <option value="4000">4000mm</option>
     </select>
 
-    <label>並び替え</label>
-    <select class="filter-select" id="filter-sort">
-      <option value="default">標準</option>
-      <option value="price-asc">価格が安い順</option>
-      <option value="price-desc">価格が高い順</option>
-    </select>
-
     <button class="btn btn-outline btn-sm" onclick="resetFilters()">リセット</button>
   </div>
 
   <p class="result-count" id="result-count"></p>
 
-  <div class="product-grid" id="product-grid"></div>
+  <div class="price-table-wrap">
+    <table class="price-table" id="price-table">
+      <thead>
+        <tr>
+          <th>グレード</th>
+          <th>節</th>
+          <th>寸法（厚×幅×長 mm）</th>
+          <th class="num">入数</th>
+          <th class="num">付売価格（税別）</th>
+          <th class="num">販売価格（税込）</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="price-tbody"></tbody>
+    </table>
+  </div>
 
 </div>
 
 <div id="site-footer"></div>
 
 <script src="data/products.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/components.js"></script>
+<script src="js/components.js?v=2"></script>
 <script>
 let currentCat = 'all';
+
+// 販売価格 = 付売価格 × 1.15（15%増し）× 1.1（税込）→ 10円単位で四捨五入
+function calcSellPrice(furiPrice) {
+  return Math.round(furiPrice * 1.15 * 1.1 / 10) * 10;
+}
 
 function getFilters() {
   return {
@@ -110,7 +241,6 @@ function getFilters() {
     grade:   document.getElementById('filter-grade').value,
     quality: document.getElementById('filter-quality').value,
     length:  document.getElementById('filter-length').value,
-    sort:    document.getElementById('filter-sort').value,
   };
 }
 
@@ -118,61 +248,72 @@ function applyFilters() {
   const f = getFilters();
   let list = PRODUCTS.filter(p => {
     if (f.cat !== 'all' && p.cat !== f.cat) return false;
-    if (f.grade   && p.grade   !== f.grade)             return false;
-    if (f.quality && p.quality !== f.quality)            return false;
-    if (f.length  && p.length  !== parseInt(f.length))  return false;
+    if (f.grade   && p.grade   !== f.grade)            return false;
+    if (f.quality && p.quality !== f.quality)           return false;
+    if (f.length  && p.length  !== parseInt(f.length)) return false;
     return true;
   });
 
-  if (f.sort === 'price-asc')  list.sort((a,b) => a.price - b.price);
-  if (f.sort === 'price-desc') list.sort((a,b) => b.price - a.price);
-
-  renderGrid(list);
+  renderTable(list);
 
   const countEl = document.getElementById('result-count');
   countEl.textContent = `${list.length}件の商品`;
 }
 
-function renderGrid(list) {
-  const grid = document.getElementById('product-grid');
+function renderTable(list) {
+  const tbody = document.getElementById('price-tbody');
   if (list.length === 0) {
-    grid.innerHTML = '<p style="color:var(--text-light);padding:40px 0;">該当する商品がありませんでした。条件を変えてお試しください。</p>';
+    tbody.innerHTML = '<tr><td colspan="7" style="padding:40px;color:var(--text-light);">該当する商品がありませんでした。条件を変えてお試しください。</td></tr>';
     return;
   }
 
-  grid.innerHTML = list.map(p => `
-    <div class="product-card${p.outOfStock ? ' out-of-stock' : ''}">
-      <img class="product-card-img"
-        src="${p.img}"
-        alt="${p.name}"
-        onerror="this.style.background='#f5ede0';this.removeAttribute('src')">
-      <div class="product-card-body">
-        <div class="product-card-badges">
-          <span class="badge badge-grade-${p.grade.toLowerCase()}">${p.grade}級品</span>
-          <span class="badge badge-quality">${p.quality}</span>
-          ${p.cat === 'sale' ? '<span class="badge badge-sale">お買い得</span>' : ''}
-          ${p.outOfStock ? '<span class="badge" style="background:#eee;color:#aaa;">在庫なし</span>' : ''}
-        </div>
-        <div class="product-card-name">${p.name}</div>
-        <div class="product-card-spec">${p.thick}×${p.width}×${p.length}mm / ${p.qty}枚入</div>
-        <div class="product-card-price">¥${p.price.toLocaleString()} <span>（税込・送料別）</span></div>
-        <div class="product-card-actions">
-          <a href="product.html?id=${p.id}" class="btn btn-outline btn-sm">詳細</a>
-          ${p.outOfStock
-            ? '<button class="btn btn-sm" style="background:#eee;color:#aaa;cursor:not-allowed;" disabled>在庫なし</button>'
-            : `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}');this.textContent='追加済';">カートへ</button>`
-          }
-        </div>
-      </div>
-    </div>
-  `).join('');
+  // カテゴリでグループ化して表示
+  const catOrder = ['flooring15', 'flooring12', 'panel', 'sale'];
+  const catLabel = {
+    flooring15: '桧フローリング 15mm',
+    flooring12: '桧フローリング 12mm',
+    panel:      '桧羽目板',
+    sale:       'お買い得品',
+  };
+
+  let rows = '';
+  const catsInList = catOrder.filter(cat => list.some(p => p.cat === cat));
+
+  catsInList.forEach(cat => {
+    const items = list.filter(p => p.cat === cat);
+    if (items.length === 0) return;
+
+    // カテゴリ見出し（allタブのみ表示 or フィルター後に複数カテゴリある場合）
+    if (catsInList.length > 1) {
+      rows += `<tr><td colspan="7" class="section-divider">■ ${catLabel[cat]}</td></tr>`;
+    }
+
+    items.forEach(p => {
+      const sellPrice = calcSellPrice(p.price);
+      rows += `
+        <tr class="${p.outOfStock ? 'out-of-stock' : ''}">
+          <td class="td-badge">
+            <span class="badge badge-grade-${p.grade.toLowerCase()}">${p.grade}級品</span>
+          </td>
+          <td class="td-badge">
+            <span class="badge badge-quality">${p.quality}</span>
+          </td>
+          <td class="td-spec">${p.thick}×${p.width}×${p.length}</td>
+          <td class="num">${p.qty}枚</td>
+          <td class="num td-furisell">¥${p.price.toLocaleString()}</td>
+          <td class="num td-sell">¥${sellPrice.toLocaleString()} <small>税込</small></td>
+          <td>${p.outOfStock ? '<span class="badge-oos">在庫なし</span>' : ''}</td>
+        </tr>`;
+    });
+  });
+
+  tbody.innerHTML = rows;
 }
 
 function resetFilters() {
   document.getElementById('filter-grade').value   = '';
   document.getElementById('filter-quality').value = '';
   document.getElementById('filter-length').value  = '';
-  document.getElementById('filter-sort').value    = 'default';
   applyFilters();
 }
 
@@ -187,7 +328,7 @@ document.getElementById('cat-tabs').addEventListener('click', e => {
 });
 
 // フィルター変更
-['filter-grade','filter-quality','filter-length','filter-sort'].forEach(id => {
+['filter-grade','filter-quality','filter-length'].forEach(id => {
   document.getElementById(id).addEventListener('change', applyFilters);
 });
 

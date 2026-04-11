@@ -510,16 +510,16 @@
     <p class="section-desc">お支払いは銀行振込。シンプルな手順でご注文いただけます。</p>
     <div class="steps">
       <div class="step">
-        <div class="step-icon">🛒</div>
+        <div class="step-icon">📋</div>
         <p class="step-num">STEP 01</p>
-        <h3>カートに入れる</h3>
-        <p>商品ページから気になる商品を選んでカートへ。</p>
+        <h3>価格表を確認</h3>
+        <p>商品ページで寸法・グレード・価格をご確認ください。</p>
       </div>
       <div class="step">
-        <div class="step-icon">📝</div>
+        <div class="step-icon">📞</div>
         <p class="step-num">STEP 02</p>
-        <h3>注文情報を入力</h3>
-        <p>お名前・住所・配送先などをフォームに入力。</p>
+        <h3>お問い合わせ</h3>
+        <p>電話・LINE・メールで商品名・数量をお知らせください。</p>
       </div>
       <div class="step">
         <div class="step-icon">🏦</div>
@@ -718,8 +718,7 @@
 <div id="site-footer"></div>
 
 <script src="data/products.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/components.js"></script>
+<script src="js/components.js?v=2"></script>
 <script>
 // 人気商品 6件を表示（フローリング15mm 節有・小節・無節、羽目板 節有・小節・無節）
 const featuredIds = [
@@ -747,10 +746,9 @@ function renderFeatured() {
           </div>
           <div class="product-card-name">${p.name}</div>
           <div class="product-card-spec">${p.thick}×${p.width}×${p.length}mm / ${p.qty}枚入</div>
-          <div class="product-card-price">¥${p.price.toLocaleString()} <span>（税込・送料別）</span></div>
+          <div class="product-card-price">¥${(Math.round(p.price*1.15*1.1/10)*10).toLocaleString()} <span>（税込・送料別）</span></div>
           <div class="product-card-actions">
-            <a href="product.html?id=${p.id}" class="btn btn-outline btn-sm">詳細</a>
-            <button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}'); this.textContent='追加済';">カートへ</button>
+            <a href="products.html" class="btn btn-primary btn-sm">価格表を見る</a>
           </div>
         </div>
       </div>`;
