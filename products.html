@@ -185,14 +185,14 @@
 <div class="products-layout">
 
   <div class="price-note">
-    <strong>価格について：</strong>表示価格はすべて税込です（消費税10%込み）。別途送料がかかります。<br>
+    <strong>価格について：</strong>表示価格は税別です。カッコ内は税込（消費税10%）。別途送料がかかります。<br>
     ご注文は <a href="contact.html">お問い合わせフォーム</a>、お電話（0538-58-2395）、または <a href="https://lin.ee/469dvgvz" target="_blank" rel="noopener">LINE</a> にてご相談ください。
   </div>
 
   <!-- 桧フローリング -->
   <div class="price-section">
     <h2 class="price-section-title">桧フローリング</h2>
-    <p class="price-section-sub">厚み 12mm・15mm 共通（幅108mm）／ 価格：税込・送料別</p>
+    <p class="price-section-sub">厚み 12mm・15mm 共通（幅108mm）／ 価格：税別・送料別（カッコ内税込）</p>
     <div class="cross-table-wrap">
       <table class="cross-table">
         <thead>
@@ -218,7 +218,7 @@
   <!-- 桧羽目板 -->
   <div class="price-section">
     <h2 class="price-section-title">桧羽目板</h2>
-    <p class="price-section-sub">厚み 12mm（幅103mm）／ 価格：税込・送料別</p>
+    <p class="price-section-sub">厚み 12mm（幅103mm）／ 価格：税別・送料別（カッコ内税込）</p>
     <div class="cross-table-wrap">
       <table class="cross-table">
         <thead>
@@ -259,7 +259,11 @@ const COLS = [
   { grade: 'B', quality: '特上小', bStart: false },
 ];
 
-function sellPrice(furiPrice) {
+function exPrice(furiPrice) {
+  return Math.round(furiPrice * 1.15 / 10) * 10;
+}
+
+function inPrice(furiPrice) {
   return Math.round(furiPrice * 1.15 * 1.1 / 10) * 10;
 }
 
@@ -283,11 +287,11 @@ function buildTbody(tbodyId, cats) {
       if (!p) {
         html += `<td class="td-none${bCls}">—</td>`;
       } else if (p.outOfStock) {
-        const price = sellPrice(p.price);
-        html += `<td class="td-oos${bCls}">¥${price.toLocaleString()}<small>${p.qty}枚入</small><span class="oos-label">在庫なし</span></td>`;
+        const ex = exPrice(p.price), inc = inPrice(p.price);
+        html += `<td class="td-oos${bCls}">¥${ex.toLocaleString()}<small>（税込¥${inc.toLocaleString()}）${p.qty}枚入</small><span class="oos-label">在庫なし</span></td>`;
       } else {
-        const price = sellPrice(p.price);
-        html += `<td class="td-price${bCls}">¥${price.toLocaleString()}<small>${p.qty}枚入</small></td>`;
+        const ex = exPrice(p.price), inc = inPrice(p.price);
+        html += `<td class="td-price${bCls}">¥${ex.toLocaleString()}<small>（税込¥${inc.toLocaleString()}）${p.qty}枚入</small></td>`;
       }
     });
     html += '</tr>';

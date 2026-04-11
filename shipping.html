@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>送料見積もり | 林材木店 無垢桧フローリング・羽目板</title>
+  <meta name="description" content="林材木店の送料見積もりツール。都道府県・長さ・数量を選ぶだけで西濃運輸の送料目安が計算できます。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <style>
+    .shipping-layout {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 40px 80px;
+    }
+
+    .shipping-note {
+      background: #fdf8f2;
+      border-left: 3px solid var(--wood-mid);
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      margin-bottom: 32px;
+      line-height: 1.8;
+    }
+
+    .shipping-note strong { color: var(--wood-dark); }
+
+    .calc-card {
+      background: #fff;
+      border: 1px solid #e8d8c4;
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+
+    .calc-card h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.05rem;
+      color: var(--wood-dark);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ede4d8;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+    }
+
+    .form-group select,
+    .form-group input[type="number"] {
+      padding: 10px 12px;
+      border: 1px solid #d0bba0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: #fff;
+      color: var(--text-dark);
+      appearance: auto;
+    }
+
+    .form-group select:focus,
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--wood-mid);
+      box-shadow: 0 0 0 3px rgba(139,90,43,0.12);
+    }
+
+    .calc-btn {
+      display: inline-block;
+      background: var(--wood-dark);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 32px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .calc-btn:hover { background: var(--wood-mid); }
+
+    /* 結果 */
+    .result-box {
+      margin-top: 24px;
+      background: #faf5ef;
+      border: 2px solid var(--wood-light);
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+
+    .result-box h3 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1rem;
+      color: var(--wood-dark);
+      margin-bottom: 14px;
+    }
+
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .result-table th,
+    .result-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e8d8c4;
+    }
+
+    .result-table th {
+      text-align: left;
+      color: var(--text-mid);
+      font-weight: 400;
+      width: 55%;
+    }
+
+    .result-table td {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-table tr.sub th,
+    .result-table tr.sub td {
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+
+    .result-table tr.total th,
+    .result-table tr.total td {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      border-top: 2px solid var(--wood-mid);
+      border-bottom: none;
+    }
+
+    .result-table tr.per-bundle td {
+      color: var(--text-mid);
+      font-size: 0.9rem;
+    }
+
+    .result-note {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 10px;
+    }
+
+    .error-box {
+      background: #fef0f0;
+      border-color: #e0a0a0;
+    }
+
+    .error-box h3 { color: #c0392b; }
+
+    @media (max-width: 640px) {
+      .shipping-layout { padding: 24px 16px 60px; }
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .calc-card { padding: 20px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>送料見積もり</h1>
+  <p>西濃運輸の送料目安を簡単に計算</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <span>送料見積もり</span>
+</nav>
+
+<div class="shipping-layout">
+
+  <div class="shipping-note">
+    <strong>ご注意：</strong>この計算は目安です。実際の送料は荷物の状態・配送先・時期により変動する場合があります。<br>
+    正確な金額はご注文時にご案内します。送料は<strong>税込</strong>で表示しています（西濃運輸・ネット販売料金）。
+  </div>
+
+  <div class="calc-card">
+    <h2>🚚 送料かんたん計算</h2>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>お届け先（都道府県）</label>
+        <select id="pref-select">
+          <option value="">選択してください</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>長さ</label>
+        <select id="length-select">
+          <option value="1">910mm（1m材）</option>
+          <option value="2">1,820mm（2m材）</option>
+          <option value="3">3,000mm（3m材）</option>
+          <option value="4" selected>4,000mm（4m材）</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>数量（束）</label>
+        <input type="number" id="qty-input" value="10" min="1" max="100" step="1">
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcShipping()">送料を計算する</button>
+
+    <div id="result-area"></div>
+  </div>
+
+  <div class="calc-card" style="background:#faf5ef;">
+    <h2>📋 送料の目安表（1束あたり・税込）</h2>
+    <div id="ref-table-area"></div>
+  </div>
+
+</div>
+
+<div id="site-footer"></div>
+
+<script src="js/components.js?v=2"></script>
+<script>
+// ===== 西濃運輸データ =====
+const SEINO_DISTANCES = [150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400];
+
+const SEINO_PREF_MAP = {
+  "静岡":0,"愛知":1,"岐阜":2,"神奈川":3,"滋賀":4,"三重":5,
+  "東京":6,"奈良":7,"京都":8,"山梨":9,"埼玉":10,"千葉":11,
+  "大阪":12,"長野":13,"栃木":14,"和歌山":15,"石川":16,"徳島":17,
+  "茨城":18,"群馬":19,"兵庫":20,"福島":21,"鳥取":22,"岡山":23,
+  "高知":24,"新潟":25,"香川":26,"福井":27,"富山":28,"宮城":29,
+  "広島":30,"愛媛":31,"山形":32,"島根":33,"秋田":34,"岩手":35,
+  "山口":36,"福岡":37,"佐賀":38,"青森":39,"長崎":40,"熊本":41,
+  "大分":42,"宮崎":43,"鹿児島":44,"北海道":45
+};
+
+const PREF_TO_DIST = [
+  0,0,1,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,7,8,8,8,9,9,10,11,11,12,13,14,14,15,16,17,18,18,18,18,19,19,21
+];
+
+const SEINO_WEIGHTS = [10,20,30,40,60,80,100,120,140,160,180,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000];
+
+const SEINO_FARES = [
+  [1500,1500,1600,1600,1600,1600,1600,1600,1600,1600,1900,1900,2000,2000,2200,2200,2200,2200,2200,2200,2200,2200],
+  [1700,1800,1800,1800,1800,1900,1900,1900,2000,2000,2400,2400,2600,2600,2700,2700,2800,2800,2900,2900,3000,3100],
+  [2000,2000,2000,2000,2100,2100,2100,2100,2200,2200,2700,2800,2900,2900,3100,3200,3200,3300,3400,3500,3600,3700],
+  [2200,2300,2400,2400,2400,2500,2500,2600,2700,2700,3300,3300,3600,3600,3900,4000,4100,4200,4300,4500,4600,4800],
+  [2400,2500,2600,2700,2800,3000,3100,3100,3100,3200,3900,4000,4200,4300,4700,4800,4900,4900,5200,5400,5600,5800],
+  [2900,3000,3100,3300,3400,3600,3700,3800,3900,4000,4900,5000,5400,5600,5900,6100,6300,6500,6800,7100,7400,7800],
+  [3300,3500,3600,3800,4000,4200,4400,4500,4600,4800,5800,6000,6400,6600,7200,7300,7500,7800,8200,8600,9000,9400],
+  [3700,4000,4300,4400,4600,4900,5100,5200,5400,5600,7100,7200,7800,8000,8500,8800,9000,9300,9800,10300,10800,11300],
+  [4200,4500,4700,5100,5200,5500,5800,6000,6200,6400,8000,8300,8900,9300,9800,10100,10500,10700,11300,11900,12600,13200],
+  [4600,4900,5300,5600,5800,6100,6400,6700,6900,7200,9000,9300,10100,10400,11100,11400,11700,12100,12800,13500,14200,15000],
+  [5000,5400,5700,6100,6400,6700,7000,7400,7600,8000,10000,10300,11100,11500,12200,12600,13000,13500,14300,15100,15900,16700],
+  [5400,5700,6200,6400,6700,7200,7400,7700,8100,8400,10500,10800,11700,12200,12900,13300,13700,14200,15000,15900,16800,17600],
+  [6300,6900,7300,7800,8200,8700,9000,9500,9900,10300,12800,13400,14400,15000,15700,16200,16800,17400,18500,19600,20700,21700],
+  [7500,8100,8700,9200,9700,10200,10800,11300,11700,12300,15300,15900,17200,17900,18800,19500,20100,20700,22100,23400,24700,26000],
+  [8500,9100,9900,10600,11100,11700,12400,12900,13600,14200,17700,18400,19900,20700,21800,22500,23400,24200,25700,27300,28900,30500],
+  [9700,10500,11300,12000,12600,13400,14100,14800,15400,16200,20100,21000,22700,23600,24900,25800,26700,27600,29400,31200,33000,34800],
+  [10700,11700,12600,13400,14200,14900,15700,16500,17300,18100,22500,23500,25500,26500,27900,29000,30000,31000,33100,35100,37100,39200],
+  [11700,12700,13800,14700,15500,16500,17400,18200,19100,20000,25000,26100,28300,29400,31000,32200,33300,34400,36700,39000,41300,43600],
+  [15200,16500,18000,19100,20300,21500,22600,23900,25100,26200,27900,29000,31500,32800,35400,36800,38000,39400,42000,44700,47300,49900],
+  [16400,17800,19500,20700,22000,23400,24700,26000,27200,28600,30300,31600,34300,35800,38600,40000,41400,42900,45800,48700,51500,54400],
+  [17600,19300,21000,22400,23800,25200,26600,28000,29500,30800,32800,34200,37100,38700,41800,43300,44900,46500,49600,52800,55900,59000],
+  [18900,20700,22500,24000,25500,27000,28600,30100,31700,33200,35200,36900,40000,41600,45000,46700,48300,50000,53400,56700,60100,63500],
+  [20200,22100,24000,25700,27300,28900,30600,32300,33900,35500,37800,39400,42800,44600,48100,49900,51800,53500,57100,60800,64400,68000],
+  [21500,23500,25600,27300,29000,30800,32600,34300,36000,37800,40200,42000,45600,47500,51200,53200,55200,57100,61000,64900,68800,72700],
+  [22700,24900,27000,28900,30800,32600,34500,36400,38300,40200,42600,44600,48500,50400,54500,56600,58500,60700,64900,69000,73100,77300],
+  [24000,26300,28600,30600,32500,34500,36500,38600,40500,42400,45100,47100,51300,53300,57600,59800,62100,64200,68600,73000,77400,81800],
+  [25300,27700,30200,32300,34300,36400,38500,40600,42700,44800,47700,49800,54100,56300,60800,63100,65500,67800,72500,77100,81700,86400],
+  [26600,29100,31600,33900,36000,38300,40500,42700,45000,47100,50100,52300,56800,59300,64000,66500,68900,71300,76200,81100,86000,90900]
+];
+
+// 長さ別: 重量(kg/束), ダンボール代(円/束)
+const DANBALL = {
+  1: { weight: 10, box: 160 },
+  2: { weight: 20, box: 160 },
+  3: { weight: 30, box: 240 },
+  4: { weight: 40, box: 320 }
+};
+
+const MAX_BUNDLE = 20;
+
+// 都道府県リストを生成（SEINO_PREF_MAPから）
+const PREFS_SORTED = [
+  "北海道","青森","岩手","宮城","秋田","山形","福島",
+  "茨城","栃木","群馬","埼玉","千葉","東京","神奈川",
+  "新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重",
+  "滋賀","京都","大阪","兵庫","奈良","和歌山",
+  "鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知",
+  "福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島"
+];
+
+function calcNet(distIdx, totalWeight, boxCost) {
+  let tierIdx = SEINO_WEIGHTS.findIndex(w => w >= totalWeight);
+  if (tierIdx === -1) return null; // 超過
+  const fare = SEINO_FARES[tierIdx][distIdx];
+  const subtotal = fare + boxCost;
+  const tax = Math.round(subtotal * 0.1);
+  const total = Math.round((subtotal + tax) / 100) * 100;
+  return { fare, boxCost, tax, total, tierWeight: SEINO_WEIGHTS[tierIdx] };
+}
+
+function calcShipping() {
+  const pref = document.getElementById('pref-select').value;
+  const length = parseInt(document.getElementById('length-select').value);
+  const qty = parseInt(document.getElementById('qty-input').value) || 0;
+  const resultArea = document.getElementById('result-area');
+
+  if (!pref) {
+    resultArea.innerHTML = '<p style="color:#c0392b;margin-top:16px;font-size:0.9rem;">都道府県を選択してください。</p>';
+    return;
+  }
+  if (qty <= 0) {
+    resultArea.innerHTML = '<p style="color:#c0392b;margin-top:16px;font-size:0.9rem;">数量を入力してください。</p>';
+    return;
+  }
+
+  const prefIdx = SEINO_PREF_MAP[pref];
+  const distIdx = PREF_TO_DIST[prefIdx];
+  const distance = SEINO_DISTANCES[distIdx];
+  const d = DANBALL[length];
+
+  if (qty > MAX_BUNDLE) {
+    // 分割計算
+    const shipCount = Math.ceil(qty / MAX_BUNDLE);
+    const baseQty = Math.floor(qty / shipCount);
+    const remainder = qty % shipCount;
+    let totalFare = 0, totalBox = 0, totalWeight = 0;
+    let shipRows = '';
+    let failed = false;
+
+    for (let i = 0; i < shipCount; i++) {
+      const sq = baseQty + (i < remainder ? 1 : 0);
+      const sw = sq * d.weight;
+      const sbox = sq * d.box;
+      const res = calcNet(distIdx, sw, sbox);
+      if (!res) { failed = true; break; }
+      totalFare += res.fare;
+      totalBox += sbox;
+      totalWeight += sw;
+      shipRows += `<tr class="sub"><th>便${i+1}（${sq}束 / ${sw}kg）</th><td>${res.fare.toLocaleString()}円 + ${sbox.toLocaleString()}円</td></tr>`;
+    }
+
+    if (failed) {
+      resultArea.innerHTML = `<div class="result-box error-box" style="margin-top:20px;"><h3>重量超過</h3><p>数量が多すぎます。分割してお問い合わせください。</p></div>`;
+      return;
+    }
+
+    const subtotal = totalFare + totalBox;
+    const tax = Math.round(subtotal * 0.1);
+    const total = Math.round((subtotal + tax) / 100) * 100;
+    const perBundle = Math.round(total / qty);
+
+    resultArea.innerHTML = `
+      <div class="result-box" style="margin-top:20px;">
+        <h3>送料見積もり結果</h3>
+        <table class="result-table">
+          <tr class="sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
+          <tr class="sub"><th>長さ・数量</th><td>${['','910mm','1820mm','3000mm','4000mm'][length]} × ${qty}束</td></tr>
+          <tr class="sub"><th>配送便数</th><td>${shipCount}便に分割</td></tr>
+          ${shipRows}
+          <tr><th>運賃合計</th><td>${totalFare.toLocaleString()}円</td></tr>
+          <tr><th>梱包材費合計</th><td>${totalBox.toLocaleString()}円</td></tr>
+          <tr><th>消費税（10%）</th><td>${tax.toLocaleString()}円</td></tr>
+          <tr class="total"><th>送料合計（税込）</th><td>${total.toLocaleString()}円</td></tr>
+          <tr class="per-bundle"><th>1束あたり目安</th><td>約${perBundle.toLocaleString()}円</td></tr>
+        </table>
+        <p class="result-note">※ ${qty}束を${shipCount}便（各${MAX_BUNDLE}束以内）に分割した場合の合計です。</p>
+      </div>`;
+    return;
+  }
+
+  const totalWeight = qty * d.weight;
+  const boxCost = qty * d.box;
+  const res = calcNet(distIdx, totalWeight, boxCost);
+
+  if (!res) {
+    resultArea.innerHTML = `<div class="result-box error-box" style="margin-top:20px;"><h3>重量超過</h3><p>重量（${totalWeight}kg）が最大値を超えています。数量を減らしてください。</p></div>`;
+    return;
+  }
+
+  const perBundle = Math.round(res.total / qty);
+  const lenLabel = ['','910mm','1,820mm','3,000mm','4,000mm'][length];
+
+  resultArea.innerHTML = `
+    <div class="result-box" style="margin-top:20px;">
+      <h3>送料見積もり結果</h3>
+      <table class="result-table">
+        <tr class="sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
+        <tr class="sub"><th>長さ・数量</th><td>${lenLabel} × ${qty}束（${totalWeight}kg）</td></tr>
+        <tr class="sub"><th>適用重量帯</th><td>${res.tierWeight}kg帯</td></tr>
+        <tr><th>運賃</th><td>${res.fare.toLocaleString()}円</td></tr>
+        <tr><th>梱包材費（${qty}束 × ${d.box.toLocaleString()}円）</th><td>${res.boxCost.toLocaleString()}円</td></tr>
+        <tr><th>消費税（10%）</th><td>${res.tax.toLocaleString()}円</td></tr>
+        <tr class="total"><th>送料合計（税込）</th><td>${res.total.toLocaleString()}円</td></tr>
+        <tr class="per-bundle"><th>1束あたり目安</th><td>約${perBundle.toLocaleString()}円</td></tr>
+      </table>
+      <p class="result-note">※ 実際の送料は荷物の状態・配送条件により異なる場合があります。</p>
+    </div>`;
+}
+
+// 目安表（代表都府県・4m材・10束）
+function buildRefTable() {
+  const refPrefs = ['静岡','愛知','東京','大阪','北海道','福岡'];
+  const refQtys = [5, 10, 15, 20];
+  const length = 4;
+  const d = DANBALL[length];
+
+  let html = '<table class="result-table" style="font-size:0.82rem;">';
+  html += '<thead><tr><th style="text-align:left;">都道府県</th>';
+  refQtys.forEach(q => { html += `<td style="text-align:center;font-weight:700;">${q}束</td>`; });
+  html += '</tr></thead><tbody>';
+
+  refPrefs.forEach(pref => {
+    const prefIdx = SEINO_PREF_MAP[pref];
+    const distIdx = PREF_TO_DIST[prefIdx];
+    html += `<tr><th>${pref}</th>`;
+    refQtys.forEach(q => {
+      const totalWeight = q * d.weight;
+      const boxCost = q * d.box;
+      const res = calcNet(distIdx, totalWeight, boxCost);
+      html += `<td style="text-align:center;">${res ? res.total.toLocaleString() + '円' : '—'}</td>`;
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  html += '<p style="font-size:0.75rem;color:var(--text-light);margin-top:8px;">※ 4,000mm材・税込（西濃運輸・ネット販売料金）</p>';
+  document.getElementById('ref-table-area').innerHTML = html;
+}
+
+// 都道府県セレクト生成
+function buildPrefSelect() {
+  const sel = document.getElementById('pref-select');
+  PREFS_SORTED.forEach(p => {
+    if (SEINO_PREF_MAP[p] !== undefined) {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+// Enterキーで計算
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (document.activeElement.id === 'qty-input' || document.activeElement.id === 'pref-select' || document.activeElement.id === 'length-select')) {
+    calcShipping();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildPrefSelect();
+  buildRefTable();
+});
+</script>
+</body>
+</html>
