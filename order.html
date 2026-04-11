@@ -3,73 +3,530 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>注文手続き | 林材木店</title>
+  <title>お見積もりシミュレーション | 林材木店 無垢桧フローリング・羽目板</title>
+  <meta name="description" content="林材木店の見積もりシミュレーション。商品を選んで都道府県を入力するだけで、送料込みの合計金額を確認できます。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=3">
   <style>
+    /* ---- Layout ---- */
     .order-layout {
-      max-width: 1000px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 40px 40px 80px;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 48px;
-      align-items: start;
+      padding: 36px 40px 80px;
     }
 
-    .order-summary-box {
-      background: var(--wood-cream);
+    /* ---- Step bar ---- */
+    .step-bar {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 40px;
       border-radius: 8px;
-      padding: 24px;
-      position: sticky;
-      top: 88px;
+      overflow: hidden;
+      border: 1px solid #e0cdb8;
     }
 
-    .order-summary-box h3 {
-      font-size: 0.95rem;
-      color: var(--wood-dark);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #e8ddd0;
+    .step-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: #faf5ef;
+      color: var(--text-light);
+      font-size: 0.82rem;
+      border-right: 1px solid #e0cdb8;
+      transition: background 0.2s;
     }
 
-    .order-items-table {
+    .step-item:last-child { border-right: none; }
+
+    .step-item.active {
+      background: var(--wood-dark);
+      color: #fff;
+    }
+
+    .step-item.done {
+      background: #f0e8dc;
+      color: var(--wood-mid);
+    }
+
+    .step-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-item.active .step-num { background: rgba(255,255,255,0.3); }
+    .step-item.done .step-num { background: #c8a87a; color: #fff; }
+    .step-item:not(.active):not(.done) .step-num { background: #e8d8c4; color: var(--wood-mid); }
+
+    .step-label { font-weight: 700; font-size: 0.9rem; line-height: 1; }
+    .step-sub { font-size: 0.72rem; margin-top: 2px; opacity: 0.8; }
+
+    /* ---- Category tabs ---- */
+    .cat-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cat-tab {
+      padding: 9px 18px;
+      border: 2px solid #d0bba0;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--wood-mid);
+      font-size: 0.88rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .cat-tab:hover { border-color: var(--wood-mid); }
+
+    .cat-tab.active {
+      background: var(--wood-dark);
+      border-color: var(--wood-dark);
+      color: #fff;
+    }
+
+    /* ---- Product table ---- */
+    .product-tab-content { display: none; }
+    .product-tab-content.active { display: block; }
+
+    .product-table-wrap { overflow-x: auto; }
+
+    .product-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.78rem;
-      margin-bottom: 16px;
+      font-size: 0.86rem;
     }
 
-    .order-items-table th,
-    .order-items-table td {
-      padding: 8px 6px;
-      border-bottom: 1px solid #e8ddd0;
+    .product-table thead th {
+      background: var(--wood-dark);
+      color: #fff;
+      padding: 10px 12px;
+      text-align: center;
+      font-weight: 500;
+      white-space: nowrap;
     }
 
-    .order-items-table th {
+    .product-table thead th:first-child { text-align: left; }
+
+    .product-table tbody tr {
+      border-bottom: 1px solid #ede4d8;
+      transition: background 0.1s;
+    }
+
+    .product-table tbody tr:hover { background: #fdf8f2; }
+
+    .product-table tbody tr.selected { background: #f5ede0; }
+
+    .product-table tbody tr.oos { opacity: 0.55; }
+
+    .product-table td {
+      padding: 11px 12px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .product-table td.td-name {
+      text-align: left;
+      color: var(--wood-dark);
+      font-weight: 600;
+    }
+
+    .product-table td.td-name small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.76rem;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    .product-table td.td-price {
       font-weight: 700;
-      color: var(--wood-mid);
+      color: var(--wood-dark);
+      white-space: nowrap;
+    }
+
+    .product-table td.td-price small {
+      display: block;
       font-size: 0.72rem;
+      font-weight: 400;
+      color: var(--text-light);
     }
 
-    .order-total-row {
-      display: flex;
-      justify-content: space-between;
+    .product-table td.td-sub {
       font-weight: 700;
+      color: var(--wood-dark);
+      min-width: 90px;
+    }
+
+    .qty-input {
+      width: 72px;
+      padding: 7px 8px;
+      border: 1.5px solid #d0bba0;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      text-align: center;
+      background: #fff;
+    }
+
+    .qty-input:focus {
+      outline: none;
+      border-color: var(--wood-mid);
+      box-shadow: 0 0 0 2px rgba(139,90,43,0.12);
+    }
+
+    .oos-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      background: #fde8e8;
+      color: #c0392b;
+      border-radius: 3px;
+      padding: 1px 6px;
+      margin-left: 4px;
+    }
+
+    /* ---- Floating bottom bar (step 1) ---- */
+    .bottom-bar {
+      position: sticky;
+      bottom: 0;
+      background: var(--wood-dark);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-radius: 10px 10px 0 0;
+      margin-top: 32px;
+      gap: 16px;
+    }
+
+    .bottom-bar-info {
+      font-size: 0.9rem;
+    }
+
+    .bottom-bar-info strong {
+      font-size: 1.2rem;
+      margin-left: 6px;
+    }
+
+    .btn-next {
+      background: #fff;
+      color: var(--wood-dark);
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .btn-next:hover { background: #f5ede0; }
+
+    .btn-back {
+      background: none;
+      color: var(--wood-mid);
+      border: 1.5px solid #d0bba0;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-back:hover { background: #faf5ef; }
+
+    /* ---- Step 2: Confirmation ---- */
+    .confirm-section {
+      background: #fff;
+      border: 1px solid #e8d8c4;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+
+    .confirm-section h3 {
+      font-family: 'Noto Serif JP', serif;
       font-size: 1rem;
       color: var(--wood-dark);
-      padding-top: 12px;
-      border-top: 2px solid #e8ddd0;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ede4d8;
     }
 
-    @media (max-width: 768px) {
-      .order-layout {
-        grid-template-columns: 1fr;
-        padding: 24px 20px 60px;
-      }
-      .order-summary-box { position: static; }
+    .confirm-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    .confirm-items-table th {
+      background: #f5ede0;
+      color: var(--wood-dark);
+      padding: 8px 12px;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .confirm-items-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #ede4d8;
+      vertical-align: middle;
+    }
+
+    .confirm-items-table td:last-child { text-align: right; font-weight: 700; }
+
+    /* ---- Shipping form (step 2) ---- */
+    .shipping-form-grid {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .form-group-sm {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group-sm label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+    }
+
+    .form-group-sm select {
+      padding: 10px 12px;
+      border: 1.5px solid #d0bba0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      min-width: 160px;
+    }
+
+    .btn-calc {
+      background: var(--wood-dark);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 11px 22px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn-calc:hover { background: var(--wood-mid); }
+
+    /* ---- Result table ---- */
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .result-table th,
+    .result-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #e8d8c4;
+    }
+
+    .result-table th {
+      text-align: left;
+      color: var(--text-mid);
+      font-weight: 400;
+    }
+
+    .result-table td {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-table tr.result-total th,
+    .result-table tr.result-total td {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      border-top: 2px solid var(--wood-mid);
+      border-bottom: none;
+    }
+
+    .result-table tr.result-sub th,
+    .result-table tr.result-sub td {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    /* ---- Grand total box ---- */
+    .grand-total-box {
+      background: #fdf8f2;
+      border: 2px solid var(--wood-light);
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+
+    .grand-total-box .grand-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .grand-total-box .grand-sub {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    /* ---- Step 3: Contact ---- */
+    .step3-summary {
+      background: #fdf8f2;
+      border: 1px solid #e8d8c4;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      font-size: 0.88rem;
+    }
+
+    .step3-summary h3 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1rem;
+      color: var(--wood-dark);
+      margin-bottom: 12px;
+    }
+
+    .step3-cta {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+
+    .btn-contact-link {
+      display: inline-block;
+      background: var(--wood-dark);
+      color: #fff;
+      border-radius: 8px;
+      padding: 16px 48px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-contact-link:hover { background: var(--wood-mid); color: #fff; }
+
+    .other-contact {
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .contact-card {
+      background: #fdf8f2;
+      border: 1px solid #e8d8c4;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .contact-card h4 {
+      font-size: 0.85rem;
+      color: var(--wood-dark);
+      margin-bottom: 6px;
+    }
+
+    .contact-card a {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--wood-mid);
+    }
+
+    .contact-card p {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    /* ---- Step buttons row ---- */
+    .step-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      gap: 16px;
+    }
+
+    .step-buttons .btn-proceed {
+      background: var(--wood-dark);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 36px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .step-buttons .btn-proceed:hover { background: var(--wood-mid); }
+
+    /* ---- Misc ---- */
+    .shipping-hint {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+
+    .note-box {
+      background: #fdf8f2;
+      border-left: 3px solid var(--wood-mid);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      margin-bottom: 28px;
+      line-height: 1.8;
+    }
+
+    .empty-warning {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      .order-layout { padding: 24px 16px 60px; }
+      .step-bar { flex-direction: column; border-radius: 8px; }
+      .step-item { border-right: none; border-bottom: 1px solid #e0cdb8; }
+      .step-item:last-child { border-bottom: none; }
+      .bottom-bar { flex-direction: column; align-items: stretch; text-align: center; }
+      .other-contact { grid-template-columns: 1fr; }
+      .step-buttons { flex-direction: column-reverse; }
+      .step-buttons .btn-proceed { width: 100%; text-align: center; }
     }
   </style>
 </head>
@@ -78,149 +535,610 @@
 <div id="site-header"></div>
 
 <div class="page-hero">
-  <h1>注文手続き</h1>
-  <p>お届け先・お客様情報をご入力ください</p>
+  <h1>お見積もりシミュレーション</h1>
+  <p>商品を選んで、送料込みの合計金額をすぐに確認</p>
 </div>
 
 <nav class="breadcrumb">
   <a href="index.html">トップ</a>
   <span class="sep">›</span>
-  <a href="cart.html">カート</a>
-  <span class="sep">›</span>
-  <span>注文手続き</span>
+  <span>お見積もり</span>
 </nav>
 
 <div class="order-layout">
-  <!-- フォーム -->
-  <div>
-    <form id="order-form" action="order.php" method="post" onsubmit="return validateOrder()">
-      <input type="hidden" id="cart-json" name="cart_json" value="">
 
-      <h2 style="font-size:1.1rem;color:var(--wood-dark);margin-bottom:24px;padding-bottom:10px;border-bottom:2px solid #e8ddd0;">
-        お客様情報
-      </h2>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">お名前 <span class="req">必須</span></label>
-          <input type="text" name="name" class="form-input" placeholder="山田 太郎" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">会社名</label>
-          <input type="text" name="company" class="form-input" placeholder="株式会社〇〇">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">メールアドレス <span class="req">必須</span></label>
-          <input type="email" name="email" class="form-input" placeholder="info@example.com" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">電話番号 <span class="req">必須</span></label>
-          <input type="tel" name="tel" class="form-input" placeholder="090-0000-0000" required>
-        </div>
-      </div>
-
-      <h2 style="font-size:1.1rem;color:var(--wood-dark);margin:32px 0 24px;padding-bottom:10px;border-bottom:2px solid #e8ddd0;">
-        お届け先
-      </h2>
-
-      <div class="form-group">
-        <label class="form-label">郵便番号 <span class="req">必須</span></label>
-        <input type="text" name="zip" class="form-input" placeholder="430-0000" required style="max-width:200px;">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">都道府県 <span class="req">必須</span></label>
-        <select name="prefecture" class="form-select" required style="max-width:200px;">
-          <option value="">選択してください</option>
-          <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option>
-          <option>秋田県</option><option>山形県</option><option>福島県</option><option>茨城県</option>
-          <option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option>
-          <option>東京都</option><option>神奈川県</option><option>新潟県</option><option>富山県</option>
-          <option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option>
-          <option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option>
-          <option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option>
-          <option>奈良県</option><option>和歌山県</option><option>鳥取県</option><option>島根県</option>
-          <option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option>
-          <option>香川県</option><option>愛媛県</option><option>高知県</option><option>福岡県</option>
-          <option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option>
-          <option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">市区町村・番地 <span class="req">必須</span></label>
-        <input type="text" name="address1" class="form-input" placeholder="磐田市大久保1234" required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">建物名・部屋番号</label>
-        <input type="text" name="address2" class="form-input" placeholder="〇〇マンション 101号室">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">備考・ご要望</label>
-        <textarea name="note" class="form-textarea" placeholder="納期のご希望、施工場所のご説明など何でもお書きください。"></textarea>
-      </div>
-
-      <div class="notice-box green" style="margin-bottom:24px;">
-        <h4>お支払い方法：銀行振込</h4>
-        ご注文確認後、振込先をメールにてご案内します。<br>
-        <strong>遠州信用金庫 普通 ***REDACTED*** ***REDACTED***</strong><br>
-        振込確認後に発送いたします（振込手数料はお客様負担）。
-      </div>
-
-      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">
-        注文を確定する
-      </button>
-    </form>
+  <!-- Step bar -->
+  <div class="step-bar" id="step-bar">
+    <div class="step-item active" id="sb1">
+      <div class="step-num">01</div>
+      <div><div class="step-label">商品を選ぶ</div><div class="step-sub">数量を入力</div></div>
+    </div>
+    <div class="step-item" id="sb2">
+      <div class="step-num">02</div>
+      <div><div class="step-label">送料・合計確認</div><div class="step-sub">都道府県を選択</div></div>
+    </div>
+    <div class="step-item" id="sb3">
+      <div class="step-num">03</div>
+      <div><div class="step-label">お申し込みへ</div><div class="step-sub">フォーム・電話・LINE</div></div>
+    </div>
   </div>
 
-  <!-- 注文サマリー -->
-  <div class="order-summary-box">
-    <h3>ご注文内容</h3>
-    <div style="overflow-x:auto;">
-      <table class="order-items-table">
-        <thead>
-          <tr>
-            <th>商品</th>
-            <th style="text-align:right;">単価</th>
-            <th style="text-align:center;">数量</th>
-            <th style="text-align:right;">小計</th>
-          </tr>
-        </thead>
-        <tbody id="order-items"></tbody>
-      </table>
+  <!-- ======================== STEP 01 ======================== -->
+  <div id="step1">
+
+    <div class="note-box">
+      <strong>価格について：</strong>表示価格は税込です。送料は次のステップで計算します。<br>
+      数量（束）に希望の束数を入力してください。0 のまま次へ進むことはできません。
     </div>
-    <div class="order-total-row">
-      <span>合計（税込）</span>
-      <span id="order-total"></span>
+
+    <!-- Category tabs -->
+    <div class="cat-tabs" id="cat-tabs">
+      <button class="cat-tab active" data-cat="flooring15" onclick="switchTab('flooring15')">桧フローリング 15mm</button>
+      <button class="cat-tab" data-cat="flooring12" onclick="switchTab('flooring12')">桧フローリング 12mm</button>
+      <button class="cat-tab" data-cat="panel" onclick="switchTab('panel')">桧羽目板</button>
+      <button class="cat-tab" data-cat="sale" onclick="switchTab('sale')">お買い得品</button>
     </div>
-    <p style="font-size:0.72rem;color:var(--text-light);margin-top:10px;">※送料は別途ご案内します</p>
-    <a href="cart.html" class="btn btn-outline btn-sm" style="margin-top:16px;width:100%;justify-content:center;">
-      ← カートに戻る
-    </a>
+
+    <!-- Product tables -->
+    <div id="tab-flooring15" class="product-tab-content active">
+      <div class="product-table-wrap">
+        <table class="product-table"><thead id="th-flooring15"></thead><tbody id="tb-flooring15"></tbody></table>
+      </div>
+    </div>
+    <div id="tab-flooring12" class="product-tab-content">
+      <div class="product-table-wrap">
+        <table class="product-table"><thead id="th-flooring12"></thead><tbody id="tb-flooring12"></tbody></table>
+      </div>
+    </div>
+    <div id="tab-panel" class="product-tab-content">
+      <div class="product-table-wrap">
+        <table class="product-table"><thead id="th-panel"></thead><tbody id="tb-panel"></tbody></table>
+      </div>
+    </div>
+    <div id="tab-sale" class="product-tab-content">
+      <div class="product-table-wrap">
+        <table class="product-table"><thead id="th-sale"></thead><tbody id="tb-sale"></tbody></table>
+      </div>
+    </div>
+
+    <!-- Sticky bottom bar -->
+    <div class="bottom-bar">
+      <div class="bottom-bar-info">
+        選択中 <span id="item-count">0</span>商品 ／ 小計（税込）
+        <strong id="subtotal-display">¥0</strong>
+      </div>
+      <button class="btn-next" onclick="goStep2()">次へ：送料を確認する →</button>
+    </div>
+
   </div>
+
+  <!-- ======================== STEP 02 ======================== -->
+  <div id="step2" style="display:none">
+
+    <!-- Selected items -->
+    <div class="confirm-section">
+      <h3>ご選択の商品</h3>
+      <div class="product-table-wrap">
+        <table class="confirm-items-table" id="confirm-table">
+          <thead>
+            <tr>
+              <th>商品</th>
+              <th style="text-align:center;">枚数/束</th>
+              <th style="text-align:center;">数量</th>
+              <th style="text-align:right;">単価（税込）</th>
+              <th style="text-align:right;">小計（税込）</th>
+            </tr>
+          </thead>
+          <tbody id="confirm-tbody"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" style="text-align:right;padding:10px 12px;font-weight:700;color:var(--wood-dark);">商品合計（税込）</td>
+              <td style="text-align:right;padding:10px 12px;font-weight:700;color:var(--wood-dark);font-size:1.05rem;" id="confirm-total"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Shipping -->
+    <div class="confirm-section">
+      <h3>送料計算</h3>
+      <div class="shipping-form-grid">
+        <div class="form-group-sm">
+          <label>お届け先（都道府県）</label>
+          <select id="pref-select2">
+            <option value="">選択してください</option>
+          </select>
+        </div>
+        <button class="btn-calc" onclick="calcStep2Shipping()">送料を計算する</button>
+      </div>
+      <div id="shipping-result2"></div>
+      <p class="shipping-hint">※ 西濃運輸ネット販売料金・税込。荷物の状態・条件により変動する場合があります。<br>
+      送料のみ確認したい場合は <a href="shipping.html">送料見積もりページ</a> もご利用いただけます。</p>
+    </div>
+
+    <!-- Grand total -->
+    <div id="grand-total-section" style="display:none">
+      <div class="grand-total-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+          <div>
+            <div style="font-size:0.82rem;color:var(--text-mid);margin-bottom:4px;">お見積もり合計（税込・送料込）</div>
+            <div class="grand-number" id="grand-total-num">¥—</div>
+            <div class="grand-sub" id="grand-total-sub"></div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-light);text-align:right;">
+            ※ 目安金額です。正確な金額はご注文時にご確認します。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-buttons">
+      <button class="btn-back" onclick="goStep1()">← 商品を変更する</button>
+      <button class="btn-proceed" onclick="goStep3()">次へ：お申し込みへ進む →</button>
+    </div>
+
+  </div>
+
+  <!-- ======================== STEP 03 ======================== -->
+  <div id="step3" style="display:none">
+
+    <div class="step3-summary">
+      <h3>お見積もり内容</h3>
+      <div id="step3-summary-content"></div>
+    </div>
+
+    <div class="step3-cta">
+      <p style="font-size:0.9rem;color:var(--text-mid);margin-bottom:16px;">
+        下のボタンからお問い合わせフォームへ進むと、選択した商品情報が自動入力されます。
+      </p>
+      <a href="contact.html" class="btn-contact-link" onclick="saveOrderToSession()">
+        お問い合わせフォームへ進む
+      </a>
+      <p style="font-size:0.78rem;color:var(--text-light);margin-top:12px;">
+        または下記の方法で直接ご連絡ください
+      </p>
+    </div>
+
+    <div class="other-contact">
+      <div class="contact-card">
+        <h4>お電話</h4>
+        <a href="tel:0538582395">0538-58-2395</a>
+        <p>平日 9:00〜17:00</p>
+      </div>
+      <div class="contact-card">
+        <h4>メール</h4>
+        <a href="mailto:info@hayazai.com">info@hayazai.com</a>
+        <p>24時間受付</p>
+      </div>
+      <div class="contact-card">
+        <h4>LINE公式</h4>
+        <a href="https://lin.ee/469dvgvz" target="_blank" rel="noopener">LINEで相談する</a>
+        <p>気軽にメッセージを</p>
+      </div>
+    </div>
+
+    <div class="step-buttons" style="margin-top:32px;">
+      <button class="btn-back" onclick="goStep2()">← 送料・合計を確認する</button>
+    </div>
+
+  </div>
+
 </div>
 
 <div id="site-footer"></div>
 
 <script src="data/products.js"></script>
-<script src="js/cart.js"></script>
 <script src="js/components.js?v=2"></script>
 <script>
-function validateOrder() {
-  const cart = getCart();
-  if (cart.length === 0) {
-    alert('カートが空です。商品を追加してからご注文ください。');
-    return false;
-  }
-  return true;
+// ===================== 価格計算 =====================
+function exPrice(p) { return Math.round(p * 1.15 / 10) * 10; }
+function inPrice(p) { return Math.round(p * 1.15 * 1.1 / 10) * 10; }
+
+// ===================== 西濃運輸データ =====================
+const SEINO_DISTANCES = [150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400];
+
+const SEINO_PREF_MAP = {
+  "静岡":0,"愛知":1,"岐阜":2,"神奈川":3,"滋賀":4,"三重":5,
+  "東京":6,"奈良":7,"京都":8,"山梨":9,"埼玉":10,"千葉":11,
+  "大阪":12,"長野":13,"栃木":14,"和歌山":15,"石川":16,"徳島":17,
+  "茨城":18,"群馬":19,"兵庫":20,"福島":21,"鳥取":22,"岡山":23,
+  "高知":24,"新潟":25,"香川":26,"福井":27,"富山":28,"宮城":29,
+  "広島":30,"愛媛":31,"山形":32,"島根":33,"秋田":34,"岩手":35,
+  "山口":36,"福岡":37,"佐賀":38,"青森":39,"長崎":40,"熊本":41,
+  "大分":42,"宮崎":43,"鹿児島":44,"北海道":45
+};
+
+const PREF_TO_DIST = [
+  0,0,1,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,7,8,8,8,9,9,10,11,11,12,13,14,14,15,16,17,18,18,18,18,19,19,21
+];
+
+const SEINO_WEIGHTS = [10,20,30,40,60,80,100,120,140,160,180,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000];
+
+const SEINO_FARES = [
+  [1500,1500,1600,1600,1600,1600,1600,1600,1600,1600,1900,1900,2000,2000,2200,2200,2200,2200,2200,2200,2200,2200],
+  [1700,1800,1800,1800,1800,1900,1900,1900,2000,2000,2400,2400,2600,2600,2700,2700,2800,2800,2900,2900,3000,3100],
+  [2000,2000,2000,2000,2100,2100,2100,2100,2200,2200,2700,2800,2900,2900,3100,3200,3200,3300,3400,3500,3600,3700],
+  [2200,2300,2400,2400,2400,2500,2500,2600,2700,2700,3300,3300,3600,3600,3900,4000,4100,4200,4300,4500,4600,4800],
+  [2400,2500,2600,2700,2800,3000,3100,3100,3100,3200,3900,4000,4200,4300,4700,4800,4900,4900,5200,5400,5600,5800],
+  [2900,3000,3100,3300,3400,3600,3700,3800,3900,4000,4900,5000,5400,5600,5900,6100,6300,6500,6800,7100,7400,7800],
+  [3300,3500,3600,3800,4000,4200,4400,4500,4600,4800,5800,6000,6400,6600,7200,7300,7500,7800,8200,8600,9000,9400],
+  [3700,4000,4300,4400,4600,4900,5100,5200,5400,5600,7100,7200,7800,8000,8500,8800,9000,9300,9800,10300,10800,11300],
+  [4200,4500,4700,5100,5200,5500,5800,6000,6200,6400,8000,8300,8900,9300,9800,10100,10500,10700,11300,11900,12600,13200],
+  [4600,4900,5300,5600,5800,6100,6400,6700,6900,7200,9000,9300,10100,10400,11100,11400,11700,12100,12800,13500,14200,15000],
+  [5000,5400,5700,6100,6400,6700,7000,7400,7600,8000,10000,10300,11100,11500,12200,12600,13000,13500,14300,15100,15900,16700],
+  [5400,5700,6200,6400,6700,7200,7400,7700,8100,8400,10500,10800,11700,12200,12900,13300,13700,14200,15000,15900,16800,17600],
+  [6300,6900,7300,7800,8200,8700,9000,9500,9900,10300,12800,13400,14400,15000,15700,16200,16800,17400,18500,19600,20700,21700],
+  [7500,8100,8700,9200,9700,10200,10800,11300,11700,12300,15300,15900,17200,17900,18800,19500,20100,20700,22100,23400,24700,26000],
+  [8500,9100,9900,10600,11100,11700,12400,12900,13600,14200,17700,18400,19900,20700,21800,22500,23400,24200,25700,27300,28900,30500],
+  [9700,10500,11300,12000,12600,13400,14100,14800,15400,16200,20100,21000,22700,23600,24900,25800,26700,27600,29400,31200,33000,34800],
+  [10700,11700,12600,13400,14200,14900,15700,16500,17300,18100,22500,23500,25500,26500,27900,29000,30000,31000,33100,35100,37100,39200],
+  [11700,12700,13800,14700,15500,16500,17400,18200,19100,20000,25000,26100,28300,29400,31000,32200,33300,34400,36700,39000,41300,43600],
+  [15200,16500,18000,19100,20300,21500,22600,23900,25100,26200,27900,29000,31500,32800,35400,36800,38000,39400,42000,44700,47300,49900],
+  [16400,17800,19500,20700,22000,23400,24700,26000,27200,28600,30300,31600,34300,35800,38600,40000,41400,42900,45800,48700,51500,54400],
+  [17600,19300,21000,22400,23800,25200,26600,28000,29500,30800,32800,34200,37100,38700,41800,43300,44900,46500,49600,52800,55900,59000],
+  [18900,20700,22500,24000,25500,27000,28600,30100,31700,33200,35200,36900,40000,41600,45000,46700,48300,50000,53400,56700,60100,63500],
+  [20200,22100,24000,25700,27300,28900,30600,32300,33900,35500,37800,39400,42800,44600,48100,49900,51800,53500,57100,60800,64400,68000],
+  [21500,23500,25600,27300,29000,30800,32600,34300,36000,37800,40200,42000,45600,47500,51200,53200,55200,57100,61000,64900,68800,72700],
+  [22700,24900,27000,28900,30800,32600,34500,36400,38300,40200,42600,44600,48500,50400,54500,56600,58500,60700,64900,69000,73100,77300],
+  [24000,26300,28600,30600,32500,34500,36500,38600,40500,42400,45100,47100,51300,53300,57600,59800,62100,64200,68600,73000,77400,81800],
+  [25300,27700,30200,32300,34300,36400,38500,40600,42700,44800,47700,49800,54100,56300,60800,63100,65500,67800,72500,77100,81700,86400],
+  [26600,29100,31600,33900,36000,38300,40500,42700,45000,47100,50100,52300,56800,59300,64000,66500,68900,71300,76200,81100,86000,90900]
+];
+
+const DANBALL = {
+  1: { weight: 10, box: 160 },
+  2: { weight: 20, box: 160 },
+  3: { weight: 30, box: 240 },
+  4: { weight: 40, box: 320 }
+};
+
+const MAX_BUNDLE = 20;
+
+function getDanballKey(length) {
+  if (length <= 910)  return 1;
+  if (length <= 1820) return 2;
+  if (length <= 3000) return 3;
+  return 4;
 }
 
-document.addEventListener('DOMContentLoaded', renderOrderSummary);
+function calcNet(distIdx, totalWeight, boxCost) {
+  let tierIdx = SEINO_WEIGHTS.findIndex(w => w >= totalWeight);
+  if (tierIdx === -1) return null;
+  const fare = SEINO_FARES[tierIdx][distIdx];
+  const subtotal = fare + boxCost;
+  const tax = Math.round(subtotal * 0.1);
+  const total = Math.round((subtotal + tax) / 100) * 100;
+  return { fare, boxCost, tax, total, tierWeight: SEINO_WEIGHTS[tierIdx] };
+}
+
+const PREFS_SORTED = [
+  "北海道","青森","岩手","宮城","秋田","山形","福島",
+  "茨城","栃木","群馬","埼玉","千葉","東京","神奈川",
+  "新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重",
+  "滋賀","京都","大阪","兵庫","奈良","和歌山",
+  "鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知",
+  "福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島"
+];
+
+// ===================== 状態管理 =====================
+// qty[productId] = 数量(束)
+const qtys = {};
+let currentStep = 1;
+let shippingResult = null; // 計算済み送料
+
+// ===================== テーブル構築 =====================
+const CAT_LABELS = {
+  flooring15: '桧フローリング 15mm（幅108mm）',
+  flooring12: '桧フローリング 12mm（幅108mm）',
+  panel:      '桧羽目板 12mm（幅103mm）',
+  sale:       'お買い得品'
+};
+
+function buildProductTable(cat) {
+  const prods = PRODUCTS.filter(p => p.cat === cat);
+  const thead = document.getElementById('th-' + cat);
+  const tbody = document.getElementById('tb-' + cat);
+
+  thead.innerHTML = `
+    <tr>
+      <th style="text-align:left;min-width:200px;">商品</th>
+      <th style="min-width:70px;">長さ</th>
+      <th style="min-width:70px;">グレード</th>
+      <th style="min-width:60px;">品質</th>
+      <th style="min-width:70px;">枚数/束</th>
+      <th style="min-width:120px;">単価（税込/束）</th>
+      <th style="min-width:100px;">数量（束）</th>
+      <th style="min-width:110px;">小計（税込）</th>
+    </tr>`;
+
+  let html = '';
+  prods.forEach(p => {
+    if (!qtys[p.id]) qtys[p.id] = 0;
+    const inc = inPrice(p.price);
+    const oos = p.outOfStock;
+    html += `<tr id="row-${p.id}" class="${oos ? 'oos' : ''}">
+      <td class="td-name">
+        ${p.thick}×${p.width}mm
+        ${oos ? '<span class="oos-badge">在庫なし</span>' : ''}
+        <small>${CAT_LABELS[cat]}</small>
+      </td>
+      <td>${p.length.toLocaleString()}mm</td>
+      <td>${p.grade}級</td>
+      <td>${p.quality}</td>
+      <td>${p.qty}枚</td>
+      <td class="td-price">¥${inc.toLocaleString()}<small>税込/束</small></td>
+      <td>
+        <input type="number" class="qty-input" id="qty-${p.id}"
+          value="${qtys[p.id]}" min="0" max="999" step="1"
+          ${oos ? 'disabled title="在庫なし"' : ''}
+          oninput="onQtyChange('${p.id}', this.value)">
+      </td>
+      <td class="td-sub" id="sub-${p.id}">${qtys[p.id] > 0 ? '¥' + (qtys[p.id] * inc).toLocaleString() : '—'}</td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+  updateBottomBar();
+}
+
+function onQtyChange(id, val) {
+  const n = Math.max(0, parseInt(val) || 0);
+  qtys[id] = n;
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const inc = inPrice(p.price);
+  const subEl = document.getElementById('sub-' + id);
+  if (subEl) subEl.textContent = n > 0 ? '¥' + (n * inc).toLocaleString() : '—';
+  const row = document.getElementById('row-' + id);
+  if (row) row.classList.toggle('selected', n > 0);
+  updateBottomBar();
+}
+
+function updateBottomBar() {
+  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
+  const subtotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
+  document.getElementById('item-count').textContent = selected.length;
+  document.getElementById('subtotal-display').textContent = '¥' + subtotal.toLocaleString();
+}
+
+function switchTab(cat) {
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  document.querySelectorAll('.product-tab-content').forEach(d => d.classList.remove('active'));
+  document.getElementById('tab-' + cat).classList.add('active');
+}
+
+// ===================== ステップ遷移 =====================
+function setStep(n) {
+  currentStep = n;
+  ['step1','step2','step3'].forEach((id, i) => {
+    document.getElementById(id).style.display = (i+1 === n) ? '' : 'none';
+  });
+  ['sb1','sb2','sb3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'step-item' + (i+1 === n ? ' active' : i+1 < n ? ' done' : '');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goStep1() { setStep(1); }
+
+function goStep2() {
+  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
+  if (selected.length === 0) {
+    alert('商品を1つ以上選択してください。');
+    return;
+  }
+  buildConfirmTable(selected);
+  setStep(2);
+}
+
+function goStep3() {
+  setStep(3);
+  buildStep3Summary();
+}
+
+// ===================== STEP 2 =====================
+function buildConfirmTable(selected) {
+  const tbody = document.getElementById('confirm-tbody');
+  let html = '';
+  let total = 0;
+  selected.forEach(p => {
+    const qty = qtys[p.id];
+    const inc = inPrice(p.price);
+    const sub = qty * inc;
+    total += sub;
+    html += `<tr>
+      <td>${p.thick}×${p.width}×${p.length}mm ${p.grade}級${p.quality}</td>
+      <td style="text-align:center;">${p.qty}枚</td>
+      <td style="text-align:center;">${qty}束</td>
+      <td style="text-align:right;">¥${inc.toLocaleString()}</td>
+      <td style="text-align:right;">¥${sub.toLocaleString()}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+  document.getElementById('confirm-total').textContent = '¥' + total.toLocaleString();
+  document.getElementById('grand-total-section').style.display = 'none';
+  document.getElementById('shipping-result2').innerHTML = '';
+  shippingResult = null;
+}
+
+function buildPrefSelect2() {
+  const sel = document.getElementById('pref-select2');
+  PREFS_SORTED.forEach(p => {
+    if (SEINO_PREF_MAP[p] !== undefined) {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+function calcStep2Shipping() {
+  const pref = document.getElementById('pref-select2').value;
+  if (!pref) {
+    alert('都道府県を選択してください。');
+    return;
+  }
+
+  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
+  const productTotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
+
+  const prefIdx = SEINO_PREF_MAP[pref];
+  const distIdx = PREF_TO_DIST[prefIdx];
+  const distance = SEINO_DISTANCES[distIdx];
+
+  // 総重量・ダンボール費
+  let totalWeight = 0;
+  let totalBoxCost = 0;
+  selected.forEach(p => {
+    const dKey = getDanballKey(p.length);
+    const d = DANBALL[dKey];
+    totalWeight  += qtys[p.id] * d.weight;
+    totalBoxCost += qtys[p.id] * d.box;
+  });
+
+  const totalBundles = selected.reduce((s, p) => s + qtys[p.id], 0);
+  let html = '';
+  let shippingTotal = 0;
+
+  if (totalWeight <= MAX_BUNDLE * 40) {
+    // 1〜3便で対応
+    const shipCount = Math.ceil(totalBundles / MAX_BUNDLE);
+    if (shipCount <= 1) {
+      const res = calcNet(distIdx, totalWeight, totalBoxCost);
+      if (!res) {
+        html = '<p style="color:#c0392b;">重量が超過しています。お問い合わせください。</p>';
+      } else {
+        shippingTotal = res.total;
+        html = buildShippingResultHTML(pref, distance, res, null);
+      }
+    } else {
+      // 分割
+      const baseW = Math.floor(totalWeight / shipCount);
+      const baseB = Math.floor(totalBoxCost / shipCount);
+      const remW = totalWeight % shipCount;
+      const remB = totalBoxCost % shipCount;
+      let totalFare = 0, totalBox2 = 0;
+      let rows = '';
+      let failed = false;
+      for (let i = 0; i < shipCount; i++) {
+        const sw = baseW + (i < remW ? 1 : 0);
+        const sb = baseB + (i < remB ? 1 : 0);
+        const res = calcNet(distIdx, sw, sb);
+        if (!res) { failed = true; break; }
+        totalFare += res.fare;
+        totalBox2 += sb;
+        rows += `<tr class="result-sub"><th>便${i+1}（${sw}kg）</th><td>${res.fare.toLocaleString()}円 + ${sb.toLocaleString()}円</td></tr>`;
+      }
+      if (failed) {
+        html = '<p style="color:#c0392b;">分割しても重量超過です。お問い合わせください。</p>';
+      } else {
+        const subtotal = totalFare + totalBox2;
+        const tax = Math.round(subtotal * 0.1);
+        shippingTotal = Math.round((subtotal + tax) / 100) * 100;
+        html = `<table class="result-table" style="margin-top:10px;">
+          <tr class="result-sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
+          <tr class="result-sub"><th>${shipCount}便に分割</th><td></td></tr>
+          ${rows}
+          <tr><th>運賃合計</th><td>${totalFare.toLocaleString()}円</td></tr>
+          <tr><th>梱包材費合計</th><td>${totalBox2.toLocaleString()}円</td></tr>
+          <tr><th>消費税（10%）</th><td>${Math.round((totalFare + totalBox2) * 0.1).toLocaleString()}円</td></tr>
+          <tr class="result-total"><th>送料合計（税込）</th><td>${shippingTotal.toLocaleString()}円</td></tr>
+        </table>`;
+      }
+    }
+  } else {
+    html = '<p style="color:#c0392b;">ご注文数が大変多いです。お電話またはLINEでお問い合わせください。</p>';
+  }
+
+  if (shippingTotal > 0) {
+    const productTotal2 = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
+    const grand = productTotal2 + shippingTotal;
+    shippingResult = { shippingTotal, grand, pref };
+    document.getElementById('grand-total-section').style.display = '';
+    document.getElementById('grand-total-num').textContent = '¥' + grand.toLocaleString();
+    document.getElementById('grand-total-sub').innerHTML =
+      `商品合計（税込）：¥${productTotal2.toLocaleString()} ＋ 送料（税込）：¥${shippingTotal.toLocaleString()}`;
+  }
+
+  document.getElementById('shipping-result2').innerHTML = html;
+}
+
+function buildShippingResultHTML(pref, distance, res, splitNote) {
+  return `<table class="result-table" style="margin-top:10px;">
+    <tr class="result-sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
+    <tr class="result-sub"><th>適用重量帯</th><td>${res.tierWeight}kg帯</td></tr>
+    <tr><th>運賃</th><td>${res.fare.toLocaleString()}円</td></tr>
+    <tr><th>梱包材費</th><td>${res.boxCost.toLocaleString()}円</td></tr>
+    <tr><th>消費税（10%）</th><td>${res.tax.toLocaleString()}円</td></tr>
+    <tr class="result-total"><th>送料合計（税込）</th><td>${res.total.toLocaleString()}円</td></tr>
+  </table>`;
+}
+
+// ===================== STEP 3 =====================
+function buildStep3Summary() {
+  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
+  const productTotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
+
+  let html = '<table style="width:100%;font-size:0.85rem;border-collapse:collapse;">';
+  selected.forEach(p => {
+    const qty = qtys[p.id];
+    const sub = qty * inPrice(p.price);
+    html += `<tr>
+      <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;">
+        ${p.thick}×${p.width}×${p.length}mm ${p.grade}級${p.quality}
+      </td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;text-align:center;white-space:nowrap;">${qty}束</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;text-align:right;white-space:nowrap;">¥${sub.toLocaleString()}</td>
+    </tr>`;
+  });
+  html += `<tr>
+    <td colspan="2" style="padding:8px;text-align:right;font-weight:700;color:var(--wood-dark);">商品合計（税込）</td>
+    <td style="padding:8px;text-align:right;font-weight:700;color:var(--wood-dark);">¥${productTotal.toLocaleString()}</td>
+  </tr>`;
+  if (shippingResult) {
+    html += `<tr>
+      <td colspan="2" style="padding:8px;text-align:right;color:var(--text-mid);">送料目安（${shippingResult.pref}・税込）</td>
+      <td style="padding:8px;text-align:right;color:var(--text-mid);">¥${shippingResult.shippingTotal.toLocaleString()}</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding:10px 8px;text-align:right;font-weight:700;font-size:1.1rem;color:var(--wood-dark);border-top:2px solid var(--wood-mid);">合計目安（税込・送料込）</td>
+      <td style="padding:10px 8px;text-align:right;font-weight:700;font-size:1.1rem;color:var(--wood-dark);border-top:2px solid var(--wood-mid);">¥${shippingResult.grand.toLocaleString()}</td>
+    </tr>`;
+  }
+  html += '</table>';
+
+  document.getElementById('step3-summary-content').innerHTML = html;
+}
+
+function saveOrderToSession() {
+  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
+  const productTotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
+
+  let msg = '【お見積もりシミュレーション内容】\n\n';
+  selected.forEach(p => {
+    const qty = qtys[p.id];
+    const sub = qty * inPrice(p.price);
+    msg += `・${p.thick}×${p.width}×${p.length}mm ${p.grade}級${p.quality} × ${qty}束 → ¥${sub.toLocaleString()}（税込）\n`;
+  });
+  msg += `\n商品合計（税込）：¥${productTotal.toLocaleString()}`;
+  if (shippingResult) {
+    msg += `\n送料目安（${shippingResult.pref}・税込）：¥${shippingResult.shippingTotal.toLocaleString()}`;
+    msg += `\n合計目安（税込・送料込）：¥${shippingResult.grand.toLocaleString()}`;
+  }
+  msg += '\n\n---\n以上の内容でご相談させてください。';
+  sessionStorage.setItem('orderMessage', msg);
+  sessionStorage.setItem('orderType', 'quote');
+}
+
+// ===================== 初期化 =====================
+document.addEventListener('DOMContentLoaded', () => {
+  ['flooring15','flooring12','panel','sale'].forEach(buildProductTable);
+  buildPrefSelect2();
+  setStep(1);
+});
 </script>
 </body>
 </html>

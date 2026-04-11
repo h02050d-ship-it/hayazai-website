@@ -209,10 +209,24 @@ document.querySelector('select[name="type"]').addEventListener('change', functio
   sampleFields.style.display = this.value === 'sample' ? 'block' : 'none';
 });
 
-// URLハッシュで種別自動選択
+// URLハッシュで種別自動選択 & 見積もりシミュレーターからの引き継ぎ
 document.addEventListener('DOMContentLoaded', () => {
+  const sel = document.querySelector('select[name="type"]');
+
+  // 見積もりシミュレーターからのデータ引き継ぎ
+  const orderMsg = sessionStorage.getItem('orderMessage');
+  const orderType = sessionStorage.getItem('orderType');
+  if (orderMsg) {
+    document.querySelector('textarea[name="message"]').value = orderMsg;
+    sessionStorage.removeItem('orderMessage');
+  }
+  if (orderType) {
+    sel.value = orderType;
+    sel.dispatchEvent(new Event('change'));
+    sessionStorage.removeItem('orderType');
+  }
+
   if (location.hash === '#sample') {
-    const sel = document.querySelector('select[name="type"]');
     sel.value = 'sample';
     sel.dispatchEvent(new Event('change'));
     sel.scrollIntoView({ behavior: 'smooth', block: 'center' });
