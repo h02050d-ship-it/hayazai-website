@@ -100,6 +100,7 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
   color: var(--wood-dark);
   white-space: nowrap;
   flex-shrink: 0;
+  text-align: center;
 }
 
 .site-logo span {
