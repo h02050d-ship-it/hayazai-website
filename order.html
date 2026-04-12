@@ -59,7 +59,6 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.25);
       font-size: 0.72rem;
       font-weight: 700;
       flex-shrink: 0;
@@ -72,114 +71,70 @@
     .step-label { font-weight: 700; font-size: 0.9rem; line-height: 1; }
     .step-sub { font-size: 0.72rem; margin-top: 2px; opacity: 0.8; }
 
-    /* ---- Category tabs ---- */
-    .cat-tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .cat-tab {
-      padding: 9px 18px;
-      border: 2px solid #d0bba0;
-      border-radius: 6px;
-      background: #fff;
-      color: var(--wood-mid);
-      font-size: 0.88rem;
-      font-family: inherit;
+    /* ---- Builder ---- */
+    .builder-header {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr 1.4fr 1fr 1.4fr 1.4fr 36px;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--wood-dark);
+      border-radius: 6px 6px 0 0;
+      color: #fff;
+      font-size: 0.78rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
     }
 
-    .cat-tab:hover { border-color: var(--wood-mid); }
+    .builder-header span { text-align: center; }
+    .builder-header span:first-child { text-align: left; }
 
-    .cat-tab.active {
-      background: var(--wood-dark);
-      border-color: var(--wood-dark);
-      color: #fff;
-    }
-
-    /* ---- Product table ---- */
-    .product-tab-content { display: none; }
-    .product-tab-content.active { display: block; }
-
-    .product-table-wrap { overflow-x: auto; }
-
-    .product-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.86rem;
-    }
-
-    .product-table thead th {
-      background: var(--wood-dark);
-      color: #fff;
+    .builder-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.2fr 1.4fr 1fr 1.4fr 1.4fr 36px;
+      gap: 8px;
+      align-items: center;
       padding: 10px 12px;
-      text-align: center;
-      font-weight: 500;
-      white-space: nowrap;
+      background: #fff;
+      border: 1px solid #e8d8c4;
+      border-top: none;
     }
 
-    .product-table thead th:first-child { text-align: left; }
-
-    .product-table tbody tr {
-      border-bottom: 1px solid #ede4d8;
-      transition: background 0.1s;
+    .builder-row:last-child {
+      border-radius: 0 0 6px 6px;
     }
 
-    .product-table tbody tr:hover { background: #fdf8f2; }
-
-    .product-table tbody tr.selected { background: #f5ede0; }
-
-    .product-table tbody tr.oos { opacity: 0.55; }
-
-    .product-table td {
-      padding: 11px 12px;
-      text-align: center;
-      vertical-align: middle;
+    .builder-row + .builder-row {
+      border-top: 1px solid #ede4d8;
     }
 
-    .product-table td.td-name {
-      text-align: left;
+    .bsel {
+      width: 100%;
+      padding: 8px 6px;
+      border: 1.5px solid #d0bba0;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-family: inherit;
+      background: #fff;
       color: var(--wood-dark);
-      font-weight: 600;
+      appearance: auto;
     }
 
-    .product-table td.td-name small {
-      display: block;
-      font-weight: 400;
-      font-size: 0.76rem;
-      color: var(--text-light);
-      margin-top: 2px;
+    .bsel:focus {
+      outline: none;
+      border-color: var(--wood-mid);
+      box-shadow: 0 0 0 2px rgba(139,90,43,0.12);
     }
 
-    .product-table td.td-price {
-      font-weight: 700;
-      color: var(--wood-dark);
-      white-space: nowrap;
-    }
-
-    .product-table td.td-price small {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 400;
-      color: var(--text-light);
-    }
-
-    .product-table td.td-sub {
-      font-weight: 700;
-      color: var(--wood-dark);
-      min-width: 90px;
+    .bsel:disabled {
+      background: #f5ede0;
+      color: #aaa;
     }
 
     .qty-input {
-      width: 72px;
-      padding: 7px 8px;
+      width: 100%;
+      padding: 8px 6px;
       border: 1.5px solid #d0bba0;
       border-radius: 5px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-family: inherit;
       text-align: center;
       background: #fff;
@@ -191,17 +146,74 @@
       box-shadow: 0 0 0 2px rgba(139,90,43,0.12);
     }
 
-    .oos-badge {
-      display: inline-block;
-      font-size: 0.68rem;
-      background: #fde8e8;
-      color: #c0392b;
-      border-radius: 3px;
-      padding: 1px 6px;
-      margin-left: 4px;
+    .row-price, .row-sub {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      text-align: center;
+      font-variant-numeric: tabular-nums;
     }
 
-    /* ---- Floating bottom bar (step 1) ---- */
+    .row-price { color: var(--text-mid); font-weight: 400; }
+
+    .row-del {
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid #d0bba0;
+      border-radius: 4px;
+      background: #fff;
+      color: #aaa;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: all 0.15s;
+      justify-self: center;
+    }
+
+    .row-del:hover {
+      border-color: #c0392b;
+      color: #c0392b;
+      background: #fde8e8;
+    }
+
+    .row-warn {
+      grid-column: 1 / -1;
+      font-size: 0.75rem;
+      color: #c0392b;
+      padding: 2px 0 4px;
+    }
+
+    .add-row-wrap {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-add-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border: 2px dashed #c8a87a;
+      border-radius: 6px;
+      background: #fdf8f2;
+      color: var(--wood-mid);
+      font-size: 0.88rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-add-row:hover {
+      background: #f5ede0;
+      border-color: var(--wood-mid);
+    }
+
+    /* ---- Floating bottom bar ---- */
     .bottom-bar {
       position: sticky;
       bottom: 0;
@@ -216,14 +228,8 @@
       gap: 16px;
     }
 
-    .bottom-bar-info {
-      font-size: 0.9rem;
-    }
-
-    .bottom-bar-info strong {
-      font-size: 1.2rem;
-      margin-left: 6px;
-    }
+    .bottom-bar-info { font-size: 0.9rem; }
+    .bottom-bar-info strong { font-size: 1.2rem; margin-left: 6px; }
 
     .btn-next {
       background: #fff;
@@ -241,6 +247,7 @@
 
     .btn-next:hover { background: #f5ede0; }
 
+    /* ---- Step buttons ---- */
     .btn-back {
       background: none;
       color: var(--wood-mid);
@@ -256,7 +263,7 @@
 
     .btn-back:hover { background: #faf5ef; }
 
-    /* ---- Step 2: Confirmation ---- */
+    /* ---- Step 2 ---- */
     .confirm-section {
       background: #fff;
       border: 1px solid #e8d8c4;
@@ -296,7 +303,6 @@
 
     .confirm-items-table td:last-child { text-align: right; font-weight: 700; }
 
-    /* ---- Shipping form (step 2) ---- */
     .shipping-form-grid {
       display: flex;
       gap: 12px;
@@ -340,7 +346,6 @@
 
     .btn-calc:hover { background: var(--wood-mid); }
 
-    /* ---- Result table ---- */
     .result-table {
       width: 100%;
       border-collapse: collapse;
@@ -353,16 +358,8 @@
       border-bottom: 1px solid #e8d8c4;
     }
 
-    .result-table th {
-      text-align: left;
-      color: var(--text-mid);
-      font-weight: 400;
-    }
-
-    .result-table td {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
+    .result-table th { text-align: left; color: var(--text-mid); font-weight: 400; }
+    .result-table td { text-align: right; font-variant-numeric: tabular-nums; }
 
     .result-table tr.result-total th,
     .result-table tr.result-total td {
@@ -400,7 +397,7 @@
       margin-top: 4px;
     }
 
-    /* ---- Step 3: Contact ---- */
+    /* ---- Step 3 ---- */
     .step3-summary {
       background: #fdf8f2;
       border: 1px solid #e8d8c4;
@@ -417,10 +414,7 @@
       margin-bottom: 12px;
     }
 
-    .step3-cta {
-      text-align: center;
-      padding: 32px 0 24px;
-    }
+    .step3-cta { text-align: center; padding: 32px 0 24px; }
 
     .btn-contact-link {
       display: inline-block;
@@ -451,23 +445,9 @@
       text-align: center;
     }
 
-    .contact-card h4 {
-      font-size: 0.85rem;
-      color: var(--wood-dark);
-      margin-bottom: 6px;
-    }
-
-    .contact-card a {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--wood-mid);
-    }
-
-    .contact-card p {
-      font-size: 0.75rem;
-      color: var(--text-light);
-      margin-top: 4px;
-    }
+    .contact-card h4 { font-size: 0.85rem; color: var(--wood-dark); margin-bottom: 6px; }
+    .contact-card a { font-size: 0.9rem; font-weight: 700; color: var(--wood-mid); }
+    .contact-card p { font-size: 0.75rem; color: var(--text-light); margin-top: 4px; }
 
     /* ---- Step buttons row ---- */
     .step-buttons {
@@ -507,26 +487,89 @@
       border-radius: 0 6px 6px 0;
       font-size: 0.82rem;
       color: var(--text-mid);
-      margin-bottom: 28px;
+      margin-bottom: 20px;
       line-height: 1.8;
     }
 
-    .empty-warning {
-      text-align: center;
-      padding: 32px;
-      color: var(--text-light);
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 640px) {
+    /* ---- Mobile ---- */
+    @media (max-width: 768px) {
       .order-layout { padding: 24px 16px 60px; }
+
       .step-bar { flex-direction: column; border-radius: 8px; }
       .step-item { border-right: none; border-bottom: 1px solid #e0cdb8; }
       .step-item:last-child { border-bottom: none; }
-      .bottom-bar { flex-direction: column; align-items: stretch; text-align: center; }
+
+      .builder-header { display: none; }
+
+      .builder-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 0;
+      }
+
+      .builder-row:first-child { border-radius: 6px 6px 0 0; }
+      .builder-row:last-child { border-radius: 0 0 6px 6px; }
+
+      .bsel, .qty-input {
+        font-size: 0.88rem;
+      }
+
+      /* モバイル：各セルにラベルを疑似要素で表示 */
+      .builder-row .bsel:nth-child(1)::before { content: '種類'; }
+
+      .row-price-wrap {
+        grid-column: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .row-sub-wrap {
+        grid-column: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .row-del {
+        grid-column: 2;
+        justify-self: end;
+        margin-top: 4px;
+      }
+
+      .bottom-bar {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+
       .other-contact { grid-template-columns: 1fr; }
       .step-buttons { flex-direction: column-reverse; }
       .step-buttons .btn-proceed { width: 100%; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .builder-row {
+        grid-template-columns: 1fr;
+      }
+      .row-del { justify-self: start; }
+    }
+
+    /* mobile labels */
+    @media (max-width: 768px) {
+      .bsel-label {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--wood-dark);
+        margin-bottom: 3px;
+      }
+      .bfield { display: flex; flex-direction: column; }
+    }
+    @media (min-width: 769px) {
+      .bsel-label { display: none; }
+      .bfield { display: contents; }
     }
   </style>
 </head>
@@ -568,43 +611,33 @@
 
     <div class="note-box">
       <strong>価格について：</strong>表示価格は税込です。送料は次のステップで計算します。<br>
-      数量（束）に希望の束数を入力してください。0 のまま次へ進むことはできません。
+      複数の商品を見積もる場合は「＋ 行を追加」でご入力ください。
     </div>
 
-    <!-- Category tabs -->
-    <div class="cat-tabs" id="cat-tabs">
-      <button class="cat-tab active" data-cat="flooring15" onclick="switchTab('flooring15')">桧フローリング 15mm</button>
-      <button class="cat-tab" data-cat="flooring12" onclick="switchTab('flooring12')">桧フローリング 12mm</button>
-      <button class="cat-tab" data-cat="panel" onclick="switchTab('panel')">桧羽目板</button>
-      <button class="cat-tab" data-cat="sale" onclick="switchTab('sale')">お買い得品</button>
+    <!-- Builder header (desktop only) -->
+    <div class="builder-header">
+      <span>種類</span>
+      <span>厚さ</span>
+      <span>長さ</span>
+      <span>品質</span>
+      <span>数量（束）</span>
+      <span>単価（税込/束）</span>
+      <span>小計（税込）</span>
+      <span></span>
     </div>
 
-    <!-- Product tables -->
-    <div id="tab-flooring15" class="product-tab-content active">
-      <div class="product-table-wrap">
-        <table class="product-table"><thead id="th-flooring15"></thead><tbody id="tb-flooring15"></tbody></table>
-      </div>
-    </div>
-    <div id="tab-flooring12" class="product-tab-content">
-      <div class="product-table-wrap">
-        <table class="product-table"><thead id="th-flooring12"></thead><tbody id="tb-flooring12"></tbody></table>
-      </div>
-    </div>
-    <div id="tab-panel" class="product-tab-content">
-      <div class="product-table-wrap">
-        <table class="product-table"><thead id="th-panel"></thead><tbody id="tb-panel"></tbody></table>
-      </div>
-    </div>
-    <div id="tab-sale" class="product-tab-content">
-      <div class="product-table-wrap">
-        <table class="product-table"><thead id="th-sale"></thead><tbody id="tb-sale"></tbody></table>
-      </div>
+    <!-- Rows -->
+    <div id="builder-rows"></div>
+
+    <!-- Add row -->
+    <div class="add-row-wrap">
+      <button class="btn-add-row" onclick="addRow()">＋ 行を追加</button>
     </div>
 
     <!-- Sticky bottom bar -->
     <div class="bottom-bar">
       <div class="bottom-bar-info">
-        選択中 <span id="item-count">0</span>商品 ／ 小計（税込）
+        <span id="item-count">0</span>品目 ／ 小計（税込）
         <strong id="subtotal-display">¥0</strong>
       </div>
       <button class="btn-next" onclick="goStep2()">次へ：送料を確認する →</button>
@@ -615,10 +648,9 @@
   <!-- ======================== STEP 02 ======================== -->
   <div id="step2" style="display:none">
 
-    <!-- Selected items -->
     <div class="confirm-section">
       <h3>ご選択の商品</h3>
-      <div class="product-table-wrap">
+      <div style="overflow-x:auto;">
         <table class="confirm-items-table" id="confirm-table">
           <thead>
             <tr>
@@ -640,7 +672,6 @@
       </div>
     </div>
 
-    <!-- Shipping -->
     <div class="confirm-section">
       <h3>送料計算</h3>
       <div class="shipping-form-grid">
@@ -657,7 +688,6 @@
       送料のみ確認したい場合は <a href="shipping.html">送料見積もりページ</a> もご利用いただけます。</p>
     </div>
 
-    <!-- Grand total -->
     <div id="grand-total-section" style="display:none">
       <div class="grand-total-box">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
@@ -821,91 +851,153 @@ const PREFS_SORTED = [
   "福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島"
 ];
 
-// ===================== 状態管理 =====================
-// qty[productId] = 数量(束)
-const qtys = {};
+// ===================== 行管理 =====================
+let rows = [];
+let rowCounter = 0;
+let shippingResult = null;
 let currentStep = 1;
-let shippingResult = null; // 計算済み送料
 
-// ===================== テーブル構築 =====================
-const CAT_LABELS = {
-  flooring15: '桧フローリング 15mm（幅108mm）',
-  flooring12: '桧フローリング 12mm（幅108mm）',
-  panel:      '桧羽目板 12mm（幅103mm）',
-  sale:       'お買い得品'
-};
+function findProduct(row) {
+  if (!row.type || !row.thick || !row.length || !row.quality) return null;
+  const cat = row.type === 'panel' ? 'panel'
+    : (row.thick === '15' ? 'flooring15' : 'flooring12');
+  return PRODUCTS.find(p =>
+    p.cat === cat &&
+    p.grade === 'A' &&
+    p.quality === row.quality &&
+    p.length === parseInt(row.length)
+  ) || null;
+}
 
-function buildProductTable(cat) {
-  const prods = PRODUCTS.filter(p => p.cat === cat);
-  const thead = document.getElementById('th-' + cat);
-  const tbody = document.getElementById('tb-' + cat);
-
-  thead.innerHTML = `
-    <tr>
-      <th style="text-align:left;min-width:200px;">商品</th>
-      <th style="min-width:70px;">長さ</th>
-      <th style="min-width:70px;">グレード</th>
-      <th style="min-width:60px;">品質</th>
-      <th style="min-width:70px;">枚数/束</th>
-      <th style="min-width:120px;">単価（税込/束）</th>
-      <th style="min-width:100px;">数量（束）</th>
-      <th style="min-width:110px;">小計（税込）</th>
-    </tr>`;
-
-  let html = '';
-  prods.forEach(p => {
-    if (!qtys[p.id]) qtys[p.id] = 0;
-    const inc = inPrice(p.price);
-    const oos = p.outOfStock;
-    html += `<tr id="row-${p.id}" class="${oos ? 'oos' : ''}">
-      <td class="td-name">
-        ${p.thick}×${p.width}mm
-        ${oos ? '<span class="oos-badge">在庫なし</span>' : ''}
-        <small>${CAT_LABELS[cat]}</small>
-      </td>
-      <td>${p.length.toLocaleString()}mm</td>
-      <td>${p.grade}級</td>
-      <td>${p.quality}</td>
-      <td>${p.qty}枚</td>
-      <td class="td-price">¥${inc.toLocaleString()}<small>税込/束</small></td>
-      <td>
-        <input type="number" class="qty-input" id="qty-${p.id}"
-          value="${qtys[p.id]}" min="0" max="999" step="1"
-          ${oos ? 'disabled title="在庫なし"' : ''}
-          oninput="onQtyChange('${p.id}', this.value)">
-      </td>
-      <td class="td-sub" id="sub-${p.id}">${qtys[p.id] > 0 ? '¥' + (qtys[p.id] * inc).toLocaleString() : '—'}</td>
-    </tr>`;
+function getSelectedItems() {
+  const items = [];
+  rows.forEach(row => {
+    const p = findProduct(row);
+    if (p && row.qty > 0) items.push({ p, qty: row.qty });
   });
+  return items;
+}
 
-  tbody.innerHTML = html;
+function rowHTML(id) {
+  return `
+    <div class="bfield">
+      <span class="bsel-label">種類</span>
+      <select class="bsel" id="type-${id}" onchange="onTypeChange(${id})">
+        <option value="">種類を選択</option>
+        <option value="flooring">桧フローリング</option>
+        <option value="panel">桧羽目板</option>
+      </select>
+    </div>
+    <div class="bfield">
+      <span class="bsel-label">厚さ</span>
+      <select class="bsel" id="thick-${id}" onchange="onRowChange(${id})">
+        <option value="">厚さ</option>
+        <option value="15">15mm</option>
+        <option value="12">12mm</option>
+      </select>
+    </div>
+    <div class="bfield">
+      <span class="bsel-label">長さ</span>
+      <select class="bsel" id="len-${id}" onchange="onRowChange(${id})">
+        <option value="">長さ</option>
+        <option value="910">910mm</option>
+        <option value="1820">1820mm</option>
+        <option value="3000">3000mm</option>
+        <option value="4000">4000mm</option>
+      </select>
+    </div>
+    <div class="bfield">
+      <span class="bsel-label">品質</span>
+      <select class="bsel" id="qual-${id}" onchange="onRowChange(${id})">
+        <option value="">品質</option>
+        <option value="節有">節有</option>
+        <option value="小節">小節</option>
+        <option value="特上小">特上小</option>
+        <option value="無節">無節</option>
+      </select>
+    </div>
+    <div class="bfield">
+      <span class="bsel-label">数量（束）</span>
+      <input type="number" class="qty-input" id="qty-${id}" value="1" min="1" max="999"
+        oninput="onRowChange(${id})">
+    </div>
+    <div class="row-price" id="price-${id}">—</div>
+    <div class="row-sub"  id="sub-${id}">—</div>
+    <button class="row-del" onclick="removeRow(${id})" title="この行を削除">×</button>
+  `;
+}
+
+function addRow() {
+  const id = ++rowCounter;
+  rows.push({ id, type: '', thick: '', length: '', quality: '', qty: 1 });
+
+  const el = document.createElement('div');
+  el.className = 'builder-row';
+  el.id = 'brow-' + id;
+  el.innerHTML = rowHTML(id);
+  document.getElementById('builder-rows').appendChild(el);
   updateBottomBar();
 }
 
-function onQtyChange(id, val) {
-  const n = Math.max(0, parseInt(val) || 0);
-  qtys[id] = n;
-  const p = PRODUCTS.find(x => x.id === id);
-  if (!p) return;
-  const inc = inPrice(p.price);
-  const subEl = document.getElementById('sub-' + id);
-  if (subEl) subEl.textContent = n > 0 ? '¥' + (n * inc).toLocaleString() : '—';
-  const row = document.getElementById('row-' + id);
-  if (row) row.classList.toggle('selected', n > 0);
+function removeRow(id) {
+  rows = rows.filter(r => r.id !== id);
+  const el = document.getElementById('brow-' + id);
+  if (el) el.remove();
+  // 行がなくなったら1行追加
+  if (rows.length === 0) addRow();
+  updateBottomBar();
+}
+
+function onTypeChange(id) {
+  const type = document.getElementById('type-' + id).value;
+  const thickSel = document.getElementById('thick-' + id);
+
+  if (type === 'panel') {
+    thickSel.value = '12';
+    thickSel.disabled = true;
+  } else {
+    thickSel.disabled = false;
+  }
+
+  const row = rows.find(r => r.id === id);
+  if (row) {
+    row.type = type;
+    row.thick = thickSel.value;
+  }
+  onRowChange(id);
+}
+
+function onRowChange(id) {
+  const row = rows.find(r => r.id === id);
+  if (!row) return;
+
+  row.type    = document.getElementById('type-'  + id)?.value || '';
+  row.thick   = document.getElementById('thick-' + id)?.value || '';
+  row.length  = document.getElementById('len-'   + id)?.value || '';
+  row.quality = document.getElementById('qual-'  + id)?.value || '';
+  row.qty     = Math.max(1, parseInt(document.getElementById('qty-' + id)?.value) || 1);
+
+  const p = findProduct(row);
+  const priceEl = document.getElementById('price-' + id);
+  const subEl   = document.getElementById('sub-'   + id);
+
+  if (p) {
+    const inc = inPrice(p.price);
+    if (priceEl) priceEl.textContent = '¥' + inc.toLocaleString();
+    if (subEl)   subEl.textContent   = '¥' + (inc * row.qty).toLocaleString();
+  } else {
+    if (priceEl) priceEl.textContent = '—';
+    if (subEl)   subEl.textContent   = '—';
+  }
+
   updateBottomBar();
 }
 
 function updateBottomBar() {
-  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
-  const subtotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
-  document.getElementById('item-count').textContent = selected.length;
+  const items = getSelectedItems();
+  const subtotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
+  document.getElementById('item-count').textContent = items.length;
   document.getElementById('subtotal-display').textContent = '¥' + subtotal.toLocaleString();
-}
-
-function switchTab(cat) {
-  document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
-  document.querySelectorAll('.product-tab-content').forEach(d => d.classList.remove('active'));
-  document.getElementById('tab-' + cat).classList.add('active');
 }
 
 // ===================== ステップ遷移 =====================
@@ -924,12 +1016,12 @@ function setStep(n) {
 function goStep1() { setStep(1); }
 
 function goStep2() {
-  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
-  if (selected.length === 0) {
-    alert('商品を1つ以上選択してください。');
+  const items = getSelectedItems();
+  if (items.length === 0) {
+    alert('商品を1品目以上選択してください。種類・厚さ・長さ・品質をすべて選び、数量を入力してください。');
     return;
   }
-  buildConfirmTable(selected);
+  buildConfirmTable(items);
   setStep(2);
 }
 
@@ -939,17 +1031,17 @@ function goStep3() {
 }
 
 // ===================== STEP 2 =====================
-function buildConfirmTable(selected) {
+function buildConfirmTable(items) {
   const tbody = document.getElementById('confirm-tbody');
   let html = '';
   let total = 0;
-  selected.forEach(p => {
-    const qty = qtys[p.id];
+  items.forEach(({ p, qty }) => {
     const inc = inPrice(p.price);
     const sub = qty * inc;
     total += sub;
+    const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
     html += `<tr>
-      <td>${p.thick}×${p.width}×${p.length}mm ${p.grade}級${p.quality}</td>
+      <td>${typeName} ${p.thick}×${p.width}×${p.length}mm　品質：${p.quality}</td>
       <td style="text-align:center;">${p.qty}枚</td>
       <td style="text-align:center;">${qty}束</td>
       <td style="text-align:right;">¥${inc.toLocaleString()}</td>
@@ -977,34 +1069,25 @@ function buildPrefSelect2() {
 
 function calcStep2Shipping() {
   const pref = document.getElementById('pref-select2').value;
-  if (!pref) {
-    alert('都道府県を選択してください。');
-    return;
-  }
+  if (!pref) { alert('都道府県を選択してください。'); return; }
 
-  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
-  const productTotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
-
+  const items = getSelectedItems();
   const prefIdx = SEINO_PREF_MAP[pref];
   const distIdx = PREF_TO_DIST[prefIdx];
   const distance = SEINO_DISTANCES[distIdx];
 
-  // 総重量・ダンボール費
-  let totalWeight = 0;
-  let totalBoxCost = 0;
-  selected.forEach(p => {
-    const dKey = getDanballKey(p.length);
-    const d = DANBALL[dKey];
-    totalWeight  += qtys[p.id] * d.weight;
-    totalBoxCost += qtys[p.id] * d.box;
+  let totalWeight = 0, totalBoxCost = 0;
+  items.forEach(({ p, qty }) => {
+    const d = DANBALL[getDanballKey(p.length)];
+    totalWeight  += qty * d.weight;
+    totalBoxCost += qty * d.box;
   });
 
-  const totalBundles = selected.reduce((s, p) => s + qtys[p.id], 0);
+  const totalBundles = items.reduce((s, item) => s + item.qty, 0);
   let html = '';
   let shippingTotal = 0;
 
   if (totalWeight <= MAX_BUNDLE * 40) {
-    // 1〜3便で対応
     const shipCount = Math.ceil(totalBundles / MAX_BUNDLE);
     if (shipCount <= 1) {
       const res = calcNet(distIdx, totalWeight, totalBoxCost);
@@ -1012,17 +1095,14 @@ function calcStep2Shipping() {
         html = '<p style="color:#c0392b;">重量が超過しています。お問い合わせください。</p>';
       } else {
         shippingTotal = res.total;
-        html = buildShippingResultHTML(pref, distance, res, null);
+        html = buildShippingResultHTML(pref, distance, res);
       }
     } else {
-      // 分割
       const baseW = Math.floor(totalWeight / shipCount);
       const baseB = Math.floor(totalBoxCost / shipCount);
       const remW = totalWeight % shipCount;
       const remB = totalBoxCost % shipCount;
-      let totalFare = 0, totalBox2 = 0;
-      let rows = '';
-      let failed = false;
+      let totalFare = 0, totalBox2 = 0, rows2 = '', failed = false;
       for (let i = 0; i < shipCount; i++) {
         const sw = baseW + (i < remW ? 1 : 0);
         const sb = baseB + (i < remB ? 1 : 0);
@@ -1030,7 +1110,7 @@ function calcStep2Shipping() {
         if (!res) { failed = true; break; }
         totalFare += res.fare;
         totalBox2 += sb;
-        rows += `<tr class="result-sub"><th>便${i+1}（${sw}kg）</th><td>${res.fare.toLocaleString()}円 + ${sb.toLocaleString()}円</td></tr>`;
+        rows2 += `<tr class="result-sub"><th>便${i+1}（${sw}kg）</th><td>${res.fare.toLocaleString()}円 + ${sb.toLocaleString()}円</td></tr>`;
       }
       if (failed) {
         html = '<p style="color:#c0392b;">分割しても重量超過です。お問い合わせください。</p>';
@@ -1041,7 +1121,7 @@ function calcStep2Shipping() {
         html = `<table class="result-table" style="margin-top:10px;">
           <tr class="result-sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
           <tr class="result-sub"><th>${shipCount}便に分割</th><td></td></tr>
-          ${rows}
+          ${rows2}
           <tr><th>運賃合計</th><td>${totalFare.toLocaleString()}円</td></tr>
           <tr><th>梱包材費合計</th><td>${totalBox2.toLocaleString()}円</td></tr>
           <tr><th>消費税（10%）</th><td>${Math.round((totalFare + totalBox2) * 0.1).toLocaleString()}円</td></tr>
@@ -1054,19 +1134,19 @@ function calcStep2Shipping() {
   }
 
   if (shippingTotal > 0) {
-    const productTotal2 = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
-    const grand = productTotal2 + shippingTotal;
+    const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
+    const grand = productTotal + shippingTotal;
     shippingResult = { shippingTotal, grand, pref };
     document.getElementById('grand-total-section').style.display = '';
     document.getElementById('grand-total-num').textContent = '¥' + grand.toLocaleString();
     document.getElementById('grand-total-sub').innerHTML =
-      `商品合計（税込）：¥${productTotal2.toLocaleString()} ＋ 送料（税込）：¥${shippingTotal.toLocaleString()}`;
+      `商品合計（税込）：¥${productTotal.toLocaleString()} ＋ 送料（税込）：¥${shippingTotal.toLocaleString()}`;
   }
 
   document.getElementById('shipping-result2').innerHTML = html;
 }
 
-function buildShippingResultHTML(pref, distance, res, splitNote) {
+function buildShippingResultHTML(pref, distance, res) {
   return `<table class="result-table" style="margin-top:10px;">
     <tr class="result-sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
     <tr class="result-sub"><th>適用重量帯</th><td>${res.tierWeight}kg帯</td></tr>
@@ -1079,16 +1159,16 @@ function buildShippingResultHTML(pref, distance, res, splitNote) {
 
 // ===================== STEP 3 =====================
 function buildStep3Summary() {
-  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
-  const productTotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
+  const items = getSelectedItems();
+  const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
 
   let html = '<table style="width:100%;font-size:0.85rem;border-collapse:collapse;">';
-  selected.forEach(p => {
-    const qty = qtys[p.id];
+  items.forEach(({ p, qty }) => {
+    const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
     const sub = qty * inPrice(p.price);
     html += `<tr>
       <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;">
-        ${p.thick}×${p.width}×${p.length}mm ${p.grade}級${p.quality}
+        ${typeName} ${p.thick}×${p.width}×${p.length}mm　品質：${p.quality}
       </td>
       <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;text-align:center;white-space:nowrap;">${qty}束</td>
       <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;text-align:right;white-space:nowrap;">¥${sub.toLocaleString()}</td>
@@ -1109,19 +1189,18 @@ function buildStep3Summary() {
     </tr>`;
   }
   html += '</table>';
-
   document.getElementById('step3-summary-content').innerHTML = html;
 }
 
 function saveOrderToSession() {
-  const selected = PRODUCTS.filter(p => qtys[p.id] > 0);
-  const productTotal = selected.reduce((s, p) => s + qtys[p.id] * inPrice(p.price), 0);
+  const items = getSelectedItems();
+  const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
 
   let msg = '【お見積もりシミュレーション内容】\n\n';
-  selected.forEach(p => {
-    const qty = qtys[p.id];
+  items.forEach(({ p, qty }) => {
+    const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
     const sub = qty * inPrice(p.price);
-    msg += `・${p.thick}×${p.width}×${p.length}mm ${p.grade}級${p.quality} × ${qty}束 → ¥${sub.toLocaleString()}（税込）\n`;
+    msg += `・${typeName} ${p.thick}×${p.width}×${p.length}mm 品質:${p.quality} × ${qty}束 → ¥${sub.toLocaleString()}（税込）\n`;
   });
   msg += `\n商品合計（税込）：¥${productTotal.toLocaleString()}`;
   if (shippingResult) {
@@ -1135,7 +1214,7 @@ function saveOrderToSession() {
 
 // ===================== 初期化 =====================
 document.addEventListener('DOMContentLoaded', () => {
-  ['flooring15','flooring12','panel','sale'].forEach(buildProductTable);
+  addRow(); // 最初の1行を自動追加
   buildPrefSelect2();
   setStep(1);
 });
