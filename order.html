@@ -74,7 +74,7 @@
     /* ---- Builder ---- */
     .builder-header {
       display: grid;
-      grid-template-columns: 2fr 1fr 1.2fr 1.4fr 1fr 1.4fr 1.4fr 36px;
+      grid-template-columns: 2fr 1fr 1.2fr 1.4fr 0.8fr 1fr 1.4fr 1.4fr 36px;
       gap: 8px;
       padding: 8px 12px;
       background: var(--wood-dark);
@@ -89,7 +89,7 @@
 
     .builder-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1.2fr 1.4fr 1fr 1.4fr 1.4fr 36px;
+      grid-template-columns: 2fr 1fr 1.2fr 1.4fr 0.8fr 1fr 1.4fr 1.4fr 36px;
       gap: 8px;
       align-items: center;
       padding: 10px 12px;
@@ -144,6 +144,13 @@
       outline: none;
       border-color: var(--wood-mid);
       box-shadow: 0 0 0 2px rgba(139,90,43,0.12);
+    }
+
+    .row-insu {
+      font-size: 0.82rem;
+      color: var(--wood-mid);
+      font-weight: 600;
+      text-align: center;
     }
 
     .row-price, .row-sub {
@@ -619,7 +626,8 @@
       <span>種類</span>
       <span>厚さ</span>
       <span>長さ</span>
-      <span>品質</span>
+      <span>等級</span>
+      <span>入数</span>
       <span>数量（束）</span>
       <span>単価（税込/束）</span>
       <span>小計（税込）</span>
@@ -907,15 +915,16 @@ function rowHTML(id) {
       </select>
     </div>
     <div class="bfield">
-      <span class="bsel-label">品質</span>
+      <span class="bsel-label">等級</span>
       <select class="bsel" id="qual-${id}" onchange="onRowChange(${id})">
-        <option value="">品質</option>
+        <option value="">等級</option>
         <option value="節有">節有</option>
         <option value="小節">小節</option>
         <option value="特上小">特上小</option>
         <option value="無節">無節</option>
       </select>
     </div>
+    <div class="row-insu" id="insu-${id}">—</div>
     <div class="bfield">
       <span class="bsel-label">数量（束）</span>
       <input type="number" class="qty-input" id="qty-${id}" value="1" min="1" max="999"
@@ -978,14 +987,17 @@ function onRowChange(id) {
   row.qty     = Math.max(1, parseInt(document.getElementById('qty-' + id)?.value) || 1);
 
   const p = findProduct(row);
+  const insuEl  = document.getElementById('insu-'  + id);
   const priceEl = document.getElementById('price-' + id);
   const subEl   = document.getElementById('sub-'   + id);
 
   if (p) {
     const inc = inPrice(p.price);
+    if (insuEl)  insuEl.textContent  = p.qty + '枚/束';
     if (priceEl) priceEl.textContent = '¥' + inc.toLocaleString();
     if (subEl)   subEl.textContent   = '¥' + (inc * row.qty).toLocaleString();
   } else {
+    if (insuEl)  insuEl.textContent  = '—';
     if (priceEl) priceEl.textContent = '—';
     if (subEl)   subEl.textContent   = '—';
   }
@@ -1018,7 +1030,7 @@ function goStep1() { setStep(1); }
 function goStep2() {
   const items = getSelectedItems();
   if (items.length === 0) {
-    alert('商品を1品目以上選択してください。種類・厚さ・長さ・品質をすべて選び、数量を入力してください。');
+    alert('商品を1品目以上選択してください。種類・厚さ・長さ・等級をすべて選び、数量を入力してください。');
     return;
   }
   buildConfirmTable(items);
@@ -1041,7 +1053,7 @@ function buildConfirmTable(items) {
     total += sub;
     const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
     html += `<tr>
-      <td>${typeName} ${p.thick}×${p.width}×${p.length}mm　品質：${p.quality}</td>
+      <td>${typeName} ${p.thick}×${p.width}×${p.length}mm　等級：${p.quality}</td>
       <td style="text-align:center;">${p.qty}枚</td>
       <td style="text-align:center;">${qty}束</td>
       <td style="text-align:right;">¥${inc.toLocaleString()}</td>
@@ -1168,7 +1180,7 @@ function buildStep3Summary() {
     const sub = qty * inPrice(p.price);
     html += `<tr>
       <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;">
-        ${typeName} ${p.thick}×${p.width}×${p.length}mm　品質：${p.quality}
+        ${typeName} ${p.thick}×${p.width}×${p.length}mm　等級：${p.quality}
       </td>
       <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;text-align:center;white-space:nowrap;">${qty}束</td>
       <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;text-align:right;white-space:nowrap;">¥${sub.toLocaleString()}</td>
@@ -1200,7 +1212,7 @@ function saveOrderToSession() {
   items.forEach(({ p, qty }) => {
     const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
     const sub = qty * inPrice(p.price);
-    msg += `・${typeName} ${p.thick}×${p.width}×${p.length}mm 品質:${p.quality} × ${qty}束 → ¥${sub.toLocaleString()}（税込）\n`;
+    msg += `・${typeName} ${p.thick}×${p.width}×${p.length}mm 等級:${p.quality} × ${qty}束 → ¥${sub.toLocaleString()}（税込）\n`;
   });
   msg += `\n商品合計（税込）：¥${productTotal.toLocaleString()}`;
   if (shippingResult) {
