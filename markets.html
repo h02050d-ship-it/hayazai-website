@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>木材市場一覧 | 近くの市場で買うのが一番お得 | 林材木店</title>
+  <meta name="description" content="林材木店の桧フローリング・羽目板は全国の木材市場でも取り扱いがあります。お近くの市場があればそちらで。なければ工場から直接お届けします。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <style>
+    .markets-layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 40px 80px;
+    }
+
+    .honest-box {
+      background: linear-gradient(135deg, #f8f2ea, #edf5ed);
+      border: 2px solid var(--wood-mid);
+      border-radius: 12px;
+      padding: 32px 40px;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .honest-box::before {
+      content: '正直なご案内';
+      position: absolute;
+      top: -13px;
+      left: 28px;
+      background: var(--wood-mid);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    .honest-box h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.35rem;
+      color: var(--wood-dark);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .honest-box p {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.95;
+    }
+
+    .honest-box strong {
+      color: var(--wood-dark);
+    }
+
+    .honest-flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-top: 28px;
+    }
+
+    .flow-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      text-align: center;
+      border: 1px solid #e0d0bc;
+    }
+
+    .flow-card .flow-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .flow-card h3 {
+      font-size: 0.9rem;
+      color: var(--wood-dark);
+      margin-bottom: 6px;
+    }
+
+    .flow-card p {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .flow-arrow {
+      font-size: 1.5rem;
+      color: var(--wood-mid);
+      text-align: center;
+    }
+
+    /* 市場リスト */
+    .region-section {
+      margin-bottom: 40px;
+    }
+
+    .region-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1rem;
+      color: var(--wood-dark);
+      font-weight: 700;
+      padding: 10px 16px;
+      background: var(--wood-pale);
+      border-left: 4px solid var(--wood-mid);
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 16px;
+    }
+
+    .market-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .market-card {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .market-card-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .market-card-body {}
+
+    .market-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--wood-dark);
+      margin-bottom: 4px;
+    }
+
+    .market-addr {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    /* 訴求CTA */
+    .no-market-box {
+      background: var(--wood-dark);
+      color: #fff;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      margin-top: 56px;
+    }
+
+    .no-market-box h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.4rem;
+      color: var(--wood-light);
+      margin-bottom: 12px;
+    }
+
+    .no-market-box p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.9;
+      margin-bottom: 28px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .no-market-box .btn-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .merit-list {
+      list-style: none;
+      margin: 24px 0 0;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .merit-list li {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.75);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .merit-list li::before {
+      content: '✓';
+      color: #a8d8a8;
+      font-weight: 700;
+    }
+
+    @media (max-width: 640px) {
+      .markets-layout { padding: 32px 16px 60px; }
+      .honest-box { padding: 24px 20px; }
+      .honest-flow { grid-template-columns: 1fr; }
+      .flow-arrow { transform: rotate(90deg); }
+      .market-list { grid-template-columns: 1fr; }
+      .no-market-box { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>木材市場でも買えます</h1>
+  <p>お近くに取引市場があれば、そちらが最もお得です</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <span>木材市場一覧</span>
+</nav>
+
+<div class="markets-layout">
+
+  <!-- 正直なご案内 -->
+  <div class="honest-box">
+    <h2>近くに木材市場があるなら、そちらで買ってください。</h2>
+    <p>
+      林材木店の桧フローリング・羽目板は、全国の木材市場を通じても流通しています。<br>
+      木材市場は<strong>送料がかからない分だけ安くなる</strong>ことが多く、お近くにある場合は市場経由の方がお得です。<br><br>
+      このページは「正直に」お伝えするためにあります。<strong>市場が遠い方・個人で市場に行けない方・全国発送を希望される方</strong>に向けて、
+      当店から直接お届けします。
+    </p>
+
+    <div class="honest-flow">
+      <div class="flow-card">
+        <div class="flow-icon">🏪</div>
+        <h3>近くに市場がある方</h3>
+        <p>下記の取引市場へ直接お問い合わせください。送料分お得になります。</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card">
+        <div class="flow-icon">🏭</div>
+        <h3>市場が遠い・個人の方</h3>
+        <p>工場から全国に直接発送。無料サンプルも対応しています。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 市場一覧 -->
+  <h2 style="font-family:'Noto Serif JP',serif;font-size:1.2rem;color:var(--wood-dark);margin-bottom:6px;">林材木店の桧材を扱う木材市場</h2>
+  <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:32px;">※ 在庫状況・価格は各市場にお問い合わせください。</p>
+
+  <!-- 東海 -->
+  <div class="region-section">
+    <div class="region-title">🗾 東海（静岡・愛知）</div>
+    <div class="market-list">
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">中央木材市売（株）西部営業所</div>
+          <div class="market-addr">愛知県海部郡飛島村木場1-17</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">中央木材市売（株）大口営業所</div>
+          <div class="market-addr">愛知県丹羽郡大口町河北2丁目2番地</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">ナイス（株）小牧</div>
+          <div class="market-addr">愛知県小牧市大字下末777</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">ナイス（株）沼津</div>
+          <div class="market-addr">静岡県沼津市一本松666-1</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">佐藤工業（株）</div>
+          <div class="market-addr">静岡県島田市金谷東二丁目3483番地</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 関東 -->
+  <div class="region-section">
+    <div class="region-title">🗾 関東（栃木・群馬・埼玉・千葉・神奈川）</div>
+    <div class="market-list">
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">（株）金平</div>
+          <div class="market-addr">栃木県宇都宮市中里718-4</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">ナイス（株）宇都宮</div>
+          <div class="market-addr">栃木県宇都宮市宮の内2-814</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">（株）吉貞 佐野市場</div>
+          <div class="market-addr">栃木県佐野市免鳥町295</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">ナイス（株）前橋</div>
+          <div class="market-addr">群馬県前橋市下大島町568</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">（株）吉貞 高崎市場</div>
+          <div class="market-addr">群馬県高崎市飯塚町1150</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">（株）吉貞 熊谷市場</div>
+          <div class="market-addr">埼玉県熊谷市中奈良1412</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">ナイス（株）埼玉</div>
+          <div class="market-addr">埼玉県入間郡越生町大谷352</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">千葉県木材市場協同組合</div>
+          <div class="market-addr">千葉県東金市山田800</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">北隅木材（株）</div>
+          <div class="market-addr">神奈川県金沢区幸浦1-5-3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 北関東・茨城 -->
+  <div class="region-section">
+    <div class="region-title">🗾 茨城</div>
+    <div class="market-list">
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">（株）アイザワ</div>
+          <div class="market-addr">茨城県水戸市千波町1884</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">（株）ミトモク</div>
+          <div class="market-addr">茨城県水戸市千波町1884</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 甲信越 -->
+  <div class="region-section">
+    <div class="region-title">🗾 甲信越（新潟）</div>
+    <div class="market-list">
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">ナイス（株）新潟</div>
+          <div class="market-addr">新潟県西浦原郡味方村大字白根73-1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四国・中国 -->
+  <div class="region-section">
+    <div class="region-title">🗾 四国・中国（香川・岡山）</div>
+    <div class="market-list">
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">ナイス（株）香川</div>
+          <div class="market-addr">香川県観音寺市植田町41</div>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-icon">🏪</div>
+        <div class="market-card-body">
+          <div class="market-name">（株）勝山木材市場</div>
+          <div class="market-addr">岡山県真庭市三田211</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 市場が近くにない方へのCTA -->
+  <div class="no-market-box">
+    <h2>お近くに市場が見つからない方へ</h2>
+    <p>
+      上記以外の地域の方・個人で市場へのアクセスが難しい方は、<br>
+      工場から直接お届けします。全国発送対応・無料サンプルも承ります。
+    </p>
+    <div class="btn-row">
+      <a href="contact.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">お問い合わせ・見積もり</a>
+      <a href="sample.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">🎁 無料サンプル請求</a>
+    </div>
+    <ul class="merit-list">
+      <li>送料は全国均一（西濃運輸）</li>
+      <li>工場直販価格</li>
+      <li>無料サンプル対応</li>
+      <li>LINE・電話でも相談OK</li>
+    </ul>
+  </div>
+
+</div>
+
+<div id="site-footer"></div>
+
+<script src="js/components.js?v=2"></script>
+</body>
+</html>

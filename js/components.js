@@ -17,6 +17,7 @@ function renderHeader() {
         <a href="blog.html">ブログ</a>
         <a href="order.html">お見積もり</a>
         <a href="shipping.html">送料見積</a>
+        <a href="markets.html">取引市場一覧</a>
         <a href="contact.html">お問い合わせ</a>
         <a href="sample.html" class="nav-sample-link">無料サンプル</a>
       </nav>
@@ -37,6 +38,7 @@ function renderHeader() {
       <a href="faq.html">お悩み解決</a>
       <a href="blog.html">ブログ</a>
       <a href="order.html">お見積もり</a>
+      <a href="markets.html">取引市場一覧</a>
       <a href="contact.html">お問い合わせ</a>
       <a href="sample.html">無料サンプル請求</a>
     </div>
@@ -80,6 +82,7 @@ function renderFooter() {
             <li><a href="gallery.html">施工事例</a></li>
             <li><a href="blog.html">ブログ・コラム</a></li>
             <li><a href="faq.html">よくある質問</a></li>
+            <li><a href="markets.html">木材市場一覧</a></li>
             <li><a href="contact.html">お問い合わせ</a></li>
           </ul>
         </div>
