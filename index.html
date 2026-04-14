@@ -305,6 +305,68 @@
       flex-wrap: wrap;
     }
 
+    /* ===== HINOKI APPEAL ===== */
+    .hinoki-appeal {
+      background: linear-gradient(160deg, var(--wood-dark) 0%, #1a2a16 100%);
+    }
+
+    .appeal-label { color: rgba(240,217,190,0.6) !important; }
+    .appeal-title-sec { color: #fff !important; }
+    .appeal-desc-sec { color: rgba(255,255,255,0.65) !important; }
+
+    .appeal-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.08);
+      margin-top: 48px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .appeal-item {
+      padding: 36px 18px;
+      background: rgba(255,255,255,0.03);
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .appeal-item:hover { background: rgba(255,255,255,0.08); }
+
+    .appeal-num {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      color: var(--wood-light);
+      opacity: 0.45;
+      margin-bottom: 10px;
+    }
+
+    .appeal-icon { font-size: 2.1rem; margin-bottom: 14px; }
+
+    .appeal-item-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f0d9be;
+      margin-bottom: 12px;
+    }
+
+    .appeal-item-desc {
+      font-size: 0.77rem;
+      color: rgba(255,255,255,0.56);
+      line-height: 1.85;
+    }
+
+    .appeal-cta-note {
+      margin-top: 44px;
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.82rem;
+      line-height: 1.9;
+    }
+
+    .appeal-cta-note a { color: #f0d9be; text-decoration: underline; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .hero { min-height: 80vh; padding: 60px 20px; }
@@ -313,6 +375,11 @@
       .features-grid { grid-template-columns: 1fr; gap: 16px; }
       .grade-grid { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
+      .appeal-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .appeal-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -489,16 +556,47 @@
   </div>
 </section>
 
-<!-- ===== PRODUCTS PREVIEW ===== -->
-<section class="products-preview">
+<!-- ===== HINOKI APPEAL ===== -->
+<section class="hinoki-appeal">
   <div class="section-inner">
-    <p class="section-label">Products</p>
-    <h2 class="section-title">人気商品</h2>
-    <p class="section-desc">よくご注文いただく定番の商品をご紹介します。</p>
-    <div class="product-grid" id="featured-products"></div>
-    <div style="text-align:center;margin-top:40px;">
-      <a href="products.html" class="btn btn-primary btn-lg">全商品を見る（78種類）</a>
+    <p class="section-label appeal-label">Why Hinoki</p>
+    <h2 class="section-title appeal-title-sec">なぜ、桧なのか</h2>
+    <p class="section-desc appeal-desc-sec">フローリング材は無数にある中、職人や工務店が「桧」を選ぶ理由があります。木の中でも特別な素材、桧が持つ5つの力をご覧ください。</p>
+    <div class="appeal-grid">
+      <div class="appeal-item">
+        <div class="appeal-num">01</div>
+        <div class="appeal-icon">🛡️</div>
+        <h3 class="appeal-item-title">抗菌・防カビ</h3>
+        <p class="appeal-item-desc">桧に含まれる「ヒノキチオール」は天然の抗菌成分。ダニ・カビの繁殖を抑え、裸足で歩く床を清潔に保ちます。</p>
+      </div>
+      <div class="appeal-item">
+        <div class="appeal-num">02</div>
+        <div class="appeal-icon">🌬️</div>
+        <h3 class="appeal-item-title">調湿・断熱</h3>
+        <p class="appeal-item-desc">木の細胞が水分を吸放湿し、室内湿度を自然に調整。冬はひんやりせず、夏はべたつかない快適な床を実現します。</p>
+      </div>
+      <div class="appeal-item">
+        <div class="appeal-num">03</div>
+        <div class="appeal-icon">🌿</div>
+        <h3 class="appeal-item-title">香りの力</h3>
+        <p class="appeal-item-desc">桧の芳香成分は副交感神経を優位にし、ストレスを和らげると研究で証明されています。帰宅するたび、深呼吸したくなる空間へ。</p>
+      </div>
+      <div class="appeal-item">
+        <div class="appeal-num">04</div>
+        <div class="appeal-icon">💪</div>
+        <h3 class="appeal-item-title">強度と長寿命</h3>
+        <p class="appeal-item-desc">圧縮・曲げ強度が高く、耐久性に優れた桧。年を重ねるほど「飴色」に輝く経年美化を楽しみながら、数十年使い続けられます。</p>
+      </div>
+      <div class="appeal-item">
+        <div class="appeal-num">05</div>
+        <div class="appeal-icon">🏯</div>
+        <h3 class="appeal-item-title">日本の気候に最適</h3>
+        <p class="appeal-item-desc">高温多湿な日本で育つ国産桧は、日本の住環境に最も適した建材。古くから社寺建築にも使われてきた実績が証明しています。</p>
+      </div>
     </div>
+    <p class="appeal-cta-note">
+      まずは実際に触れてみてください。<a href="sample.html">無料サンプル請求</a>受付中 ／ 疑問は<a href="contact.html">お気軽にご相談</a>ください。
+    </p>
   </div>
 </section>
 
@@ -717,45 +815,6 @@
 
 <div id="site-footer"></div>
 
-<script src="data/products.js"></script>
 <script src="js/components.js?v=2"></script>
-<script>
-// 人気商品 6件を表示（フローリング15mm 節有・小節・無節、羽目板 節有・小節・無節）
-const featuredIds = [
-  'ff151082000a', 'fk151082000a', 'fm151082000a',
-  'pf121032000a', 'pk121032000a', 'pm121032000a',
-];
-
-function renderFeatured() {
-  const container = document.getElementById('featured-products');
-  if (!container) return;
-
-  container.innerHTML = featuredIds.map(id => {
-    const p = PRODUCTS.find(x => x.id === id);
-    if (!p) return '';
-    return `
-      <div class="product-card${p.outOfStock ? ' out-of-stock' : ''}">
-        <img class="product-card-img"
-          src="${p.img}"
-          alt="${p.name}"
-          onerror="this.style.background='#f5ede0';this.removeAttribute('src')">
-        <div class="product-card-body">
-          <div class="product-card-badges">
-            <span class="badge badge-grade-${p.grade.toLowerCase()}">${p.grade}級品</span>
-            <span class="badge badge-quality">${p.quality}</span>
-          </div>
-          <div class="product-card-name">${p.name}</div>
-          <div class="product-card-spec">${p.thick}×${p.width}×${p.length}mm / ${p.qty}枚入</div>
-          <div class="product-card-price">¥${(Math.round(p.price*1.15*1.1/10)*10).toLocaleString()} <span>（税込・送料別）</span></div>
-          <div class="product-card-actions">
-            <a href="products.html" class="btn btn-primary btn-sm">価格表を見る</a>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-document.addEventListener('DOMContentLoaded', renderFeatured);
-</script>
 </body>
 </html>
