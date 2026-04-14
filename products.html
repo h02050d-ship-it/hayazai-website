@@ -165,6 +165,86 @@
       .cross-table { font-size: 0.78rem; }
       .cross-table th, .cross-table td { padding: 8px 8px; }
     }
+
+    /* 運賃計算ウィジェット */
+    .freight-widget {
+      background: #faf5ef;
+      border: 1px solid #e8d8c4;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .freight-widget h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.05rem;
+      color: var(--wood-dark);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e8d8c4;
+    }
+    .freight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+    .freight-grid .fg-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      margin-bottom: 5px;
+    }
+    .freight-grid select,
+    .freight-grid input[type="number"] {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid #d0bba0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #fff;
+      color: var(--text-dark);
+    }
+    .freight-calc-btn {
+      background: var(--wood-dark);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 20px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .freight-calc-btn:hover { background: var(--wood-mid); }
+    .freight-result {
+      background: #fff;
+      border: 1px solid #d0bba0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 0.88rem;
+    }
+    .freight-result .fr-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      margin-bottom: 6px;
+    }
+    .freight-result .fr-detail {
+      color: var(--text-mid);
+      font-size: 0.8rem;
+      line-height: 1.7;
+    }
+    .freight-result .fr-error { color: #c0392b; }
+    .freight-result a { color: var(--wood-mid); font-weight: 600; }
+    @media (max-width: 640px) {
+      .freight-grid { grid-template-columns: 1fr 1fr; }
+      .freight-grid .fg-btn { grid-column: span 2; }
+      .freight-widget { padding: 18px 16px; }
+    }
   </style>
 </head>
 <body>
@@ -197,17 +277,11 @@
       <table class="cross-table">
         <thead>
           <tr>
-            <th class="th-length" rowspan="2">長さ</th>
-            <th class="th-group-a" colspan="4">A 級 品</th>
-            <th class="th-group-b th-b-start" colspan="2">B 級 品</th>
-          </tr>
-          <tr>
+            <th class="th-length">長さ</th>
             <th class="th-a">節有</th>
             <th class="th-a">小節</th>
             <th class="th-a">特上小</th>
             <th class="th-a">無節</th>
-            <th class="th-b th-b-start">節有</th>
-            <th class="th-b">特上小</th>
           </tr>
         </thead>
         <tbody id="tbody-flooring"></tbody>
@@ -223,17 +297,11 @@
       <table class="cross-table">
         <thead>
           <tr>
-            <th class="th-length" rowspan="2">長さ</th>
-            <th class="th-group-a" colspan="4">A 級 品</th>
-            <th class="th-group-b th-b-start" colspan="2">B 級 品</th>
-          </tr>
-          <tr>
+            <th class="th-length">長さ</th>
             <th class="th-a">節有</th>
             <th class="th-a">小節</th>
             <th class="th-a">特上小</th>
             <th class="th-a">無節</th>
-            <th class="th-b th-b-start">節有</th>
-            <th class="th-b">特上小</th>
           </tr>
         </thead>
         <tbody id="tbody-panel"></tbody>
@@ -255,8 +323,6 @@ const COLS = [
   { grade: 'A', quality: '小節',   bStart: false },
   { grade: 'A', quality: '特上小', bStart: false },
   { grade: 'A', quality: '無節',   bStart: false },
-  { grade: 'B', quality: '節有',   bStart: true  },
-  { grade: 'B', quality: '特上小', bStart: false },
 ];
 
 function exPrice(furiPrice) {
