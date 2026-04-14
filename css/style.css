@@ -907,44 +907,6 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 }
 .nav-sample-link:hover { background: var(--green-dark); }
 
-/* ===== LINEフローティングボタン ===== */
-.line-float {
-  position: fixed;
-  right: 24px;
-  bottom: 32px;
-  z-index: 999;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-}
-.line-float.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.line-float-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: #06C755;
-  color: #fff;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  box-shadow: 0 4px 16px rgba(6,199,85,0.45);
-  font-size: 0.62rem;
-  font-weight: 700;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-decoration: none;
-}
-.line-float-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 24px rgba(6,199,85,0.6);
-}
-
 /* ===== 星評価UI ===== */
 .star-rating {
   display: flex;

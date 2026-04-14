@@ -610,7 +610,7 @@
     </div>
     <div class="step-item" id="sb3">
       <div class="step-num">03</div>
-      <div><div class="step-label">お申し込みへ</div><div class="step-sub">フォーム・電話・LINE</div></div>
+      <div><div class="step-label">お申し込みへ</div><div class="step-sub">フォームまたはお電話</div></div>
     </div>
   </div>
 
@@ -693,7 +693,7 @@
         <button class="btn-calc" onclick="calcStep2Shipping()">送料を計算する</button>
       </div>
       <div id="shipping-result2"></div>
-      <p class="shipping-hint">※ 西濃運輸ネット販売料金・税込。荷物の状態・条件により変動する場合があります。</p>
+      <p class="shipping-hint">※ 西濃運輸・税込。個人様は支店止めでのお受け取りとなります。荷物の状態・条件により変動する場合があります。</p>
     </div>
 
     <div id="grand-total-section" style="display:none">
@@ -1137,7 +1137,7 @@ function calcStep2Shipping() {
       }
     }
   } else {
-    html = '<p style="color:#c0392b;">ご注文数が大変多いです。お電話またはLINEでお問い合わせください。</p>';
+    html = '<p style="color:#c0392b;">ご注文数が大変多いです。お問い合わせフォームまたはお電話でご相談ください。</p>';
   }
 
   if (shippingTotal > 0) {
