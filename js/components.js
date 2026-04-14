@@ -16,7 +16,6 @@ function renderHeader() {
         <a href="faq.html">お悩み解決</a>
         <a href="blog.html">ブログ</a>
         <a href="order.html">お見積もり</a>
-        <a href="shipping.html">送料見積</a>
         <a href="markets.html">取引市場一覧</a>
         <a href="contact.html">お問い合わせ</a>
         <a href="sample.html" class="nav-sample-link">無料サンプル</a>
