@@ -325,9 +325,9 @@
         <label>長さ</label>
         <select id="fr-length">
           <option value="1">910mm</option>
-          <option value="2">1,820mm</option>
+          <option value="2" selected>1,820mm</option>
           <option value="3">3,000mm</option>
-          <option value="4" selected>4,000mm</option>
+          <option value="4">4,000mm</option>
         </select>
       </div>
       <div class="fg-group">
@@ -339,7 +339,15 @@
       </div>
     </div>
     <div id="fr-result"></div>
-    <p style="font-size:0.75rem;color:var(--text-light);margin-top:10px;">※ 西濃運輸・ネット販売料金の目安です。実際の送料は変動する場合があります。<a href="shipping.html">詳細な送料表はこちら</a></p>
+    <p style="font-size:0.75rem;color:var(--text-light);margin-top:10px;">※ 西濃運輸・佐川急便の送料目安です。実際の送料は変動する場合があります。<a href="shipping.html">詳細な送料表はこちら</a><br>※ 西濃運輸をご利用の個人のお客様は支店止めでのお受け取りとなります。</p>
+  </div>
+
+  <!-- 送料目安一覧表 -->
+  <div style="margin-top:48px;">
+    <h2 style="font-family:'Noto Serif JP',serif;font-size:1.1rem;font-weight:700;color:var(--wood-dark);margin-bottom:6px;padding-bottom:10px;border-bottom:2px solid var(--wood-mid);">送料目安一覧（税込）</h2>
+    <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:24px;">910mmは佐川急便、1,820mm以上は西濃運輸の料金です。</p>
+    <div id="freight-ref-tables"></div>
+    <p style="font-size:0.75rem;color:var(--text-light);margin-top:16px;">※ 西濃運輸をご利用の個人のお客様は支店止めでのお受け取りとなります。</p>
   </div>
 
 </div>
@@ -385,10 +393,6 @@ function buildTbody(tbodyId, cats) {
       const bCls = col.bStart ? ' td-b-start' : '';
       if (!p) {
         html += `<td class="td-none${bCls}">—</td>`;
-      } else if (p.outOfStock) {
-        const ex = exPrice(p.price), inc = inPrice(p.price);
-        const perEx = Math.round(ex / p.qty), perInc = Math.round(inc / p.qty);
-        html += `<td class="td-oos${bCls}">¥${ex.toLocaleString()}<small>（税込¥${inc.toLocaleString()}）${p.qty}枚入<br>1枚 ¥${perEx.toLocaleString()}（税込¥${perInc.toLocaleString()}）</small><span class="oos-label">在庫なし</span></td>`;
       } else {
         const ex = exPrice(p.price), inc = inPrice(p.price);
         const perEx = Math.round(ex / p.qty), perInc = Math.round(inc / p.qty);
@@ -404,6 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildTbody('tbody-flooring', ['flooring15', 'flooring12']);
   buildTbody('tbody-panel', ['panel']);
   buildFreightPrefSelect();
+  buildFreightRefTable();
 });
 
 // ===== 運賃計算 =====
@@ -495,6 +500,67 @@ function calcFreight() {
         1束あたり目安：約¥${Math.round(total/qty).toLocaleString()}
       </div>
     </div>`;
+}
+
+function calcFreightRef(pref, length, qty) {
+  if (length === 1) {
+    const rate = FR_SAGAWA_1M[pref];
+    if (!rate) return null;
+    return rate * qty;
+  }
+  const distIdx = FR_DIST_IDX[FR_PREF_MAP[pref]];
+  const d = FR_DANBALL[length];
+  const shipCount = Math.ceil(qty / FR_MAX);
+  const baseQty = Math.floor(qty / shipCount);
+  const rem = qty % shipCount;
+  let totalFare = 0, totalBox = 0;
+  for (let i = 0; i < shipCount; i++) {
+    const sq = baseQty + (i < rem ? 1 : 0);
+    const sw = sq * d.weight;
+    const sbox = sq * d.box;
+    const ti = FR_WEIGHTS.findIndex(w => w >= sw);
+    if (ti === -1) return null;
+    totalFare += FR_FARES[ti][distIdx];
+    totalBox += sbox;
+  }
+  const subtotal = totalFare + totalBox;
+  const tax = Math.round(subtotal * 0.1);
+  return Math.round((subtotal + tax) / 100) * 100;
+}
+
+function buildFreightRefTable() {
+  const REF_PREFS = ["北海道","宮城","東京","愛知","大阪","福岡"];
+  const REF_QTYS = [5, 10, 15, 20];
+  const LENS = [
+    { val: 1, label: '910mm', carrier: '佐川急便' },
+    { val: 2, label: '1,820mm', carrier: '西濃運輸' },
+    { val: 3, label: '3,000mm', carrier: '西濃運輸' },
+    { val: 4, label: '4,000mm', carrier: '西濃運輸' },
+  ];
+  const wrap = document.getElementById('freight-ref-tables');
+  if (!wrap) return;
+  let html = '';
+  LENS.forEach(len => {
+    html += `<div style="margin-bottom:40px;">
+      <h3 style="font-size:0.95rem;font-weight:700;color:var(--wood-dark);margin-bottom:10px;padding:6px 12px;background:var(--wood-cream);border-radius:4px;">
+        ${len.label}　<span style="font-weight:400;font-size:0.8rem;color:var(--text-light);">${len.carrier}</span>
+      </h3>
+      <div class="cross-table-wrap"><table class="cross-table"><thead><tr>
+        <th style="text-align:left;min-width:72px;">都道府県</th>`;
+    REF_QTYS.forEach(q => { html += `<th>${q}束</th>`; });
+    html += `</tr></thead><tbody>`;
+    REF_PREFS.forEach(pref => {
+      html += `<tr><td style="text-align:left;padding:6px 10px;font-weight:500;">${pref}</td>`;
+      REF_QTYS.forEach(q => {
+        const val = calcFreightRef(pref, len.val, q);
+        const per = val ? Math.round(val / q / 100) * 100 : null;
+        html += `<td style="text-align:center;padding:6px 10px;line-height:1.5;">${val ? `¥${val.toLocaleString()}<br><small style="color:var(--text-light);font-size:0.75rem;">(¥${per.toLocaleString()}/束)</small>` : '—'}</td>`;
+      });
+      html += `</tr>`;
+    });
+    html += `</tbody></table></div></div>`;
+  });
+  wrap.innerHTML = html;
 }
 </script>
 </body>
