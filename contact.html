@@ -125,19 +125,19 @@
       <!-- サンプル請求の場合のみ追加フィールド -->
       <div id="sample-fields" style="display:none;">
         <div class="notice-box green" style="margin-bottom:20px;">
-          無料サンプルをご希望の場合、お届け先住所をご入力ください。
+          無料サンプルをご希望の場合、お届け先住所・ご希望の種類・等級をご入力ください。
         </div>
         <div class="form-group">
-          <label class="form-label">郵便番号</label>
-          <input type="text" name="sample_zip" class="form-input" placeholder="430-0000" style="max-width:200px;">
+          <label class="form-label">郵便番号 <span class="req">必須</span></label>
+          <input type="text" name="sample_zip" id="sample_zip" class="form-input" placeholder="430-0000" style="max-width:200px;">
         </div>
         <div class="form-group">
-          <label class="form-label">住所</label>
-          <input type="text" name="sample_address" class="form-input" placeholder="静岡県磐田市〇〇1234">
+          <label class="form-label">住所 <span class="req">必須</span></label>
+          <input type="text" name="sample_address" id="sample_address" class="form-input" placeholder="静岡県磐田市〇〇1234">
         </div>
         <div class="form-group">
-          <label class="form-label">ご希望のサンプル（種類）</label>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
+          <label class="form-label">ご希望のサンプル（種類） <span class="req">必須</span></label>
+          <div id="sample-items-group" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
             <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
               <input type="checkbox" name="sample_items[]" value="flooring15">フローリング15mm
             </label>
@@ -148,10 +148,11 @@
               <input type="checkbox" name="sample_items[]" value="panel">羽目板
             </label>
           </div>
+          <p id="sample-items-error" style="display:none;font-size:0.78rem;color:#c0392b;margin-top:4px;">種類を1つ以上選択してください</p>
         </div>
         <div class="form-group">
-          <label class="form-label">ご希望のサンプル（等級）</label>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
+          <label class="form-label">ご希望のサンプル（等級） <span class="req">必須</span></label>
+          <div id="sample-grades-group" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
             <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
               <input type="checkbox" name="sample_grades[]" value="fushi_ari">節有
             </label>
@@ -165,7 +166,8 @@
               <input type="checkbox" name="sample_grades[]" value="mushi">無節
             </label>
           </div>
-          <p style="font-size:0.75rem;color:var(--text-light);margin-top:6px;">複数選択可。等級の違いが分からない場合はそのままで構いません。</p>
+          <p id="sample-grades-error" style="display:none;font-size:0.78rem;color:#c0392b;margin-top:4px;">等級を1つ以上選択してください</p>
+          <p style="font-size:0.75rem;color:var(--text-light);margin-top:6px;">複数選択可</p>
         </div>
       </div>
 
@@ -221,10 +223,32 @@
 <script src="js/cart.js"></script>
 <script src="js/components.js?v=3"></script>
 <script>
-// サンプル請求選択時に追加フィールド表示
-document.querySelector('select[name="type"]').addEventListener('change', function() {
-  const sampleFields = document.getElementById('sample-fields');
-  sampleFields.style.display = this.value === 'sample' ? 'block' : 'none';
+// サンプル請求選択時に追加フィールド表示・必須切替
+const typeSelect = document.querySelector('select[name="type"]');
+const zipInput     = document.getElementById('sample_zip');
+const addressInput = document.getElementById('sample_address');
+
+typeSelect.addEventListener('change', function() {
+  const isSample = this.value === 'sample';
+  document.getElementById('sample-fields').style.display = isSample ? 'block' : 'none';
+  zipInput.required     = isSample;
+  addressInput.required = isSample;
+});
+
+// フォーム送信時のチェックボックス必須バリデーション
+document.querySelector('form').addEventListener('submit', function(e) {
+  if (typeSelect.value !== 'sample') return;
+  let ok = true;
+
+  const itemsChecked = document.querySelectorAll('input[name="sample_items[]"]:checked').length > 0;
+  document.getElementById('sample-items-error').style.display = itemsChecked ? 'none' : 'block';
+  if (!itemsChecked) ok = false;
+
+  const gradesChecked = document.querySelectorAll('input[name="sample_grades[]"]:checked').length > 0;
+  document.getElementById('sample-grades-error').style.display = gradesChecked ? 'none' : 'block';
+  if (!gradesChecked) ok = false;
+
+  if (!ok) e.preventDefault();
 });
 
 // URLハッシュで種別自動選択 & 見積もりシミュレーターからの引き継ぎ
