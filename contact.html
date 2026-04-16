@@ -124,10 +124,37 @@
 
       <!-- サンプル請求の場合のみ追加フィールド -->
       <div id="sample-fields" style="display:none;">
+
+        <!-- サンプルセットの内容 -->
+        <div style="background:#f5f0e8;border:1px solid #d9cfc0;border-radius:10px;padding:20px 22px;margin-bottom:24px;">
+          <p style="font-size:0.82rem;font-weight:700;color:var(--wood-dark);margin-bottom:12px;letter-spacing:.03em;">📦 サンプルセットの内容</p>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.84rem;color:var(--text-mid);">
+              <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+              各商品 約100×150mm程度の木片サンプル（選んだ種別ごと）／サンプル材 約110×300mm
+            </li>
+            <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.84rem;color:var(--text-mid);">
+              <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+              グレード（節有・小節・特上小・無節）の比較ができるセット構成
+            </li>
+            <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.84rem;color:var(--text-mid);">
+              <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+              桧本来の香りを実感できる天然乾燥・超仕上げ品
+            </li>
+            <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.84rem;color:var(--text-mid);">
+              <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+              商品カタログ・価格表を同封（準備中・完成次第同封）
+            </li>
+            <li style="display:flex;align-items:flex-start;gap:8px;font-size:0.84rem;color:var(--text-mid);">
+              <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+              ご不明点は電話・メールでいつでも相談OK
+            </li>
+          </ul>
+        </div>
+
         <div class="notice-box green" style="margin-bottom:20px;">
-          無料サンプルをご希望の場合、お届け先住所とご希望の種類をご入力ください。<br>
-          <span style="font-size:0.78rem;color:var(--text-mid);">※ サンプルサイズ：木片サンプル 約100×150mm／サンプル材 約110×300mm（種別ごとにお送りします）<br>
-          ※ 商品カタログ・価格表は現在準備中です。完成次第サンプルと同封してお送りします。</span>
+          お届け先住所とご希望の種類をご入力ください。<br>
+          <span style="font-size:0.78rem;color:var(--text-mid);">※ 木片サンプル 約100×150mm／サンプル材 約110×300mm（種別ごとにお送りします）</span>
         </div>
         <div class="form-group">
           <label class="form-label">郵便番号 <span class="req">必須</span></label>
@@ -154,8 +181,8 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">確認したいグレード <span style="font-size:0.78rem;font-weight:normal;color:var(--text-light);background:#f0ece8;padding:2px 8px;border-radius:4px;margin-left:4px;">任意</span></label>
-          <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px;">未選択の場合は節有・小節・特上小・無節の4グレード比較セットをお送りします</p>
+          <label class="form-label">確認したいグレード <span class="req">必須</span></label>
+          <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px;">複数選択可</p>
           <div id="sample-grades-group" style="display:flex;flex-wrap:wrap;gap:10px;">
             <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
               <input type="checkbox" name="sample_grades[]" value="fushi_ari">節有
@@ -248,7 +275,10 @@ document.querySelector('form').addEventListener('submit', function(e) {
   document.getElementById('sample-items-error').style.display = itemsChecked ? 'none' : 'block';
   if (!itemsChecked) ok = false;
 
-  // グレードは任意なのでバリデーション不要
+  // グレード ― 必須
+  const gradesChecked = document.querySelectorAll('input[name="sample_grades[]"]:checked').length > 0;
+  document.getElementById('sample-grades-error').style.display = gradesChecked ? 'none' : 'block';
+  if (!gradesChecked) ok = false;
 
   if (!ok) e.preventDefault();
 });

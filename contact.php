@@ -32,9 +32,7 @@ $sample_items    = $_POST['sample_items'] ?? [];
 $sample_items_str = implode('・', array_map('h', $sample_items));
 $sample_grades_raw = $_POST['sample_grades'] ?? [];
 $grade_labels_map  = ['fushi_ari' => '節有', 'ko_fushi' => '小節', 'toku_ko' => '特上小', 'mushi' => '無節'];
-$sample_grades_str = empty($sample_grades_raw)
-    ? '指定なし（4グレード比較セット）'
-    : implode('・', array_map(fn($v) => $grade_labels_map[h($v)] ?? h($v), $sample_grades_raw));
+$sample_grades_str = implode('・', array_map(fn($v) => $grade_labels_map[h($v)] ?? h($v), $sample_grades_raw));
 
 $type_labels = [
     'sample'       => '無料サンプル請求',
@@ -57,7 +55,7 @@ if ($type === 'sample') {
     if (!$sample_zip)    $errors[] = '郵便番号を入力してください';
     if (!$sample_address) $errors[] = '住所を入力してください';
     if (empty($sample_items)) $errors[] = 'サンプルの種類を1つ以上選択してください';
-    // グレードは任意のためバリデーションなし
+    if (empty($sample_grades_raw)) $errors[] = 'グレードを1つ以上選択してください';
 }
 
 if (!empty($errors)) {

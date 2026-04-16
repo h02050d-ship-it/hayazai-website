@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>無料サンプル請求 | 林材木店 桧フローリング・羽目板</title>
+  <title>無料サンプル請求 | 林材木店</title>
   <meta name="description" content="国産無垢桧フローリング・羽目板の無料サンプルを請求できます。実際の質感・香り・色味を手で確かめてから安心してご注文いただけます。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,70 +12,65 @@
   <link rel="stylesheet" href="css/style.css?v=3">
   <style>
     .sample-layout {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 48px 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 60px;
+      align-items: start;
     }
-    .sample-form-box {
-      background: var(--white);
+    .sample-sidebar {
+      position: sticky;
+      top: 88px;
+    }
+    .grade-card {
       border: 1px solid #e8ddd0;
-      border-radius: 12px;
-      padding: 40px;
-      margin-top: 40px;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: #fff;
     }
-    .sample-feature-list {
-      list-style: none;
-      margin: 0 0 32px;
-    }
-    .sample-feature-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid #f0e8e0;
+    .grade-card-title {
       font-size: 0.88rem;
-      color: var(--text-mid);
-    }
-    .sample-feature-list li:last-child { border: none; }
-    .sample-feature-list li::before {
-      content: '✓';
-      color: var(--green-mid);
       font-weight: 700;
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: 2px;
+      color: var(--wood-dark);
+      margin-bottom: 4px;
     }
+    .grade-card-desc {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+    .check-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 2px solid #e8ddd0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: normal;
+      transition: border-color .15s;
+    }
+    .check-card:hover { border-color: #c8b8a0; }
     @media (max-width: 768px) {
-      .sample-layout { padding: 32px 20px 60px; }
-      .sample-form-box { padding: 24px 20px; }
-      .sample-steps { grid-template-columns: 1fr; }
-      .sample-items-grid { grid-template-columns: 1fr; }
+      .sample-layout {
+        grid-template-columns: 1fr;
+        padding: 32px 20px 60px;
+      }
+      .sample-sidebar { position: static; }
     }
   </style>
-
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "無料サンプル請求 | 林材木店",
-    "description": "桧フローリング・羽目板の無料サンプルを請求できるページ",
-    "url": "https://hayazai.com/sample.html",
-    "provider": {
-      "@type": "LocalBusiness",
-      "name": "林材木店",
-      "telephone": "0538-58-2395"
-    }
-  }
-  </script>
 </head>
 <body>
 
 <div id="site-header"></div>
 
-<div class="page-hero" style="background:linear-gradient(135deg,#f5ede0,#e8d5c0);">
-  <h1 style="color:var(--wood-dark);">🎁 無料サンプル請求</h1>
-  <p style="color:var(--text-mid);">実際の質感・香り・色を確かめてから安心してご注文いただけます</p>
+<div class="page-hero">
+  <h1>無料サンプル請求</h1>
+  <p>実物を見て・触れて・香りを確かめてからご検討ください</p>
 </div>
 
 <nav class="breadcrumb">
@@ -86,99 +81,38 @@
 
 <div class="sample-layout">
 
-  <!-- サンプルの特徴 -->
-  <section>
-    <p class="section-label" style="margin-bottom:6px;">About Sample</p>
-    <h2 class="section-title" style="font-size:1.6rem;">なぜサンプルが大切なの？</h2>
-    <p style="color:var(--text-mid);font-size:0.9rem;line-height:1.9;max-width:680px;">
-      木材はモニターで見るのと実物では、色・艶・手触り・香りが全く異なります。
-      「思っていた色と違う」「肌触りが合わない」—— そんなミスを防ぐために、
-      まずは実物のサンプルでご確認ください。もちろん完全無料です。
-    </p>
-  </section>
-
-  <!-- ステップ -->
-  <div class="sample-steps" style="margin:40px 0;">
-    <div class="sample-step">
-      <div class="sample-step-num">01</div>
-      <h3>フォームから申し込む</h3>
-      <p>お届け先住所・希望サンプルを選んでフォーム送信（1分で完了）</p>
-    </div>
-    <div class="sample-step">
-      <div class="sample-step-num">02</div>
-      <h3>自宅に届く</h3>
-      <p>通常3〜7営業日以内にポスト投函でお届け。送料は当店負担</p>
-    </div>
-    <div class="sample-step">
-      <div class="sample-step-num">03</div>
-      <h3>手で触って確かめる</h3>
-      <p>木目・香り・肌触りを実際に確認してからご注文ください</p>
-    </div>
-  </div>
-
-  <!-- サンプルの内容 -->
-  <section style="background:var(--wood-cream);border-radius:12px;padding:32px;">
-    <h3 style="font-size:1rem;color:var(--wood-dark);margin-bottom:20px;">📦 サンプルセットの内容</h3>
-    <ul class="sample-feature-list">
-      <li>各商品約100×150mm程度の木片サンプル（選んだ種別ごと）</li>
-      <li>グレード（節有・小節・特上小・無節）の比較ができるセット構成</li>
-      <li>桧本来の香りを実感できる天然乾燥・超仕上げ品</li>
-      <li>商品カタログ・価格表を同封</li>
-      <li>ご不明点は電話・メールでいつでも相談OK</li>
-    </ul>
-  </section>
-
   <!-- フォーム -->
-  <div class="sample-form-box">
-    <h2 style="font-size:1.2rem;color:var(--wood-dark);margin-bottom:8px;">サンプル請求フォーム</h2>
-    <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:28px;">送料無料・完全無料。通常3〜7営業日以内に発送します。</p>
+  <div>
+
+    <!-- サンプルセットの内容 -->
+    <div style="background:#f5f0e8;border:1px solid #d9cfc0;border-radius:10px;padding:22px 24px;margin-bottom:32px;">
+      <p style="font-size:0.88rem;font-weight:700;color:var(--wood-dark);margin-bottom:14px;letter-spacing:.03em;">📦 サンプルセットの内容</p>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-mid);">
+          <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+          サンプル材 約110×300mm（選んだ種別ごと）
+        </li>
+        <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-mid);">
+          <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+          グレード（節有・小節・特上小・無節）の比較ができるセット構成
+        </li>
+        <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-mid);">
+          <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+          桧本来の香りを実感できる天然乾燥・超仕上げ品
+        </li>
+        <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-mid);">
+          <span style="color:var(--wood-mid);font-weight:700;flex-shrink:0;">✓</span>
+          ご不明点は電話・メールでいつでも相談OK
+        </li>
+      </ul>
+    </div>
+
+    <h2 style="font-size:1.1rem;color:var(--wood-dark);margin-bottom:24px;padding-bottom:10px;border-bottom:2px solid #e8ddd0;">
+      お申し込みフォーム
+    </h2>
 
     <form action="contact.php" method="post">
       <input type="hidden" name="type" value="sample">
-
-      <!-- ご希望サンプル -->
-      <div class="form-group">
-        <label class="form-label">ご希望のサンプル <span class="req">必須（複数選択可）</span></label>
-        <div class="sample-items-grid">
-          <label class="sample-item-card" id="card-flooring15">
-            <input type="checkbox" name="sample_items[]" value="flooring15" onchange="toggleCard('card-flooring15',this)">
-            <div class="sample-item-icon">🪵</div>
-            <div class="sample-item-name">フローリング 15mm</div>
-            <div class="sample-item-desc">リビング・寝室などの床材に</div>
-          </label>
-          <label class="sample-item-card" id="card-flooring12">
-            <input type="checkbox" name="sample_items[]" value="flooring12" onchange="toggleCard('card-flooring12',this)">
-            <div class="sample-item-icon">📏</div>
-            <div class="sample-item-name">フローリング 12mm</div>
-            <div class="sample-item-desc">廊下・洋室などに。薄型で施工しやすい</div>
-          </label>
-          <label class="sample-item-card" id="card-panel">
-            <input type="checkbox" name="sample_items[]" value="panel" onchange="toggleCard('card-panel',this)">
-            <div class="sample-item-icon">🎋</div>
-            <div class="sample-item-name">羽目板</div>
-            <div class="sample-item-desc">壁・天井の内装材。和室・リビングに</div>
-          </label>
-        </div>
-      </div>
-
-      <!-- グレードの希望 -->
-      <div class="form-group">
-        <label class="form-label">確認したいグレード（任意）</label>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;">
-          <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="grades[]" value="節有"> 節有（最もリーズナブル）
-          </label>
-          <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="grades[]" value="小節"> 小節（バランス型）
-          </label>
-          <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="grades[]" value="特上小"> 特上小（高品質）
-          </label>
-          <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="grades[]" value="無節"> 無節（最高グレード）
-          </label>
-        </div>
-      </div>
 
       <div class="form-row">
         <div class="form-group">
@@ -186,7 +120,7 @@
           <input type="text" name="name" class="form-input" placeholder="山田 太郎" required>
         </div>
         <div class="form-group">
-          <label class="form-label">会社名・屋号（任意）</label>
+          <label class="form-label">会社名 <span style="font-size:0.75rem;font-weight:normal;color:var(--text-light);">任意</span></label>
           <input type="text" name="company" class="form-input" placeholder="株式会社〇〇工務店">
         </div>
       </div>
@@ -197,53 +131,120 @@
           <input type="email" name="email" class="form-input" placeholder="info@example.com" required>
         </div>
         <div class="form-group">
-          <label class="form-label">電話番号</label>
+          <label class="form-label">電話番号 <span style="font-size:0.75rem;font-weight:normal;color:var(--text-light);">任意</span></label>
           <input type="tel" name="tel" class="form-input" placeholder="090-0000-0000">
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
+      <!-- お届け先 -->
+      <div style="background:#fafaf8;border:1px solid #e8ddd0;border-radius:8px;padding:20px;margin-bottom:20px;">
+        <p style="font-size:0.82rem;font-weight:700;color:var(--wood-dark);margin-bottom:14px;">📍 お届け先</p>
+        <div class="form-group" style="margin-bottom:12px;">
           <label class="form-label">郵便番号 <span class="req">必須</span></label>
-          <input type="text" name="zip" class="form-input" placeholder="430-0000" style="max-width:180px;" required>
+          <input type="text" name="sample_zip" id="sample_zip" class="form-input" placeholder="430-0000" style="max-width:200px;" required>
         </div>
-        <div class="form-group" style="flex:2;">
-          <label class="form-label">住所（お届け先） <span class="req">必須</span></label>
-          <input type="text" name="address" class="form-input" placeholder="静岡県磐田市〇〇1234" required>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">住所 <span class="req">必須</span></label>
+          <input type="text" name="sample_address" id="sample_address" class="form-input" placeholder="静岡県磐田市〇〇1234" required>
         </div>
       </div>
 
+      <!-- 種類選択 -->
       <div class="form-group">
-        <label class="form-label">ご使用予定の場所・ご要望（任意）</label>
-        <textarea name="message" class="form-textarea" style="height:100px;"
-          placeholder="例：20畳のリビングにフローリングを貼りたい。小節と無節の違いを確認したい。"></textarea>
+        <label class="form-label">ご希望のサンプル（種類） <span class="req">必須</span></label>
+        <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px;">複数選択可</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <label class="check-card" id="chk-flooring15">
+            <input type="checkbox" name="sample_items[]" value="flooring15" style="accent-color:var(--wood-mid);">フローリング15mm
+          </label>
+          <label class="check-card" id="chk-flooring12">
+            <input type="checkbox" name="sample_items[]" value="flooring12" style="accent-color:var(--wood-mid);">フローリング12mm
+          </label>
+          <label class="check-card" id="chk-panel">
+            <input type="checkbox" name="sample_items[]" value="panel" style="accent-color:var(--wood-mid);">羽目板
+          </label>
+        </div>
+        <p id="sample-items-error" style="display:none;font-size:0.78rem;color:#c0392b;margin-top:6px;">種類を1つ以上選択してください</p>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-top:8px;">
-        🎁 無料サンプルを申し込む（送料無料）
+      <!-- グレード（必須） -->
+      <div class="form-group">
+        <label class="form-label">確認したいグレード <span class="req">必須</span></label>
+        <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px;">複数選択可</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <label class="check-card">
+            <input type="checkbox" name="sample_grades[]" value="fushi_ari" style="accent-color:var(--wood-mid);">節有
+          </label>
+          <label class="check-card">
+            <input type="checkbox" name="sample_grades[]" value="ko_fushi" style="accent-color:var(--wood-mid);">小節
+          </label>
+          <label class="check-card">
+            <input type="checkbox" name="sample_grades[]" value="toku_ko" style="accent-color:var(--wood-mid);">特上小
+          </label>
+          <label class="check-card">
+            <input type="checkbox" name="sample_grades[]" value="mushi" style="accent-color:var(--wood-mid);">無節
+          </label>
+        </div>
+        <p id="sample-grades-error" style="display:none;font-size:0.78rem;color:#c0392b;margin-top:6px;">グレードを1つ以上選択してください</p>
+      </div>
+
+      <!-- 備考 -->
+      <div class="form-group">
+        <label class="form-label">
+          備考・ご要望
+          <span style="font-size:0.75rem;font-weight:normal;color:var(--text-light);background:#f0ece8;padding:2px 8px;border-radius:4px;margin-left:6px;">任意</span>
+        </label>
+        <textarea name="message" class="form-textarea" style="height:100px;"
+          placeholder="施工場所・ご予算・気になる点など、なんでもお書きください。"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">
+        無料サンプルを申し込む（送料無料）
       </button>
 
       <p style="font-size:0.75rem;color:var(--text-light);margin-top:12px;text-align:center;">
-        ご入力いただいた情報はサンプル発送以外には使用しません。通常1〜2営業日以内に発送確認メールをお送りします。
+        通常2〜5営業日以内に発送します。ご入力情報はサンプル発送以外に使用しません。
       </p>
     </form>
   </div>
 
-  <!-- 他の相談方法 -->
-  <div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
-    <div class="contact-method" style="background:var(--wood-cream);border-radius:8px;padding:20px;text-align:center;">
-      <div style="font-size:1.8rem;margin-bottom:8px;">📞</div>
-      <h3 style="font-size:0.88rem;color:var(--wood-dark);font-weight:700;margin-bottom:4px;">電話で相談</h3>
-      <a href="tel:0538582395" style="font-weight:700;color:var(--wood-mid);font-size:0.9rem;">0538-58-2395</a>
-      <p style="font-size:0.75rem;color:var(--text-light);margin-top:4px;">平日 9:00〜17:00</p>
+  <!-- サイドバー -->
+  <aside class="sample-sidebar">
+
+    <div style="margin-bottom:20px;">
+      <p style="font-size:0.82rem;font-weight:700;color:var(--wood-dark);margin-bottom:12px;">🌳 グレードについて</p>
+
+      <div class="grade-card">
+        <div class="grade-card-title">節有（ふしあり）</div>
+        <div class="grade-card-desc">節が自然に入った素朴な表情。温かみのある空間に。コストを抑えたい方にも人気。</div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-card-title">小節（こぶし）</div>
+        <div class="grade-card-desc">小さな節が少量入ったバランス型。自然感と上品さを両立。最も選ばれるグレード。</div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-card-title">特上小（とくじょうこ）</div>
+        <div class="grade-card-desc">節が極めて少なく木目が均一で美しい。高品質な空間づくりに。</div>
+      </div>
+      <div class="grade-card" style="margin-bottom:0;">
+        <div class="grade-card-title">無節（むぶし）</div>
+        <div class="grade-card-desc">節がまったくない最高級品。旅館・高級住宅などに使われる逸品。</div>
+      </div>
     </div>
-    <div class="contact-method" style="background:var(--wood-cream);border-radius:8px;padding:20px;text-align:center;">
-      <div style="font-size:1.8rem;margin-bottom:8px;">✉</div>
-      <h3 style="font-size:0.88rem;color:var(--wood-dark);font-weight:700;margin-bottom:4px;">メールで相談</h3>
-      <a href="mailto:info@hayazai.com" style="font-weight:700;color:var(--wood-mid);font-size:0.82rem;">info@hayazai.com</a>
-      <p style="font-size:0.75rem;color:var(--text-light);margin-top:4px;">24時間受付</p>
+
+    <div style="background:var(--wood-cream);border-radius:8px;padding:20px;margin-bottom:12px;">
+      <p style="font-size:0.8rem;font-weight:700;color:var(--wood-dark);margin-bottom:6px;">📞 電話でのご相談</p>
+      <a href="tel:0538582395" style="font-size:1.05rem;font-weight:700;color:var(--wood-mid);display:block;margin-bottom:4px;">0538-58-2395</a>
+      <p style="font-size:0.75rem;color:var(--text-light);">平日 9:00〜17:00</p>
     </div>
-  </div>
+
+    <div style="background:var(--wood-cream);border-radius:8px;padding:20px;">
+      <p style="font-size:0.8rem;font-weight:700;color:var(--wood-dark);margin-bottom:6px;">✉ メールでのご相談</p>
+      <a href="mailto:info@hayazai.com" style="font-size:0.88rem;font-weight:700;color:var(--wood-mid);display:block;margin-bottom:4px;">info@hayazai.com</a>
+      <p style="font-size:0.75rem;color:var(--text-light);">24時間受付・通常1〜3営業日以内に返信</p>
+    </div>
+
+  </aside>
 
 </div>
 
@@ -253,11 +254,31 @@
 <script src="js/cart.js"></script>
 <script src="js/components.js?v=3"></script>
 <script>
-function toggleCard(id, checkbox) {
-  const card = document.getElementById(id);
-  if (checkbox.checked) card.classList.add('selected');
-  else card.classList.remove('selected');
-}
+// チェックカードのハイライト
+document.querySelectorAll('.check-card input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', function() {
+    this.closest('.check-card').style.borderColor = this.checked ? 'var(--wood-mid)' : '#e8ddd0';
+  });
+});
+
+// バリデーション
+document.querySelector('form').addEventListener('submit', function(e) {
+  let ok = true;
+
+  const itemsChecked = document.querySelectorAll('input[name="sample_items[]"]:checked').length > 0;
+  document.getElementById('sample-items-error').style.display = itemsChecked ? 'none' : 'block';
+  if (!itemsChecked) ok = false;
+
+  const gradesChecked = document.querySelectorAll('input[name="sample_grades[]"]:checked').length > 0;
+  document.getElementById('sample-grades-error').style.display = gradesChecked ? 'none' : 'block';
+  if (!gradesChecked) ok = false;
+
+  // 備考が空の場合はデフォルト値（contact.phpのmessage必須対応）
+  const msg = document.querySelector('textarea[name="message"]');
+  if (msg && !msg.value.trim()) msg.value = '無料サンプルを請求します。';
+
+  if (!ok) e.preventDefault();
+});
 </script>
 </body>
 </html>
