@@ -26,10 +26,15 @@ $type    = h($_POST['type']);
 $message = h($_POST['message']);
 
 // サンプル請求フィールド
-$sample_zip     = h($_POST['sample_zip'] ?? '');
-$sample_address = h($_POST['sample_address'] ?? '');
-$sample_items   = $_POST['sample_items'] ?? [];
+$sample_zip      = h($_POST['sample_zip'] ?? '');
+$sample_address  = h($_POST['sample_address'] ?? '');
+$sample_items    = $_POST['sample_items'] ?? [];
 $sample_items_str = implode('・', array_map('h', $sample_items));
+$sample_grades_raw = $_POST['sample_grades'] ?? [];
+$grade_labels_map  = ['fushi_ari' => '節有', 'ko_fushi' => '小節', 'toku_ko' => '特上小', 'mushi' => '無節'];
+$sample_grades_str = empty($sample_grades_raw)
+    ? '指定なし（4グレード比較セット）'
+    : implode('・', array_map(fn($v) => $grade_labels_map[h($v)] ?? h($v), $sample_grades_raw));
 
 $type_labels = [
     'sample'       => '無料サンプル請求',
@@ -49,10 +54,10 @@ if (!$message) $errors[] = 'お問い合わせ内容を入力してください'
 
 // サンプル請求の場合の追加バリデーション
 if ($type === 'sample') {
-    if (!$sample_zip)     $errors[] = '郵便番号を入力してください';
+    if (!$sample_zip)    $errors[] = '郵便番号を入力してください';
     if (!$sample_address) $errors[] = '住所を入力してください';
-    if (empty($sample_items))  $errors[] = 'サンプルの種類を1つ以上選択してください';
-    if (empty($_POST['sample_grades'] ?? [])) $errors[] = 'サンプルの等級を1つ以上選択してください';
+    if (empty($sample_items)) $errors[] = 'サンプルの種類を1つ以上選択してください';
+    // グレードは任意のためバリデーションなし
 }
 
 if (!empty($errors)) {
@@ -81,7 +86,7 @@ TEL：0538-58-2395（平日 9:00〜17:00）
 EOT;
 
 if ($type === 'sample' && $sample_address) {
-    $customer_body .= "\n■ サンプル送付先\n  〒{$sample_zip} {$sample_address}\n  ご希望：{$sample_items_str}";
+    $customer_body .= "\n■ サンプル送付先\n  〒{$sample_zip} {$sample_address}\n  ご希望品目：{$sample_items_str}\n  ご希望グレード：{$sample_grades_str}";
 }
 
 $customer_body .= <<<EOT
@@ -108,7 +113,7 @@ TEL：{$tel}
 EOT;
 
 if ($type === 'sample') {
-    $shop_body .= "\n\nサンプル送付先：〒{$sample_zip} {$sample_address}\nご希望品目：{$sample_items_str}";
+    $shop_body .= "\n\nサンプル送付先：〒{$sample_zip} {$sample_address}\nご希望品目：{$sample_items_str}\nご希望グレード：{$sample_grades_str}";
 }
 
 $headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">";

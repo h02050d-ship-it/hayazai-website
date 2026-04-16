@@ -125,7 +125,9 @@
       <!-- サンプル請求の場合のみ追加フィールド -->
       <div id="sample-fields" style="display:none;">
         <div class="notice-box green" style="margin-bottom:20px;">
-          無料サンプルをご希望の場合、お届け先住所・ご希望の種類・等級をご入力ください。
+          無料サンプルをご希望の場合、お届け先住所とご希望の種類をご入力ください。<br>
+          <span style="font-size:0.78rem;color:var(--text-mid);">※ サンプルサイズ：木片サンプル 約100×150mm／サンプル材 約110×300mm（種別ごとにお送りします）<br>
+          ※ 商品カタログ・価格表は現在準備中です。完成次第サンプルと同封してお送りします。</span>
         </div>
         <div class="form-group">
           <label class="form-label">郵便番号 <span class="req">必須</span></label>
@@ -150,9 +152,11 @@
           </div>
           <p id="sample-items-error" style="display:none;font-size:0.78rem;color:#c0392b;margin-top:4px;">種類を1つ以上選択してください</p>
         </div>
+
         <div class="form-group">
-          <label class="form-label">ご希望のサンプル（等級） <span class="req">必須</span></label>
-          <div id="sample-grades-group" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
+          <label class="form-label">確認したいグレード <span style="font-size:0.78rem;font-weight:normal;color:var(--text-light);background:#f0ece8;padding:2px 8px;border-radius:4px;margin-left:4px;">任意</span></label>
+          <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:8px;">未選択の場合は節有・小節・特上小・無節の4グレード比較セットをお送りします</p>
+          <div id="sample-grades-group" style="display:flex;flex-wrap:wrap;gap:10px;">
             <label style="font-weight:normal;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
               <input type="checkbox" name="sample_grades[]" value="fushi_ari">節有
             </label>
@@ -166,7 +170,6 @@
               <input type="checkbox" name="sample_grades[]" value="mushi">無節
             </label>
           </div>
-          <p id="sample-grades-error" style="display:none;font-size:0.78rem;color:#c0392b;margin-top:4px;">等級を1つ以上選択してください</p>
           <p style="font-size:0.75rem;color:var(--text-light);margin-top:6px;">複数選択可</p>
         </div>
       </div>
@@ -235,18 +238,17 @@ typeSelect.addEventListener('change', function() {
   addressInput.required = isSample;
 });
 
-// フォーム送信時のチェックボックス必須バリデーション
+// フォーム送信時のバリデーション（グレードは任意）
 document.querySelector('form').addEventListener('submit', function(e) {
   if (typeSelect.value !== 'sample') return;
   let ok = true;
 
+  // 種類（商品）チェック ― 必須
   const itemsChecked = document.querySelectorAll('input[name="sample_items[]"]:checked').length > 0;
   document.getElementById('sample-items-error').style.display = itemsChecked ? 'none' : 'block';
   if (!itemsChecked) ok = false;
 
-  const gradesChecked = document.querySelectorAll('input[name="sample_grades[]"]:checked').length > 0;
-  document.getElementById('sample-grades-error').style.display = gradesChecked ? 'none' : 'block';
-  if (!gradesChecked) ok = false;
+  // グレードは任意なのでバリデーション不要
 
   if (!ok) e.preventDefault();
 });
