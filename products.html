@@ -273,44 +273,20 @@
   </div>
 
 
-  <!-- 桧フローリング -->
-  <div class="price-section">
-    <h2 class="price-section-title">桧フローリング</h2>
-    <p class="price-section-sub">厚み 12mm・15mm 共通（幅108mm）／ 価格：税別・送料別（カッコ内税込）</p>
-    <div class="cross-table-wrap">
-      <table class="cross-table">
-        <thead>
-          <tr>
-            <th class="th-length">長さ</th>
-            <th class="th-a">節有</th>
-            <th class="th-a">小節</th>
-            <th class="th-a">特上小</th>
-            <th class="th-a">無節</th>
-          </tr>
-        </thead>
-        <tbody id="tbody-flooring"></tbody>
-      </table>
+  <!-- 価格表：工事中 -->
+  <div style="text-align:center;padding:60px 20px 56px;background:#faf5ef;border-radius:12px;margin-bottom:56px;border:2px dashed #c8b49a;">
+    <div style="font-size:3rem;margin-bottom:16px;">🔨</div>
+    <p style="font-size:0.75rem;letter-spacing:0.25em;color:var(--wood-mid);text-transform:uppercase;margin-bottom:10px;">Under Construction</p>
+    <h2 style="font-family:'Noto Serif JP',serif;font-size:1.6rem;font-weight:700;color:var(--wood-dark);margin-bottom:16px;">価格表 準備中</h2>
+    <p style="font-size:0.95rem;color:var(--text-mid);line-height:1.9;max-width:480px;margin:0 auto 28px;">
+      現在、価格表のページを整備中です。<br>
+      商品の価格・在庫についてはお気軽にお問い合わせください。
+    </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="contact.html" class="btn btn-primary">見積もり・お問い合わせ</a>
+      <a href="https://store.shopping.yahoo.co.jp/hayazaimuku/" target="_blank" rel="noopener" class="btn btn-outline">Yahooショッピングで見る</a>
     </div>
-  </div>
-
-  <!-- 桧羽目板 -->
-  <div class="price-section">
-    <h2 class="price-section-title">桧羽目板</h2>
-    <p class="price-section-sub">厚み 12mm（幅103mm）／ 価格：税別・送料別（カッコ内税込）</p>
-    <div class="cross-table-wrap">
-      <table class="cross-table">
-        <thead>
-          <tr>
-            <th class="th-length">長さ</th>
-            <th class="th-a">節有</th>
-            <th class="th-a">小節</th>
-            <th class="th-a">特上小</th>
-            <th class="th-a">無節</th>
-          </tr>
-        </thead>
-        <tbody id="tbody-panel"></tbody>
-      </table>
-    </div>
+    <p style="font-size:0.75rem;color:var(--text-light);margin-top:20px;">TEL：0538-58-2395（平日 9:00〜17:00）</p>
   </div>
 
   <!-- 運賃計算ウィジェット -->
@@ -405,8 +381,6 @@ function buildTbody(tbodyId, cats) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  buildTbody('tbody-flooring', ['flooring15', 'flooring12']);
-  buildTbody('tbody-panel', ['panel']);
   buildFreightPrefSelect();
   buildFreightRefTable();
 });
