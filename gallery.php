@@ -159,7 +159,12 @@ if (is_dir($gallery_dir)) {
 
 <?php if (empty($images)): ?>
   <div class="upload-notice">
-    <div style="font-size:3rem;margin-bottom:16px;">📷</div>
+    <div style="width:72px;height:72px;border-radius:50%;background:#f0e6d4;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
+        <circle cx="12" cy="13" r="4" stroke="#7a5c3e" stroke-width="1.8"/>
+      </svg>
+    </div>
     <h2 style="font-size:1.1rem;color:var(--wood-dark);margin-bottom:12px;">施工写真を追加してください</h2>
     <p>
       サーバーの <code>/gallery/</code> フォルダに<br>
