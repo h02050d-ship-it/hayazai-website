@@ -2,162 +2,136 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ファビコン候補</title>
+  <title>ファビコン候補「林」</title>
   <style>
     body { font-family: sans-serif; background: #f5f0e8; padding: 40px; }
     h1 { font-size: 1.1rem; color: #3d2b1f; margin-bottom: 8px; }
     p { font-size: 0.85rem; color: #888; margin-bottom: 32px; }
     .grid { display: flex; flex-wrap: wrap; gap: 24px; }
-    .item { background: #fff; border-radius: 12px; padding: 24px; text-align: center; width: 140px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .item { background: #fff; border-radius: 12px; padding: 24px 20px; text-align: center; width: 130px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
     .item svg { display: block; margin: 0 auto 12px; }
-    .num { font-size: 0.75rem; color: #7a5c3e; font-weight: 700; margin-bottom: 4px; }
-    .desc { font-size: 0.72rem; color: #999; }
-    /* ブラウザタブ風プレビュー */
-    .tab-preview { background: #e8e8e8; border-radius: 6px 6px 0 0; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #444; margin-bottom: 12px; }
-    .tab-preview svg { flex-shrink: 0; }
+    .num { font-size: 0.75rem; color: #7a5c3e; font-weight: 700; margin-bottom: 6px; }
+    .desc { font-size: 0.7rem; color: #999; line-height: 1.4; }
   </style>
 </head>
 <body>
-<h1>ファビコン候補 — 番号を教えてください</h1>
-<p>ブラウザのタブ・お気に入りバーに表示されるアイコンです。64×64pxで表示されます。</p>
+<h1>ファビコン候補「林」— 番号を教えてください</h1>
+<p>漢字「林」をベースにした10案です。</p>
 
 <div class="grid">
 
-  <!-- 1: 年輪（現状改良版） -->
+  <!-- 1: ダークブラウン・ゴールド文字 シンプル -->
   <div class="item">
-    <div class="num">① 年輪</div>
+    <div class="num">①</div>
     <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <circle cx="32" cy="32" r="22" fill="none" stroke="#d4a96a" stroke-width="1.5" opacity="0.3"/>
-      <circle cx="32" cy="32" r="17" fill="none" stroke="#d4a96a" stroke-width="2" opacity="0.5"/>
-      <circle cx="32" cy="32" r="11" fill="none" stroke="#d4a96a" stroke-width="2.5" opacity="0.7"/>
-      <circle cx="32" cy="32" r="5"  fill="none" stroke="#d4a96a" stroke-width="2" opacity="0.9"/>
-      <circle cx="32" cy="32" r="2"  fill="#d4a96a"/>
+      <text x="32" y="46" font-family="serif" font-size="36" font-weight="700" fill="#d4a96a" text-anchor="middle">林</text>
     </svg>
-    <div class="desc">木の断面・年輪</div>
+    <div class="desc">ダーク×ゴールド</div>
   </div>
 
-  <!-- 2: 木目ストライプ -->
+  <!-- 2: ベージュ背景・ブラウン文字 -->
   <div class="item">
-    <div class="num">② 木目</div>
+    <div class="num">②</div>
+    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="14" fill="#f0e6d4"/>
+      <text x="32" y="46" font-family="serif" font-size="36" font-weight="700" fill="#3d2b1f" text-anchor="middle">林</text>
+    </svg>
+    <div class="desc">ベージュ×ダーク</div>
+  </div>
+
+  <!-- 3: 角丸なし・正方形 ゴールド文字 -->
+  <div class="item">
+    <div class="num">③</div>
+    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="4" fill="#3d2b1f"/>
+      <text x="32" y="46" font-family="serif" font-size="36" font-weight="700" fill="#c8a87a" text-anchor="middle">林</text>
+    </svg>
+    <div class="desc">シャープ角</div>
+  </div>
+
+  <!-- 4: 円形 -->
+  <div class="item">
+    <div class="num">④</div>
+    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="30" fill="#3d2b1f"/>
+      <text x="32" y="46" font-family="serif" font-size="34" font-weight="700" fill="#d4a96a" text-anchor="middle">林</text>
+    </svg>
+    <div class="desc">丸形</div>
+  </div>
+
+  <!-- 5: 白背景・ゴールドフレーム -->
+  <div class="item">
+    <div class="num">⑤</div>
+    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="14" fill="#fff"/>
+      <rect x="3" y="3" width="58" height="58" rx="12" fill="none" stroke="#c8a87a" stroke-width="2.5"/>
+      <text x="32" y="46" font-family="serif" font-size="34" font-weight="700" fill="#3d2b1f" text-anchor="middle">林</text>
+    </svg>
+    <div class="desc">白×ゴールド枠</div>
+  </div>
+
+  <!-- 6: グラデーション背景 -->
+  <div class="item">
+    <div class="num">⑥</div>
+    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#5a3820"/>
+          <stop offset="100%" stop-color="#2a1a0e"/>
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#g1)"/>
+      <text x="32" y="46" font-family="serif" font-size="36" font-weight="700" fill="#d4a96a" text-anchor="middle">林</text>
+    </svg>
+    <div class="desc">グラデ背景</div>
+  </div>
+
+  <!-- 7: 枠付き文字 -->
+  <div class="item">
+    <div class="num">⑦</div>
     <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <rect x="10" y="16" width="44" height="6" rx="3" fill="#c8a87a" opacity="0.9"/>
-      <rect x="10" y="26" width="44" height="4" rx="2" fill="#c8a87a" opacity="0.6"/>
-      <rect x="10" y="34" width="44" height="6" rx="3" fill="#c8a87a" opacity="0.85"/>
-      <rect x="10" y="44" width="44" height="4" rx="2" fill="#c8a87a" opacity="0.55"/>
+      <text x="32" y="46" font-family="serif" font-size="36" font-weight="700"
+        fill="none" stroke="#d4a96a" stroke-width="1.5" text-anchor="middle">林</text>
     </svg>
-    <div class="desc">フローリング板目</div>
+    <div class="desc">アウトライン</div>
   </div>
 
-  <!-- 3: H モノグラム -->
+  <!-- 8: 小さめ文字＋下線装飾 -->
   <div class="item">
-    <div class="num">③ 頭文字 H</div>
+    <div class="num">⑧</div>
     <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <line x1="18" y1="14" x2="18" y2="50" stroke="#d4a96a" stroke-width="7" stroke-linecap="round"/>
-      <line x1="46" y1="14" x2="46" y2="50" stroke="#d4a96a" stroke-width="7" stroke-linecap="round"/>
-      <line x1="18" y1="32" x2="46" y2="32" stroke="#d4a96a" stroke-width="5" stroke-linecap="round"/>
+      <text x="32" y="40" font-family="serif" font-size="28" font-weight="700" fill="#d4a96a" text-anchor="middle">林</text>
+      <line x1="14" y1="48" x2="50" y2="48" stroke="#c8a87a" stroke-width="1.5" opacity="0.6"/>
     </svg>
-    <div class="desc">林（Hayashi）の H</div>
+    <div class="desc">文字＋下線</div>
   </div>
 
-  <!-- 4: 木の字 -->
+  <!-- 9: 金色背景・ダーク文字 -->
   <div class="item">
-    <div class="num">④ 木（漢字）</div>
+    <div class="num">⑨</div>
+    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="14" fill="#c8a87a"/>
+      <text x="32" y="46" font-family="serif" font-size="36" font-weight="700" fill="#3d2b1f" text-anchor="middle">林</text>
+    </svg>
+    <div class="desc">ゴールド背景</div>
+  </div>
+
+  <!-- 10: 文字＋年輪 -->
+  <div class="item">
+    <div class="num">⑩</div>
     <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <line x1="32" y1="10" x2="32" y2="48" stroke="#d4a96a" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="14" y1="28" x2="50" y2="28" stroke="#d4a96a" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="32" y1="34" x2="16" y2="52" stroke="#d4a96a" stroke-width="4" stroke-linecap="round"/>
-      <line x1="32" y1="34" x2="48" y2="52" stroke="#d4a96a" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="32" cy="32" r="26" fill="none" stroke="#c8a87a" stroke-width="1" opacity="0.25"/>
+      <circle cx="32" cy="32" r="20" fill="none" stroke="#c8a87a" stroke-width="1" opacity="0.2"/>
+      <text x="32" y="46" font-family="serif" font-size="34" font-weight="700" fill="#d4a96a" text-anchor="middle">林</text>
     </svg>
-    <div class="desc">漢字「木」</div>
-  </div>
-
-  <!-- 5: ダイヤモンド＋木目 -->
-  <div class="item">
-    <div class="num">⑤ ダイヤ</div>
-    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <polygon points="32,8 56,32 32,56 8,32" fill="none" stroke="#d4a96a" stroke-width="2.5" stroke-linejoin="round"/>
-      <polygon points="32,16 48,32 32,48 16,32" fill="#d4a96a" opacity="0.2"/>
-      <circle cx="32" cy="32" r="6" fill="#d4a96a" opacity="0.9"/>
-    </svg>
-    <div class="desc">プレミアム感</div>
-  </div>
-
-  <!-- 6: 葉 -->
-  <div class="item">
-    <div class="num">⑥ 葉</div>
-    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <path d="M32 52 C32 52 12 42 12 24 C12 24 22 14 32 12 C42 14 52 24 52 24 C52 42 32 52 32 52Z" fill="#c8a87a" opacity="0.8"/>
-      <line x1="32" y1="52" x2="32" y2="20" stroke="#3d2b1f" stroke-width="2" stroke-linecap="round"/>
-      <line x1="32" y1="30" x2="22" y2="24" stroke="#3d2b1f" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-      <line x1="32" y1="38" x2="42" y2="32" stroke="#3d2b1f" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-    </svg>
-    <div class="desc">桧の葉</div>
-  </div>
-
-  <!-- 7: 六角形＋年輪 -->
-  <div class="item">
-    <div class="num">⑦ 六角＋年輪</div>
-    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <polygon points="32,6 55,19 55,45 32,58 9,45 9,19" fill="none" stroke="#d4a96a" stroke-width="2.5" stroke-linejoin="round"/>
-      <circle cx="32" cy="32" r="12" fill="none" stroke="#d4a96a" stroke-width="1.8" opacity="0.7"/>
-      <circle cx="32" cy="32" r="6"  fill="none" stroke="#d4a96a" stroke-width="1.5" opacity="0.9"/>
-      <circle cx="32" cy="32" r="2"  fill="#d4a96a"/>
-    </svg>
-    <div class="desc">六角形＋年輪</div>
-  </div>
-
-  <!-- 8: ミニマル丸＋木 -->
-  <div class="item">
-    <div class="num">⑧ 白丸＋木</div>
-    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <circle cx="32" cy="32" r="24" fill="#c8a87a" opacity="0.15"/>
-      <line x1="32" y1="12" x2="32" y2="46" stroke="#d4a96a" stroke-width="4" stroke-linecap="round"/>
-      <line x1="18" y1="28" x2="46" y2="28" stroke="#d4a96a" stroke-width="3.5" stroke-linecap="round"/>
-      <line x1="32" y1="34" x2="18" y2="50" stroke="#d4a96a" stroke-width="3.5" stroke-linecap="round"/>
-      <line x1="32" y1="34" x2="46" y2="50" stroke="#d4a96a" stroke-width="3.5" stroke-linecap="round"/>
-    </svg>
-    <div class="desc">木＋円</div>
-  </div>
-
-  <!-- 9: クリーム背景＋ブラウン年輪 -->
-  <div class="item">
-    <div class="num">⑨ ライト年輪</div>
-    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#f5ede0"/>
-      <circle cx="32" cy="32" r="22" fill="none" stroke="#7a5c3e" stroke-width="1.5" opacity="0.25"/>
-      <circle cx="32" cy="32" r="16" fill="none" stroke="#7a5c3e" stroke-width="2" opacity="0.45"/>
-      <circle cx="32" cy="32" r="10" fill="none" stroke="#7a5c3e" stroke-width="2.5" opacity="0.65"/>
-      <circle cx="32" cy="32" r="4"  fill="none" stroke="#7a5c3e" stroke-width="2" opacity="0.85"/>
-      <circle cx="32" cy="32" r="1.5" fill="#7a5c3e"/>
-    </svg>
-    <div class="desc">明るい配色</div>
-  </div>
-
-  <!-- 10: フローリング断面 -->
-  <div class="item">
-    <div class="num">⑩ 板</div>
-    <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="14" fill="#3d2b1f"/>
-      <rect x="8" y="14" width="48" height="10" rx="3" fill="#c8a87a" opacity="0.9"/>
-      <rect x="8" y="27" width="48" height="10" rx="3" fill="#c8a87a" opacity="0.65"/>
-      <rect x="8" y="40" width="48" height="10" rx="3" fill="#c8a87a" opacity="0.45"/>
-      <!-- 木目ライン -->
-      <line x1="16" y1="14" x2="20" y2="24" stroke="#3d2b1f" stroke-width="0.8" opacity="0.4"/>
-      <line x1="36" y1="14" x2="32" y2="24" stroke="#3d2b1f" stroke-width="0.8" opacity="0.4"/>
-    </svg>
-    <div class="desc">フローリング断面</div>
+    <div class="desc">林＋年輪</div>
   </div>
 
 </div>
-
 <p style="margin-top:32px;font-size:0.85rem;color:#7a5c3e;">番号を教えてもらえれば即反映します。</p>
 </body>
 </html>
