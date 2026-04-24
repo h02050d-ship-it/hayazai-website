@@ -84,10 +84,18 @@ function renderFooter() {
             <li><a href="contact.html">お問い合わせ</a></li>
           </ul>
         </div>
+        <div class="footer-nav">
+          <h4>会社情報</h4>
+          <ul>
+            <li><a href="company.html">会社概要</a></li>
+            <li><a href="tokushoho.html">特定商取引法に基づく表記</a></li>
+            <li><a href="privacy.html">プライバシーポリシー</a></li>
+          </ul>
+        </div>
       </div>
       <div class="footer-bottom">
         <span>〒437-0224 静岡県磐田市大久保1234</span>
-        <span>© ${new Date().getFullYear()} 林材木店 All Rights Reserved.</span>
+        <span>© ${new Date().getFullYear()} 株式会社林材木店 All Rights Reserved.</span>
       </div>
     </div>
   </footer>`;
