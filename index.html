@@ -1007,7 +1007,11 @@
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:8px;">
       <div class="gallery-card" onclick="location.href='gallery.html'">
         <div class="gallery-card-img-placeholder" style="height:180px;overflow:hidden;padding:0;">
-          <img src="images/gallery/IMG00584_HDR.jpg" alt="炉裏部屋・羽目板腰板施工" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <!-- TODO: WebP 未生成。scripts/convert-webp.sh 実行で images/gallery/webp/ 配下に生成される -->
+          <picture>
+            <source type="image/webp" srcset="images/gallery/webp/IMG00584_HDR-324.webp 324w, images/gallery/webp/IMG00584_HDR-648.webp 648w, images/gallery/webp/IMG00584_HDR-1296.webp 1296w" sizes="(max-width:768px) 100vw, 360px">
+            <img src="images/gallery/IMG00584_HDR.jpg" alt="炉裏部屋・羽目板腰板施工" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;">
+          </picture>
         </div>
         <div class="gallery-card-body">
           <div class="gallery-card-tag">羽目板 · 腰板</div>
@@ -1017,7 +1021,10 @@
       </div>
       <div class="gallery-card" onclick="location.href='gallery.html'">
         <div class="gallery-card-img-placeholder" style="height:180px;overflow:hidden;padding:0;">
-          <img src="images/gallery/IMG00607_HDR.jpg" alt="炉裏部屋・天井羽目板施工" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <picture>
+            <source type="image/webp" srcset="images/gallery/webp/IMG00607_HDR-324.webp 324w, images/gallery/webp/IMG00607_HDR-648.webp 648w, images/gallery/webp/IMG00607_HDR-1296.webp 1296w" sizes="(max-width:768px) 100vw, 360px">
+            <img src="images/gallery/IMG00607_HDR.jpg" alt="炉裏部屋・天井羽目板施工" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;">
+          </picture>
         </div>
         <div class="gallery-card-body">
           <div class="gallery-card-tag">羽目板 · 天井</div>
@@ -1027,7 +1034,10 @@
       </div>
       <div class="gallery-card" onclick="location.href='gallery.html'">
         <div class="gallery-card-img-placeholder" style="height:180px;overflow:hidden;padding:0;">
-          <img src="images/gallery/IMG00608_HDR.jpg" alt="天井羽目板クローズアップ" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <picture>
+            <source type="image/webp" srcset="images/gallery/webp/IMG00608_HDR-324.webp 324w, images/gallery/webp/IMG00608_HDR-648.webp 648w, images/gallery/webp/IMG00608_HDR-1296.webp 1296w" sizes="(max-width:768px) 100vw, 360px">
+            <img src="images/gallery/IMG00608_HDR.jpg" alt="天井羽目板クローズアップ" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;">
+          </picture>
         </div>
         <div class="gallery-card-body">
           <div class="gallery-card-tag">羽目板 · 天井</div>
