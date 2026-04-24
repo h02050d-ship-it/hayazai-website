@@ -80,6 +80,7 @@ function renderFooter() {
             <li><a href="gallery.html">施工事例</a></li>
             <li><a href="blog.html">ブログ・コラム</a></li>
             <li><a href="faq.html">よくある質問</a></li>
+            <li><a href="shipping.html">送料のご案内</a></li>
             <li><a href="markets.html">木材市場一覧</a></li>
             <li><a href="contact.html">お問い合わせ</a></li>
           </ul>
@@ -94,7 +95,7 @@ function renderFooter() {
         </div>
       </div>
       <div class="footer-bottom">
-        <span>〒437-0224 静岡県磐田市大久保1234</span>
+        <span>〒437-1203 静岡県磐田市福田5490-47</span>
         <span>© ${new Date().getFullYear()} 株式会社林材木店 All Rights Reserved.</span>
       </div>
     </div>
