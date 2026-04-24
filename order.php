@@ -7,7 +7,7 @@
 // メール設定
 define('SHOP_EMAIL', 'info@hayazai.com');
 define('SHOP_NAME',  '林材木店');
-define('BANK_INFO',  "遠州信用金庫\n普通預金 口座番号：***REDACTED***\n口座名義：***REDACTED***");
+define('BANK_INFO',  "遠州信用金庫\n普通預金 口座番号：0131004660\n口座名義：カ）ハヤシザイモクテン");
 
 // POST以外はリダイレクト
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
