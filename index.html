@@ -100,11 +100,18 @@
     .hero {
       min-height: 92vh;
       background:
-        linear-gradient(135deg, rgba(61,43,31,0.72) 0%, rgba(45,74,45,0.55) 100%),
-        url('images/hero_gemini.webp') center/cover no-repeat;
+        linear-gradient(135deg, rgba(61,43,31,0.35) 0%, rgba(45,74,45,0.25) 100%),
+        url('images/hero_baby_2026.webp') center/cover no-repeat;
       display: flex;
       align-items: center;
       padding: 80px 40px;
+    }
+    @media (max-width: 640px) {
+      .hero {
+        background:
+          linear-gradient(135deg, rgba(61,43,31,0.35) 0%, rgba(45,74,45,0.25) 100%),
+          url('images/hero_baby_2026_mobile.webp') center/cover no-repeat;
+      }
     }
 
     .hero-inner {

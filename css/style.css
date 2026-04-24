@@ -1286,3 +1286,15 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 .gallery-modal-info {
   padding: 20px 24px;
 }
+
+/* ===== SHIPPING TABLES (static) ===== */
+.shipping-tables { margin-top: 3rem; }
+.shipping-tables h2 { font-size: 1.6rem; margin-bottom: 1rem; }
+.shipping-tables h3 { font-size: 1.2rem; margin: 2rem 0 0.8rem; padding-left: 0.5rem; border-left: 4px solid #8b7355; }
+.shipping-tables .tbl-wrap { overflow-x: auto; }
+.shipping-tables table { width: 100%; border-collapse: collapse; min-width: 540px; margin-bottom: 1rem; }
+.shipping-tables th, .shipping-tables td { border: 1px solid #ddd; padding: 0.6rem 0.8rem; text-align: right; font-size: 0.95rem; }
+.shipping-tables th { background: #f5efe4; }
+.shipping-tables td:first-child, .shipping-tables th:first-child { text-align: left; }
+.shipping-tables small { color: #888; font-size: 0.82em; }
+.shipping-tables .note { font-size: 0.9rem; color: #666; margin-top: 1rem; }
