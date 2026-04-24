@@ -162,6 +162,53 @@
       50%      { transform: translateX(-50%) translateY(6px); }
     }
 
+    /* ===== USP BAR (送料・発送日・サンプル) ===== */
+    .usp-bar {
+      background: var(--wood-pale);
+      border-bottom: 1px solid #e8ddd0;
+    }
+    .usp-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .usp-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .usp-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--wood-dark);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .usp-icon svg { width: 22px; height: 22px; }
+    .usp-text h3 {
+      font-size: 0.95rem;
+      color: var(--wood-dark);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .usp-text p {
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .usp-text a { color: var(--wood-dark); text-decoration: underline; }
+    @media (max-width: 768px) {
+      .usp-inner { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+    }
+
     /* ===== STATS BAR ===== */
     .stats-bar {
       background: var(--wood-dark);
@@ -461,6 +508,41 @@
     </div>
   </div>
   <div class="hero-scroll">↓ スクロール</div>
+</section>
+
+<!-- ===== USP BAR ===== -->
+<section class="usp-bar" aria-label="送料・発送・サンプル">
+  <div class="usp-inner">
+    <div class="usp-item">
+      <div class="usp-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="13" height="10" rx="1" stroke="currentColor" stroke-width="1.8"/><path d="M15 10h4l3 3v4h-7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+      </div>
+      <div class="usp-text">
+        <h3>全国配送対応</h3>
+        <p>西濃運輸で全国へ発送。<br>送料目安：<!-- REQUIRES USER INPUT: 本州〇〇円〜（北海道・沖縄別途） --> ／ <a href="shipping.html">送料見積もり</a></p>
+      </div>
+    </div>
+
+    <div class="usp-item">
+      <div class="usp-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="usp-text">
+        <h3>最短2〜5営業日で発送</h3>
+        <p>ご入金確認後、2〜5営業日以内に発送。<br>お急ぎの場合はお電話でご相談ください。</p>
+      </div>
+    </div>
+
+    <div class="usp-item">
+      <div class="usp-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="8" width="18" height="13" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18" stroke="currentColor" stroke-width="1.8"/><path d="M12 8V5" stroke="currentColor" stroke-width="1.8"/><path d="M8 5a2.5 2.5 0 1 1 4 0M16 5a2.5 2.5 0 1 0-4 0" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>
+      </div>
+      <div class="usp-text">
+        <h3>無料サンプル送付</h3>
+        <p>実物の質感・香り・色味を<br>お手元でご確認 ／ <a href="sample.html">サンプルを請求する</a></p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ===== STATS ===== -->
