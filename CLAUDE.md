@@ -27,7 +27,7 @@ python3 -m http.server 3456
 
 - 静的HTML/CSS/JS + PHP
 - カート: localStorage
-- 決済: 銀行振込（遠州信用金庫 普通 ***REDACTED*** ***REDACTED***）
+- 決済: 銀行振込（振込先の口座情報はローカルの `.env.local` もしくは別途共有の安全なチャネルを参照）
 - 施工事例: `gallery/` フォルダ → gallery.php が自動表示
 - 商品データ: `data/products.js`
 - 画像生成: ナノバナナ（Google Gemini）のみ使用、Unsplash禁止
