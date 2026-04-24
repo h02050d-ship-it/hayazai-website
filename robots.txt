@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# 管理系・サーバー処理エンドポイントはインデックス対象外
+Disallow: /contact.php
+Disallow: /order.php
+Disallow: /gallery.php
+Disallow: /contact_complete.html
+Disallow: /order_complete.html
+Disallow: /cart.html
+Disallow: /hero_preview.html
+Disallow: /favicon_preview.html
+
+Sitemap: https://hayazai.com/sitemap.xml
