@@ -30,6 +30,19 @@
   <link rel="stylesheet" href="css/style.css?v=3">
   <!-- Schema.org: Product（JS側で動的に書き換える） -->
   <script id="product-schema" type="application/ld+json">{}</script>
+
+  <!-- Schema.org: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "トップ", "item": "https://hayazai.com/" },
+      { "@type": "ListItem", "position": 2, "name": "商品一覧", "item": "https://hayazai.com/products.html" },
+      { "@type": "ListItem", "position": 3, "name": "商品詳細", "item": "https://hayazai.com/product.html" }
+    ]
+  }
+  </script>
   <style>
     .product-detail {
       max-width: 1100px;
