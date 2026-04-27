@@ -1,0 +1,78 @@
+name: Yahoo Price Sync
+
+# 毎日 04:00 JST (= 19:00 UTC 前日) に実行
+# 手動実行も可
+on:
+  schedule:
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run のみ（書き込み・PR作成なし）'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Yahoo price sync
+        env:
+          YAHOO_APP_ID: ${{ secrets.YAHOO_APP_ID }}
+        run: |
+          if [ -z "$YAHOO_APP_ID" ]; then
+            echo "::error::Secret YAHOO_APP_ID が未設定です。リポジトリ Settings > Secrets and variables > Actions で登録してください。"
+            exit 1
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            node scripts/sync-yahoo-prices.js --dry-run
+          else
+            node scripts/sync-yahoo-prices.js
+          fi
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain data/products.js)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "--- diff ---"
+            git --no-pager diff --stat data/products.js
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "差分なし"
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.changed == 'true' && github.event.inputs.dry_run != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore: sync Yahoo prices ${{ github.run_id }}
+          title: "chore: sync Yahoo prices (auto)"
+          body: |
+            Yahoo!ショッピング店舗 `hayazaimuku` から取得した最新価格を `data/products.js` に反映しました。
+
+            - 自動生成PRです
+            - マージ後、ローカルから `./deploy.sh` を実行してXサーバーへ反映してください
+            - `// NEW` コメント付きの新規SKUは要レビュー（カテゴリや寸法を手動で補完）
+            - `// REMOVED?` コメントは Yahoo 側で見つからなかった商品（自動削除はしません）
+
+            実行ID: ${{ github.run_id }}
+          branch: chore/yahoo-sync-${{ github.run_id }}
+          delete-branch: true
+          base: main
+          add-paths: |
+            data/products.js
