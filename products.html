@@ -306,34 +306,90 @@
 
 <div class="products-layout">
 
-  <!-- 後日コンテンツ追加予定 -->
-
-  <div style="text-align:center;margin-bottom:40px;">
+  <div style="text-align:center;margin-bottom:18px;">
     <p style="font-size:0.75rem;letter-spacing:0.2em;color:var(--wood-mid);text-transform:uppercase;margin-bottom:6px;">Price List</p>
     <h2 style="font-family:'Noto Serif JP',serif;font-size:1.8rem;font-weight:700;color:var(--wood-dark);margin:0;">価格表</h2>
   </div>
 
-
-  <!-- 価格表：工事中 -->
-  <div style="text-align:center;padding:60px 20px 56px;background:#faf5ef;border-radius:12px;margin-bottom:56px;border:2px dashed #c8b49a;">
-    <div style="width:72px;height:72px;border-radius:50%;background:#f0e6d4;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14.5 2.5L18.5 6.5L8 17L4 17L4 13L14.5 2.5Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-        <line x1="11.5" y1="5.5" x2="15.5" y2="9.5" stroke="#7a5c3e" stroke-width="1.8" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <p style="font-size:0.75rem;letter-spacing:0.25em;color:var(--wood-mid);text-transform:uppercase;margin-bottom:10px;">Under Construction</p>
-    <h2 style="font-family:'Noto Serif JP',serif;font-size:1.6rem;font-weight:700;color:var(--wood-dark);margin-bottom:16px;">価格表 準備中</h2>
-    <p style="font-size:0.95rem;color:var(--text-mid);line-height:1.9;max-width:480px;margin:0 auto 28px;">
-      現在、価格表のページを整備中です。<br>
-      商品の価格・在庫についてはお気軽にお問い合わせください。
-    </p>
-    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-      <a href="contact.html" class="btn btn-primary">見積もり・お問い合わせ</a>
-      <a href="https://store.shopping.yahoo.co.jp/hayazaimuku/" target="_blank" rel="noopener" class="btn btn-outline">Yahooショッピングで見る</a>
-    </div>
-    <p style="font-size:0.75rem;color:var(--text-light);margin-top:20px;">TEL：0538-58-2395（平日 9:00〜17:00）</p>
+  <div class="price-note">
+    <strong>Yahoo!ショッピング価格より5%お得な公式HP価格でございます。</strong><br>
+    全商品、メーカー直送・無垢A級品を、ネットショップ掲載価格よりさらにお値引きしてご提供しております。<br>
+    ご注文・お見積りは <a href="contact.html">お問い合わせフォーム</a> またはお電話（0538-58-2395 平日9:00〜17:00）にて承ります。
   </div>
+
+  <!-- 桧フローリング 15mm -->
+  <section class="price-section">
+    <h3 class="price-section-title">桧フローリング 15mm（幅108mm）</h3>
+    <p class="price-section-sub">厚みがあり踏み心地のよい定番サイズ。床への張り付け用。</p>
+    <div class="cross-table-wrap">
+      <table class="cross-table">
+        <thead>
+          <tr>
+            <th class="th-length" rowspan="2">長さ</th>
+            <th colspan="4" class="th-group-a">A級品（節有・小節・特上小・無節）</th>
+          </tr>
+          <tr>
+            <th class="th-a">節有</th>
+            <th class="th-a">小節</th>
+            <th class="th-a">特上小</th>
+            <th class="th-a">無節</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-flooring15"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 桧フローリング 12mm -->
+  <section class="price-section">
+    <h3 class="price-section-title">桧フローリング 12mm（幅108mm）</h3>
+    <p class="price-section-sub">リフォームや重ね張りに最適な薄型。</p>
+    <div class="cross-table-wrap">
+      <table class="cross-table">
+        <thead>
+          <tr>
+            <th class="th-length" rowspan="2">長さ</th>
+            <th colspan="4" class="th-group-a">A級品（節有・小節・特上小・無節）</th>
+          </tr>
+          <tr>
+            <th class="th-a">節有</th>
+            <th class="th-a">小節</th>
+            <th class="th-a">特上小</th>
+            <th class="th-a">無節</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-flooring12"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 桧羽目板 12mm -->
+  <section class="price-section">
+    <h3 class="price-section-title">桧羽目板 12mm（幅103mm）</h3>
+    <p class="price-section-sub">天井・壁への張り付け用内装材。</p>
+    <div class="cross-table-wrap">
+      <table class="cross-table">
+        <thead>
+          <tr>
+            <th class="th-length" rowspan="2">長さ</th>
+            <th colspan="4" class="th-group-a">A級品（節有・小節・特上小・無節）</th>
+          </tr>
+          <tr>
+            <th class="th-a">節有</th>
+            <th class="th-a">小節</th>
+            <th class="th-a">特上小</th>
+            <th class="th-a">無節</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-panel"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:48px;line-height:1.8;">
+    ※ 価格はメイン価格を税抜で表示しております（カッコ内は税込）。送料は別途、<a href="shipping.html">送料のご案内</a>をご参照ください。<br>
+    ※ B級品・お買い得品は <a href="https://store.shopping.yahoo.co.jp/hayazaimuku/" target="_blank" rel="noopener">Yahoo!ショッピング店</a> にて随時掲載しております。
+  </p>
 
   <!-- 運賃計算ウィジェット -->
   <div class="freight-widget">
@@ -388,12 +444,17 @@ const COLS = [
   { grade: 'A', quality: '無節',   bStart: false },
 ];
 
-function exPrice(furiPrice) {
-  return Math.round(furiPrice * 1.15 / 10) * 10;
+// HP価格 = Yahoo価格（税抜）× 0.95、100円単位四捨五入
+function hpPrice(yahooPrice) {
+  return Math.round(yahooPrice * 0.95 / 100) * 100;
 }
-
-function inPrice(furiPrice) {
-  return Math.round(furiPrice * 1.15 * 1.1 / 10) * 10;
+// 税込価格 = HP価格 × 1.10、100円単位四捨五入
+function withTax(p) {
+  return Math.round(p * 1.10 / 100) * 100;
+}
+// 1枚あたり単価（10円単位四捨五入）
+function perPiece(p, qty) {
+  return Math.round(p / qty / 10) * 10;
 }
 
 function lookup(cats, grade, quality, length) {
@@ -407,6 +468,7 @@ function lookup(cats, grade, quality, length) {
 
 function buildTbody(tbodyId, cats) {
   const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
   let html = '';
   LENGTHS.forEach(len => {
     html += `<tr><td class="td-length">${len.toLocaleString()}mm</td>`;
@@ -416,9 +478,11 @@ function buildTbody(tbodyId, cats) {
       if (!p) {
         html += `<td class="td-none${bCls}">—</td>`;
       } else {
-        const ex = exPrice(p.price), inc = inPrice(p.price);
-        const perEx = Math.round(ex / p.qty), perInc = Math.round(inc / p.qty);
-        html += `<td class="td-price${bCls}">¥${ex.toLocaleString()}<small>（税込¥${inc.toLocaleString()}）${p.qty}枚入<br>1枚 ¥${perEx.toLocaleString()}（税込¥${perInc.toLocaleString()}）</small></td>`;
+        const ex = hpPrice(p.price);
+        const inc = withTax(ex);
+        const perEx = perPiece(ex, p.qty);
+        const perInc = perPiece(inc, p.qty);
+        html += `<td class="td-price${bCls}">¥${ex.toLocaleString()}<small>（税込¥${inc.toLocaleString()}）<br>${p.qty}枚入<br>1枚 ¥${perEx.toLocaleString()}（税込¥${perInc.toLocaleString()}）</small></td>`;
       }
     });
     html += '</tr>';
@@ -427,6 +491,9 @@ function buildTbody(tbodyId, cats) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  buildTbody('tbl-flooring15', ['flooring15']);
+  buildTbody('tbl-flooring12', ['flooring12']);
+  buildTbody('tbl-panel',      ['panel']);
   buildFreightPrefSelect();
   buildFreightRefTable();
 });
