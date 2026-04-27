@@ -1,0 +1,5 @@
+# Cloudflare Pages リダイレクト設定
+# 旧PHPエンドポイントを新しいFunctionsへ
+/contact.php   /contact   308
+/order.php     /order     308
+/gallery.php   /gallery.html  301
