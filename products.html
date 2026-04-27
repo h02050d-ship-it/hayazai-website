@@ -317,10 +317,10 @@
     ご注文・お見積りは <a href="contact.html">お問い合わせフォーム</a> またはお電話（0538-58-2395 平日9:00〜17:00）にて承ります。
   </div>
 
-  <!-- 桧フローリング 15mm -->
+  <!-- 桧フローリング 12mm・15mm（同価格） -->
   <section class="price-section">
-    <h3 class="price-section-title">桧フローリング 15mm（幅108mm）</h3>
-    <p class="price-section-sub">厚みがあり踏み心地のよい定番サイズ。床への張り付け用。</p>
+    <h3 class="price-section-title">桧フローリング 12mm・15mm（幅108mm）</h3>
+    <p class="price-section-sub">12mm（リフォーム・重ね張り向け）と15mm（定番厚）は同価格です。</p>
     <div class="cross-table-wrap">
       <table class="cross-table">
         <thead>
@@ -335,30 +335,7 @@
             <th class="th-a">無節</th>
           </tr>
         </thead>
-        <tbody id="tbl-flooring15"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 桧フローリング 12mm -->
-  <section class="price-section">
-    <h3 class="price-section-title">桧フローリング 12mm（幅108mm）</h3>
-    <p class="price-section-sub">リフォームや重ね張りに最適な薄型。</p>
-    <div class="cross-table-wrap">
-      <table class="cross-table">
-        <thead>
-          <tr>
-            <th class="th-length" rowspan="2">長さ</th>
-            <th colspan="4" class="th-group-a">A級品（節有・小節・特上小・無節）</th>
-          </tr>
-          <tr>
-            <th class="th-a">節有</th>
-            <th class="th-a">小節</th>
-            <th class="th-a">特上小</th>
-            <th class="th-a">無節</th>
-          </tr>
-        </thead>
-        <tbody id="tbl-flooring12"></tbody>
+        <tbody id="tbl-flooring"></tbody>
       </table>
     </div>
   </section>
@@ -444,13 +421,13 @@ const COLS = [
   { grade: 'A', quality: '無節',   bStart: false },
 ];
 
-// HP価格 = Yahoo価格（税抜）× 0.95、100円単位四捨五入
-function hpPrice(yahooPrice) {
-  return Math.round(yahooPrice * 0.95 / 100) * 100;
+// Yahoo価格は「税込」表示。HP税込 = Yahoo税込 × 0.95、100円単位四捨五入
+function hpPriceIncTax(yahooIncTax) {
+  return Math.round(yahooIncTax * 0.95 / 100) * 100;
 }
-// 税込価格 = HP価格 × 1.10、100円単位四捨五入
-function withTax(p) {
-  return Math.round(p * 1.10 / 100) * 100;
+// 税抜価格 = 税込 ÷ 1.10、100円単位四捨五入
+function exclTax(incTax) {
+  return Math.round(incTax / 1.10 / 100) * 100;
 }
 // 1枚あたり単価（10円単位四捨五入）
 function perPiece(p, qty) {
@@ -478,11 +455,11 @@ function buildTbody(tbodyId, cats) {
       if (!p) {
         html += `<td class="td-none${bCls}">—</td>`;
       } else {
-        const ex = hpPrice(p.price);
-        const inc = withTax(ex);
-        const perEx = perPiece(ex, p.qty);
+        const inc = hpPriceIncTax(p.price);
+        const ex = exclTax(inc);
         const perInc = perPiece(inc, p.qty);
-        html += `<td class="td-price${bCls}">¥${ex.toLocaleString()}<small>（税込¥${inc.toLocaleString()}）<br>${p.qty}枚入<br>1枚 ¥${perEx.toLocaleString()}（税込¥${perInc.toLocaleString()}）</small></td>`;
+        const perEx = perPiece(ex, p.qty);
+        html += `<td class="td-price${bCls}">¥${inc.toLocaleString()}<small>（税抜¥${ex.toLocaleString()}）<br>${p.qty}枚入<br>1枚 ¥${perInc.toLocaleString()}（税抜¥${perEx.toLocaleString()}）</small></td>`;
       }
     });
     html += '</tr>';
@@ -491,8 +468,7 @@ function buildTbody(tbodyId, cats) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  buildTbody('tbl-flooring15', ['flooring15']);
-  buildTbody('tbl-flooring12', ['flooring12']);
+  buildTbody('tbl-flooring', ['flooring15', 'flooring12']);
   buildTbody('tbl-panel',      ['panel']);
   buildFreightPrefSelect();
   buildFreightRefTable();
