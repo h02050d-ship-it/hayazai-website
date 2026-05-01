@@ -783,8 +783,10 @@
 <script src="js/components.js?v=4"></script>
 <script>
 // ===================== 価格計算 =====================
-function exPrice(p) { return Math.round(p * 1.15 / 10) * 10; }
-function inPrice(p) { return Math.round(p * 1.15 * 1.1 / 10) * 10; }
+// Yahoo価格は税込。HP税込 = Yahoo税込 × 0.95（100円単位四捨五入）
+// HP税抜 = HP税込 ÷ 1.10（100円単位四捨五入）
+function inPrice(p) { return Math.round(p * 0.95 / 100) * 100; }
+function exPrice(p) { return Math.round(inPrice(p) / 1.10 / 100) * 100; }
 
 // ===================== 西濃運輸データ =====================
 const SEINO_DISTANCES = [150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400];
