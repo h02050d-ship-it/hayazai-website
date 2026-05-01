@@ -94,24 +94,65 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 }
 
 .site-logo {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--wood-dark);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   white-space: nowrap;
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  color: var(--wood-dark);
+  text-decoration: none;
+  transition: opacity .25s ease;
+}
+.site-logo:hover { opacity: .8; }
+
+.site-logo .logo-mark {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--wood-mid);
 }
 
-.site-logo span {
-  font-size: 0.65rem;
-  display: block;
-  color: var(--wood-mid);
-  letter-spacing: 0.08em;
+.site-logo .logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.site-logo .logo-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--wood-dark);
+}
+
+.site-logo .logo-tag {
   font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.62rem;
   font-weight: 400;
+  letter-spacing: 0.16em;
+  color: var(--wood-mid);
+  margin-top: 2px;
+  position: relative;
+  padding-left: 18px;
+}
+.site-logo .logo-tag::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 12px;
+  height: 1px;
+  background: var(--wood-mid);
+  opacity: 0.6;
+}
+
+@media (max-width: 480px) {
+  .site-logo { gap: 8px; }
+  .site-logo .logo-mark { width: 28px; height: 28px; }
+  .site-logo .logo-name { font-size: 1.02rem; letter-spacing: 0.14em; }
+  .site-logo .logo-tag { font-size: 0.56rem; padding-left: 14px; }
+  .site-logo .logo-tag::before { width: 8px; }
 }
 
 .header-nav {
