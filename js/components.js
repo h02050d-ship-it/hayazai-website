@@ -7,12 +7,9 @@ function renderHeader() {
   <header class="site-header">
     <div class="header-inner">
       <a href="/" class="site-logo" aria-label="林材木店 トップへ">
-        <span class="logo-est" aria-hidden="true">EST.<br>1968</span>
-        <span class="logo-divider" aria-hidden="true"></span>
-        <span class="logo-text">
-          <span class="logo-name">林材木店</span>
-          <span class="logo-tag">Hinoki Wood Specialist</span>
-        </span>
+        <span class="logo-name">林材木店</span>
+        <span class="logo-bar" aria-hidden="true"></span>
+        <span class="logo-tag">無垢桧フローリング・羽目板専門</span>
       </a>
       <nav class="header-nav">
         <a href="/products.html">商品一覧</a>
