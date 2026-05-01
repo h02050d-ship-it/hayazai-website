@@ -1,12 +1,16 @@
 name: Deploy to Cloudflare Pages
 
+# 一時無効化: Cloudflare移行完了（CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID をSecretsに登録）後に push トリガを再有効化する
+# 再有効化方法: 下の `on:` ブロックの `# push:` `#   branches:` 行のコメントを外す
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 jobs:
   deploy:
+    # Secretsが設定されていない場合は実行スキップ（手動実行時の保険）
+    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
