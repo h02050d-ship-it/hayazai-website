@@ -3,24 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>木材市場一覧 | 近くの市場で買うのが一番お得 | 林材木店</title>
-  <meta name="description" content="林材木店の桧フローリング・羽目板は全国の木材市場でも取り扱いがあります。お近くの市場があればそちらで。なければ工場から直接お届けします。">
-  <!-- Canonical -->
+  <title>取り扱い市場・販売代理店一覧 | 林材木店</title>
+  <meta name="description" content="林材木店の桧フローリング・羽目板を取り扱う全国の木材市場（市売）および販売代理店（付売）一覧。お近くの市場・代理店をご利用いただくか、工場から直送いたします。">
   <link rel="canonical" href="https://hayazai.com/markets.html">
 
   <!-- OGP -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="株式会社林材木店">
-  <meta property="og:title" content="木材市場一覧 | 近くの市場で買うのが一番お得 | 林材木店">
-  <meta property="og:description" content="林材木店の桧フローリング・羽目板は全国の木材市場でも取り扱いがあります。お近くの市場があればそちらで。なければ工場から直接お届けします。">
+  <meta property="og:title" content="取り扱い市場・販売代理店一覧 | 林材木店">
+  <meta property="og:description" content="林材木店の桧フローリング・羽目板を取り扱う全国の木材市場および販売代理店一覧。">
   <meta property="og:url" content="https://hayazai.com/markets.html">
   <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
   <meta property="og:locale" content="ja_JP">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="木材市場一覧 | 近くの市場で買うのが一番お得 | 林材木店">
-  <meta name="twitter:description" content="林材木店の桧フローリング・羽目板は全国の木材市場でも取り扱いがあります。お近くの市場があればそちらで。なければ工場から直接お届けします。">
+  <meta name="twitter:title" content="取り扱い市場・販売代理店一覧 | 林材木店">
+  <meta name="twitter:description" content="林材木店の桧フローリング・羽目板を取り扱う全国の木材市場および販売代理店一覧。">
   <meta name="twitter:image" content="https://hayazai.com/images/og/og-image.jpg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,567 +29,479 @@
   <link rel="stylesheet" href="css/style.css?v=3">
   <style>
     .markets-layout {
-      max-width: 960px;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 48px 40px 80px;
     }
 
-    .honest-box {
+    .lead-box {
       background: linear-gradient(135deg, #f8f2ea, #edf5ed);
       border: 2px solid var(--wood-mid);
       border-radius: 12px;
-      padding: 32px 40px;
-      margin-bottom: 48px;
-      position: relative;
-    }
-
-    .honest-box::before {
-      content: '正直なご案内';
-      position: absolute;
-      top: -13px;
-      left: 28px;
-      background: var(--wood-mid);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      padding: 4px 14px;
-      border-radius: 20px;
-    }
-
-    .honest-box h2 {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1.35rem;
-      color: var(--wood-dark);
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-
-    .honest-box p {
-      font-size: 0.9rem;
-      color: var(--text-mid);
-      line-height: 1.95;
-    }
-
-    .honest-box strong {
-      color: var(--wood-dark);
-    }
-
-    .honest-flow {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 16px;
-      align-items: center;
-      margin-top: 28px;
-    }
-
-    .flow-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 20px 24px;
-      text-align: center;
-      border: 1px solid #e0d0bc;
-    }
-
-    .flow-card .flow-icon {
-      font-size: 2rem;
-      margin-bottom: 8px;
-    }
-
-    .flow-card h3 {
-      font-size: 0.9rem;
-      color: var(--wood-dark);
-      margin-bottom: 6px;
-    }
-
-    .flow-card p {
-      font-size: 0.78rem;
-      color: var(--text-light);
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    .flow-arrow {
-      font-size: 1.5rem;
-      color: var(--wood-mid);
-      text-align: center;
-    }
-
-    /* 市場リスト */
-    .region-section {
+      padding: 28px 36px;
       margin-bottom: 40px;
     }
 
-    .region-title {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1rem;
-      color: var(--wood-dark);
-      font-weight: 700;
-      padding: 10px 16px;
-      background: var(--wood-pale);
-      border-left: 4px solid var(--wood-mid);
-      border-radius: 0 6px 6px 0;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .region-title::before {
-      content: '';
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z' stroke='%237a5c3e' stroke-width='1.8'/%3E%3Ccircle cx='12' cy='9' r='2.5' stroke='%237a5c3e' stroke-width='1.8'/%3E%3C/svg%3E");
-      background-size: contain;
-      background-repeat: no-repeat;
-      flex-shrink: 0;
+    .lead-box p {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 1.95;
+      margin: 0;
     }
 
-    .market-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+    .lead-box strong {
+      color: var(--wood-dark);
+    }
+
+    .section-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.35rem;
+      color: var(--wood-dark);
+      font-weight: 700;
+      padding: 12px 18px;
+      background: var(--wood-pale);
+      border-left: 5px solid var(--wood-mid);
+      border-radius: 0 6px 6px 0;
+      margin: 48px 0 8px;
+      display: flex;
+      align-items: center;
       gap: 12px;
     }
 
-    .market-card {
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin: 0 0 20px 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 14px;
+      letter-spacing: 0.06em;
+    }
+
+    .badge-ichiuri {
+      background: #7a5c3e;
+      color: #fff;
+    }
+
+    .badge-tsukeuri {
+      background: #4a7a4a;
+      color: #fff;
+    }
+
+    .markets-table-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
       background: #fff;
       border: 1px solid #e8ddd0;
-      border-radius: 8px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
     }
 
-    .market-card-icon {
-      font-size: 1.4rem;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .market-card-body {}
-
-    .market-name {
-      font-weight: 700;
+    table.markets-table {
+      width: 100%;
+      border-collapse: collapse;
       font-size: 0.9rem;
+      min-width: 720px;
+    }
+
+    table.markets-table thead th {
+      background: var(--wood-pale, #f5ede2);
       color: var(--wood-dark);
-      margin-bottom: 4px;
+      font-weight: 700;
+      text-align: left;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--wood-mid);
+      font-size: 0.86rem;
+      letter-spacing: 0.04em;
     }
 
-    .market-addr {
-      font-size: 0.78rem;
+    table.markets-table tbody td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #ece3d6;
+      color: var(--text-mid);
+      line-height: 1.6;
+      vertical-align: top;
+    }
+
+    table.markets-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.markets-table tbody tr:hover {
+      background: #faf6ef;
+    }
+
+    table.markets-table .col-name {
+      width: 38%;
+      font-weight: 600;
+      color: var(--wood-dark);
+    }
+
+    table.markets-table .col-name a {
+      color: var(--wood-dark);
+      text-decoration: underline;
+      text-decoration-color: rgba(122,92,62,0.35);
+      text-underline-offset: 3px;
+    }
+
+    table.markets-table .col-name a:hover {
+      color: #5a3f24;
+      text-decoration-color: var(--wood-mid);
+    }
+
+    table.markets-table .col-name a::after {
+      content: ' \2197';
+      font-size: 0.75rem;
+      color: var(--wood-mid);
+      vertical-align: super;
+    }
+
+    table.markets-table .col-addr {
       color: var(--text-light);
-      line-height: 1.5;
+      font-size: 0.86rem;
     }
 
-    /* 訴求CTA */
-    .no-market-box {
+    .addr-empty {
+      color: #b9a892;
+      font-style: italic;
+    }
+
+    .closing-cta {
       background: var(--wood-dark);
       color: #fff;
       border-radius: 12px;
-      padding: 40px;
+      padding: 36px 40px;
       text-align: center;
       margin-top: 56px;
     }
 
-    .no-market-box h2 {
+    .closing-cta h2 {
       font-family: 'Noto Serif JP', serif;
-      font-size: 1.4rem;
-      color: var(--wood-light);
+      font-size: 1.3rem;
+      color: var(--wood-light, #f5ede2);
       margin-bottom: 12px;
     }
 
-    .no-market-box p {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.8);
-      line-height: 1.9;
-      margin-bottom: 28px;
-      max-width: 520px;
+    .closing-cta p {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.95;
+      margin-bottom: 24px;
+      max-width: 640px;
       margin-left: auto;
       margin-right: auto;
     }
 
-    .no-market-box .btn-row {
+    .closing-cta .btn-row {
       display: flex;
       gap: 14px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
-    .merit-list {
-      list-style: none;
-      margin: 24px 0 0;
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .merit-list li {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.75);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .merit-list li::before {
-      content: '✓';
-      color: #a8d8a8;
-      font-weight: 700;
-    }
-
     @media (max-width: 640px) {
       .markets-layout { padding: 32px 16px 60px; }
-      .honest-box { padding: 24px 20px; }
-      .honest-flow { grid-template-columns: 1fr; }
-      .flow-arrow { transform: rotate(90deg); }
-      .market-list { grid-template-columns: 1fr; }
-      .no-market-box { padding: 28px 20px; }
+      .lead-box { padding: 22px 18px; }
+      .section-title { font-size: 1.1rem; padding: 10px 14px; }
+      table.markets-table { font-size: 0.85rem; }
+      table.markets-table thead th,
+      table.markets-table tbody td { padding: 11px 12px; }
+      .closing-cta { padding: 28px 20px; }
     }
   </style>
+
+  <!-- JSON-LD: ItemList of distributors -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "林材木店 取り扱い市場・販売代理店一覧",
+    "description": "株式会社林材木店の桧フローリング・羽目板を取り扱う全国の木材市場および販売代理店",
+    "itemListOrder": "https://schema.org/ItemListOrderAscending",
+    "numberOfItems": 50
+  }
+  </script>
 </head>
 <body>
 
 <div id="site-header"></div>
 
 <div class="page-hero">
-  <h1>木材市場のご案内</h1>
-  <p>お近くに取引市場があれば、送料なしで購入できておすすめです</p>
+  <h1>取り扱い市場・販売代理店一覧</h1>
+  <p>全国の木材市場・販売代理店で林材木店の製品をお取り扱いいただいています</p>
 </div>
 
 <nav class="breadcrumb">
   <a href="index.html">トップ</a>
   <span class="sep">›</span>
-  <span>木材市場一覧</span>
+  <span>取り扱い市場・販売代理店一覧</span>
 </nav>
 
 <div class="markets-layout">
 
-  <!-- 正直なご案内 -->
-  <div class="honest-box">
-    <h2>お近くに木材市場があれば、そちらの利用がおすすめです。</h2>
+  <!-- リード文 -->
+  <div class="lead-box">
     <p>
-      林材木店の桧フローリング・羽目板は、全国の木材市場を通じても流通しています。<br>
-      市場経由であれば<strong>送料がかからない分だけトータルコストを抑えられる</strong>ため、お近くに取引市場がある場合はぜひご活用ください。<br><br>
-      木材市場へのアクセスが難しい方・遠方の方・個人のお客様には、<strong>工場から全国へ直接発送</strong>しています。
-      送料込みでも競争力のある価格でお届けできますので、お気軽にご相談ください。
+      林材木店の桧フローリング・羽目板は、<strong>全国の木材市場および販売代理店</strong>でお取り扱いがございます。お近くの市場・代理店があればそちらをご利用ください。<br>
+      掲載のない地域や直接購入をご希望の場合は<strong>工場から直接お届け</strong>します。詳細・在庫状況等は各取扱店または当社へお問い合わせください。
     </p>
-
-    <div class="honest-flow">
-      <div class="flow-card">
-        <div class="flow-icon">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.6" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.6"/>
-          </svg>
-        </div>
-        <h3>近くに市場がある方</h3>
-        <p>下記の取引市場へ直接お問い合わせください。送料なしで購入できるためトータルでお得です。</p>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-card">
-        <div class="flow-icon">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="10" width="20" height="12" rx="1.5" stroke="#7a5c3e" stroke-width="1.6"/>
-            <rect x="6" y="6" width="12" height="6" rx="1" stroke="#7a5c3e" stroke-width="1.6"/>
-            <rect x="9" y="3" width="6" height="5" rx="1" stroke="#7a5c3e" stroke-width="1.4"/>
-            <rect x="5" y="13" width="3" height="3" rx="0.5" fill="#7a5c3e" opacity="0.4"/>
-            <rect x="10.5" y="13" width="3" height="3" rx="0.5" fill="#7a5c3e" opacity="0.4"/>
-            <rect x="16" y="13" width="3" height="3" rx="0.5" fill="#7a5c3e" opacity="0.4"/>
-            <rect x="9" y="17" width="6" height="5" rx="0.5" stroke="#7a5c3e" stroke-width="1.4"/>
-          </svg>
-        </div>
-        <h3>市場が遠い・個人の方</h3>
-        <p>工場から全国に直接発送。無料サンプルも対応しています。</p>
-      </div>
-    </div>
   </div>
 
-  <!-- 市場一覧 -->
-  <h2 style="font-family:'Noto Serif JP',serif;font-size:1.2rem;color:var(--wood-dark);margin-bottom:6px;">林材木店の桧材を扱う木材市場</h2>
-  <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:32px;">※ 在庫状況・価格は各市場にお問い合わせください。</p>
+  <!-- 市売（市場） -->
+  <h2 class="section-title">
+    <span class="badge badge-ichiuri">市売</span>
+    木材市場
+  </h2>
+  <p class="section-desc">セリ形式で取引される木材市場です。買方資格をお持ちの方はそちらでお取り扱いがございます。</p>
 
-  <!-- 東海 -->
-  <div class="region-section">
-    <div class="region-title">東海（静岡・愛知）</div>
-    <div class="market-list">
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">中央木材市売（株）西部営業所</div>
-          <div class="market-addr">愛知県海部郡飛島村木場1-17</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">中央木材市売（株）大口営業所</div>
-          <div class="market-addr">愛知県丹羽郡大口町河北2丁目2番地</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">ナイス（株）小牧</div>
-          <div class="market-addr">愛知県小牧市大字下末777</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">ナイス（株）沼津</div>
-          <div class="market-addr">静岡県沼津市一本松666-1</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">佐藤工業（株）</div>
-          <div class="market-addr">静岡県島田市金谷東二丁目3483番地</div>
-        </div>
-      </div>
-    </div>
+  <div class="markets-table-wrap">
+    <table class="markets-table">
+      <thead>
+        <tr>
+          <th class="col-name">会社名</th>
+          <th class="col-addr">所在地</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-name">（株）アイザワ</td>
+          <td class="col-addr">茨城県水戸市千波町1884</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://katsuichi-okayama.com/" target="_blank" rel="noopener">（株）勝山木材市場</a></td>
+          <td class="col-addr">岡山県真庭市三田211</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="http://kanehira-tochigi.jp/" target="_blank" rel="noopener">（株）金平</a></td>
+          <td class="col-addr">栃木県宇都宮市中里718-4</td>
+        </tr>
+        <tr>
+          <td class="col-name">北隅木材（株）</td>
+          <td class="col-addr">神奈川県横浜市金沢区幸浦1-5-3</td>
+        </tr>
+        <tr>
+          <td class="col-name">佐藤工業（株）</td>
+          <td class="col-addr">静岡県島田市金谷東二丁目3483番地</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）西部営業所</a></td>
+          <td class="col-addr">愛知県海部郡飛島村木場1-17</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）大口営業所</a></td>
+          <td class="col-addr">愛知県丹羽郡大口町河北2丁目2番地</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="http://www.mokuichi.or.jp/" target="_blank" rel="noopener">千葉県木材市場協同組合</a></td>
+          <td class="col-addr">千葉県東金市山田800</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）宇都宮</a></td>
+          <td class="col-addr">栃木県宇都宮市宮の内2-814</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）岡山</a></td>
+          <td class="col-addr"><span class="addr-empty">（住所未記載）</span></td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）香川</a></td>
+          <td class="col-addr">香川県観音寺市植田町41</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）小牧</a></td>
+          <td class="col-addr">愛知県小牧市大字下末777</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）埼玉</a></td>
+          <td class="col-addr">埼玉県入間郡越生町大谷352</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）滋賀</a></td>
+          <td class="col-addr"><span class="addr-empty">（住所未記載）</span></td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）相模原</a></td>
+          <td class="col-addr">神奈川県相模原市中央区田名塩田3-11-8</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）長野</a></td>
+          <td class="col-addr">長野県長野市大字大田580-1</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）新潟</a></td>
+          <td class="col-addr">新潟県西浦原郡味方村大字白根73-1</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）沼津</a></td>
+          <td class="col-addr">静岡県沼津市一本松666-1</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）浜松</a></td>
+          <td class="col-addr"><span class="addr-empty">（住所未記載）</span></td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）前橋</a></td>
+          <td class="col-addr">群馬県前橋市下大島町568</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）横浜</a></td>
+          <td class="col-addr"><span class="addr-empty">（住所未記載）</span></td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.hikarimokuzai.com/" target="_blank" rel="noopener">（株）HIKARI</a></td>
+          <td class="col-addr">愛知県名古屋市瑞穂区桃園町3番23号</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）大栄浜市場</a></td>
+          <td class="col-addr">千葉県成田市伊能567</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）北浜市場</a></td>
+          <td class="col-addr">埼玉県さいたま市岩槻区鈞上新田291</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）下館市場</a></td>
+          <td class="col-addr">茨城県下妻市大字半谷1100-3</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）京葉市場</a></td>
+          <td class="col-addr">千葉県鎌ケ谷市軽井沢2153</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.mitomoku.co.jp/" target="_blank" rel="noopener">（株）ミトモク</a></td>
+          <td class="col-addr">茨城県水戸市千波町1884</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.mitomoku.co.jp/" target="_blank" rel="noopener">（株）ミトモク日立</a></td>
+          <td class="col-addr"><span class="addr-empty">（住所未記載）</span></td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 熊谷市場</a></td>
+          <td class="col-addr">埼玉県熊谷市中奈良1412</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 高崎市場</a></td>
+          <td class="col-addr">群馬県高崎市飯塚町1150</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 佐野市場</a></td>
+          <td class="col-addr">栃木県佐野市免鳥町295</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- 関東 -->
-  <div class="region-section">
-    <div class="region-title">関東（栃木・群馬・埼玉・千葉・神奈川）</div>
-    <div class="market-list">
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">（株）金平</div>
-          <div class="market-addr">栃木県宇都宮市中里718-4</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">ナイス（株）宇都宮</div>
-          <div class="market-addr">栃木県宇都宮市宮の内2-814</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">（株）吉貞 佐野市場</div>
-          <div class="market-addr">栃木県佐野市免鳥町295</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">ナイス（株）前橋</div>
-          <div class="market-addr">群馬県前橋市下大島町568</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">（株）吉貞 高崎市場</div>
-          <div class="market-addr">群馬県高崎市飯塚町1150</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">（株）吉貞 熊谷市場</div>
-          <div class="market-addr">埼玉県熊谷市中奈良1412</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">ナイス（株）埼玉</div>
-          <div class="market-addr">埼玉県入間郡越生町大谷352</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">千葉県木材市場協同組合</div>
-          <div class="market-addr">千葉県東金市山田800</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">北隅木材（株）</div>
-          <div class="market-addr">神奈川県金沢区幸浦1-5-3</div>
-        </div>
-      </div>
-    </div>
+  <!-- 付売（販売代理店） -->
+  <h2 class="section-title">
+    <span class="badge badge-tsukeuri">付売</span>
+    販売代理店
+  </h2>
+  <p class="section-desc">直接お買い求めいただける販売代理店です。一般の方・工務店様もご利用可能です（詳細は各社へお問い合わせください）。</p>
+
+  <div class="markets-table-wrap">
+    <table class="markets-table">
+      <thead>
+        <tr>
+          <th class="col-name">会社名</th>
+          <th class="col-addr">所在地</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-name">（株）糸永</td>
+          <td class="col-addr">神奈川県相模原市中央区横山台1-29-20</td>
+        </tr>
+        <tr>
+          <td class="col-name">（有）井出木建材</td>
+          <td class="col-addr">静岡県静岡市清水区宮代町3-18</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://ohtsuka.ne.jp/" target="_blank" rel="noopener">（株）オオツカ</a></td>
+          <td class="col-addr">千葉県八街市四木321-5</td>
+        </tr>
+        <tr>
+          <td class="col-name">カネ信木材（株）</td>
+          <td class="col-addr">静岡県静岡市葵区辰起町7-1</td>
+        </tr>
+        <tr>
+          <td class="col-name">（株）木下銘木店</td>
+          <td class="col-addr">東京都江東区冬木7番6号</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.kuwabara.co.jp/" target="_blank" rel="noopener">桑原木材（株）</a></td>
+          <td class="col-addr">愛知県犬山市大字羽黒新田字下蝉屋38</td>
+        </tr>
+        <tr>
+          <td class="col-name">山都銘木</td>
+          <td class="col-addr">山形県山形市下柳38-1-1</td>
+        </tr>
+        <tr>
+          <td class="col-name">（有）滝川</td>
+          <td class="col-addr">静岡県磐田市上万能300</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）浜松営業所</a></td>
+          <td class="col-addr"><span class="addr-empty">（住所未記載）</span></td>
+        </tr>
+        <tr>
+          <td class="col-name">（有）東京丸文</td>
+          <td class="col-addr">千葉県富里市新橋665-1</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）資材事業部</a></td>
+          <td class="col-addr">神奈川県横浜市鶴見区中央4丁目33番1号 ナイスビル5階</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）木材事業部</a></td>
+          <td class="col-addr">神奈川県横浜市鶴見区中央4丁目33番1号 ナイスビル5階</td>
+        </tr>
+        <tr>
+          <td class="col-name">（株）ニッチ</td>
+          <td class="col-addr">長野県長野市大字大町740-3</td>
+        </tr>
+        <tr>
+          <td class="col-name">（株）ニッチ 松本営業所</td>
+          <td class="col-addr">長野県松本市大字笹賀7804</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://www.horiuchikenei.com/" target="_blank" rel="noopener">ホリウチ建営（株）</a></td>
+          <td class="col-addr">長野県諏訪市中州神宮寺1635</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="https://maruchi.org/" target="_blank" rel="noopener">（株）マルチ</a></td>
+          <td class="col-addr"><span class="addr-empty">（住所未記載）</span></td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="http://www.e-03.co.jp/" target="_blank" rel="noopener">マルサンアークウッド（株）</a></td>
+          <td class="col-addr">埼玉県所沢市下富1346</td>
+        </tr>
+        <tr>
+          <td class="col-name"><a href="http://www.maruyamanishi.co.jp/" target="_blank" rel="noopener">丸山西木材産業（株）</a></td>
+          <td class="col-addr">静岡県磐田市一言3201</td>
+        </tr>
+        <tr>
+          <td class="col-name">山田銘建</td>
+          <td class="col-addr">静岡県静岡市清水区宍原1198番地</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- 北関東・茨城 -->
-  <div class="region-section">
-    <div class="region-title">茨城</div>
-    <div class="market-list">
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">（株）アイザワ</div>
-          <div class="market-addr">茨城県水戸市千波町1884</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">（株）ミトモク</div>
-          <div class="market-addr">茨城県水戸市千波町1884</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 甲信越 -->
-  <div class="region-section">
-    <div class="region-title">甲信越（新潟）</div>
-    <div class="market-list">
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">ナイス（株）新潟</div>
-          <div class="market-addr">新潟県西浦原郡味方村大字白根73-1</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 四国・中国 -->
-  <div class="region-section">
-    <div class="region-title">四国・中国（香川・岡山）</div>
-    <div class="market-list">
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">ナイス（株）香川</div>
-          <div class="market-addr">香川県観音寺市植田町41</div>
-        </div>
-      </div>
-      <div class="market-card">
-        <div class="market-card-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9L12 3L21 9V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V9Z" stroke="#7a5c3e" stroke-width="1.8" stroke-linejoin="round"/>
-            <rect x="9" y="13" width="6" height="8" rx="1" stroke="#7a5c3e" stroke-width="1.8"/>
-          </svg>
-        </div>
-        <div class="market-card-body">
-          <div class="market-name">（株）勝山木材市場</div>
-          <div class="market-addr">岡山県真庭市三田211</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 市場が近くにない方へのCTA -->
-  <div class="no-market-box">
-    <h2>お近くに市場が見つからない方へ</h2>
+  <!-- 末尾CTA -->
+  <div class="closing-cta">
+    <h2>上記以外でのお取り扱い・直接購入をご希望の方</h2>
     <p>
-      上記以外の地域の方・個人で市場へのアクセスが難しい方は、<br>
-      工場から直接お届けします。全国発送対応・無料サンプルも承ります。
+      上記以外でもお取り扱いをご希望の方、市場・代理店経由でのご購入が難しい方は、お気軽にお問い合わせください。<br>
+      工場から全国へ直接発送いたします。無料サンプルもご用意しております。
     </p>
     <div class="btn-row">
       <a href="contact.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">お問い合わせ・見積もり</a>
       <a href="sample.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">無料サンプル請求</a>
     </div>
-    <ul class="merit-list">
-      <li>送料は全国均一（西濃運輸）</li>
-      <li>工場直販価格</li>
-      <li>無料サンプル対応</li>
-      <li>電話・メールで相談OK</li>
-    </ul>
   </div>
 
 </div>
