@@ -7,13 +7,11 @@ function renderHeader() {
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="site-logo" aria-label="林材木店 トップへ">
-        <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-          <path d="M16 3 L26 9 L26 23 L16 29 L6 23 L6 9 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-          <path d="M16 3 L16 16 L6 9 M16 16 L26 9 M16 16 L16 29" fill="none" stroke="currentColor" stroke-width="1" opacity="0.55"/>
-        </svg>
+        <span class="logo-est" aria-hidden="true">EST.<br>1968</span>
+        <span class="logo-divider" aria-hidden="true"></span>
         <span class="logo-text">
           <span class="logo-name">林材木店</span>
-          <span class="logo-tag">無垢桧フローリング・羽目板専門</span>
+          <span class="logo-tag">Hinoki Wood Specialist</span>
         </span>
       </a>
       <nav class="header-nav">

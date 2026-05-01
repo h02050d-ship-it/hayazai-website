@@ -96,63 +96,65 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 .site-logo {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   white-space: nowrap;
   flex-shrink: 0;
   color: var(--wood-dark);
   text-decoration: none;
   transition: opacity .25s ease;
 }
-.site-logo:hover { opacity: .8; }
+.site-logo:hover { opacity: .75; }
 
-.site-logo .logo-mark {
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
+.site-logo .logo-est {
+  font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   color: var(--wood-mid);
+  line-height: 1.2;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.site-logo .logo-divider {
+  width: 1px;
+  height: 30px;
+  background: var(--wood-mid);
+  opacity: 0.45;
+  flex-shrink: 0;
 }
 
 .site-logo .logo-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .site-logo .logo-name {
   font-family: 'Noto Serif JP', serif;
-  font-size: 1.18rem;
+  font-size: 1.32rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   color: var(--wood-dark);
 }
 
 .site-logo .logo-tag {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
   font-size: 0.62rem;
+  font-style: italic;
   font-weight: 400;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.32em;
   color: var(--wood-mid);
-  margin-top: 2px;
-  position: relative;
-  padding-left: 18px;
-}
-.site-logo .logo-tag::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 12px;
-  height: 1px;
-  background: var(--wood-mid);
-  opacity: 0.6;
+  margin-top: 4px;
+  text-transform: uppercase;
 }
 
 @media (max-width: 480px) {
-  .site-logo { gap: 8px; }
-  .site-logo .logo-mark { width: 28px; height: 28px; }
-  .site-logo .logo-name { font-size: 1.02rem; letter-spacing: 0.14em; }
-  .site-logo .logo-tag { font-size: 0.56rem; padding-left: 14px; }
-  .site-logo .logo-tag::before { width: 8px; }
+  .site-logo { gap: 10px; }
+  .site-logo .logo-est { font-size: 0.55rem; }
+  .site-logo .logo-divider { height: 26px; }
+  .site-logo .logo-name { font-size: 1.08rem; letter-spacing: 0.16em; }
+  .site-logo .logo-tag { font-size: 0.52rem; letter-spacing: 0.24em; }
 }
 
 .header-nav {
