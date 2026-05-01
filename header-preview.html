@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>ヘッダーロゴ デザイン10案 比較 | 林材木店</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: #f8f5f0;
+    color: #3d2b1f;
+    padding: 40px 16px 80px;
+    line-height: 1.6;
+  }
+  h1 {
+    text-align: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #3d2b1f;
+    letter-spacing: 0.08em;
+  }
+  .subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    margin-bottom: 6px;
+  }
+  .note {
+    text-align: center;
+    color: #b08a5c;
+    font-size: 0.78rem;
+    margin-bottom: 30px;
+  }
+  .grid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    gap: 28px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 14px rgba(60, 40, 20, 0.08);
+    overflow: hidden;
+  }
+  .card-label {
+    background: linear-gradient(90deg, #3d2b1f, #5a3e2a);
+    color: #fff;
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+  }
+  .card-label .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .card-body {
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-foot {
+    padding: 12px 18px;
+    border-top: 1px solid #f0e8de;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .card-desc {
+    font-size: 0.8rem;
+    color: #6b5a48;
+    flex: 1;
+    min-width: 200px;
+  }
+  .pick-btn {
+    display: inline-block;
+    padding: 8px 18px;
+    background: #c8a26a;
+    color: #fff;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+  .pick-btn:hover { background: #b08a5c; }
+
+  /* ===== 案01: 印鑑風 ===== */
+  .opt01 {
+    width: 100%;
+    height: 110px;
+    background: #faf6ef;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 18px;
+  }
+  .opt01-stamp {
+    width: 60px;
+    height: 60px;
+    background: #c0392b;
+    color: #fff;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 700;
+    font-size: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(150, 30, 20, 0.2);
+    letter-spacing: 0;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .opt01-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .opt01-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #3d2b1f;
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+  }
+  .opt01-sub {
+    font-size: 0.72rem;
+    color: #8a6f55;
+    letter-spacing: 0.16em;
+    margin-top: 4px;
+  }
+
+  /* ===== 案02: 木目アンダーライン ===== */
+  .opt02 {
+    width: 100%;
+    height: 110px;
+    background: #fdfbf6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+  }
+  .opt02-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #3d2b1f;
+    letter-spacing: 0.32em;
+    padding-right: 0;
+  }
+  .opt02-bar {
+    width: 220px;
+    max-width: 70%;
+    height: 4px;
+    margin: 8px 0 6px;
+    background:
+      linear-gradient(90deg,
+        rgba(180,130,80,0.0) 0%,
+        rgba(180,130,80,0.7) 12%,
+        rgba(120,80,40,0.85) 35%,
+        rgba(160,110,60,0.6) 55%,
+        rgba(140,90,50,0.85) 78%,
+        rgba(180,130,80,0.0) 100%
+      ),
+      repeating-linear-gradient(90deg, rgba(80,50,20,0.15) 0 2px, transparent 2px 6px);
+    border-radius: 2px;
+  }
+  .opt02-sub {
+    font-size: 0.74rem;
+    color: #8a6f55;
+    letter-spacing: 0.2em;
+  }
+
+  /* ===== 案03: シンプル極大セリフ ===== */
+  .opt03 {
+    width: 100%;
+    height: 110px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+  }
+  .opt03-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #2c1f15;
+    letter-spacing: 0.06em;
+    line-height: 1;
+  }
+  .opt03-sub {
+    font-size: 0.7rem;
+    color: #999;
+    letter-spacing: 0.18em;
+    text-align: right;
+    align-self: flex-end;
+    padding-bottom: 18px;
+    line-height: 1.6;
+  }
+
+  /* ===== 案04: モノグラム + 店名 ===== */
+  .opt04 {
+    width: 100%;
+    height: 110px;
+    background: #f5f0e6;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 22px;
+  }
+  .opt04-mono {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+  }
+  .opt04-text { display: flex; flex-direction: column; }
+  .opt04-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #3d2b1f;
+    letter-spacing: 0.16em;
+  }
+  .opt04-sub {
+    font-size: 0.72rem;
+    color: #8a6f55;
+    letter-spacing: 0.14em;
+    margin-top: 6px;
+  }
+
+  /* ===== 案05: EST.1968 + 縦線 ===== */
+  .opt05 {
+    width: 100%;
+    height: 110px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    gap: 22px;
+  }
+  .opt05-est {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    color: #b08a5c;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .opt05-est .y {
+    display: block;
+    font-size: 1.5rem;
+    font-style: normal;
+    letter-spacing: 0.05em;
+  }
+  .opt05-est .e {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    margin-top: 2px;
+  }
+  .opt05-line {
+    width: 1px;
+    height: 56px;
+    background: #c8a26a;
+  }
+  .opt05-text { display: flex; flex-direction: column; }
+  .opt05-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3d2b1f;
+    letter-spacing: 0.18em;
+  }
+  .opt05-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    color: #8a6f55;
+    letter-spacing: 0.14em;
+    margin-top: 4px;
+  }
+
+  /* ===== 案06: 山シルエット背景 ===== */
+  .opt06 {
+    width: 100%;
+    height: 110px;
+    background: linear-gradient(180deg, #f0ede4 0%, #e8e2d1 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .opt06-mountains {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+  }
+  .opt06-text {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  .opt06-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #2c4733;
+    letter-spacing: 0.22em;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  }
+  .opt06-sub {
+    font-size: 0.72rem;
+    color: #5a6e60;
+    letter-spacing: 0.18em;
+    margin-top: 4px;
+  }
+
+  /* ===== 案07: 横長エンブレム枠 ===== */
+  .opt07 {
+    width: 100%;
+    height: 110px;
+    background: #fdfbf6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+  }
+  .opt07-frame {
+    border: 1.5px solid #8a6f55;
+    padding: 12px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .opt07-frame::before,
+  .opt07-frame::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    background: #fdfbf6;
+    border: 1.5px solid #8a6f55;
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .opt07-frame::before { left: -5px; }
+  .opt07-frame::after { right: -5px; }
+  .opt07-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #3d2b1f;
+    letter-spacing: 0.24em;
+  }
+  .opt07-sub {
+    font-size: 0.7rem;
+    color: #8a6f55;
+    letter-spacing: 0.18em;
+    margin-top: 6px;
+  }
+
+  /* ===== 案08: 木の年輪アイコン ===== */
+  .opt08 {
+    width: 100%;
+    height: 110px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 22px;
+  }
+  .opt08-rings { width: 60px; height: 60px; flex-shrink: 0; }
+  .opt08-text { display: flex; flex-direction: column; }
+  .opt08-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #3d2b1f;
+    letter-spacing: 0.16em;
+  }
+  .opt08-sub {
+    font-size: 0.72rem;
+    color: #8a6f55;
+    letter-spacing: 0.16em;
+    margin-top: 6px;
+  }
+
+  /* ===== 案09: 切り絵風 / レーザーカット ===== */
+  .opt09 {
+    width: 100%;
+    height: 110px;
+    background:
+      linear-gradient(90deg, rgba(60,40,20,0.55), rgba(60,40,20,0.55)),
+      repeating-linear-gradient(90deg,
+        #6b4a2b 0px,
+        #7a5638 6px,
+        #6b4a2b 12px,
+        #5e4128 22px,
+        #6b4a2b 30px
+      );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+  }
+  .opt09-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1.2px #f5e6c8;
+    letter-spacing: 0.2em;
+  }
+  .opt09-sub {
+    font-size: 0.7rem;
+    color: rgba(245, 230, 200, 0.85);
+    letter-spacing: 0.22em;
+    margin-top: 6px;
+  }
+
+  /* ===== 案10: 朝陽グラデ ===== */
+  .opt10 {
+    width: 100%;
+    height: 110px;
+    background: linear-gradient(135deg, #fbe6c2 0%, #f7d3a3 35%, #f2b990 70%, #e8a78f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .opt10::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: 12%;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,240,210,0.9) 0%, rgba(255,200,150,0) 70%);
+  }
+  .opt10-line {
+    position: absolute;
+    bottom: 22px;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: rgba(120, 70, 40, 0.35);
+  }
+  .opt10-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #5a3922;
+    letter-spacing: 0.24em;
+    z-index: 2;
+  }
+  .opt10-sub {
+    font-size: 0.72rem;
+    color: #7d4f30;
+    letter-spacing: 0.2em;
+    margin-top: 4px;
+    z-index: 2;
+  }
+
+  /* ===== レスポンシブ ===== */
+  @media (max-width: 600px) {
+    h1 { font-size: 1.4rem; }
+    .opt01, .opt02, .opt03, .opt04, .opt05,
+    .opt06, .opt07, .opt08, .opt09, .opt10 {
+      padding-left: 14px;
+      padding-right: 14px;
+      gap: 12px;
+    }
+    .opt01-stamp { width: 50px; height: 50px; font-size: 1.9rem; }
+    .opt01-name, .opt04-name, .opt05-name, .opt08-name { font-size: 1.15rem; letter-spacing: 0.12em; }
+    .opt02-name, .opt06-name, .opt10-name { font-size: 1.25rem; letter-spacing: 0.18em; }
+    .opt03-name { font-size: 1.5rem; }
+    .opt03-sub { font-size: 0.62rem; padding-bottom: 10px; }
+    .opt07-frame { padding: 10px 18px; }
+    .opt07-name { font-size: 1.05rem; letter-spacing: 0.16em; }
+    .opt09-name { font-size: 1.3rem; letter-spacing: 0.14em; }
+    .opt04-mono, .opt08-rings { width: 48px; height: 48px; }
+    .opt05-est .y { font-size: 1.2rem; }
+    .opt05-est .e { font-size: 0.6rem; }
+    .opt02-sub, .opt04-sub, .opt06-sub, .opt07-sub, .opt08-sub, .opt09-sub, .opt10-sub, .opt01-sub {
+      font-size: 0.62rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>ヘッダーロゴ デザイン10案</h1>
+<p class="subtitle">気に入ったものを教えてください</p>
+<p class="note">※ このページは比較検討用のテンポラリプレビューです（noindex）</p>
+
+<div class="grid">
+
+  <!-- 案01 印鑑風 -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 01</span><span>STAMP</span></div>
+    <div class="card-body">
+      <div class="opt01">
+        <div class="opt01-stamp">林</div>
+        <div class="opt01-text">
+          <div class="opt01-name">林材木店</div>
+          <div class="opt01-sub">無垢桧フローリング・羽目板専門</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">重厚・伝統的・印鑑モチーフ／和の象徴である朱印で信頼感を演出</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8801%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案02 木目アンダーライン -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 02</span><span>WOODGRAIN</span></div>
+    <div class="card-body">
+      <div class="opt02">
+        <div class="opt02-name">林材木店</div>
+        <div class="opt02-bar"></div>
+        <div class="opt02-sub">無垢桧フローリング・羽目板専門</div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">中央配置・木目テクスチャの帯／素材感を直接ロゴに織り込む</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8802%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案03 シンプル極大セリフ -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 03</span><span>BOLD SERIF</span></div>
+    <div class="card-body">
+      <div class="opt03">
+        <div class="opt03-name">林材木店</div>
+        <div class="opt03-sub">無垢桧フローリング<br>羽目板専門</div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">大胆・骨太・モダン／店名そのものを主役にしたミニマル構成</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8803%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案04 モノグラム -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 04</span><span>MONOGRAM</span></div>
+    <div class="card-body">
+      <div class="opt04">
+        <svg class="opt04-mono" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="none" stroke="#3d2b1f" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="26" fill="none" stroke="#b08a5c" stroke-width="0.8"/>
+          <text x="32" y="42" text-anchor="middle" font-family="Noto Serif JP, serif" font-size="28" font-weight="700" fill="#3d2b1f">林</text>
+        </svg>
+        <div class="opt04-text">
+          <div class="opt04-name">林材木店</div>
+          <div class="opt04-sub">無垢桧フローリング・羽目板専門</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">エンブレム的・上品／円形モノグラムで老舗ブランドの風格</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8804%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案05 EST.1968 -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 05</span><span>EST. 1968</span></div>
+    <div class="card-body">
+      <div class="opt05">
+        <div class="opt05-est">
+          <span class="y">1968</span>
+          <span class="e">EST.</span>
+        </div>
+        <div class="opt05-line"></div>
+        <div class="opt05-text">
+          <div class="opt05-name">林材木店</div>
+          <div class="opt05-sub">Hayazai Timber &amp; Hinoki</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">老舗感・洋風スパイス／創業年訴求・現行版の正統進化</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8805%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案06 山シルエット -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 06</span><span>MOUNTAIN</span></div>
+    <div class="card-body">
+      <div class="opt06">
+        <svg class="opt06-mountains" viewBox="0 0 1000 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,80 L0,55 L150,25 L300,50 L460,15 L620,45 L800,20 L1000,40 L1000,80 Z" fill="#a8b8a4" opacity="0.55"/>
+          <path d="M0,80 L0,68 L120,48 L280,62 L440,40 L600,58 L780,42 L1000,55 L1000,80 Z" fill="#7a8c75" opacity="0.65"/>
+        </svg>
+        <div class="opt06-text">
+          <div class="opt06-name">林材木店</div>
+          <div class="opt06-sub">無垢桧フローリング・羽目板専門</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">山並みの背景／産地の風景を想起させる詩情あるデザイン</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8806%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案07 エンブレム枠 -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 07</span><span>EMBLEM</span></div>
+    <div class="card-body">
+      <div class="opt07">
+        <div class="opt07-frame">
+          <div class="opt07-name">林材木店</div>
+          <div class="opt07-sub">無垢桧フローリング・羽目板専門</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">罫線フレーム・両端ダイヤ／カードのような格式と整い</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8807%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案08 年輪 -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 08</span><span>TREE RINGS</span></div>
+    <div class="card-body">
+      <div class="opt08">
+        <svg class="opt08-rings" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="28" fill="none" stroke="#3d2b1f" stroke-width="1.2"/>
+          <circle cx="30" cy="30" r="22" fill="none" stroke="#5a3e2a" stroke-width="1"/>
+          <circle cx="30" cy="30" r="16" fill="none" stroke="#7a5638" stroke-width="0.9"/>
+          <circle cx="30" cy="30" r="10" fill="none" stroke="#9a704a" stroke-width="0.8"/>
+          <circle cx="30" cy="30" r="4" fill="#b08a5c"/>
+        </svg>
+        <div class="opt08-text">
+          <div class="opt08-name">林材木店</div>
+          <div class="opt08-sub">無垢桧フローリング・羽目板専門</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">木の年輪アイコン／樹齢・歴史・木材専門という本質を象徴</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8808%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案09 切り絵 / レーザーカット -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 09</span><span>LASER CUT</span></div>
+    <div class="card-body">
+      <div class="opt09">
+        <div class="opt09-name">林材木店</div>
+        <div class="opt09-sub">無垢桧フローリング・羽目板専門</div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">木目背景に白抜きアウトライン／クラフト感・先進的な印象</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8809%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+  <!-- 案10 朝陽グラデ -->
+  <div class="card">
+    <div class="card-label"><span class="num">案 10</span><span>SUNRISE</span></div>
+    <div class="card-body">
+      <div class="opt10">
+        <div class="opt10-name">林材木店</div>
+        <div class="opt10-sub">無垢桧フローリング・羽目板専門</div>
+        <div class="opt10-line"></div>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="card-desc">朝焼けグラデーション／日本らしい上品さ・あたたかさ</div>
+      <a class="pick-btn" href="mailto:h02050d@gmail.com?subject=%E6%A1%8810%E3%81%AB%E6%B1%BA%E5%AE%9A">これに決定</a>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
