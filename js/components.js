@@ -36,6 +36,7 @@ function renderHeader() {
     <div class="mobile-nav-inner">
       <button class="mobile-nav-close" id="mobile-close">✕</button>
       <a href="index.html">トップ</a>
+      <a href="story.html">ブランドストーリー</a>
       <a href="products.html">商品一覧</a>
       <a href="gallery.html">施工事例</a>
       <a href="faq.html">お悩み解決</a>
@@ -92,6 +93,7 @@ function renderFooter() {
         <div class="footer-nav">
           <h4>会社情報</h4>
           <ul>
+            <li><a href="story.html">ブランドストーリー</a></li>
             <li><a href="company.html">会社概要</a></li>
             <li><a href="tokushoho.html">特定商取引法に基づく表記</a></li>
             <li><a href="privacy.html">プライバシーポリシー</a></li>
