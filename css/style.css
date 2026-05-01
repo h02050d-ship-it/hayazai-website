@@ -1298,3 +1298,124 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 .shipping-tables td:first-child, .shipping-tables th:first-child { text-align: left; }
 .shipping-tables small { color: #888; font-size: 0.82em; }
 .shipping-tables .note { font-size: 0.9rem; color: #666; margin-top: 1rem; }
+
+/* ===========================================================
+   LP ANIMATIONS (added 2026-04-30)
+   - 過剰演出を避け、木材・伝統・職人の世界観に合った上品な動き
+   - すべて transform / opacity のみで GPU acceleration
+   - prefers-reduced-motion: reduce で全アニメーション無効化
+   =========================================================== */
+
+/* スクロール連動フェードイン共通 */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .8s ease-out, transform .8s ease-out;
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger（子要素を段差で表示） */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .7s ease-out, transform .7s ease-out;
+}
+.reveal-stagger.is-visible > *              { opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(1) { transition-delay: .00s; }
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay: .08s; }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: .16s; }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: .24s; }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: .32s; }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: .40s; }
+
+/* ヒーローのロード時フェードイン＋上昇（stagger） */
+.hero-inner > * {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: heroFadeUp 1s ease-out forwards;
+}
+.hero-inner > .hero-label   { animation-delay: .15s; }
+.hero-inner > .hero-title   { animation-delay: .35s; }
+.hero-inner > .hero-desc    { animation-delay: .65s; }
+.hero-inner > .hero-actions { animation-delay: .90s; }
+@keyframes heroFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ヒーロー画像のパララックス（PCのみ、モバイルは無効） */
+@media (min-width: 769px) {
+  .hero { background-attachment: fixed; }
+}
+
+/* CTAボタンの控えめなパルス（box-shadowのみ） */
+.btn-pulse {
+  animation: btnPulse 2.6s ease-in-out infinite;
+}
+@keyframes btnPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 217, 190, 0.55); }
+  50%      { box-shadow: 0 0 0 10px rgba(240, 217, 190, 0); }
+}
+
+/* 画像・カードのホバー演出（PCのみ） */
+@media (hover: hover) and (pointer: fine) {
+  .gallery-card .gallery-card-img-placeholder img,
+  .gallery-card .gallery-card-img-placeholder picture img {
+    transition: transform .6s ease;
+  }
+  .gallery-card:hover .gallery-card-img-placeholder img {
+    transform: scale(1.06);
+  }
+  .feature-card,
+  .grade-card,
+  .review-card,
+  .blog-card {
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .feature-card:hover,
+  .grade-card:hover,
+  .review-card:hover,
+  .blog-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(61, 43, 31, 0.10);
+  }
+}
+
+/* 木目テクスチャ風のセクション境界（控えめな水平ライン） */
+.wood-divider {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(122, 92, 62, 0.18) 20%,
+    rgba(122, 92, 62, 0.32) 50%,
+    rgba(122, 92, 62, 0.18) 80%,
+    transparent 100%
+  );
+}
+
+/* 数字カウントアップのチラつき防止 */
+.count-up { font-variant-numeric: tabular-nums; }
+
+/* prefers-reduced-motion: 動きを抑えたいユーザーへの配慮 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > *,
+  .hero-inner > *,
+  .btn-pulse,
+  .gallery-card .gallery-card-img-placeholder img,
+  .feature-card, .grade-card, .review-card, .blog-card {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .hero { background-attachment: scroll !important; }
+  .hero-scroll { animation: none !important; }
+}
+
