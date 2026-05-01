@@ -137,6 +137,33 @@
       appearance: auto;
     }
 
+    /* 種類トグル（フローリング/羽目板） */
+    .cat-toggle {
+      display: flex;
+      gap: 3px;
+      width: 100%;
+      padding: 2px;
+      border: 1.5px solid #d0bba0;
+      border-radius: 5px;
+      background: #fff;
+    }
+    .cat-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 6px 4px;
+      font-size: 0.78rem;
+      font-family: inherit;
+      font-weight: 600;
+      color: var(--wood-mid);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .cat-btn:hover { background: #faf5ef; }
+    .cat-btn.is-active { background: var(--wood-dark); color: #fff; }
+
     .bsel:focus {
       outline: none;
       border-color: var(--wood-mid);
@@ -905,11 +932,11 @@ function rowHTML(id) {
   return `
     <div class="bfield">
       <span class="bsel-label">種類</span>
-      <select class="bsel" id="type-${id}" onchange="onTypeChange(${id})">
-        <option value="">種類を選択</option>
-        <option value="flooring">桧フローリング</option>
-        <option value="panel">桧羽目板</option>
-      </select>
+      <div class="cat-toggle" id="cat-${id}">
+        <button type="button" class="cat-btn" data-val="flooring" onclick="setType(${id},'flooring')">フローリング</button>
+        <button type="button" class="cat-btn" data-val="panel" onclick="setType(${id},'panel')">羽目板</button>
+        <input type="hidden" id="type-${id}" value="">
+      </div>
     </div>
     <div class="bfield">
       <span class="bsel-label">厚さ</span>
@@ -970,6 +997,15 @@ function removeRow(id) {
   // 行がなくなったら1行追加
   if (rows.length === 0) addRow();
   updateBottomBar();
+}
+
+function setType(id, val) {
+  document.getElementById('type-' + id).value = val;
+  const grp = document.getElementById('cat-' + id);
+  if (grp) {
+    grp.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('is-active', b.dataset.val === val));
+  }
+  onTypeChange(id);
 }
 
 function onTypeChange(id) {
