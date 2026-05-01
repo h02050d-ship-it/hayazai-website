@@ -4,10 +4,17 @@
 // /gallery/ フォルダ内の画像を自動読み込み
 // =====================================================
 
-$gallery_dir = __DIR__ . '/gallery/';
-$allowed_ext = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+// gallery.php は images/gallery/ ではなく gallery/ を参照する旧仕様。
+// 互換のため両方探し、存在する方を使う。
+$gallery_dir = is_dir(__DIR__ . '/images/gallery/')
+    ? __DIR__ . '/images/gallery/'
+    : __DIR__ . '/gallery/';
+$gallery_url = (strpos($gallery_dir, '/images/gallery/') !== false)
+    ? 'images/gallery'
+    : 'gallery';
+$allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
 
-// 画像ファイル一覧取得
+// 画像ファイル一覧取得（_md / _th 派生は除外、ベース画像のみ）
 $images = [];
 if (is_dir($gallery_dir)) {
     $files = scandir($gallery_dir);
@@ -16,15 +23,31 @@ if (is_dir($gallery_dir)) {
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         if (!in_array($ext, $allowed_ext)) continue;
 
-        // ファイル名からキャプション生成（拡張子を除いたファイル名をラベルに）
-        $caption = pathinfo($file, PATHINFO_FILENAME);
-        // アンダースコア・ハイフンをスペースに変換
-        $caption = str_replace(['_', '-'], ' ', $caption);
+        $stem = pathinfo($file, PATHINFO_FILENAME);
+        // 派生サイズはスキップ
+        if (substr($stem, -3) === '_md' || substr($stem, -3) === '_th') continue;
+
+        // キャプション生成
+        $caption = str_replace(['_', '-'], ' ', $stem);
+
+        // 各派生のパスチェック
+        $base = "$gallery_url/$stem";
+        $has_webp_lg = file_exists($gallery_dir . $stem . '.webp');
+        $has_webp_md = file_exists($gallery_dir . $stem . '_md.webp');
+        $has_webp_th = file_exists($gallery_dir . $stem . '_th.webp');
+        $has_jpg_th  = file_exists($gallery_dir . $stem . '_th.jpg');
 
         $images[] = [
             'file'    => $file,
+            'stem'    => $stem,
+            'base'    => $base,
+            'ext'     => $ext,
             'caption' => $caption,
             'mtime'   => filemtime($gallery_dir . $file),
+            'has_webp_lg' => $has_webp_lg,
+            'has_webp_md' => $has_webp_md,
+            'has_webp_th' => $has_webp_th,
+            'has_jpg_th'  => $has_jpg_th,
         ];
     }
     // 新しいファイル順
@@ -182,12 +205,42 @@ if (is_dir($gallery_dir)) {
 
   <div class="gallery-grid" id="gallery-grid">
     <?php foreach ($images as $i => $img): ?>
+    <?php
+      $base   = htmlspecialchars($img['base'], ENT_QUOTES);
+      $alt    = htmlspecialchars($img['caption'], ENT_QUOTES);
+      $eager  = $i < 6; // ファーストビュー想定
+      $loading = $eager ? 'eager' : 'lazy';
+      $fp      = $eager ? ' fetchpriority="high"' : '';
+      // WebP srcset 構築（存在する派生のみ）
+      $webp_parts = [];
+      if ($img['has_webp_th']) $webp_parts[] = "{$base}_th.webp 400w";
+      if ($img['has_webp_md']) $webp_parts[] = "{$base}_md.webp 900w";
+      if ($img['has_webp_lg']) $webp_parts[] = "{$base}.webp 1600w";
+      $webp_srcset = implode(', ', $webp_parts);
+      // JPEG fallback
+      $img_src = $img['has_jpg_th'] ? "{$base}_th.jpg" : "{$base}.jpg";
+      $jpg_parts = [];
+      if ($img['has_jpg_th']) $jpg_parts[] = "{$base}_th.jpg 400w";
+      $jpg_parts[] = "{$base}.jpg 1600w";
+      $jpg_srcset = implode(', ', $jpg_parts);
+    ?>
     <div class="gallery-item" style="cursor:pointer;" onclick="openLightbox(<?= $i ?>)">
-      <img
-        src="gallery/<?= htmlspecialchars($img['file']) ?>"
-        alt="<?= htmlspecialchars($img['caption']) ?>"
-        loading="lazy">
-      <div class="gallery-caption"><?= htmlspecialchars($img['caption']) ?></div>
+      <picture>
+        <?php if ($webp_srcset): ?>
+        <source type="image/webp"
+                srcset="<?= $webp_srcset ?>"
+                sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw">
+        <?php endif; ?>
+        <img
+          src="<?= $img_src ?>"
+          srcset="<?= $jpg_srcset ?>"
+          sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
+          alt="<?= $alt ?>"
+          loading="<?= $loading ?>"
+          decoding="async"<?= $fp ?>
+          width="400" height="300">
+      </picture>
+      <div class="gallery-caption"><?= $alt ?></div>
     </div>
     <?php endforeach; ?>
   </div>
@@ -244,8 +297,13 @@ function moveLightbox(delta) {
 function updateLightbox() {
   const item = galleryData[currentIndex];
   if (!item) return;
-  document.getElementById('lightbox-img').src = 'gallery/' + item.file;
-  document.getElementById('lightbox-img').alt = item.caption;
+  // WebP large があればそちら、無ければ JPEG large
+  const lightboxImg = document.getElementById('lightbox-img');
+  // ブラウザに任せる: webp対応なら .webp、それ以外なら .jpg
+  // <picture>に置き換え
+  const src = item.has_webp_lg ? (item.base + '.webp') : (item.base + '.jpg');
+  lightboxImg.src = src;
+  lightboxImg.alt = item.caption;
   document.getElementById('lightbox-caption').textContent = item.caption;
 }
 

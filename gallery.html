@@ -380,7 +380,7 @@ const GALLERY_ITEMS = [
 
   // ===== 屋外・軒下 =====
   {id:22, title:'屋外軒下・桧羽目板施工（完成）', cat:['panel', 'outdoor'],
-   img:'images/gallery/pa_A9_buna_1.jpeg', product:'羽目板 12mm 節有 A級品',
+   img:'images/gallery/pa_A9_buna_1.jpg', product:'羽目板 12mm 節有 A級品',
    location:'屋外 軒下（ブナの森）',
    desc:'屋外の軒下に桧羽目板を施工。軒下に桧を使うことで、外観に温かみと個性が生まれます。適切な処理を施せば屋外でも長く使えます。',
    tags:['羽目板', '軒下', '屋外', '節有']},
@@ -392,7 +392,7 @@ const GALLERY_ITEMS = [
    desc:'ハイエースの荷台に桧羽目板でDIYカスタム。木の香り漂う車内は、まるでキャビンのような雰囲気。夜景と桧の組み合わせが絶品です。',
    tags:['羽目板', 'キャンピングカー', 'DIY', '節有']},
   {id:24, title:'キャンピングバン内装・壁と天井（完成）', cat:['panel', 'diy'],
-   img:'images/gallery/pa_A3_1.jpeg', product:'羽目板 12mm 節有 A級品',
+   img:'images/gallery/pa_A3_1.jpg', product:'羽目板 12mm 節有 A級品',
    location:'キャンピングバン',
    desc:'バンの内装を桧羽目板で壁・天井をフルカバー。照明と組み合わせることで、コンパクトながら温かみのある居住空間が完成しています。',
    tags:['羽目板', 'キャンピングカー', 'DIY', '天井']},
@@ -432,16 +432,59 @@ const GALLERY_ITEMS = [
 
 let currentFilter = 'all';
 
+// 画像URL → ベース名（拡張子なし）
+function imgBase(src) {
+  return src.replace(/\.(jpe?g|png|webp)$/i, '');
+}
+
+// レスポンシブな <picture> タグ HTML を生成
+// eager: ファーストビュー想定の最初の3-6枚は true
+function buildPictureCard(item, eager) {
+  const base = imgBase(item.img);
+  const loading = eager ? 'eager' : 'lazy';
+  const fp     = eager ? ' fetchpriority="high"' : '';
+  return `
+    <picture>
+      <source type="image/webp"
+              srcset="${base}_th.webp 400w, ${base}_md.webp 900w, ${base}.webp 1600w"
+              sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw">
+      <img src="${base}_th.jpg"
+           srcset="${base}_th.jpg 400w, ${base}.jpg 1600w"
+           sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw"
+           alt="${item.title}"
+           loading="${loading}"
+           decoding="async"${fp}
+           width="400" height="300"
+           style="width:100%;height:100%;object-fit:cover;display:block;">
+    </picture>`;
+}
+
+// モーダル用：高解像度の <picture>
+function buildPictureModal(item) {
+  const base = imgBase(item.img);
+  return `
+    <picture>
+      <source type="image/webp"
+              srcset="${base}_md.webp 900w, ${base}.webp 1600w"
+              sizes="(max-width: 760px) 100vw, 760px">
+      <img src="${base}.jpg"
+           srcset="${base}.jpg 1600w"
+           alt="${item.title}"
+           decoding="async"
+           style="width:100%;height:100%;object-fit:cover;display:block;">
+    </picture>`;
+}
+
 function renderGallery() {
   const grid = document.getElementById('gallery-grid');
   const filtered = currentFilter === 'all'
     ? GALLERY_ITEMS
     : GALLERY_ITEMS.filter(item => item.cat.includes(currentFilter));
 
-  grid.innerHTML = filtered.map(item => `
+  grid.innerHTML = filtered.map((item, idx) => `
     <div class="gallery-card" onclick="openModal(${item.id})">
       <div class="gallery-card-img-placeholder" style="padding:0;overflow:hidden;">
-        <img src="${item.img}" alt="${item.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        ${buildPictureCard(item, idx < 6)}
       </div>
       <div class="gallery-card-body">
         <div class="gallery-card-tag">${item.tags.slice(0, 2).join(' · ')}</div>
@@ -458,7 +501,7 @@ function openModal(id) {
   const imgArea = document.getElementById('modal-img');
   imgArea.className = 'modal-img-area';
   imgArea.style.cssText = 'padding:0;overflow:hidden;';
-  imgArea.innerHTML = `<img src="${item.img}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+  imgArea.innerHTML = buildPictureModal(item);
   document.getElementById('modal-title').textContent = item.title;
   document.getElementById('modal-desc').innerHTML =
     `<strong>使用商品：</strong>${item.product}<br>` +
