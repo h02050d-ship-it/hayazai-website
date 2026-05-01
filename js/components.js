@@ -6,7 +6,7 @@ function renderHeader() {
   const html = `
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="site-logo" aria-label="林材木店 トップへ">
+      <a href="/" class="site-logo" aria-label="林材木店 トップへ">
         <span class="logo-est" aria-hidden="true">EST.<br>1968</span>
         <span class="logo-divider" aria-hidden="true"></span>
         <span class="logo-text">
@@ -15,14 +15,14 @@ function renderHeader() {
         </span>
       </a>
       <nav class="header-nav">
-        <a href="products.html">商品一覧</a>
-        <a href="gallery.html">施工事例</a>
-        <a href="faq.html">お悩み解決</a>
-        <a href="blog.html">ブログ</a>
-        <a href="order.html">お見積もり</a>
-        <a href="markets.html">取引市場一覧</a>
-        <a href="contact.html">お問い合わせ</a>
-        <a href="sample.html" class="nav-sample-link">無料サンプル</a>
+        <a href="/products.html">商品一覧</a>
+        <a href="/gallery.html">施工事例</a>
+        <a href="/faq.html">お悩み解決</a>
+        <a href="/blog.html">ブログ</a>
+        <a href="/order.html">お見積もり</a>
+        <a href="/markets.html">取引市場一覧</a>
+        <a href="/contact.html">お問い合わせ</a>
+        <a href="/sample.html" class="nav-sample-link">無料サンプル</a>
       </nav>
       <div class="header-actions">
         <button class="hamburger" id="hamburger" aria-label="メニューを開く">
@@ -35,15 +35,15 @@ function renderHeader() {
   <div class="mobile-nav" id="mobile-nav">
     <div class="mobile-nav-inner">
       <button class="mobile-nav-close" id="mobile-close">✕</button>
-      <a href="index.html">トップ</a>
-      <a href="products.html">商品一覧</a>
-      <a href="gallery.html">施工事例</a>
-      <a href="faq.html">お悩み解決</a>
-      <a href="blog.html">ブログ</a>
-      <a href="order.html">お見積もり</a>
-      <a href="markets.html">取引市場一覧</a>
-      <a href="contact.html">お問い合わせ</a>
-      <a href="sample.html">無料サンプル請求</a>
+      <a href="/">トップ</a>
+      <a href="/products.html">商品一覧</a>
+      <a href="/gallery.html">施工事例</a>
+      <a href="/faq.html">お悩み解決</a>
+      <a href="/blog.html">ブログ</a>
+      <a href="/order.html">お見積もり</a>
+      <a href="/markets.html">取引市場一覧</a>
+      <a href="/contact.html">お問い合わせ</a>
+      <a href="/sample.html">無料サンプル請求</a>
     </div>
   </div>`;
 
@@ -71,30 +71,30 @@ function renderFooter() {
         <div class="footer-nav">
           <h4>商品・サービス</h4>
           <ul>
-            <li><a href="products.html?cat=flooring15">桧フローリング 15mm</a></li>
-            <li><a href="products.html?cat=flooring12">桧フローリング 12mm</a></li>
-            <li><a href="products.html?cat=panel">桧羽目板</a></li>
-            <li><a href="products.html?cat=sale">お買い得品</a></li>
-            <li><a href="sample.html">🎁 無料サンプル請求</a></li>
+            <li><a href="/products.html?cat=flooring15">桧フローリング 15mm</a></li>
+            <li><a href="/products.html?cat=flooring12">桧フローリング 12mm</a></li>
+            <li><a href="/products.html?cat=panel">桧羽目板</a></li>
+            <li><a href="/products.html?cat=sale">お買い得品</a></li>
+            <li><a href="/sample.html">🎁 無料サンプル請求</a></li>
           </ul>
         </div>
         <div class="footer-nav">
           <h4>情報・サポート</h4>
           <ul>
-            <li><a href="gallery.html">施工事例</a></li>
-            <li><a href="blog.html">ブログ・コラム</a></li>
-            <li><a href="faq.html">よくある質問</a></li>
-            <li><a href="shipping.html">送料のご案内</a></li>
-            <li><a href="markets.html">木材市場一覧</a></li>
-            <li><a href="contact.html">お問い合わせ</a></li>
+            <li><a href="/gallery.html">施工事例</a></li>
+            <li><a href="/blog.html">ブログ・コラム</a></li>
+            <li><a href="/faq.html">よくある質問</a></li>
+            <li><a href="/shipping.html">送料のご案内</a></li>
+            <li><a href="/markets.html">木材市場一覧</a></li>
+            <li><a href="/contact.html">お問い合わせ</a></li>
           </ul>
         </div>
         <div class="footer-nav">
           <h4>会社情報</h4>
           <ul>
-            <li><a href="company.html">会社概要</a></li>
-            <li><a href="tokushoho.html">特定商取引法に基づく表記</a></li>
-            <li><a href="privacy.html">プライバシーポリシー</a></li>
+            <li><a href="/company.html">会社概要</a></li>
+            <li><a href="/tokushoho.html">特定商取引法に基づく表記</a></li>
+            <li><a href="/privacy.html">プライバシーポリシー</a></li>
           </ul>
         </div>
       </div>
