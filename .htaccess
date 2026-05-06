@@ -29,3 +29,28 @@
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>
+
+# =====================================================
+# 旧WordPressサイト時代のURLを新サイトへリダイレクト
+# Google Search Consoleで「見つかりませんでした(404)」検出URL対応
+# =====================================================
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 旧WP固定ページ → 新静的HTML（301恒久リダイレクト）
+  RewriteRule ^company-profile/?$ /company.html [R=301,L]
+  RewriteRule ^個人情報保護方針/?$ /privacy.html [R=301,L,NE]
+  RewriteRule ^%E5%80%8B%E4%BA%BA%E6%83%85%E5%A0%B1%E4%BF%9D%E8%AD%B7%E6%96%B9%E9%87%9D/?$ /privacy.html [R=301,L,NE]
+  RewriteRule ^blog/company\.html$ /company.html [R=301,L]
+  RewriteRule ^blog/sample\.html$ /sample.html [R=301,L]
+
+  # 旧WP残骸 → 410 Gone（インデックスから速やかに除外させる）
+  RewriteRule ^category/.*$ - [G,L]
+  RewriteRule ^[0-9]+/?$ - [G,L]
+  RewriteRule ^wp-content/.*$ - [G,L]
+  RewriteRule ^wp-includes/.*$ - [G,L]
+  RewriteRule ^wp-admin/?.*$ - [G,L]
+  RewriteRule ^wp-.*\.php$ - [G,L]
+  RewriteRule ^xmlrpc\.php$ - [G,L]
+  RewriteRule ^feed/?$ - [G,L]
+</IfModule>
