@@ -4,6 +4,18 @@
 
 ---
 
+## ⛔ デプロイポリシー（最重要・絶対遵守）
+
+- **デプロイは GitHub Actions のみ。手動デプロイは原則禁止。**
+- 編集したら `git add` → `git commit` → `git push origin main` のみ。
+- `bash deploy.sh` を直接叩かない（強制ガードでエラー終了する）。
+- 自動デプロイの実行状況: <https://github.com/h02050d-ship-it/hayazai-website/actions>
+- 詳細: [`docs/DEPLOY_AUTOMATION.md`](docs/DEPLOY_AUTOMATION.md)
+
+**理由:** 別マシン・別ディレクトリの古いローカルファイルで本番を上書きする事故を物理的に防ぐため。Claude 自身も、このプロジェクトの編集後は **push のみで完了**とし、rsync は呼ばないこと。
+
+---
+
 ## プロジェクト概要
 
 - **サイト名:** 林材木店（ハヤシザイモクテン）
@@ -19,9 +31,15 @@ python3 -m http.server 3456
 # → http://localhost:3456
 ```
 
-## デプロイ（FTP情報取得後）
+## デプロイ
 
-`~/.claude/projects/-Users-hayashidaiki-receipt-downloader/memory/project_hayazai_deploy.md` のコマンドを使用
+**GitHub Actions による自動デプロイのみ。**
+
+```bash
+git add -A && git commit -m "..." && git push origin main
+```
+
+push 後 1〜3 分で `https://hayazai.com/` に反映される。手動デプロイは原則禁止（上の「デプロイポリシー」を参照）。
 
 ## 技術構成
 
