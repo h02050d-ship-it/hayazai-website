@@ -103,6 +103,21 @@ curl -sI https://hayazai.com/ | head -1
 # 期待: HTTP/2 200
 ```
 
+## 初回セットアップ時の既知の失敗
+
+ワークフロー導入直後の最初のジョブ（run 25705519723）は **Secrets 未登録のため失敗します**。これは想定内です。下記の手順で 5 件の Secrets を登録後、Actions タブから `Run workflow`（workflow_dispatch）で再実行してください。
+
+失敗ログ要約:
+
+```
+Setup SSH key & known_hosts:
+  printf '%s\n' "" > ~/.ssh/id_rsa
+  ssh-keyscan -p "" "" >> ~/.ssh/known_hosts
+  ##[error]Process completed with exit code 1.
+```
+
+`secrets.XSERVER_*` が空文字に展開されたため `ssh-keyscan` が引数不足で失敗。Secrets 登録後は解消します。
+
 ## フォールバック手順（自動デプロイが壊れた時）
 
 ### 1. ワークフローの失敗ログを見る
