@@ -1,0 +1,86 @@
+name: Deploy to Xserver
+
+# 林材木店HP 自動デプロイ
+# main へ push されると、自動的に Xserver の ~/hayazai.com/public_html/ へ rsync で配信される。
+# 手動実行は GitHub の Actions タブから workflow_dispatch で可能。
+# 詳細: docs/DEPLOY_AUTOMATION.md
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-xserver
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build gallery JSON (if script exists)
+        run: |
+          if [ -f scripts/build-gallery.js ]; then
+            echo "Running scripts/build-gallery.js"
+            node scripts/build-gallery.js
+          else
+            echo "scripts/build-gallery.js not found - skipping"
+          fi
+
+      - name: Setup SSH key & known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.XSERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p "${{ secrets.XSERVER_PORT }}" "${{ secrets.XSERVER_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.claude/' \
+            --exclude='node_modules/' \
+            --exclude='scripts/' \
+            --exclude='docs/' \
+            --exclude='functions/' \
+            --exclude='CLAUDE.md' \
+            --exclude='README.md' \
+            --exclude='CHANGES.md' \
+            --exclude='*.bak' \
+            --exclude='*.tmp' \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='deploy.sh' \
+            --exclude='.gitignore' \
+            --exclude='.DS_Store' \
+            --exclude='Thumbs.db' \
+            --exclude='data/products.js.NEW*.draft' \
+            --exclude='data/*.draft' \
+            -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.XSERVER_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=~/.ssh/known_hosts" \
+            ./ "${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ secrets.XSERVER_PATH }}"
+
+      - name: Verify deployment (HTTP 200)
+        run: |
+          set +e
+          STATUS=$(curl -sI -o /dev/null -w "%{http_code}" https://hayazai.com/)
+          echo "https://hayazai.com/ -> HTTP $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "::warning::Top page did not return 200 (got $STATUS)"
+          fi
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_rsa

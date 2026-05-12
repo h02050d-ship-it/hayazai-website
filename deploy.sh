@@ -1,5 +1,21 @@
 #!/bin/bash
-# 林材木店HP 自動デプロイスクリプト
+# =============================================================================
+#  林材木店HP 自動デプロイスクリプト（Claude PostToolUse hook 用 / 緊急時手動用）
+# =============================================================================
+#
+#  ⚠️  通常運用は GitHub Actions による自動デプロイです。
+#  ⚠️  main へ push すれば自動的に Xserver へ配信されます。
+#  ⚠️  詳細: docs/DEPLOY_AUTOMATION.md
+#
+#  本スクリプトは:
+#    1. Claude PostToolUse hook から stdin 経由で呼ばれる用途
+#    2. Actions が壊れている等の緊急時の手動デプロイ用途
+#  のために残しています。
+#
+#  ⚠️  手動で叩く前には必ず `git pull origin main` を実行してください。
+#  ⚠️  古い手元ファイルでサーバ側を上書きする事故を防ぐためです。
+#
+# =============================================================================
 # Claude PostToolUse hookから呼ばれる（stdin にツール入力JSON）
 #
 # 必要な環境変数（ローカルの .env.local で管理し、source しておくこと）:
@@ -22,6 +38,7 @@ if echo "$INPUT" | grep -q "hayazai_website"; then
   rsync -az --delete \
     --exclude '.DS_Store' \
     --exclude '.git/' \
+    --exclude '.github/' \
     --exclude '*.md' \
     --exclude 'CLAUDE.md' \
     --exclude 'deploy.sh' \
