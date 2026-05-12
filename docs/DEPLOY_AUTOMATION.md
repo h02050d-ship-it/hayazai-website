@@ -78,7 +78,58 @@ cat ~/.ssh/xserver_hayazai | clip
 - BEGIN / END 行を欠かさないこと。
 - 余計なインデント・先頭スペースを付けない。
 
-## 動作確認手順
+## Secrets 登録後の動作確認チェックリスト（ユーザー作業）
+
+5 件の Secrets を登録した直後に、以下の順で必ず確認してください。
+
+### Step 1. Secrets 5 件が揃っているか目視確認
+
+<https://github.com/h02050d-ship-it/hayazai-website/settings/secrets/actions>
+
+「Repository secrets」のリストに以下 5 件があること（値は表示されないが Name のみ確認できる）:
+
+- [ ] `XSERVER_HOST`
+- [ ] `XSERVER_USER`
+- [ ] `XSERVER_PORT`
+- [ ] `XSERVER_PATH`
+- [ ] `XSERVER_SSH_KEY`
+
+### Step 2. 手動で workflow_dispatch 実行
+
+<https://github.com/h02050d-ship-it/hayazai-website/actions/workflows/deploy-xserver.yml>
+
+1. 右上の **「Run workflow」** ボタンをクリック
+2. Branch: `main` を選んで **「Run workflow」**
+3. 数十秒で新しいジョブが出現
+
+### Step 3. ジョブのログを確認
+
+- **Deploy banner** ステップ: `🚀 Deploy started from commit ...` が表示される
+- **Verify required secrets are present** ステップ: `✅ All 5 required secrets are present.` が表示される
+  - もし `::error title=Missing secrets` が出たら → どの Secret が NO になっているか確認して再登録
+- **Setup SSH key & known_hosts**: エラーなく完了
+- **Deploy via rsync**: 転送リストが流れる
+- **Verify deployment (HTTP 200)**: `https://hayazai.com/ -> HTTP 200`
+
+### Step 4. ブラウザで本番確認
+
+```bash
+curl -sI https://hayazai.com/ | head -1
+# 期待: HTTP/2 200
+```
+
+### Step 5. 自動トリガーを試す（オプション）
+
+何か無害な変更（コメント追加など）を main に push:
+
+```bash
+git commit --allow-empty -m "chore: trigger auto-deploy smoke test"
+git push origin main
+```
+
+→ Actions タブに新しいジョブが自動起動するはず。
+
+## 動作確認手順（一般）
 
 ### 自動デプロイの確認
 
@@ -139,15 +190,36 @@ https://github.com/h02050d-ship-it/hayazai-website/actions
 
 ### 3. 緊急時のみ：手動デプロイ
 
-`deploy.sh` を使う場合は **必ず最新の main を pull してから**:
+`deploy.sh` は強制ガード付きで、フラグ無しで叩くとエラー終了します。
 
 ```bash
-cd /c/Users/hayaz/AppData/Local/Temp/hayazai_fix/hayazai-website
-git pull origin main
+# まずリポジトリのルートで実行
 bash deploy.sh
+# → ⛔ 手動デプロイは原則禁止です ... と表示されて exit 1
 ```
 
-手動デプロイ後は **Actions の最新の自動デプロイ結果と整合しているか確認**してください。古い手元ファイルで自動デプロイ後の状態を上書きしないこと。
+緊急時に本当に必要な場合のみ:
+
+```bash
+# 1. 環境変数を source
+source .env.local   # SSH_HOST / SSH_USER / SSH_PORT / SSH_KEY を含むこと
+
+# 2. dry-run で確認
+bash deploy.sh --i-know-what-im-doing --dry-run
+
+# 3. 問題なければ本番
+bash deploy.sh --i-know-what-im-doing
+```
+
+スクリプト内部で以下を強制チェックします:
+
+1. `git fetch && git pull --ff-only origin main` で最新化
+2. 未コミット変更が無いこと
+3. ローカル HEAD が `origin/main` と完全一致
+
+いずれか NG なら即 exit 1。**古いローカルでの上書き事故を物理的に防ぎます。**
+
+手動デプロイ後は **Actions の最新の自動デプロイ結果と整合しているか必ず確認**してください。
 
 ## セキュリティ
 

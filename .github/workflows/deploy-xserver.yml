@@ -20,6 +20,39 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: Deploy banner
+        run: |
+          echo "::notice title=Deploy::🚀 Deploy started from commit ${{ github.sha }} on ${{ github.ref_name }} by ${{ github.actor }}"
+          echo "Trigger: ${{ github.event_name }}"
+          echo "Commit:  ${{ github.sha }}"
+          echo "Actor:   ${{ github.actor }}"
+          echo "Ref:     ${{ github.ref }}"
+
+      - name: Verify required secrets are present
+        run: |
+          MISSING=0
+          for var in XSERVER_HOST XSERVER_USER XSERVER_PORT XSERVER_PATH XSERVER_SSH_KEY; do
+            # GitHub Actions では secrets を直接 shell から見られないため
+            # ここでは事前展開された env で空文字判定する
+            :
+          done
+          if [ -z "${HOST}" ] || [ -z "${USER}" ] || [ -z "${PORT}" ] || [ -z "${REMOTE_PATH}" ] || [ -z "${SSH_KEY}" ]; then
+            echo "::error title=Missing secrets::必要な Secrets が登録されていません。docs/DEPLOY_AUTOMATION.md を参照して XSERVER_HOST / XSERVER_USER / XSERVER_PORT / XSERVER_PATH / XSERVER_SSH_KEY を登録してください。"
+            echo "  XSERVER_HOST set: $([ -n "$HOST" ] && echo yes || echo NO)"
+            echo "  XSERVER_USER set: $([ -n "$USER" ] && echo yes || echo NO)"
+            echo "  XSERVER_PORT set: $([ -n "$PORT" ] && echo yes || echo NO)"
+            echo "  XSERVER_PATH set: $([ -n "$REMOTE_PATH" ] && echo yes || echo NO)"
+            echo "  XSERVER_SSH_KEY set: $([ -n "$SSH_KEY" ] && echo yes || echo NO)"
+            exit 1
+          fi
+          echo "✅ All 5 required secrets are present."
+        env:
+          HOST: ${{ secrets.XSERVER_HOST }}
+          USER: ${{ secrets.XSERVER_USER }}
+          PORT: ${{ secrets.XSERVER_PORT }}
+          REMOTE_PATH: ${{ secrets.XSERVER_PATH }}
+          SSH_KEY: ${{ secrets.XSERVER_SSH_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
