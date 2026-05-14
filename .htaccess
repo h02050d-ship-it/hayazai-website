@@ -44,6 +44,23 @@
   RewriteRule ^blog/company\.html$ /company.html [R=301,L]
   RewriteRule ^blog/sample\.html$ /sample.html [R=301,L]
 
+  # /xxx/（末尾スラッシュ）→ /xxx.html へ301
+  # 既存の .html ページが存在するパス全てに対して
+  RewriteRule ^products/?$ /products.html [R=301,L]
+  RewriteRule ^product/?$ /product.html [R=301,L]
+  RewriteRule ^gallery/?$ /gallery.html [R=301,L]
+  RewriteRule ^faq/?$ /faq.html [R=301,L]
+  RewriteRule ^blog/?$ /blog.html [R=301,L]
+  RewriteRule ^order/?$ /order.html [R=301,L]
+  RewriteRule ^markets/?$ /markets.html [R=301,L]
+  RewriteRule ^contact/?$ /contact.html [R=301,L]
+  RewriteRule ^sample/?$ /sample.html [R=301,L]
+  RewriteRule ^shipping/?$ /shipping.html [R=301,L]
+  RewriteRule ^company/?$ /company.html [R=301,L]
+  RewriteRule ^tokushoho/?$ /tokushoho.html [R=301,L]
+  RewriteRule ^privacy/?$ /privacy.html [R=301,L]
+  RewriteRule ^cart/?$ /cart.html [R=301,L]
+
   # 旧WP残骸 → 410 Gone（インデックスから速やかに除外させる）
   RewriteRule ^category/.*$ - [G,L]
   RewriteRule ^[0-9]+/?$ - [G,L]
