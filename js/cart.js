@@ -5,6 +5,11 @@
 
 const CART_KEY = 'hayazai_cart';
 
+// Yahoo価格は「税込」表示。HP税込 = Yahoo税込 × 0.95、100円単位四捨五入
+function hpPriceIncTax(yahooIncTax) {
+  return Math.round(yahooIncTax * 0.95 / 100) * 100;
+}
+
 // ---------- カートデータ操作 ----------
 
 function getCart() {
@@ -33,7 +38,7 @@ function addToCart(productId, qty = 1) {
     cart.push({
       id:    product.id,
       name:  product.name,
-      price: product.price,
+      price: hpPriceIncTax(product.price),
       img:   product.img,
       qty:   qty,
     });

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>商品詳細 | 林材木店</title>
-  <meta name="description" content="国産無垢桧フローリング・羽目板の商品詳細ページ。">
+  <meta name="description" content="国産無垢桧フローリング・羽目板の詳細スペック・価格・サンプル請求はこちら。創業昭和43年、自社工場で天然乾燥・超仕上げ。">
   <!-- Canonical -->
   <link rel="canonical" href="https://hayazai.com/product.html">
 
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="株式会社林材木店">
   <meta property="og:title" content="商品詳細 | 林材木店">
-  <meta property="og:description" content="国産無垢桧フローリング・羽目板の商品詳細ページ。">
+  <meta property="og:description" content="国産無垢桧フローリング・羽目板の詳細スペック・価格・サンプル請求はこちら。創業昭和43年、自社工場で天然乾燥・超仕上げ。">
   <meta property="og:url" content="https://hayazai.com/product.html">
   <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
   <meta property="og:locale" content="ja_JP">
@@ -20,7 +20,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="商品詳細 | 林材木店">
-  <meta name="twitter:description" content="国産無垢桧フローリング・羽目板の商品詳細ページ。">
+  <meta name="twitter:description" content="国産無垢桧フローリング・羽目板の詳細スペック・価格・サンプル請求はこちら。創業昭和43年、自社工場で天然乾燥・超仕上げ。">
   <meta name="twitter:image" content="https://hayazai.com/images/og/og-image.jpg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -287,6 +287,15 @@ function changeDetailQty(delta) {
 
 let currentProduct = null;
 
+// Yahoo価格は「税込」表示。HP税込 = Yahoo税込 × 0.95、100円単位四捨五入
+function hpPriceIncTax(yahooIncTax) {
+  return Math.round(yahooIncTax * 0.95 / 100) * 100;
+}
+// 税抜価格 = 税込 ÷ 1.10、100円単位四捨五入
+function exclTax(incTax) {
+  return Math.round(incTax / 1.10 / 100) * 100;
+}
+
 function addDetailToCart() {
   if (!currentProduct || currentProduct.outOfStock) return;
   const qty = parseInt(document.getElementById('detail-qty').value) || 1;
@@ -319,7 +328,7 @@ function initProduct() {
     "brand": { "@type": "Brand", "name": "林材木店" },
     "offers": {
       "@type": "Offer",
-      "price": p.price,
+      "price": hpPriceIncTax(p.price),
       "priceCurrency": "JPY",
       "availability": p.outOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "林材木店" }
@@ -369,9 +378,11 @@ function initProduct() {
       `<strong>${qd.label}について：</strong>${qd.desc}`;
   }
 
-  // 価格
-  document.getElementById('product-price').textContent =
-    `¥${p.price.toLocaleString()}`;
+  // 価格（Yahoo価格×0.95、税込メイン/税抜カッコ）
+  const inc = hpPriceIncTax(p.price);
+  const ex = exclTax(inc);
+  document.getElementById('product-price').innerHTML =
+    `¥${inc.toLocaleString()}<small style="display:block;font-size:0.7rem;font-weight:400;color:var(--text-light);margin-top:4px;">（税抜 ¥${ex.toLocaleString()}）</small>`;
 
   // 在庫なし
   if (p.outOfStock) {
@@ -398,7 +409,7 @@ function initProduct() {
         </div>
         <div class="product-card-name">${r.name}</div>
         <div class="product-card-spec">${r.thick}×${r.width}×${r.length}mm / ${r.qty}枚</div>
-        <div class="product-card-price">¥${r.price.toLocaleString()} <span>（税込）</span></div>
+        <div class="product-card-price">¥${hpPriceIncTax(r.price).toLocaleString()} <span>（税込）</span></div>
         <div class="product-card-actions">
           <a href="product.html?id=${r.id}" class="btn btn-outline btn-sm">詳細</a>
           <button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}');this.textContent='追加済';">カートへ</button>
@@ -427,7 +438,7 @@ function initProduct() {
           </div>
           <div class="product-card-name">${r.name}</div>
           <div class="product-card-spec">${r.thick}×${r.width}×${r.length}mm / ${r.qty}枚</div>
-          <div class="product-card-price">¥${r.price.toLocaleString()} <span>（税込）</span></div>
+          <div class="product-card-price">¥${hpPriceIncTax(r.price).toLocaleString()} <span>（税込）</span></div>
           <div class="product-card-actions">
             <a href="product.html?id=${r.id}" class="btn btn-outline btn-sm">詳細</a>
             <button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}');this.textContent='追加済';">カートへ</button>
@@ -456,7 +467,7 @@ function calcQty() {
   // 必要セット数（切り上げ）
   const sets = Math.ceil(needed / setArea);
   const totalSheets = sets * p.qty;
-  const totalPrice = sets * p.price;
+  const totalPrice = sets * hpPriceIncTax(p.price);
   const totalArea = (setArea * sets).toFixed(2);
 
   const result = document.getElementById('calc-result');
