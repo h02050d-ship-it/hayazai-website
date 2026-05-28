@@ -98,8 +98,11 @@ async function fetchAllItems(appid) {
 
     for (const h of hits) {
       // Yahoo V3 形式: code（商品コード）, price, name, url
-      const code = h.code || (h.janCode ? String(h.janCode) : null);
+      // code は "hayazaimuku_ff15108950a" 形式。store prefix を除去して
+      // ローカル products.js の id（例: "ff15108950a"）と突合できるようにする。
+      let code = h.code || (h.janCode ? String(h.janCode) : null);
       if (!code) continue;
+      code = code.replace(new RegExp('^' + SELLER_ID + '_'), '');
       const priceRaw = h.price;
       const price = (typeof priceRaw === 'number') ? priceRaw : parseInt(priceRaw, 10);
       if (!Number.isFinite(price)) continue;
