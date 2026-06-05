@@ -164,10 +164,9 @@ foreach ($payload['events'] as $ev) {
     if (!$userId || !$replyToken) continue;
 
     // ---- フォロー（友だち追加）----
+    // あいさつは LINE公式アカウントの「あいさつメッセージ」機能に任せる（二重送信防止）。
+    // ここでは何も返信しない。
     if ($type === 'follow') {
-        replyMessages($replyToken, [
-            textMsg("友だち追加ありがとうございます！🌲\n無垢桧フローリング・羽目板の林材木店です。\n下のメニュー「見積もり依頼」からお気軽にどうぞ。")
-        ], $ACCESS_TOKEN);
         continue;
     }
 
