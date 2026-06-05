@@ -19,7 +19,7 @@ function renderHeader() {
         <a href="/order.html">お見積もり</a>
         <a href="/markets.html">取引市場一覧</a>
         <a href="/contact.html">お問い合わせ</a>
-        <a href="https://lin.ee/tGamtbg" target="_blank" rel="noopener" class="nav-line-link" aria-label="LINEで相談">
+        <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" class="nav-line-link" aria-label="LINEで相談">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.76 2 11.4c0 2.93 1.97 5.5 4.94 6.96-.18 1.05-.71 3-.81 3.47-.12.59.22.59.46.43.19-.12 3.04-2.07 4.27-2.92.37.05.74.07 1.14.07 5.52 0 10-3.76 10-8.4S17.52 3 12 3z"/></svg>
           LINEで相談
         </a>
@@ -44,7 +44,7 @@ function renderHeader() {
       <a href="/order.html">お見積もり</a>
       <a href="/markets.html">取引市場一覧</a>
       <a href="/contact.html">お問い合わせ</a>
-      <a href="https://lin.ee/tGamtbg" target="_blank" rel="noopener" class="mobile-line-link">💬 LINEで相談</a>
+      <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" class="mobile-line-link">💬 LINEで相談</a>
       <a href="/sample.html">無料サンプル請求</a>
     </div>
   </div>`;
@@ -68,7 +68,7 @@ function renderFooter() {
           <div class="footer-contact">
             <a href="tel:0538582395">📞 0538-58-2395（平日 9:00〜17:00）</a>
             <a href="mailto:info@hayazai.com">✉ info@hayazai.com</a>
-            <a href="https://lin.ee/tGamtbg" target="_blank" rel="noopener">💬 LINEで相談（友だち追加）</a>
+            <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener">💬 LINEで相談（友だち追加）</a>
           </div>
         </div>
         <div class="footer-nav">
@@ -115,14 +115,21 @@ function renderFooter() {
 
 function renderFloatingLineButton() {
   const html = `
-  <a href="https://lin.ee/tGamtbg" target="_blank" rel="noopener"
-     class="floating-line-btn" aria-label="LINEで友だち追加・相談">
-    <svg viewBox="0 0 24 24" width="26" height="26" fill="#fff" aria-hidden="true">
-      <path d="M12 3C6.48 3 2 6.76 2 11.4c0 2.93 1.97 5.5 4.94 6.96-.18 1.05-.71 3-.81 3.47-.12.59.22.59.46.43.19-.12 3.04-2.07 4.27-2.92.37.05.74.07 1.14.07 5.52 0 10-3.76 10-8.4S17.52 3 12 3z"/>
-    </svg>
-    <span class="floating-line-label">LINEで<br>相談</span>
+  <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener"
+     class="floating-line-banner" aria-label="LINEで友だち追加・相談">
+    <span class="flb-badge">無料相談OK</span>
+    <span class="flb-icon">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff" aria-hidden="true">
+        <path d="M12 3C6.48 3 2 6.76 2 11.4c0 2.93 1.97 5.5 4.94 6.96-.18 1.05-.71 3-.81 3.47-.12.59.22.59.46.43.19-.12 3.04-2.07 4.27-2.92.37.05.74.07 1.14.07 5.52 0 10-3.76 10-8.4S17.52 3 12 3z"/>
+      </svg>
+    </span>
+    <span class="flb-copy">桧のこと<br>何でも<br>ご相談</span>
+    <span class="flb-cta">友だち追加 ›</span>
+    <button class="flb-close" aria-label="閉じる" onclick="event.preventDefault();event.stopPropagation();this.closest('.floating-line-banner').style.display='none';sessionStorage.setItem('flb_hidden','1');">×</button>
   </a>`;
-  document.body.insertAdjacentHTML('beforeend', html);
+  if (sessionStorage.getItem('flb_hidden') !== '1') {
+    document.body.insertAdjacentHTML('beforeend', html);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
