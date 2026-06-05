@@ -70,6 +70,24 @@ jobs:
             echo "scripts/build-gallery.js not found - skipping"
           fi
 
+      - name: Generate LINE bot config (from Secrets, not committed)
+        env:
+          LINE_CHANNEL_SECRET: ${{ secrets.LINE_CHANNEL_SECRET }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+        run: |
+          mkdir -p line/state
+          {
+            echo '<?php'
+            echo '// 自動生成（GitHub Actions）: 編集しない。値は GitHub Secrets で管理。'
+            echo 'return ['
+            printf "    'channel_secret'       => '%s',\n" "$LINE_CHANNEL_SECRET"
+            printf "    'channel_access_token' => '%s',\n" "$LINE_CHANNEL_ACCESS_TOKEN"
+            echo "    'staff_email'          => 'info@hayazai.com',"
+            echo "    'from_email'           => 'info@hayazai.com',"
+            echo '];'
+          } > line/config.php
+          echo "Generated line/config.php (secret set: $([ -n "$LINE_CHANNEL_SECRET" ] && echo yes || echo NO))"
+
       - name: Setup SSH key & known_hosts
         run: |
           mkdir -p ~/.ssh
@@ -102,6 +120,8 @@ jobs:
             --exclude='Thumbs.db' \
             --exclude='data/products.js.NEW*.draft' \
             --exclude='data/*.draft' \
+            --exclude='line/config.sample.php' \
+            --exclude='line/state/*.json' \
             -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.XSERVER_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=~/.ssh/known_hosts" \
             ./ "${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ secrets.XSERVER_PATH }}"
 

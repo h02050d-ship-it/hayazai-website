@@ -3,3 +3,7 @@
 .env
 .env.*
 !.env.example
+
+# LINE bot (公開リポジトリのため秘密情報と状態は除外)
+line/config.php
+line/state/*.json
