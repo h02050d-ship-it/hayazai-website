@@ -1450,3 +1450,68 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
   .hero-scroll { animation: none !important; }
 }
 
+
+/* ===== 公式LINE ===== */
+/* ヘッダーナビ LINEリンク */
+.nav-line-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #06C755;
+  color: #fff !important;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  transition: background 0.2s;
+}
+.nav-line-link:hover { background: #04a247; }
+
+/* モバイルナビ LINEリンク */
+.mobile-line-link {
+  background: #06C755;
+  color: #fff !important;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* 右下フローティングLINEボタン */
+.floating-line-btn {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 64px;
+  height: 64px;
+  background: #06C755;
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  text-decoration: none;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.floating-line-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.24);
+}
+.floating-line-label {
+  font-size: 0.52rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  margin-top: 1px;
+}
+@media (max-width: 480px) {
+  .floating-line-btn {
+    right: 14px;
+    bottom: 14px;
+    width: 56px;
+    height: 56px;
+  }
+  .floating-line-label { font-size: 0.48rem; }
+}
