@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工務店・建築会社様へ｜法人取引・大量ロット価格 | 林材木店</title>
+  <meta name="description" content="工務店・建築会社・リフォーム業者様向けの法人取引ページ。大量ロット割引（5束以上3%〜）、掛売り（月末締め）対応、最長4000mm長尺・大型車現場直送。自社工場直販の国産無垢桧フローリング・羽目板。">
+  <link rel="canonical" href="https://hayazai.com/business.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="株式会社林材木店">
+  <meta property="og:title" content="工務店・建築会社様へ｜法人取引・大量ロット価格 | 林材木店">
+  <meta property="og:description" content="工務店・建築会社・リフォーム業者様向け。大量ロット割引・掛売り対応・4000mm長尺・現場直送に対応した国産無垢桧フローリング・羽目板の自社工場直販。">
+  <meta property="og:url" content="https://hayazai.com/business.html">
+  <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
+  <meta property="og:locale" content="ja_JP">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="工務店・建築会社様へ｜法人取引 | 林材木店">
+  <meta name="twitter:description" content="大量ロット割引・掛売り・現場直送に対応した自社工場直販の国産無垢桧フローリング・羽目板。">
+  <meta name="twitter:image" content="https://hayazai.com/images/og/og-image.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css?v=5">
+
+  <style>
+    .biz-hero {
+      background: linear-gradient(135deg, #3d2b1f 0%, #1a2a16 100%);
+      color: #fff;
+      padding: 64px 24px 56px;
+      text-align: center;
+    }
+    .biz-hero-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      color: rgba(240,217,190,0.7);
+      margin-bottom: 14px;
+    }
+    .biz-hero h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(1.6rem, 4.2vw, 2.6rem);
+      color: #fff;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 18px;
+    }
+    .biz-hero h1 em {
+      font-style: normal;
+      color: #f0d9be;
+    }
+    .biz-hero p {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: rgba(255,255,255,0.82);
+      max-width: 640px;
+      margin: 0 auto 28px;
+    }
+    .biz-hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .biz-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 24px;
+    }
+    .biz-section h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+      color: var(--wood-dark);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .biz-section-sub {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.88rem;
+      margin-bottom: 36px;
+    }
+
+    /* 3つの強み */
+    .biz-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .biz-pillar {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 10px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .biz-pillar-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--wood-pale, #f5f0e8);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .biz-pillar h3 {
+      font-size: 1rem;
+      color: var(--wood-dark);
+      margin-bottom: 8px;
+    }
+    .biz-pillar p {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+    @media (max-width: 768px) {
+      .biz-pillars { grid-template-columns: 1fr; }
+    }
+
+    /* ロット価格表 */
+    .lot-table-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+    .lot-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .lot-table th {
+      background: var(--wood-dark);
+      color: #fff;
+      padding: 14px 18px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .lot-table td {
+      padding: 16px 18px;
+      text-align: center;
+      border-bottom: 1px solid #ede4d8;
+      font-size: 0.92rem;
+    }
+    .lot-table tr:last-child td { border-bottom: none; }
+    .lot-table tr.highlight {
+      background: #fff8e8;
+    }
+    .lot-discount {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+    }
+    .lot-note {
+      max-width: 800px;
+      margin: 18px auto 0;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* 比較表 */
+    .compare-table {
+      max-width: 760px;
+      margin: 0 auto;
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .compare-table th, .compare-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #ede4d8;
+      font-size: 0.88rem;
+    }
+    .compare-table thead th {
+      background: var(--wood-dark);
+      color: #fff;
+      font-weight: 600;
+      text-align: center;
+    }
+    .compare-table .feat { font-weight: 600; color: var(--wood-dark); width: 30%; }
+    .compare-table .indiv { color: var(--text-mid); width: 35%; }
+    .compare-table .biz { background: #fff8e8; color: var(--wood-dark); font-weight: 600; width: 35%; }
+    .compare-table tr:last-child td { border-bottom: none; }
+
+    /* 取引の流れ */
+    .biz-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      counter-reset: flow;
+    }
+    .biz-flow-step {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 8px;
+      padding: 22px 18px;
+      position: relative;
+      counter-increment: flow;
+    }
+    .biz-flow-step::before {
+      content: "STEP " counter(flow, decimal-leading-zero);
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--wood-mid);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .biz-flow-step h4 {
+      font-size: 0.95rem;
+      color: var(--wood-dark);
+      margin-bottom: 6px;
+    }
+    .biz-flow-step p {
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+    @media (max-width: 768px) {
+      .biz-flow { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .biz-flow { grid-template-columns: 1fr; }
+    }
+
+    /* 見積もりフォーム */
+    .biz-form-wrap {
+      background: #f5f0e8;
+      padding: 48px 24px;
+    }
+    .biz-form {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 32px 28px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .biz-form h2 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .biz-form .biz-section-sub { margin-bottom: 28px; }
+    .biz-form .form-group { margin-bottom: 18px; }
+    .biz-form .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--wood-dark);
+      margin-bottom: 6px;
+    }
+    .biz-form .form-label .req {
+      color: #c0392b;
+      font-size: 0.72rem;
+      margin-left: 6px;
+    }
+    .biz-form input, .biz-form select, .biz-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0bba0;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      background: #fff;
+    }
+    .biz-form textarea { min-height: 90px; resize: vertical; }
+    .biz-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 480px) {
+      .biz-form-row { grid-template-columns: 1fr; }
+    }
+    .biz-form-submit {
+      width: 100%;
+      background: var(--wood-dark);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: background 0.2s;
+    }
+    .biz-form-submit:hover { background: var(--wood-mid); }
+
+    /* FAQ */
+    .biz-faq details {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      padding: 0;
+    }
+    .biz-faq summary {
+      padding: 16px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--wood-dark);
+      font-size: 0.92rem;
+    }
+    .biz-faq details[open] summary { border-bottom: 1px solid #ede4d8; }
+    .biz-faq details p {
+      padding: 14px 20px;
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.85;
+      margin: 0;
+    }
+  </style>
+
+  <!-- Schema.org: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "トップ", "item": "https://hayazai.com/" },
+      { "@type": "ListItem", "position": 2, "name": "工務店・建築会社様へ", "item": "https://hayazai.com/business.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- ===== HERO ===== -->
+<section class="biz-hero">
+  <p class="biz-hero-label">For Builders & Architects</p>
+  <h1>工務店・建築会社の皆様へ<br><em>大量ロット価格・掛売り・現場直送</em>でお応えします</h1>
+  <p>
+    昭和43年創業、自社工場で天然乾燥・超仕上げした国産無垢桧フローリング・羽目板を、
+    工務店・建築会社・リフォーム業者の皆様向けに法人特別条件で直販。
+    継続取引・大量ロット・長尺対応など、現場のニーズに合わせたご相談に応じます。
+  </p>
+  <div class="biz-hero-actions">
+    <a href="#estimate" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">見積もり依頼へ</a>
+    <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" class="btn btn-lg" style="background:#06C755;color:#fff;display:inline-flex;align-items:center;gap:6px;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.76 2 11.4c0 2.93 1.97 5.5 4.94 6.96-.18 1.05-.71 3-.81 3.47-.12.59.22.59.46.43.19-.12 3.04-2.07 4.27-2.92.37.05.74.07 1.14.07 5.52 0 10-3.76 10-8.4S17.52 3 12 3z"/></svg>
+      LINEで相談
+    </a>
+  </div>
+</section>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <span>工務店・建築会社様へ</span>
+</nav>
+
+<!-- ===== 3本柱 ===== -->
+<section class="biz-section">
+  <p class="biz-hero-label" style="color:var(--text-light);text-align:center;">Our Strengths</p>
+  <h2>法人取引・3つのメリット</h2>
+  <p class="biz-section-sub">他社で対応の薄い「3つの課題」に正面から応えます。</p>
+  <div class="biz-pillars">
+    <div class="biz-pillar">
+      <div class="biz-pillar-icon">
+        <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="#7a5c3e" stroke-width="2">
+          <path d="M8 12h24v20H8z"/>
+          <path d="M12 18h16M12 22h16M12 26h10"/>
+        </svg>
+      </div>
+      <h3>大量ロット割引</h3>
+      <p>5束以上から数量割引を適用。継続取引・大型案件は別途特別価格にて対応します。</p>
+    </div>
+    <div class="biz-pillar">
+      <div class="biz-pillar-icon">
+        <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="#7a5c3e" stroke-width="2">
+          <rect x="6" y="10" width="28" height="20" rx="2"/>
+          <path d="M6 16h28M14 22h6M14 26h12"/>
+        </svg>
+      </div>
+      <h3>掛売り・月末締め</h3>
+      <p>初回お取引後の信用評価により、請求書・月末締め払いに対応可能。事務手間を最小化します。</p>
+    </div>
+    <div class="biz-pillar">
+      <div class="biz-pillar-icon">
+        <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="#7a5c3e" stroke-width="2">
+          <rect x="4" y="16" width="22" height="12" rx="1"/>
+          <path d="M26 20h6l4 4v4h-10"/>
+          <circle cx="10" cy="30" r="2"/>
+          <circle cx="30" cy="30" r="2"/>
+        </svg>
+      </div>
+      <h3>最長4000mm・現場直送</h3>
+      <p>長尺材も大型車・路線便で対応。複数現場への分納、フォークリフト要否などもご相談ください。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ロット価格表 ===== -->
+<section class="biz-section" style="background:#faf5ef;border-radius:14px;">
+  <p class="biz-hero-label" style="color:var(--text-light);text-align:center;">Volume Discount</p>
+  <h2>大量ロット割引価格</h2>
+  <p class="biz-section-sub">商品ページに掲載の通常価格から、ご注文数に応じて以下の割引を適用します。</p>
+  <div class="lot-table-wrap">
+    <table class="lot-table">
+      <thead>
+        <tr>
+          <th>ご注文ロット</th>
+          <th>割引率</th>
+          <th>主な対象</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>5束以上</td>
+          <td><span class="lot-discount">3%</span> OFF</td>
+          <td>小規模リフォーム・現場補修</td>
+        </tr>
+        <tr>
+          <td>10束以上</td>
+          <td><span class="lot-discount">5%</span> OFF</td>
+          <td>戸建て一室〜複数室分</td>
+        </tr>
+        <tr class="highlight">
+          <td>20束以上</td>
+          <td><span class="lot-discount">8%</span> OFF</td>
+          <td>戸建て1棟分・中規模物件</td>
+        </tr>
+        <tr>
+          <td>50束以上</td>
+          <td><span class="lot-discount">別途見積もり</span></td>
+          <td>大型物件・継続取引</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="lot-note">
+    ※ 同一商品でのご注文束数が対象。複数SKUを組み合わせる場合は合計束数で判定します。<br>
+    ※ Yahoo!ショッピング店・楽天市場店経由のご注文は対象外です。本ページの見積もり依頼または直接お電話・LINEでのご相談に限ります。<br>
+    ※ 表示価格はすべて税抜です。送料・決済条件は別途。
+  </p>
+</section>
+
+<!-- ===== 個人 vs 法人 ===== -->
+<section class="biz-section">
+  <p class="biz-hero-label" style="color:var(--text-light);text-align:center;">Comparison</p>
+  <h2>個人購入と法人取引の違い</h2>
+  <p class="biz-section-sub">本ページ経由のお取引では、法人様向け条件をご利用いただけます。</p>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>個人購入</th>
+        <th>法人取引（本ページ）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="feat">価格</td><td class="indiv">商品ページ価格</td><td class="biz">5束以上で 3〜8% OFF</td></tr>
+      <tr><td class="feat">お支払い</td><td class="indiv">銀行振込（前払い）</td><td class="biz">掛売り（月末締め・要審査）可</td></tr>
+      <tr><td class="feat">対応サイズ</td><td class="indiv">標準サイズ</td><td class="biz">最長4000mm・カスタム相談</td></tr>
+      <tr><td class="feat">配送</td><td class="indiv">西濃運輸・佐川急便</td><td class="biz">大型車・現場直送・分納対応</td></tr>
+      <tr><td class="feat">継続取引</td><td class="indiv">都度発注</td><td class="biz">専用窓口・優先在庫確保</td></tr>
+      <tr><td class="feat">見積もり</td><td class="indiv">送料計算ツールで概算</td><td class="biz">最短当日対応・案件単位</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== 取引の流れ ===== -->
+<section class="biz-section" style="background:#faf5ef;border-radius:14px;">
+  <p class="biz-hero-label" style="color:var(--text-light);text-align:center;">Flow</p>
+  <h2>お取引の流れ</h2>
+  <p class="biz-section-sub">初回ご相談から納品まで、最短数日でお応えします。</p>
+  <div class="biz-flow">
+    <div class="biz-flow-step">
+      <h4>お問い合わせ</h4>
+      <p>フォーム・電話・LINEから、ご希望の商品・数量・現場情報をお知らせください。</p>
+    </div>
+    <div class="biz-flow-step">
+      <h4>お見積もり</h4>
+      <p>最短当日中に、ロット割引適用後の価格・送料・納期をご回答します。</p>
+    </div>
+    <div class="biz-flow-step">
+      <h4>ご注文・決済</h4>
+      <p>初回は銀行振込、2回目以降は掛売り（月末締め）もご相談可能です。</p>
+    </div>
+    <div class="biz-flow-step">
+      <h4>製造・発送</h4>
+      <p>ご入金または受注確定後、自社工場から最短2〜5営業日で発送します。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="biz-section">
+  <p class="biz-hero-label" style="color:var(--text-light);text-align:center;">FAQ</p>
+  <h2>よくあるご質問（法人取引）</h2>
+  <div class="biz-faq" style="max-width:760px;margin:32px auto 0;">
+    <details>
+      <summary>初回から掛売り（月末締め）は可能ですか？</summary>
+      <p>原則、初回お取引は銀行振込（前払い）でお願いしております。2回目以降、信用評価のうえ月末締めなどの掛売りに切り替え可能です。継続取引の見込みが大きい場合は、初回からのご相談にも応じます。お気軽にお問い合わせください。</p>
+    </details>
+    <details>
+      <summary>4000mm長尺材を現場直送してもらえますか？</summary>
+      <p>はい、対応可能です。西濃運輸の大型車（路線便）または佐川急便でお届けします。フォークリフトの要否、荷下ろし条件、複数現場への分納などもご相談ください。地域・物量によっては別途料金が発生する場合があります。</p>
+    </details>
+    <details>
+      <summary>Yahoo!ショッピング・楽天で注文しても割引は適用されますか？</summary>
+      <p>申し訳ありませんが、Yahoo!ショッピング店・楽天市場店経由のご注文は本ページの割引対象外です。法人特別条件をご希望の場合は、本ページの見積もりフォーム・お電話（0538-58-2395）・LINEのいずれかからお申し付けください。</p>
+    </details>
+    <details>
+      <summary>カスタム加工・特注サイズには対応できますか？</summary>
+      <p>幅・厚み・長さのカスタム加工、面取り、加工色の調整など、可能な範囲でご相談に応じます。物量・仕様により対応可否と納期が変わりますので、まずはお問い合わせください。</p>
+    </details>
+    <details>
+      <summary>サンプル材はもらえますか？</summary>
+      <p>はい、法人様にも無料サンプルをお送りします。<a href="sample.html">サンプル請求ページ</a>からお申し込みください。グレード比較（節有・小節・特上小・無節）が一度にご確認いただけます。</p>
+    </details>
+  </div>
+</section>
+
+<!-- ===== 見積もりフォーム ===== -->
+<section class="biz-form-wrap" id="estimate">
+  <div class="biz-form">
+    <p class="biz-hero-label" style="color:var(--text-light);text-align:center;">Get a Quote</p>
+    <h2>法人見積もり依頼</h2>
+    <p class="biz-section-sub">最短当日中にご回答します（営業日 9:00〜17:00）。</p>
+    <form action="/contact" method="post">
+      <input type="hidden" name="type" value="quote">
+      <input type="hidden" name="source" value="business-page">
+
+      <div class="biz-form-row">
+        <div class="form-group">
+          <label class="form-label">ご担当者名 <span class="req">必須</span></label>
+          <input type="text" name="name" placeholder="山田 太郎" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">会社名 <span class="req">必須</span></label>
+          <input type="text" name="company" placeholder="株式会社○○工務店" required>
+        </div>
+      </div>
+
+      <div class="biz-form-row">
+        <div class="form-group">
+          <label class="form-label">業種 <span class="req">必須</span></label>
+          <select name="industry" required>
+            <option value="">選択してください</option>
+            <option value="builder">工務店・住宅会社</option>
+            <option value="architect">設計事務所・建築士</option>
+            <option value="reform">リフォーム業者</option>
+            <option value="contractor">ゼネコン・建設会社</option>
+            <option value="diy_shop">DIY販売店・小売</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">電話番号 <span class="req">必須</span></label>
+          <input type="tel" name="tel" placeholder="0538-58-2395" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">メールアドレス <span class="req">必須</span></label>
+        <input type="email" name="email" placeholder="info@example.com" required>
+      </div>
+
+      <div class="biz-form-row">
+        <div class="form-group">
+          <label class="form-label">ご希望の商品種別 <span class="req">必須</span></label>
+          <select name="product_type" required>
+            <option value="">選択してください</option>
+            <option value="flooring15">桧フローリング 15mm</option>
+            <option value="flooring12">桧フローリング 12mm</option>
+            <option value="panel">桧羽目板 12mm</option>
+            <option value="multiple">複数（次項で詳細記載）</option>
+            <option value="other">その他・カスタム</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">概算ご希望数量 <span class="req">必須</span></label>
+          <select name="quantity_range" required>
+            <option value="">選択してください</option>
+            <option value="1-4">1〜4束</option>
+            <option value="5-9">5〜9束</option>
+            <option value="10-19">10〜19束</option>
+            <option value="20-49">20〜49束</option>
+            <option value="50+">50束以上</option>
+            <option value="unknown">未定（相談したい）</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">納期希望・現場所在地・その他ご要望</label>
+        <textarea name="message" placeholder="例：◯月◯日までに○○県へ現場直送希望／フォークリフトあり／4000mm長尺で見積もり希望、など"></textarea>
+      </div>
+
+      <button type="submit" class="biz-form-submit">見積もりを依頼する</button>
+
+      <p style="font-size:0.74rem;color:var(--text-light);margin-top:14px;text-align:center;line-height:1.7;">
+        通常1営業日以内にご返答します。<br>
+        お急ぎの場合は <a href="tel:0538582395" style="color:var(--wood-mid);font-weight:600;">📞 0538-58-2395</a> または
+        <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" style="color:#06C755;font-weight:600;">LINEで相談</a> をご利用ください。
+      </p>
+    </form>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="js/components.js?v=5"></script>
+</body>
+</html>
