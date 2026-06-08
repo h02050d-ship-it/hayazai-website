@@ -1455,18 +1455,13 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 .nav-biz-link {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   background: var(--wood-dark, #3d2b1f);
   color: #fff !important;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 4px;
   font-weight: 700;
   font-size: 0.82rem;
   transition: background 0.2s;
-}
-.nav-biz-link::before {
-  content: "🏢";
-  font-size: 0.85rem;
 }
 .nav-biz-link:hover { background: var(--wood-mid, #7a5c3e); }
 

@@ -39,7 +39,7 @@ function renderHeader() {
       <button class="mobile-nav-close" id="mobile-close">✕</button>
       <a href="/">トップ</a>
       <a href="/products.html">商品一覧</a>
-      <a href="/business.html">🏢 法人取引（工務店・建築会社様）</a>
+      <a href="/business.html">法人取引（工務店・建築会社様）</a>
       <a href="/gallery.html">施工事例</a>
       <a href="/faq.html">お悩み解決</a>
       <a href="/blog.html">ブログ</a>
@@ -86,7 +86,7 @@ function renderFooter() {
         <div class="footer-nav">
           <h4>情報・サポート</h4>
           <ul>
-            <li><a href="/business.html">🏢 法人取引（工務店・建築会社様）</a></li>
+            <li><a href="/business.html">法人取引（工務店・建築会社様）</a></li>
             <li><a href="/gallery.html">施工事例</a></li>
             <li><a href="/blog.html">ブログ・コラム</a></li>
             <li><a href="/faq.html">よくある質問</a></li>
