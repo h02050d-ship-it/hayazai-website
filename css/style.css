@@ -1451,19 +1451,7 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 }
 
 
-/* ===== 法人取引ナビリンク ===== */
-.nav-biz-link {
-  display: inline-flex;
-  align-items: center;
-  background: var(--wood-dark, #3d2b1f);
-  color: #fff !important;
-  padding: 6px 14px;
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 0.82rem;
-  transition: background 0.2s;
-}
-.nav-biz-link:hover { background: var(--wood-mid, #7a5c3e); }
+/* 法人取引ナビリンクは通常リンクと同じスタイル（強調しない方針） */
 
 /* ===== 公式LINE ===== */
 /* ヘッダーナビ LINEリンク */

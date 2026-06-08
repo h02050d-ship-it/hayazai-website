@@ -13,7 +13,7 @@ function renderHeader() {
       </a>
       <nav class="header-nav">
         <a href="/products.html">商品一覧</a>
-        <a href="/business.html" class="nav-biz-link">法人取引</a>
+        <a href="/business.html">法人取引</a>
         <a href="/gallery.html">施工事例</a>
         <a href="/faq.html">お悩み解決</a>
         <a href="/blog.html">ブログ</a>
