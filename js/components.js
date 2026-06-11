@@ -1,4 +1,36 @@
 // =====================================================
+// Google Analytics 4（全ページ共通・components.js経由で一括導入）
+// =====================================================
+(function () {
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-EQLK2295RN';
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', 'G-EQLK2295RN');
+
+  // LINEリンククリック計測
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href*="line.me"], a[href*="lin.ee"]');
+    if (a) gtag('event', 'line_click', { page_path: location.pathname });
+  });
+
+  // フォーム送信計測（type別: sample=サンプル請求 / quote=法人見積もり / その他=問い合わせ）
+  document.addEventListener('submit', function (e) {
+    var f = e.target;
+    if (!f || f.tagName !== 'FORM') return;
+    var typeInput = f.querySelector('input[name="type"], select[name="type"]');
+    var type = (typeInput && typeInput.value) || 'contact';
+    var eventName = type === 'sample' ? 'sample_request'
+                  : type === 'quote'  ? 'quote_request'
+                  : 'contact_submit';
+    gtag('event', eventName, { page_path: location.pathname });
+  });
+})();
+
+// =====================================================
 // 共通ヘッダー・フッター生成
 // =====================================================
 
