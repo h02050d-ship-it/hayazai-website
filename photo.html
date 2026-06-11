@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>施工写真ご提供のお願い | 林材木店</title>
+  <meta name="description" content="桧フローリング・羽目板の施工写真とご感想を募集しています。ご提供いただいた方に謝礼として300円分のポイントを進呈いたします。">
+  <link rel="canonical" href="https://hayazai.com/photo.html">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <style>
+    .photo-layout {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 28px 18px 80px;
+    }
+    .photo-lead {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .photo-lead img {
+      width: 100%;
+      max-width: 360px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+    .photo-lead h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.25rem;
+      color: var(--wood-dark);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .photo-lead p {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.9;
+    }
+    /* 3ステップ */
+    .photo-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 24px 0 28px;
+    }
+    .photo-step {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .photo-step .num {
+      display: inline-block;
+      width: 26px; height: 26px;
+      background: var(--wood-dark);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 26px;
+      margin-bottom: 8px;
+    }
+    .photo-step p {
+      font-size: 0.76rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin: 0;
+      font-weight: 600;
+    }
+    /* 謝礼ボックス */
+    .reward-box {
+      background: #fff8e8;
+      border: 2px solid #e8a000;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .reward-box .reward-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #b37000;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .reward-box .reward-main {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      line-height: 1.5;
+    }
+    .reward-box .reward-note {
+      font-size: 0.74rem;
+      color: var(--text-light);
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+    /* フォーム */
+    .photo-form {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 12px;
+      padding: 24px 20px;
+    }
+    .photo-form .form-group { margin-bottom: 18px; }
+    .photo-form .form-label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      margin-bottom: 6px;
+    }
+    .photo-form .form-label .req {
+      color: #c0392b;
+      font-size: 0.7rem;
+      margin-left: 6px;
+    }
+    .photo-form .form-label .opt {
+      color: var(--text-light);
+      font-size: 0.7rem;
+      font-weight: 400;
+      margin-left: 6px;
+    }
+    .photo-form input[type="text"],
+    .photo-form input[type="email"],
+    .photo-form select,
+    .photo-form textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d0bba0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      background: #fff;
+    }
+    .photo-form textarea { min-height: 100px; resize: vertical; }
+    .form-hint {
+      font-size: 0.74rem;
+      color: var(--text-light);
+      margin-top: 4px;
+      line-height: 1.6;
+    }
+    /* 写真アップロード */
+    .upload-area {
+      border: 2px dashed #d0bba0;
+      border-radius: 10px;
+      padding: 22px 14px;
+      text-align: center;
+      background: #fdfaf5;
+      cursor: pointer;
+    }
+    .upload-area:active { background: #f5ede0; }
+    .upload-area p { font-size: 0.85rem; color: var(--text-mid); margin: 0; line-height: 1.7; }
+    .upload-area .upload-icon { font-size: 1.6rem; margin-bottom: 4px; }
+    #photo-previews {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .preview-item { position: relative; }
+    .preview-item img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+    .preview-remove {
+      position: absolute;
+      top: -6px; right: -6px;
+      width: 24px; height: 24px;
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    /* 同意 */
+    .consent-box {
+      background: #faf5ef;
+      border: 1px solid #e8d8c4;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .consent-box summary {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      cursor: pointer;
+    }
+    .consent-box ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      line-height: 1.9;
+    }
+    .consent-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 12px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      cursor: pointer;
+    }
+    .consent-check input { width: 20px; height: 20px; margin-top: 1px; flex-shrink: 0; accent-color: var(--wood-mid); }
+    .photo-submit {
+      width: 100%;
+      background: var(--wood-dark);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+    }
+    .photo-submit:disabled { background: #ccc; cursor: not-allowed; }
+    .form-error {
+      background: #fdf0ee;
+      border: 1px solid #e74c3c;
+      color: #c0392b;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.84rem;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      display: none;
+    }
+    /* 完了画面 */
+    #thanks-view {
+      display: none;
+      text-align: center;
+      padding: 40px 16px;
+    }
+    #thanks-view h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.3rem;
+      color: var(--wood-dark);
+      margin-bottom: 14px;
+    }
+    #thanks-view p {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>施工写真ご提供のお願い</h1>
+  <p>あなたの「桧のある暮らし」を見せてください</p>
+</div>
+
+<div class="photo-layout">
+
+  <div id="form-view">
+
+    <div class="photo-lead">
+      <img src="images/ai/A06_lifestyle_family.webp" alt="桧の床のある暮らし" loading="lazy" decoding="async">
+      <h2>施工後のお写真とご感想を<br>募集しています</h2>
+      <p>
+        ご提供いただいた写真とご感想は、当店ホームページの施工事例やSNS等でご紹介し、
+        これから桧の床を検討される方の参考にさせていただきます。
+        スマホで撮影した写真で大丈夫です。
+      </p>
+    </div>
+
+    <div class="photo-steps">
+      <div class="photo-step"><span class="num">1</span><p>施工後の<br>お部屋を撮影</p></div>
+      <div class="photo-step"><span class="num">2</span><p>このページから<br>送信（約2分）</p></div>
+      <div class="photo-step"><span class="num">3</span><p>確認後、謝礼を<br>進呈します</p></div>
+    </div>
+
+    <div class="reward-box">
+      <p class="reward-title">🎁 ご提供への謝礼</p>
+      <p class="reward-main" id="reward-display">300円分のポイントを進呈</p>
+      <p class="reward-note">
+        進呈は商品到着後、ご提供内容の確認後となります。<br>
+        ご感想は率直な内容で構いません。内容の良し悪しは謝礼の条件ではありません。
+      </p>
+    </div>
+
+    <form class="photo-form" id="photo-form" novalidate>
+      <div class="form-error" id="form-error"></div>
+
+      <!-- honeypot -->
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true">
+
+      <div class="form-group">
+        <label class="form-label" for="f-name">お名前 <span class="req">必須</span></label>
+        <input type="text" id="f-name" name="name" autocomplete="name" placeholder="山田 太郎">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="f-email">メールアドレス <span class="req">必須</span></label>
+        <input type="email" id="f-email" name="email" autocomplete="email" placeholder="example@email.com" inputmode="email">
+        <p class="form-hint">謝礼のご案内をお送りします。お間違いのないようご入力ください。</p>
+      </div>
+
+      <div class="form-group" id="channel-group">
+        <label class="form-label" for="f-channel">ご購入店舗 <span class="req">必須</span></label>
+        <select id="f-channel" name="channel">
+          <option value="">選択してください</option>
+          <option value="rakuten">楽天市場店</option>
+          <option value="yahoo">Yahoo!ショッピング店</option>
+          <option value="own">公式サイト（hayazai.com）</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="f-order">ご注文番号 <span class="req">必須</span></label>
+        <input type="text" id="f-order" name="order_no" placeholder="ご購入時の注文番号" autocomplete="off">
+        <p class="form-hint">ご購入の確認に使用します。注文確認メールに記載されています。</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="f-place">施工箇所・使用商品 <span class="opt">任意</span></label>
+        <input type="text" id="f-place" name="place" placeholder="例：リビングにフローリング15mm 節有">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">施工写真 <span class="req">必須</span></label>
+        <div class="upload-area" id="upload-area">
+          <p class="upload-icon">📷</p>
+          <p><strong>タップして写真を選択</strong><br>複数枚OK（最大10枚）／スマホ撮影の写真で大丈夫です</p>
+        </div>
+        <input type="file" id="f-photos" accept="image/*,.heic,.heif" multiple style="display:none;">
+        <div id="photo-previews"></div>
+        <p class="form-hint">お部屋全体が写った「引き」の写真があると、とても助かります。</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="f-comment">ご感想 <span class="opt">任意・ひとことでOK</span></label>
+        <textarea id="f-comment" name="comment" placeholder="例：張り終えた瞬間の香りに感動しました。子どもがはだしで走り回っています。"></textarea>
+      </div>
+
+      <div class="form-group" id="reward-group" style="display:none;">
+        <label class="form-label" for="f-reward">謝礼の受け取り方法 <span class="req">必須</span></label>
+        <select id="f-reward" name="reward">
+          <option value="">選択してください</option>
+          <option value="楽天ポイント">楽天ポイント</option>
+          <option value="PayPayポイント">PayPayポイント</option>
+          <option value="Amazonギフトカード">Amazonギフトカード</option>
+        </select>
+      </div>
+
+      <div class="consent-box">
+        <details>
+          <summary>写真・ご感想の利用について（タップして全文を表示）</summary>
+          <ul>
+            <li>ご提供いただいた写真およびご感想は、株式会社林材木店のホームページ・SNS・カタログ等の販促物において、無期限で使用させていただきます。</li>
+            <li>掲載にあたり、トリミング・色調整・文章の抜粋等の加工を行う場合があります。</li>
+            <li>写真はご応募者本人（またはご家族）が撮影したものであり、住宅の掲載についてご本人（施主）の同意があるものとします。</li>
+            <li>住宅が写るため、個人が特定され得る情報（表札・人物のお顔等）が含まれる場合は、当店にてぼかし等のプライバシー配慮・加工を行います。</li>
+            <li>お預かりした個人情報は、本件のご連絡と謝礼の進呈のみに使用します。</li>
+          </ul>
+        </details>
+        <label class="consent-check">
+          <input type="checkbox" id="f-consent">
+          上記の利用条件に同意します
+        </label>
+      </div>
+
+      <button type="submit" class="photo-submit" id="submit-btn">写真を送信する</button>
+      <p class="form-hint" style="text-align:center;margin-top:10px;">送信には数十秒かかる場合があります。完了画面が出るまでお待ちください。</p>
+    </form>
+
+  </div>
+
+  <div id="thanks-view">
+    <p style="font-size:2.4rem;margin-bottom:8px;">🌲</p>
+    <h2>ありがとうございます！<br>お写真を受け付けました</h2>
+    <p>
+      内容を確認のうえ、ご入力いただいたメールアドレス宛に<br>
+      謝礼のご案内をお送りします（通常3営業日以内）。<br><br>
+      素敵なお写真のご提供、心より感謝いたします。
+    </p>
+  </div>
+
+</div>
+
+<div id="site-footer"></div>
+
+<script src="js/components.js?v=6"></script>
+<script>
+(function () {
+  // ===== チャネル出し分け =====
+  var REWARD_LABEL = {
+    rakuten: '楽天ポイント 300円分を進呈',
+    yahoo: 'PayPayポイント 300円分を進呈',
+    own: '300円分のポイントを進呈（楽天ポイント／PayPayポイント／Amazonギフトカードから選択）'
+  };
+  var channelSel = document.getElementById('f-channel');
+  var rewardGroup = document.getElementById('reward-group');
+  var rewardDisplay = document.getElementById('reward-display');
+
+  function applyChannel(ch) {
+    if (REWARD_LABEL[ch]) rewardDisplay.textContent = REWARD_LABEL[ch];
+    else rewardDisplay.textContent = '300円分のポイントを進呈';
+    rewardGroup.style.display = (ch === 'own') ? '' : 'none';
+  }
+
+  var param = new URLSearchParams(location.search).get('ch');
+  if (param && REWARD_LABEL[param]) {
+    channelSel.value = param;
+    applyChannel(param);
+  }
+  channelSel.addEventListener('change', function () { applyChannel(this.value); });
+
+  // ===== 写真選択＋クライアント圧縮 =====
+  var MAX_PHOTOS = 10;
+  var photoFiles = []; // {blob, name, url}
+  var fileInput = document.getElementById('f-photos');
+  var previews = document.getElementById('photo-previews');
+
+  document.getElementById('upload-area').addEventListener('click', function () { fileInput.click(); });
+
+  fileInput.addEventListener('change', async function () {
+    var files = Array.from(this.files || []);
+    this.value = '';
+    for (var i = 0; i < files.length; i++) {
+      if (photoFiles.length >= MAX_PHOTOS) { alert('写真は最大' + MAX_PHOTOS + '枚までです'); break; }
+      try {
+        var compressed = await compressImage(files[i]);
+        if (compressed.size > 15 * 1024 * 1024) { alert(files[i].name + ' はサイズが大きすぎるため追加できませんでした'); continue; }
+        var url = URL.createObjectURL(compressed);
+        photoFiles.push({ blob: compressed, name: 'photo' + (photoFiles.length + 1) + '.jpg', url: url });
+      } catch (e) {
+        alert(files[i].name + ' は画像として読み込めませんでした');
+      }
+    }
+    renderPreviews();
+  });
+
+  async function compressImage(file) {
+    var bitmap;
+    try { bitmap = await createImageBitmap(file); }
+    catch (e) { return file; } // HEIC等デコード不可 → 原本のまま（iOSは選択時にJPEG変換されることが多い）
+    var MAX = 2000;
+    var scale = Math.min(1, MAX / Math.max(bitmap.width, bitmap.height));
+    var canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    return new Promise(function (resolve) {
+      canvas.toBlob(function (blob) { resolve(blob || file); }, 'image/jpeg', 0.85);
+    });
+  }
+
+  function renderPreviews() {
+    previews.innerHTML = photoFiles.map(function (p, i) {
+      return '<div class="preview-item"><img src="' + p.url + '" alt="選択した写真' + (i + 1) + '">' +
+             '<button type="button" class="preview-remove" data-i="' + i + '" aria-label="削除">×</button></div>';
+    }).join('');
+  }
+  previews.addEventListener('click', function (e) {
+    var btn = e.target.closest('.preview-remove');
+    if (!btn) return;
+    var i = parseInt(btn.dataset.i, 10);
+    URL.revokeObjectURL(photoFiles[i].url);
+    photoFiles.splice(i, 1);
+    renderPreviews();
+  });
+
+  // ===== 送信 =====
+  var form = document.getElementById('photo-form');
+  var errBox = document.getElementById('form-error');
+  var submitBtn = document.getElementById('submit-btn');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    var errors = [];
+    var name = document.getElementById('f-name').value.trim();
+    var email = document.getElementById('f-email').value.trim();
+    var channel = channelSel.value;
+    var order = document.getElementById('f-order').value.trim();
+    var reward = document.getElementById('f-reward').value;
+    var consent = document.getElementById('f-consent').checked;
+
+    if (!name) errors.push('お名前を入力してください');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('メールアドレスを正しく入力してください');
+    if (!channel) errors.push('ご購入店舗を選択してください');
+    if (!order) errors.push('ご注文番号を入力してください');
+    if (photoFiles.length === 0) errors.push('施工写真を1枚以上追加してください');
+    if (channel === 'own' && !reward) errors.push('謝礼の受け取り方法を選択してください');
+    if (!consent) errors.push('利用条件への同意が必要です');
+
+    if (errors.length) {
+      errBox.innerHTML = errors.join('<br>');
+      errBox.style.display = 'block';
+      errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '送信中…そのままお待ちください';
+
+    var fd = new FormData();
+    fd.append('name', name);
+    fd.append('email', email);
+    fd.append('channel', channel);
+    fd.append('order_no', order);
+    fd.append('place', document.getElementById('f-place').value.trim());
+    fd.append('comment', document.getElementById('f-comment').value.trim());
+    fd.append('reward', channel === 'own' ? reward : (channel === 'rakuten' ? '楽天ポイント' : 'PayPayポイント'));
+    fd.append('consent', '1');
+    fd.append('website', form.querySelector('[name="website"]').value);
+    photoFiles.forEach(function (p) { fd.append('photos[]', p.blob, p.name); });
+
+    try {
+      var res = await fetch('photos.php', { method: 'POST', body: fd });
+      var data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'server');
+      document.getElementById('form-view').style.display = 'none';
+      document.getElementById('thanks-view').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.gtag) gtag('event', 'photo_submit', { channel: channel });
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '写真を送信する';
+      errBox.innerHTML = '送信に失敗しました。お手数ですが時間をおいて再度お試しいただくか、LINE・お電話（0538-58-2395）でご連絡ください。';
+      errBox.style.display = 'block';
+    }
+  });
+})();
+</script>
+</body>
+</html>
