@@ -305,6 +305,54 @@
 
 <div class="products-layout">
 
+  <!-- 概算シミュレーター -->
+  <div class="freight-widget" id="simulator">
+    <h2>かんたん概算シミュレーター — 何束必要？いくらかかる？</h2>
+    <div class="freight-grid" style="grid-template-columns:1fr 1fr 1fr 1fr auto;">
+      <div class="fg-group">
+        <label>お部屋の広さ</label>
+        <div style="display:flex;gap:6px;">
+          <input type="number" id="sim-area" min="0.5" step="0.5" value="6" style="flex:1;">
+          <select id="sim-unit" style="width:70px;">
+            <option value="jo">畳</option>
+            <option value="m2">㎡</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg-group">
+        <label>商品</label>
+        <select id="sim-cat">
+          <option value="flooring15">フローリング15mm</option>
+          <option value="flooring12">フローリング12mm</option>
+          <option value="panel">羽目板12mm</option>
+        </select>
+      </div>
+      <div class="fg-group">
+        <label>グレード</label>
+        <select id="sim-grade">
+          <option value="節有">節有（お手頃）</option>
+          <option value="小節">小節</option>
+          <option value="特上小">特上小</option>
+          <option value="無節">無節（最高級）</option>
+        </select>
+      </div>
+      <div class="fg-group">
+        <label>長さ</label>
+        <select id="sim-length">
+          <option value="910">910mm</option>
+          <option value="1820" selected>1,820mm</option>
+          <option value="3000">3,000mm</option>
+          <option value="4000">4,000mm</option>
+        </select>
+      </div>
+      <div class="fg-btn">
+        <button class="freight-calc-btn" onclick="calcSim()">計算</button>
+      </div>
+    </div>
+    <div id="sim-result"></div>
+    <p style="font-size:0.75rem;color:var(--text-light);margin-top:10px;">※ 施工ロス5%を見込んだ概算（税込）です。送料は下部の「送料かんたん計算」でご確認ください。1畳=1.62㎡で換算。</p>
+  </div>
+
   <!-- 桧フローリング 12mm・15mm（同価格） -->
   <section class="price-section">
     <h3 class="price-section-title">桧フローリング 12mm・15mm（幅108mm）</h3>
@@ -431,6 +479,9 @@ function lookup(cats, grade, quality, length) {
   );
 }
 
+// 在庫データ（Yahoo!店と同期、data/stock.json）。明示的に false の商品のみ在庫切れ表示
+let STOCK = {};
+
 function buildTbody(tbodyId, cats) {
   const tbody = document.getElementById(tbodyId);
   if (!tbody) return;
@@ -442,6 +493,9 @@ function buildTbody(tbodyId, cats) {
       const bCls = col.bStart ? ' td-b-start' : '';
       if (!p) {
         html += `<td class="td-none${bCls}">—</td>`;
+      } else if (STOCK[p.id] === false) {
+        const inc = hpPriceIncTax(p.price);
+        html += `<td class="td-oos${bCls}">¥${inc.toLocaleString()}<span class="oos-label">在庫切れ・入荷未定</span><small>入荷通知をご希望の方は<br>LINE・お電話でご連絡ください</small></td>`;
       } else {
         const inc = hpPriceIncTax(p.price);
         const ex = exclTax(inc);
@@ -455,11 +509,57 @@ function buildTbody(tbodyId, cats) {
   tbody.innerHTML = html;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function renderPriceTables() {
   buildTbody('tbl-flooring', ['flooring15', 'flooring12']);
   buildTbody('tbl-panel',      ['panel']);
-  buildFreightPrefSelect();
-  buildFreightRefTable();
+}
+
+// ===== 概算シミュレーター =====
+function calcSim() {
+  const areaVal = parseFloat(document.getElementById('sim-area').value);
+  const unit = document.getElementById('sim-unit').value;
+  const cat = document.getElementById('sim-cat').value;
+  const grade = document.getElementById('sim-grade').value;
+  const len = parseInt(document.getElementById('sim-length').value, 10);
+  const out = document.getElementById('sim-result');
+  if (!areaVal || areaVal <= 0) {
+    out.innerHTML = '<div class="freight-result"><span class="fr-error">お部屋の広さを入力してください。</span></div>';
+    return;
+  }
+  const m2 = unit === 'jo' ? areaVal * 1.62 : areaVal;
+  const p = lookup([cat], 'A', grade, len);
+  if (!p) {
+    out.innerHTML = '<div class="freight-result"><span class="fr-error">この組み合わせの商品が見つかりません。長さやグレードを変えてお試しください。</span></div>';
+    return;
+  }
+  const perBundle = (p.width / 1000) * (p.length / 1000) * p.qty; // 1束あたり㎡
+  const need = Math.ceil((m2 * 1.05) / perBundle); // ロス5%込み
+  const inc = hpPriceIncTax(p.price);
+  const total = inc * need;
+  const oos = STOCK[p.id] === false;
+  out.innerHTML = `
+    <div class="freight-result">
+      <div class="fr-total">商品代 概算：¥${total.toLocaleString()}<span style="font-size:0.8rem;font-weight:400;">（税込）</span></div>
+      <div class="fr-detail">
+        ${unit === 'jo' ? areaVal + '畳（約' + m2.toFixed(1) + '㎡）' : m2.toFixed(1) + '㎡'}
+        ／ ${grade}・${len.toLocaleString()}mm ×<strong> ${need}束</strong>（1束 ¥${inc.toLocaleString()}・約${perBundle.toFixed(1)}㎡分）<br>
+        ${oos ? '<span style="color:#c0392b;font-weight:600;">※ この商品は現在在庫切れです。入荷時期はお問い合わせください。</span><br>' : ''}
+        別途送料がかかります。下の「送料かんたん計算」でご確認ください。
+        ／ <a href="sample.html">まずは無料サンプルで質感確認 →</a>
+      </div>
+    </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('data/stock.json?t=' + Date.now())
+    .then(r => r.ok ? r.json() : {})
+    .then(data => { STOCK = data || {}; })
+    .catch(() => {})
+    .finally(() => {
+      renderPriceTables();
+      buildFreightPrefSelect();
+      buildFreightRefTable();
+    });
 });
 
 // ===== 運賃計算 =====
