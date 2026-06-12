@@ -422,6 +422,19 @@ foreach ($payload['events'] as $ev) {
             // トリガー（いつでも開始）
             if (in_array($text, QUOTE_TRIGGERS, true)) { startQuote($replyToken, $userId, $ACCESS_TOKEN, $PRODUCTS); continue; }
             if (in_array($text, PHOTO_TRIGGERS, true)) { startPhoto($replyToken, $userId, $ACCESS_TOKEN); continue; }
+            // お問い合わせボタン（専用応答・キャンペーン案内は出さない）
+            if (in_array($text, ['お問い合わせ', 'お問合せ', '問い合わせ'], true)) {
+                clearState($userId);
+                replyMessages($replyToken, [textMsg(
+                    "お問い合わせありがとうございます！🌲\n" .
+                    "ご用件をこのままメッセージでお送りください。スタッフが営業時間内にご返信します。\n\n" .
+                    "▼営業時間\n平日 8:00〜17:00（土日祝休み）\n" .
+                    "お急ぎの場合はお電話（0538-58-2395）もどうぞ。\n\n" .
+                    "✏️ 画面下の「メッセージを入力」欄に入力して送信してください。\n" .
+                    "※メニュー画像で入力欄がかくれているときは、左下のキーボードのマークをタップすると入力欄が出てきます。"
+                )], $ACCESS_TOKEN);
+                continue;
+            }
             if (in_array($text, ['キャンセル', 'やめる', '最初から'], true)) {
                 clearState($userId);
                 replyMessages($replyToken, [textMsg("入力をリセットしました。\n・お見積もり →「見積もり」\n・施工写真のご提供 →「施工写真」\nと送るといつでも再開できます。")], $ACCESS_TOKEN);
