@@ -112,7 +112,13 @@ curl_close($ch);
 
 if ($res === false || $code >= 400) {
     http_response_code(502);
-    echo json_encode(['error' => 'AIの応答に失敗しました。お急ぎの場合はお電話（0538-58-2395）・LINEでお問い合わせください。']);
+    $out = ['error' => 'AIの応答に失敗しました。お急ぎの場合はお電話（0538-58-2395）・LINEでお問い合わせください。'];
+    if (!empty($body['debug'])) {
+        $out['debug_code'] = $code;
+        $out['debug_body'] = mb_substr((string)$res, 0, 300);
+        $out['debug_keylen'] = strlen((string)$config['api_key']);
+    }
+    echo json_encode($out, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
