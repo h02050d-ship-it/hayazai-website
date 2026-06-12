@@ -70,6 +70,10 @@ foreach ($cart as $item) {
 // 注文番号
 $orderNo = date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 6));
 
+// ヒアドキュメント内で使う変数（本文より先に定義しないと空欄になる）
+$total_fmt = number_format($total);
+$bank = BANK_INFO;
+
 // お客様へのメール本文
 $customerBody = <<<EOT
 {$name} 様
@@ -107,8 +111,8 @@ $customerBody = <<<EOT
 
 ご不明な点はお気軽にご連絡ください。
 ──────────────────────────
-林材木店（ハヤシザイモクテン）
-〒437-0224 静岡県磐田市
+株式会社林材木店（ハヤシザイモクテン）
+〒437-1203 静岡県磐田市福田5490-47
 TEL：0538-58-2395（平日9:00〜17:00）
 Email：info@hayazai.com
 EOT;
@@ -134,10 +138,6 @@ $shopBody = <<<EOT
 ■ 備考
   {$note}
 EOT;
-
-// 変数埋め込み
-$total_fmt = number_format($total);
-$bank = BANK_INFO;
 
 // mb_send_mail 設定
 $headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"

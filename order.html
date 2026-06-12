@@ -544,9 +544,89 @@
       line-height: 1.8;
     }
 
+    /* ---- カート注文フォーム ---- */
+    .order-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 18px;
+      margin-top: 18px;
+    }
+
+    .order-form-grid .full { grid-column: 1 / -1; }
+
+    .order-field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      margin-bottom: 5px;
+    }
+
+    .order-field .req {
+      color: #c0392b;
+      font-size: 0.72rem;
+      margin-left: 4px;
+    }
+
+    .order-field input,
+    .order-field select,
+    .order-field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #d0bba0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: #fff;
+      color: var(--wood-dark);
+    }
+
+    .order-field input:focus,
+    .order-field select:focus,
+    .order-field textarea:focus {
+      outline: none;
+      border-color: var(--wood-mid);
+      box-shadow: 0 0 0 2px rgba(139,90,43,0.12);
+    }
+
+    .btn-order-submit {
+      background: var(--wood-dark);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 15px 40px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-order-submit:hover { background: var(--wood-mid); }
+
+    .sim-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 36px 0 28px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .sim-divider::before,
+    .sim-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e0cdb8;
+    }
+
     /* ---- Mobile ---- */
     @media (max-width: 768px) {
       .order-layout { padding: 24px 16px 60px; }
+
+      .order-form-grid { grid-template-columns: 1fr; }
 
       .step-bar { flex-direction: column; border-radius: 8px; }
       .step-item { border-right: none; border-bottom: 1px solid #e0cdb8; }
@@ -643,6 +723,96 @@
 
 <div class="order-layout">
 
+  <!-- ============ カートからのご注文（カートに商品がある場合のみ表示） ============ -->
+  <div id="cart-order-section" style="display:none;">
+
+    <div class="confirm-section">
+      <h3>カートの内容でご注文</h3>
+      <div style="overflow-x:auto;">
+        <table class="confirm-items-table">
+          <thead>
+            <tr>
+              <th>商品</th>
+              <th style="text-align:right;">単価（税込）</th>
+              <th style="text-align:center;">数量</th>
+              <th style="text-align:right;">小計（税込）</th>
+            </tr>
+          </thead>
+          <tbody id="order-items"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" style="text-align:right;padding:10px 12px;font-weight:700;color:var(--wood-dark);">商品合計（税込）</td>
+              <td style="text-align:right;padding:10px 12px;font-weight:700;color:var(--wood-dark);font-size:1.05rem;" id="order-total"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-mid);margin-top:10px;">
+        ※ 送料は別途かかります（910mm=佐川急便、1,820mm以上=西濃運輸）。ご注文確認後、送料を含めた合計金額とお振込先をメールでご案内します。
+        送料の目安は下の見積もりシミュレーションでもご確認いただけます。
+      </p>
+      <p style="font-size:0.8rem;margin-top:6px;">
+        <a href="cart.html" style="color:var(--wood-mid);">← カートに戻って内容を変更する</a>
+      </p>
+    </div>
+
+    <div class="confirm-section">
+      <h3>お客様情報の入力</h3>
+      <form id="order-form" action="order.php" method="post">
+        <input type="hidden" name="cart_json" id="cart-json">
+        <div class="order-form-grid">
+          <div class="order-field">
+            <label>お名前<span class="req">必須</span></label>
+            <input type="text" name="name" required autocomplete="name" placeholder="山田 太郎">
+          </div>
+          <div class="order-field">
+            <label>会社名（法人の場合）</label>
+            <input type="text" name="company" autocomplete="organization" placeholder="株式会社○○工務店">
+          </div>
+          <div class="order-field">
+            <label>メールアドレス<span class="req">必須</span></label>
+            <input type="email" name="email" required autocomplete="email" placeholder="example@example.com">
+          </div>
+          <div class="order-field">
+            <label>電話番号<span class="req">必須</span></label>
+            <input type="tel" name="tel" required autocomplete="tel" placeholder="0538-58-2395">
+          </div>
+          <div class="order-field">
+            <label>郵便番号</label>
+            <input type="text" name="zip" autocomplete="postal-code" placeholder="437-1203">
+          </div>
+          <div class="order-field">
+            <label>都道府県<span class="req">必須</span></label>
+            <select name="prefecture" id="order-pref" required>
+              <option value="">選択してください</option>
+            </select>
+          </div>
+          <div class="order-field full">
+            <label>ご住所（市区町村・番地）<span class="req">必須</span></label>
+            <input type="text" name="address1" required autocomplete="address-line1" placeholder="磐田市福田5490-47">
+          </div>
+          <div class="order-field full">
+            <label>建物名・部屋番号など</label>
+            <input type="text" name="address2" autocomplete="address-line2" placeholder="○○ビル 101">
+          </div>
+          <div class="order-field full">
+            <label>備考（配送のご希望・ご質問など）</label>
+            <textarea name="note" rows="4" placeholder="ご希望のお届け時期などがあればご記入ください"></textarea>
+          </div>
+        </div>
+        <div class="note-box" style="margin:20px 0;">
+          <strong>お支払いについて：</strong>銀行振込（前払い）のみの対応です。ご注文後にお送りする確認メールに振込先（遠州信用金庫）を記載しています。ご入金確認後、2〜5営業日で発送いたします。
+        </div>
+        <div style="text-align:center;">
+          <button type="submit" class="btn-order-submit">この内容で注文する（銀行振込）</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="sim-divider">送料の目安は以下のシミュレーションでご確認いただけます</div>
+
+  </div>
+
   <!-- Step bar -->
   <div class="step-bar" id="step-bar">
     <div class="step-item active" id="sb1">
@@ -738,7 +908,7 @@
         <button class="btn-calc" onclick="calcStep2Shipping()">送料を計算する</button>
       </div>
       <div id="shipping-result2"></div>
-      <p class="shipping-hint">※ 西濃運輸・税込。個人様は支店止めでのお受け取りとなります。荷物の状態・条件により変動する場合があります。</p>
+      <p class="shipping-hint">※ 910mmは佐川急便、1,820mm以上は西濃運輸でのお届けです（送料はいずれも税込）。混載の場合は別便となり送料は合算です。西濃運輸をご利用の個人のお客様は支店止めでのお受け取りとなります。荷物の状態・条件により変動する場合があります。</p>
     </div>
 
     <div id="grand-total-section" style="display:none">
@@ -807,6 +977,7 @@
 <div id="site-footer"></div>
 
 <script src="data/products.js"></script>
+<script src="js/cart.js"></script>
 <script src="js/components.js?v=6"></script>
 <script>
 // ===================== 価格計算 =====================
@@ -900,6 +1071,19 @@ const PREFS_SORTED = [
   "鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知",
   "福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島"
 ];
+
+// ===================== 佐川急便データ（910mm専用） =====================
+// 910mm → 佐川急便（都道府県別固定・1束あたり税込）※products.html / shipping.html と共通データ
+const FR_SAGAWA_1M = {
+  "北海道":3000,"青森":2700,"岩手":2700,"宮城":2500,"秋田":2700,"山形":2500,"福島":2500,
+  "東京":2400,"神奈川":2400,"埼玉":2400,"千葉":2400,"茨城":2400,"栃木":2400,"群馬":2400,
+  "山梨":2400,"新潟":2400,"長野":2400,"富山":2400,"石川":2400,"福井":2400,
+  "愛知":2400,"岐阜":2400,"静岡":2400,"三重":2400,
+  "大阪":2400,"兵庫":2400,"京都":2400,"滋賀":2400,"奈良":2400,"和歌山":2400,
+  "鳥取":2500,"島根":2500,"岡山":2500,"広島":2500,"山口":2500,
+  "徳島":2700,"香川":2700,"愛媛":2700,"高知":2700,
+  "福岡":2700,"佐賀":2700,"長崎":2700,"熊本":2700,"大分":2700,"宮崎":2700,"鹿児島":2700
+};
 
 // ===================== 行管理 =====================
 let rows = [];
@@ -1135,68 +1319,114 @@ function calcStep2Shipping() {
   if (!pref) { alert('都道府県を選択してください。'); return; }
 
   const items = getSelectedItems();
-  const prefIdx = SEINO_PREF_MAP[pref];
-  const distIdx = PREF_TO_DIST[prefIdx];
-  const distance = SEINO_DISTANCES[distIdx];
+  // 配送ルール: 910mm = 佐川急便、1,820mm以上 = 西濃運輸（混載時は別便・送料合算）
+  const sagawaItems = items.filter(({ p }) => p.length <= 910);
+  const seinoItems  = items.filter(({ p }) => p.length > 910);
 
-  let totalWeight = 0, totalBoxCost = 0;
-  items.forEach(({ p, qty }) => {
-    const d = DANBALL[getDanballKey(p.length)];
-    totalWeight  += qty * d.weight;
-    totalBoxCost += qty * d.box;
-  });
-
-  const totalBundles = items.reduce((s, item) => s + item.qty, 0);
   let html = '';
   let shippingTotal = 0;
+  let ok = true;
 
-  if (totalWeight <= MAX_BUNDLE * 40) {
-    const shipCount = Math.ceil(totalBundles / MAX_BUNDLE);
-    if (shipCount <= 1) {
-      const res = calcNet(distIdx, totalWeight, totalBoxCost);
-      if (!res) {
-        html = '<p style="color:#c0392b;">重量が超過しています。お問い合わせください。</p>';
-      } else {
-        shippingTotal = res.total;
-        html = buildShippingResultHTML(pref, distance, res);
-      }
+  // ---- 910mm → 佐川急便（1束あたり固定・税込） ----
+  let sagawaTotal = 0;
+  if (sagawaItems.length > 0) {
+    const rate = FR_SAGAWA_1M[pref];
+    if (!rate) {
+      html += '<p style="color:#c0392b;">この都道府県の佐川急便送料データがありません。お問い合わせください。</p>';
+      ok = false;
     } else {
-      const baseW = Math.floor(totalWeight / shipCount);
-      const baseB = Math.floor(totalBoxCost / shipCount);
-      const remW = totalWeight % shipCount;
-      const remB = totalBoxCost % shipCount;
-      let totalFare = 0, totalBox2 = 0, rows2 = '', failed = false;
-      for (let i = 0; i < shipCount; i++) {
-        const sw = baseW + (i < remW ? 1 : 0);
-        const sb = baseB + (i < remB ? 1 : 0);
-        const res = calcNet(distIdx, sw, sb);
-        if (!res) { failed = true; break; }
-        totalFare += res.fare;
-        totalBox2 += sb;
-        rows2 += `<tr class="result-sub"><th>便${i+1}（${sw}kg）</th><td>${res.fare.toLocaleString()}円 + ${sb.toLocaleString()}円</td></tr>`;
-      }
-      if (failed) {
-        html = '<p style="color:#c0392b;">分割しても重量超過です。お問い合わせください。</p>';
-      } else {
-        const subtotal = totalFare + totalBox2;
-        const tax = Math.round(subtotal * 0.1);
-        shippingTotal = Math.round((subtotal + tax) / 100) * 100;
-        html = `<table class="result-table" style="margin-top:10px;">
-          <tr class="result-sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
-          <tr class="result-sub"><th>${shipCount}便に分割</th><td></td></tr>
-          ${rows2}
-          <tr><th>運賃合計</th><td>${totalFare.toLocaleString()}円</td></tr>
-          <tr><th>梱包材費合計</th><td>${totalBox2.toLocaleString()}円</td></tr>
-          <tr><th>消費税（10%）</th><td>${Math.round((totalFare + totalBox2) * 0.1).toLocaleString()}円</td></tr>
-          <tr class="result-total"><th>送料合計（税込）</th><td>${shippingTotal.toLocaleString()}円</td></tr>
-        </table>`;
-      }
+      const sagawaBundles = sagawaItems.reduce((s, item) => s + item.qty, 0);
+      sagawaTotal = rate * sagawaBundles;
+      shippingTotal += sagawaTotal;
+      html += `<table class="result-table" style="margin-top:10px;">
+        <tr class="result-sub"><th>【910mm商品】配送便</th><td>佐川急便</td></tr>
+        <tr class="result-sub"><th>お届け先</th><td>${pref}</td></tr>
+        <tr><th>1束あたり（税込）× 束数</th><td>${rate.toLocaleString()}円 × ${sagawaBundles}束</td></tr>
+        <tr class="result-total"><th>佐川急便 送料（税込）</th><td>${sagawaTotal.toLocaleString()}円</td></tr>
+      </table>`;
     }
-  } else {
-    html = '<p style="color:#c0392b;">ご注文数が大変多いです。お問い合わせフォームまたはお電話でご相談ください。</p>';
   }
 
-  if (shippingTotal > 0) {
+  // ---- 1,820mm以上 → 西濃運輸 ----
+  let seinoTotal = 0;
+  if (ok && seinoItems.length > 0) {
+    const prefIdx = SEINO_PREF_MAP[pref];
+    const distIdx = PREF_TO_DIST[prefIdx];
+    const distance = SEINO_DISTANCES[distIdx];
+
+    let totalWeight = 0, totalBoxCost = 0;
+    seinoItems.forEach(({ p, qty }) => {
+      const d = DANBALL[getDanballKey(p.length)];
+      totalWeight  += qty * d.weight;
+      totalBoxCost += qty * d.box;
+    });
+
+    const totalBundles = seinoItems.reduce((s, item) => s + item.qty, 0);
+
+    if (totalWeight <= MAX_BUNDLE * 40) {
+      const shipCount = Math.ceil(totalBundles / MAX_BUNDLE);
+      if (shipCount <= 1) {
+        const res = calcNet(distIdx, totalWeight, totalBoxCost);
+        if (!res) {
+          html += '<p style="color:#c0392b;">重量が超過しています。お問い合わせください。</p>';
+          ok = false;
+        } else {
+          seinoTotal = res.total;
+          shippingTotal += seinoTotal;
+          html += buildShippingResultHTML(pref, distance, res);
+        }
+      } else {
+        const baseW = Math.floor(totalWeight / shipCount);
+        const baseB = Math.floor(totalBoxCost / shipCount);
+        const remW = totalWeight % shipCount;
+        const remB = totalBoxCost % shipCount;
+        let totalFare = 0, totalBox2 = 0, rows2 = '', failed = false;
+        for (let i = 0; i < shipCount; i++) {
+          const sw = baseW + (i < remW ? 1 : 0);
+          const sb = baseB + (i < remB ? 1 : 0);
+          const res = calcNet(distIdx, sw, sb);
+          if (!res) { failed = true; break; }
+          totalFare += res.fare;
+          totalBox2 += sb;
+          rows2 += `<tr class="result-sub"><th>便${i+1}（${sw}kg）</th><td>${res.fare.toLocaleString()}円 + ${sb.toLocaleString()}円</td></tr>`;
+        }
+        if (failed) {
+          html += '<p style="color:#c0392b;">分割しても重量超過です。お問い合わせください。</p>';
+          ok = false;
+        } else {
+          const subtotal = totalFare + totalBox2;
+          const tax = Math.round(subtotal * 0.1);
+          seinoTotal = Math.round((subtotal + tax) / 100) * 100;
+          shippingTotal += seinoTotal;
+          html += `<table class="result-table" style="margin-top:10px;">
+            <tr class="result-sub"><th>【1,820mm以上の商品】配送便</th><td>西濃運輸</td></tr>
+            <tr class="result-sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
+            <tr class="result-sub"><th>${shipCount}便に分割</th><td></td></tr>
+            ${rows2}
+            <tr><th>運賃合計</th><td>${totalFare.toLocaleString()}円</td></tr>
+            <tr><th>梱包材費合計</th><td>${totalBox2.toLocaleString()}円</td></tr>
+            <tr><th>消費税（10%）</th><td>${Math.round((totalFare + totalBox2) * 0.1).toLocaleString()}円</td></tr>
+            <tr class="result-total"><th>西濃運輸 送料（税込）</th><td>${seinoTotal.toLocaleString()}円</td></tr>
+          </table>`;
+        }
+      }
+    } else {
+      html += '<p style="color:#c0392b;">ご注文数が大変多いです。お問い合わせフォームまたはお電話でご相談ください。</p>';
+      ok = false;
+    }
+  }
+
+  // ---- 混載（佐川＋西濃）の合算表示 ----
+  if (ok && sagawaTotal > 0 && seinoTotal > 0) {
+    html += `<table class="result-table" style="margin-top:14px;">
+      <tr class="result-total"><th>送料合計（佐川＋西濃・税込）</th><td>${shippingTotal.toLocaleString()}円</td></tr>
+    </table>
+    <p style="font-size:0.78rem;color:var(--text-mid);margin-top:8px;">
+      ※ 910mm商品は佐川急便、1,820mm以上の商品は西濃運輸の<strong>別便</strong>でのお届けとなり、送料は両方の合算です。
+    </p>`;
+  }
+
+  if (ok && shippingTotal > 0) {
     const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
     const grand = productTotal + shippingTotal;
     shippingResult = { shippingTotal, grand, pref };
@@ -1204,6 +1434,9 @@ function calcStep2Shipping() {
     document.getElementById('grand-total-num').textContent = '¥' + grand.toLocaleString();
     document.getElementById('grand-total-sub').innerHTML =
       `商品合計（税込）：¥${productTotal.toLocaleString()} ＋ 送料（税込）：¥${shippingTotal.toLocaleString()}`;
+  } else {
+    shippingResult = null;
+    document.getElementById('grand-total-section').style.display = 'none';
   }
 
   document.getElementById('shipping-result2').innerHTML = html;
@@ -1211,12 +1444,13 @@ function calcStep2Shipping() {
 
 function buildShippingResultHTML(pref, distance, res) {
   return `<table class="result-table" style="margin-top:10px;">
+    <tr class="result-sub"><th>【1,820mm以上の商品】配送便</th><td>西濃運輸</td></tr>
     <tr class="result-sub"><th>お届け先</th><td>${pref}（距離帯 ${distance}km）</td></tr>
     <tr class="result-sub"><th>適用重量帯</th><td>${res.tierWeight}kg帯</td></tr>
     <tr><th>運賃</th><td>${res.fare.toLocaleString()}円</td></tr>
     <tr><th>梱包材費</th><td>${res.boxCost.toLocaleString()}円</td></tr>
     <tr><th>消費税（10%）</th><td>${res.tax.toLocaleString()}円</td></tr>
-    <tr class="result-total"><th>送料合計（税込）</th><td>${res.total.toLocaleString()}円</td></tr>
+    <tr class="result-total"><th>西濃運輸 送料（税込）</th><td>${res.total.toLocaleString()}円</td></tr>
   </table>`;
 }
 
@@ -1275,11 +1509,38 @@ function saveOrderToSession() {
   sessionStorage.setItem('orderType', 'quote');
 }
 
+// ===================== カート注文セクション =====================
+function initCartOrderSection() {
+  // js/cart.js の getCart / renderOrderSummary を利用
+  if (typeof getCart !== 'function') return;
+  const cart = getCart();
+  if (cart.length === 0) return; // カートが空ならシミュレーターのみ表示
+
+  // 都道府県セレクト（注文フォーム用・正式名称で送信）
+  const sel = document.getElementById('order-pref');
+  if (sel) {
+    PREFS_SORTED.forEach(p => {
+      const full = p === '北海道' ? '北海道'
+        : p === '東京' ? '東京都'
+        : (p === '大阪' || p === '京都') ? p + '府'
+        : p + '県';
+      const opt = document.createElement('option');
+      opt.value = full;
+      opt.textContent = full;
+      sel.appendChild(opt);
+    });
+  }
+
+  renderOrderSummary(); // #order-items / #order-total / #cart-json を埋める
+  document.getElementById('cart-order-section').style.display = '';
+}
+
 // ===================== 初期化 =====================
 document.addEventListener('DOMContentLoaded', () => {
   addRow(); // 最初の1行を自動追加
   buildPrefSelect2();
   setStep(1);
+  initCartOrderSection();
 });
 </script>
 </body>

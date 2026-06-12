@@ -287,6 +287,12 @@ function changeDetailQty(delta) {
 
 let currentProduct = null;
 
+// 在庫データ（Yahoo!店と同期、data/stock.json）。明示的に false の商品のみ在庫切れ表示
+let STOCK = {};
+function isOutOfStock(p) {
+  return STOCK[p.id] === false;
+}
+
 // Yahoo価格は「税込」表示。HP税込 = Yahoo税込 × 0.95、100円単位四捨五入
 function hpPriceIncTax(yahooIncTax) {
   return Math.round(yahooIncTax * 0.95 / 100) * 100;
@@ -297,7 +303,7 @@ function exclTax(incTax) {
 }
 
 function addDetailToCart() {
-  if (!currentProduct || currentProduct.outOfStock) return;
+  if (!currentProduct || isOutOfStock(currentProduct)) return;
   const qty = parseInt(document.getElementById('detail-qty').value) || 1;
   addToCart(currentProduct.id, qty);
   const btn = document.getElementById('add-to-cart-btn');
@@ -330,7 +336,7 @@ function initProduct() {
       "@type": "Offer",
       "price": hpPriceIncTax(p.price),
       "priceCurrency": "JPY",
-      "availability": p.outOfStock ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+      "availability": isOutOfStock(p) ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "林材木店" }
     }
   };
@@ -352,7 +358,7 @@ function initProduct() {
     <span class="badge badge-grade-${p.grade.toLowerCase()}">${p.grade}級品</span>
     <span class="badge badge-quality">${p.quality}</span>
     ${p.cat === 'sale' ? '<span class="badge badge-sale">お買い得</span>' : ''}
-    ${p.outOfStock ? '<span class="badge" style="background:#eee;color:#aaa;">在庫なし</span>' : ''}
+    ${isOutOfStock(p) ? '<span class="badge" style="background:#eee;color:#c0392b;">在庫切れ・入荷未定</span>' : ''}
   `;
 
   // 商品名
@@ -384,18 +390,25 @@ function initProduct() {
   document.getElementById('product-price').innerHTML =
     `¥${inc.toLocaleString()}<small style="display:block;font-size:0.7rem;font-weight:400;color:var(--text-light);margin-top:4px;">（税抜 ¥${ex.toLocaleString()}）</small>`;
 
-  // 在庫なし
-  if (p.outOfStock) {
+  // 在庫切れ（stock.json で明示的に false の商品のみ）
+  if (isOutOfStock(p)) {
     const btn = document.getElementById('add-to-cart-btn');
-    btn.textContent = '在庫なし';
+    btn.textContent = '在庫切れ・入荷未定';
     btn.disabled = true;
     btn.style.background = '#ccc';
     btn.style.cursor = 'not-allowed';
+    const priceBox = document.querySelector('.product-price-box');
+    if (priceBox) {
+      const note = document.createElement('div');
+      note.style.cssText = 'margin-top:10px;font-size:0.82rem;color:#c0392b;font-weight:600;';
+      note.textContent = '※ この商品は現在在庫切れです。入荷通知をご希望の方はLINE・お電話でご連絡ください。';
+      priceBox.appendChild(note);
+    }
   }
 
   // 関連商品（同カテゴリ 最大4件）
   const related = PRODUCTS
-    .filter(x => x.cat === p.cat && x.id !== p.id && !x.outOfStock)
+    .filter(x => x.cat === p.cat && x.id !== p.id && !isOutOfStock(x))
     .slice(0, 4);
 
   document.getElementById('related-grid').innerHTML = related.map(r => `
@@ -422,7 +435,7 @@ function initProduct() {
   // フローリング → 羽目板、羽目板 → フローリング を優先
   const crossCat = p.cat.startsWith('flooring') ? 'panel' : 'flooring15';
   const recommend = PRODUCTS
-    .filter(x => x.cat === crossCat && x.quality === p.quality && !x.outOfStock && x.id !== p.id)
+    .filter(x => x.cat === crossCat && x.quality === p.quality && !isOutOfStock(x) && x.id !== p.id)
     .slice(0, 3);
 
   if (recommend.length > 0) {
@@ -479,7 +492,14 @@ function calcQty() {
   `;
 }
 
-document.addEventListener('DOMContentLoaded', initProduct);
+document.addEventListener('DOMContentLoaded', () => {
+  // products.html と同じ仕組み: stock.json を取得してから描画
+  fetch('data/stock.json?t=' + Date.now())
+    .then(r => r.ok ? r.json() : {})
+    .then(data => { STOCK = data || {}; })
+    .catch(() => {})
+    .finally(initProduct);
+});
 </script>
 </body>
 </html>

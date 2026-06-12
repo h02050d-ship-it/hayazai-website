@@ -24,16 +24,16 @@
 
 ## 2. 要ユーザー判断（修正せずリストアップ）
 
-1. **order.html（見積もりシミュレーション）の910mm送料も西濃計算のまま。** 複数商品の混載前提ロジックのため機械的修正を見送った。910mm単独の見積もりでは佐川料金（東京10束24,000円）より大幅に安い金額が出る。注記も「※ 西濃運輸・税込」のみで佐川に言及なし。
-2. **カート機能が注文フローに接続していない。** cart.html「注文手続きへ進む」→ order.html だが、現在の order.html は見積もりシミュレーターでカート内容を読み込まない（js/cart.js の renderOrderSummary が参照する #order-items が存在しない）。order_complete.html・order.php は旧フローの残骸。カート機能の存続/撤去はビジネス判断。
-3. **index.html JSON-LD（LocalBusiness）の aggregateRating（4.97・600件）。** Yahoo/楽天/メルカリの外部モールのレビューを自社サイトの構造化データとして掲載するのは、Googleの「自己申告レビュー（self-serving reviews）」ポリシーに抵触するリスクがあり、リッチリザルト無効化や手動対応の可能性。本文中の「4.97以上/600件以上」表記自体は出典明記ありで問題薄。
-4. **business.html ロット割引の注記「※ 表示価格はすべて税抜です」。** 商品ページは税込をメイン表示しており、割引の基準価格が税抜・税込どちらか曖昧。文言の明確化推奨。
+1. **order.html（見積もりシミュレーション）の910mm送料も西濃計算のまま。** 複数商品の混載前提ロジックのため機械的修正を見送った。910mm単独の見積もりでは佐川料金（東京10束24,000円）より大幅に安い金額が出る。注記も「※ 西濃運輸・税込」のみで佐川に言及なし。 → **修正済み(2026-06-12追記)**: products.html と同一の佐川料金表（FR_SAGAWA_1M）を order.html に移植し、「910mm=佐川急便、1,820mm以上=西濃運輸」で分岐するよう calcStep2Shipping を改修。混載時は「910mm分=佐川、それ以外=西濃の別便」として合算し、その旨を結果表と注記に明示。注記も「※ 910mmは佐川急便、1,820mm以上は西濃運輸…」に更新。python単体検算＋ブラウザ実動作で 東京910mm×10束=24,000円／東京1,820mm×10束=8,800円／混載=32,800円（products.html の料金表と完全一致）を確認済み。
+2. **カート機能が注文フローに接続していない。** cart.html「注文手続きへ進む」→ order.html だが、現在の order.html は見積もりシミュレーターでカート内容を読み込まない（js/cart.js の renderOrderSummary が参照する #order-items が存在しない）。order_complete.html・order.php は旧フローの残骸。カート機能の存続/撤去はビジネス判断。 → **修正済み(2026-06-12追記)**: order.html にカート注文セクションを復活。カートに商品がある場合のみシミュレーターの上に「カートの内容でご注文」（明細表 #order-items＋お客様情報フォーム）を表示し、order.php へPOST → order_complete.html（カート自動クリア）に接続。空カート時は従来どおりシミュレーターのみ表示。フォームの name 属性（name/company/email/tel/zip/prefecture/address1/address2/note/cart_json）が order.php の受信フィールドと全一致することをブラウザで確認。あわせて order.php の致命的バグ（`$total_fmt`・`$bank` をヒアドキュメント定義の後で代入しており、メールの「商品合計」「振込先口座」が空欄になる）を修正し、メール署名の誤住所（437-0224 磐田市）も正住所（437-1203 磐田市福田5490-47）に修正。送料はメール記載どおり「別途ご案内」運用（注文セクションにもその旨を注記）。
+3. **index.html JSON-LD（LocalBusiness）の aggregateRating（4.97・600件）。** Yahoo/楽天/メルカリの外部モールのレビューを自社サイトの構造化データとして掲載するのは、Googleの「自己申告レビュー（self-serving reviews）」ポリシーに抵触するリスクがあり、リッチリザルト無効化や手動対応の可能性。本文中の「4.97以上/600件以上」表記自体は出典明記ありで問題薄。 → **対応済み(2026-06-12追記)**: JSON-LD から aggregateRating プロパティのみ削除。本文のテキスト表記（出典明記あり）は残置。JSON-LD 3ブロックの妥当性検証済み。
+4. **business.html ロット割引の注記「※ 表示価格はすべて税抜です」。** 商品ページは税込をメイン表示しており、割引の基準価格が税抜・税込どちらか曖昧。文言の明確化推奨。 → **対応済み(2026-06-12追記)**: 「※ 割引適用後の正式なお見積もり金額（税込）は見積もり回答にてご提示します。送料・決済条件は別途。」に変更。ページ内に具体的な価格表記はなく他箇所との矛盾なし。
 5. **佐川・西濃の運賃データそのものの最新性**（2026年改定運賃か）は社内資料がなく未検証。
 6. **blog.html: 旧14記事のサムネイル画像（images/blog/*.jpg）が存在しない。** onerror で非表示になるため表示崩れはないが、新8記事のみ画像ありで見た目が不均一（blog.html は編集対象外のため報告のみ）。
-7. **privacy.html に Google Analytics（GA4）利用の明記がない。** js/components.js で全ページに GA4（G-EQLK2295RN）を導入済み。第6条のCookie一般記述のみでは不十分の可能性。
-8. **company.html に未記入プレースホルダーが残存**（`<!-- REQUIRES USER INPUT -->`: 主要取引先欄が空、定休日の年末年始補記）。
-9. **product.html の在庫切れ表示が機能していない。** `p.outOfStock` を参照するが products.js にこのフィールドはなく、stock.json も読み込まないため常に「在庫あり」扱い。products.html は stock.json 連動済みで、stock.json には false（在庫切れ）の商品が8件あるため、商品詳細ページとの不整合が起こり得る。
-10. **残骸ファイル**: blog_post_sample.html（どこからもリンクされていないテンプレ。旧ヒノキチオール記述を含むがnoindex等なし）、js/components.js.bak、blog/shizuoka-hinoki-shop.html.bak、_redirects（Cloudflare用・Xserverでは無効）、functions/（同）。
+7. **privacy.html に Google Analytics（GA4）利用の明記がない。** js/components.js で全ページに GA4（G-EQLK2295RN）を導入済み。第6条のCookie一般記述のみでは不十分の可能性。 → **対応済み(2026-06-12追記)**: 「8. アクセス解析ツール（Google Analytics）の利用について」を新設（GA4利用・Cookie等での収集・Google社ポリシーに基づく管理・オプトアウトアドオンのリンクを明記）。以降の条項を再採番（旧8〜10→9〜11）、最終改定日を2026年6月12日に更新。
+8. **company.html に未記入プレースホルダーが残存**（`<!-- REQUIRES USER INPUT -->`: 主要取引先欄が空、定休日の年末年始補記）。 → **対応済み(2026-06-12追記)**: 空の「主要取引先」行をテーブルから削除、定休日のプレースホルダーコメントを除去（年末年始は事実未確認のため追記せず現状維持）。REQUIRES USER INPUT の残存ゼロを確認。
+9. **product.html の在庫切れ表示が機能していない。** `p.outOfStock` を参照するが products.js にこのフィールドはなく、stock.json も読み込まないため常に「在庫あり」扱い。products.html は stock.json 連動済みで、stock.json には false（在庫切れ）の商品が8件あるため、商品詳細ページとの不整合が起こり得る。 → **修正済み(2026-06-12追記)**: products.html と同じ仕組み（stock.json をフェッチ → `STOCK[p.id] === false` のみ在庫切れ判定）を product.html に実装。全 `outOfStock` 参照を `isOutOfStock()` に置換（バッジ・カートボタン無効化・JSON-LD availability・関連/おすすめ商品の除外）。文言は products.html に合わせ「在庫切れ・入荷未定」＋入荷通知案内（LINE・お電話）。ブラウザで在庫切れ品 ff1293950b（バッジ表示・ボタン無効・schema.org/OutOfStock）と在庫あり品 ff15108950a（通常表示・カート追加可）の両方を動作確認済み。
+10. **残骸ファイル**: blog_post_sample.html（どこからもリンクされていないテンプレ。旧ヒノキチオール記述を含むがnoindex等なし）、js/components.js.bak、blog/shizuoka-hinoki-shop.html.bak、_redirects（Cloudflare用・Xserverでは無効）、functions/（同）。 → **対応済み(2026-06-12追記)**: blog_post_sample.html・js/components.js.bak・_redirects・functions/ を削除（HTML・sitemapからの参照ゼロをgrepで確認。deploy.sh / GitHub Actions の `--exclude 'functions/'` 指定は無害のため残置）。blog/shizuoka-hinoki-shop.html.bak は blog/ 担当範囲のため未削除。
 
 ---
 
