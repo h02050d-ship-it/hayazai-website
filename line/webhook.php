@@ -202,7 +202,8 @@ function startPhoto(string $replyToken, string $userId, string $token): void {
     replyMessages($replyToken, [textMsg(
         "施工写真のご提供ありがとうございます！🌲\n" .
         "無垢桧フローリング・羽目板を使った施工写真を募集しています。確認後、謝礼としてAmazonギフトカード300円分をメールでお送りします。\n\n" .
-        "まず、お名前を教えてください。"
+        "まず、お名前を教えてください。\n\n" .
+        "✏️ 入力のしかた：画面いちばん下の「メッセージを入力」欄に文字を入力して、右の送信ボタン（紙飛行機マーク）を押してください。"
     )], $token);
 }
 function pcFinalize(array $state, string $userId, string $displayName, array $PC_STORES, string $staffEmail): bool {
@@ -297,7 +298,7 @@ foreach ($payload['events'] as $ev) {
                 $state['product'] = $val; $state['product_label'] = $PRODUCTS[$val];
                 if ($val === 'other') {
                     $state['step'] = 'qty'; $state['grade_label'] = '-'; saveState($userId, $state);
-                    replyMessages($replyToken, [textMsg("ご相談内容（樹種・寸法・用途など）を自由にご記入ください。")], $ACCESS_TOKEN);
+                    replyMessages($replyToken, [textMsg("ご相談内容（樹種・寸法・用途など）を自由にご記入ください。\n\n✏️ 入力のしかた：画面いちばん下の「メッセージを入力」欄に文字を入力して、送信ボタン（紙飛行機マーク）を押してください。")], $ACCESS_TOKEN);
                 } else {
                     $state['step'] = 'grade'; saveState($userId, $state);
                     $items = []; foreach ($GRADES as $k => $label) $items[] = qrPostback($label, 'q=grade&v=' . $k, $label);
@@ -307,12 +308,12 @@ foreach ($payload['events'] as $ev) {
             }
             if ($step === 'grade' && isset($GRADES[$val])) {
                 $state['grade_label'] = $GRADES[$val]; $state['step'] = 'qty'; saveState($userId, $state);
-                replyMessages($replyToken, [textMsg("数量または面積をご記入ください。\n例）30㎡ / 200枚 など")], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("数量または面積をご記入ください。\n例）30㎡ / 200枚 など\n\n✏️ 入力のしかた：画面いちばん下の「メッセージを入力」欄に文字を入力して、送信ボタン（紙飛行機マーク）を押してください。")], $ACCESS_TOKEN);
                 continue;
             }
             if ($step === 'delivery' && isset($DELIVERIES[$val])) {
                 $state['delivery_label'] = $DELIVERIES[$val]; $state['step'] = 'address'; saveState($userId, $state);
-                replyMessages($replyToken, [textMsg("お届け先（都道府県・市区町村）をご記入ください。\n例）静岡県浜松市")], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("お届け先（都道府県・市区町村）をご記入ください。\n例）静岡県浜松市\n\n✏️ 画面下の入力欄に入力して送信してください。")], $ACCESS_TOKEN);
                 continue;
             }
             if ($step === 'confirm' && $val === 'send') {
@@ -331,12 +332,12 @@ foreach ($payload['events'] as $ev) {
             if ($step === 'store' && isset($PC_STORES[$val])) {
                 $state['store'] = $val; $state['step'] = 'pc_order'; saveState($userId, $state);
                 $items = [qrPostback('番号がわからない', 'p=order_skip', '番号がわからない')];
-                replyMessages($replyToken, [textMsg("ご注文番号を教えてください（不正応募防止の確認用です）。\n分かる範囲でOK。", $items)], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("ご注文番号を教えてください（確認用です）。分かる範囲でOK。\n\n✏️ 画面下の入力欄に入力して送信してください。\n分からない場合は下の「番号がわからない」ボタンを押せばそのまま進めます。", $items)], $ACCESS_TOKEN);
                 continue;
             }
             if ($step === 'order_skip') {
                 $state['order'] = '（不明）'; $state['step'] = 'pc_place'; saveState($userId, $state);
-                replyMessages($replyToken, [textMsg("施工箇所を教えてください。\n例）リビングの床、寝室の壁、天井 など")], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("施工箇所を教えてください。\n例）リビングの床、寝室の壁、天井 など\n\n✏️ 画面下の入力欄に入力して送信してください。")], $ACCESS_TOKEN);
                 continue;
             }
             if ($step === 'photo_done') {
@@ -347,7 +348,7 @@ foreach ($payload['events'] as $ev) {
                 }
                 $state['step'] = 'pc_comment'; saveState($userId, $state);
                 $items = [qrPostback('感想は書かない', 'p=comment_skip', '感想は書かない')];
-                replyMessages($replyToken, [textMsg("ありがとうございます！(" . $state['photos'] . "枚)\nよろしければ、ご感想を一言いただけますか？（任意）", $items)], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("ありがとうございます！(" . $state['photos'] . "枚)\nよろしければ、ご感想を一言いただけますか？（任意）\n\n✏️ 画面下の入力欄に入力して送信してください。\n書かない場合は下の「感想は書かない」ボタンでそのまま進めます。", $items)], $ACCESS_TOKEN);
                 continue;
             }
             if ($step === 'comment_skip') {
@@ -446,7 +447,7 @@ foreach ($payload['events'] as $ev) {
             // 施工写真フローの自由記述
             if ($flow === 'photo' && $step === 'pc_name' && $text !== '') {
                 $state['name'] = mb_substr($text, 0, 100); $state['step'] = 'pc_email'; saveState($userId, $state);
-                replyMessages($replyToken, [textMsg("ありがとうございます、" . $state['name'] . "様。\nAmazonギフトカードの送付先となる【メールアドレス】を教えてください。")], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("ありがとうございます、" . $state['name'] . "様。\nAmazonギフトカードの送付先となる【メールアドレス】を教えてください。\n\n✏️ 画面下の入力欄に入力して送信してください。")], $ACCESS_TOKEN);
                 continue;
             }
             if ($flow === 'photo' && $step === 'pc_email' && $text !== '') {
@@ -461,7 +462,7 @@ foreach ($payload['events'] as $ev) {
             }
             if ($flow === 'photo' && $step === 'pc_order' && $text !== '') {
                 $state['order'] = mb_substr($text, 0, 100); $state['step'] = 'pc_place'; saveState($userId, $state);
-                replyMessages($replyToken, [textMsg("施工箇所を教えてください。\n例）リビングの床、寝室の壁、天井 など")], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("施工箇所を教えてください。\n例）リビングの床、寝室の壁、天井 など\n\n✏️ 画面下の入力欄に入力して送信してください。")], $ACCESS_TOKEN);
                 continue;
             }
             if ($flow === 'photo' && $step === 'pc_place' && $text !== '') {
@@ -470,7 +471,9 @@ foreach ($payload['events'] as $ev) {
                 replyMessages($replyToken, [textMsg(
                     "では施工写真を送ってください📷\n" .
                     "（目安：リフォームは施工前3枚＋施工後3枚／新築はいろんな角度から5枚ほど。難しければ　できる範囲でOKです）\n\n" .
-                    "この画面に写真を1枚ずつ送ってください。送り終えたら「写真を送り終えた」を押してください。", $items)], $ACCESS_TOKEN);
+                    "📷 写真の送り方：\n" .
+                    "画面下の入力欄の左にある【＋】か【写真マーク🖼】をタップ → アルバムから写真を選んで送信してください。複数まとめて選んでもOKです。\n\n" .
+                    "送り終えたら下の「写真を送り終えた」ボタンを押してください。", $items)], $ACCESS_TOKEN);
                 continue;
             }
             if ($flow === 'photo' && $step === 'pc_photo') {
