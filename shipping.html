@@ -404,6 +404,18 @@ const DANBALL = {
   4: { weight: 40, box: 320 }
 };
 
+// 910mm → 佐川急便（都道府県別固定・1束あたり税込）※products.htmlと共通データ
+const SAGAWA_1M = {
+  "北海道":3000,"青森":2700,"岩手":2700,"宮城":2500,"秋田":2700,"山形":2500,"福島":2500,
+  "東京":2400,"神奈川":2400,"埼玉":2400,"千葉":2400,"茨城":2400,"栃木":2400,"群馬":2400,
+  "山梨":2400,"新潟":2400,"長野":2400,"富山":2400,"石川":2400,"福井":2400,
+  "愛知":2400,"岐阜":2400,"静岡":2400,"三重":2400,
+  "大阪":2400,"兵庫":2400,"京都":2400,"滋賀":2400,"奈良":2400,"和歌山":2400,
+  "鳥取":2500,"島根":2500,"岡山":2500,"広島":2500,"山口":2500,
+  "徳島":2700,"香川":2700,"愛媛":2700,"高知":2700,
+  "福岡":2700,"佐賀":2700,"長崎":2700,"熊本":2700,"大分":2700,"宮崎":2700,"鹿児島":2700
+};
+
 const MAX_BUNDLE = 20;
 
 // 都道府県リストを生成（SEINO_PREF_MAPから）
@@ -438,6 +450,28 @@ function calcShipping() {
   }
   if (qty <= 0) {
     resultArea.innerHTML = '<p style="color:#c0392b;margin-top:16px;font-size:0.9rem;">数量を入力してください。</p>';
+    return;
+  }
+
+  // 910mm（3尺材）は佐川急便（1束あたり固定・税込）
+  if (length === 1) {
+    const rate = SAGAWA_1M[pref];
+    if (!rate) {
+      resultArea.innerHTML = '<p style="color:#c0392b;margin-top:16px;font-size:0.9rem;">この都道府県は個別見積となります。お問い合わせください。</p>';
+      return;
+    }
+    const total = rate * qty;
+    resultArea.innerHTML = `
+      <div class="result-box" style="margin-top:20px;">
+        <h3>送料見積もり結果</h3>
+        <table class="result-table">
+          <tr class="sub"><th>お届け先</th><td>${pref}</td></tr>
+          <tr class="sub"><th>長さ・数量</th><td>910mm × ${qty}束（佐川急便）</td></tr>
+          <tr class="total"><th>送料合計（税込）</th><td>${total.toLocaleString()}円</td></tr>
+          <tr class="per-bundle"><th>1束あたり</th><td>${rate.toLocaleString()}円</td></tr>
+        </table>
+        <p class="result-note">※ 実際の送料は荷物の状態・配送条件により異なる場合があります。</p>
+      </div>`;
     return;
   }
 

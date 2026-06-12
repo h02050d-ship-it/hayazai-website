@@ -25,6 +25,35 @@ $tel     = h($_POST['tel']);
 $type    = h($_POST['type']);
 $message = h($_POST['message']);
 
+// 法人見積もりフォーム（business.html）の追加フィールド
+$industry_labels = [
+    'builder'   => '工務店・住宅会社',
+    'architect' => '設計事務所・建築士',
+    'reform'    => 'リフォーム業者',
+    'contractor'=> 'ゼネコン・建設会社',
+    'diy_shop'  => 'DIY販売店・小売',
+    'other'     => 'その他',
+];
+$product_type_labels = [
+    'flooring15' => '桧フローリング 15mm',
+    'flooring12' => '桧フローリング 12mm',
+    'panel'      => '桧羽目板 12mm',
+    'multiple'   => '複数',
+];
+$industry       = h($_POST['industry'] ?? '');
+$product_type   = h($_POST['product_type'] ?? '');
+$quantity_range = h($_POST['quantity_range'] ?? '');
+$quote_lines = [];
+if ($industry)       $quote_lines[] = '業種：' . ($industry_labels[$industry] ?? $industry);
+if ($product_type)   $quote_lines[] = '希望商品：' . ($product_type_labels[$product_type] ?? $product_type);
+if ($quantity_range) $quote_lines[] = '希望数量：' . $quantity_range . '束';
+$quote_info = $quote_lines ? implode("\n", $quote_lines) : '';
+
+// 法人見積もり（quote）でメッセージ未入力の場合はデフォルト文を補完
+if ($type === 'quote' && !$message && $quote_info) {
+    $message = '法人見積もりを依頼します。';
+}
+
 // サンプル請求フィールド
 $sample_zip      = h($_POST['sample_zip'] ?? '');
 $sample_address  = h($_POST['sample_address'] ?? '');
@@ -109,6 +138,10 @@ TEL：{$tel}
 内容：
 {$message}
 EOT;
+
+if ($quote_info) {
+    $shop_body .= "\n\n【法人見積もり情報】\n{$quote_info}";
+}
 
 if ($type === 'sample') {
     $shop_body .= "\n\nサンプル送付先：〒{$sample_zip} {$sample_address}\nご希望品目：{$sample_items_str}\nご希望グレード：{$sample_grades_str}";
