@@ -74,6 +74,7 @@ jobs:
         env:
           LINE_CHANNEL_SECRET: ${{ secrets.LINE_CHANNEL_SECRET }}
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           mkdir -p line/state
           {
@@ -82,6 +83,7 @@ jobs:
             echo 'return ['
             printf "    'channel_secret'       => '%s',\n" "$LINE_CHANNEL_SECRET"
             printf "    'channel_access_token' => '%s',\n" "$LINE_CHANNEL_ACCESS_TOKEN"
+            printf "    'openai_api_key'       => '%s',\n" "$OPENAI_API_KEY"
             echo "    'staff_email'          => 'info@hayazai.com',"
             echo "    'from_email'           => 'info@hayazai.com',"
             echo '];'

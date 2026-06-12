@@ -25,6 +25,7 @@ $CHANNEL_SECRET = $CONFIG['channel_secret'] ?? '';
 $ACCESS_TOKEN   = $CONFIG['channel_access_token'] ?? '';
 $STAFF_EMAIL    = $CONFIG['staff_email'] ?? 'info@hayazai.com';
 $FROM_EMAIL     = $CONFIG['from_email'] ?? 'info@hayazai.com';
+$OPENAI_KEY     = $CONFIG['openai_api_key'] ?? '';
 const CAMPAIGN_FROM = 'noreply@hayazai.com';
 
 // --- 署名検証 -------------------------------------------------------
@@ -148,6 +149,56 @@ function fetchDisplayName(string $userId, string $token): string {
     curl_close($ch);
     $d = json_decode((string)$res, true);
     return $d['displayName'] ?? '(不明)';
+}
+
+// =====================================================================
+//  AI一次回答（お問い合わせ用・gpt-4o-mini）
+// =====================================================================
+function aiAnswer(string $category, string $question, string $apiKey): ?string {
+    if ($apiKey === '') return null;
+    $system = <<<SYS
+あなたは「株式会社林材木店」の公式LINEのアシスタントです。お客様の問い合わせに日本語で簡潔（300字以内）・丁寧に一次回答してください。
+
+【会社情報（正確に使ってよい事実）】
+- 株式会社林材木店：無垢桧（ひのき）フローリング・羽目板の製造販売
+- 住所：静岡県磐田市福田5490-47 ／ 電話：0538-58-2395
+- 営業時間：平日8:00〜17:00（土日祝休み）
+- 販売チャネル：楽天市場店・Yahoo!ショッピング店・公式サイト https://hayazai.com
+- 無料サンプルの請求が可能（LINEまたはHPから）
+- お見積もりはLINEメニュー「見積もり依頼」から
+- グレード（節の量）：無節／特上小／小節／節有
+
+【厳守ルール】
+- 価格・在庫・納期・送料の具体的な数字は答えない。「スタッフが確認してご返信します」と案内する
+- 知らないこと・不確かなことは推測で断定しない
+- 当店と無関係な話題（医療・法律・他社製品等）は「こちらではお答えできかねます」と丁重に断る
+- 営業・勧誘めいた誇張はしない。施工の安全に関わる内容は専門業者への相談も勧める
+SYS;
+    $payload = json_encode([
+        'model' => 'gpt-4o-mini',
+        'messages' => [
+            ['role' => 'system', 'content' => $system],
+            ['role' => 'user', 'content' => "カテゴリ: {$category}\n質問: {$question}"],
+        ],
+        'max_tokens' => 500,
+        'temperature' => 0.3,
+    ], JSON_UNESCAPED_UNICODE);
+    $ch = curl_init('https://api.openai.com/v1/chat/completions');
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'Authorization: Bearer ' . $apiKey],
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_TIMEOUT => 12,
+        CURLOPT_CONNECTTIMEOUT => 5,
+    ]);
+    $res = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($res === false || $code !== 200) { error_log('[line] ai answer failed code=' . $code); return null; }
+    $d = json_decode($res, true);
+    $text = trim($d['choices'][0]['message']['content'] ?? '');
+    return $text !== '' ? $text : null;
 }
 
 // =====================================================================
@@ -468,22 +519,41 @@ foreach ($payload['events'] as $ev) {
                 continue;
             }
 
-            // お問い合わせの内容入力 → スタッフ通知＋受付返信
+            // お問い合わせの内容入力 → AI一次回答＋スタッフ通知
             if ($flow === 'inquiry' && $step === 'iq_detail' && $text !== '') {
                 $name = fetchDisplayName($userId, $ACCESS_TOKEN);
                 $catLabel = $state['cat_label'] ?? 'その他';
+                $question = mb_substr($text, 0, 3000);
+
+                // AI一次回答（失敗時はnull→従来の受付メッセージ）
+                $ai = aiAnswer($catLabel, $question, $OPENAI_KEY);
+
+                // スタッフ通知（AIが何と答えたかも記載）
                 $b  = "LINEからお問い合わせが届きました。\n\n";
                 $b .= "■ カテゴリ: {$catLabel}\n";
                 $b .= "■ LINE表示名: {$name}\n";
-                $b .= "■ 内容:\n" . mb_substr($text, 0, 3000) . "\n";
-                $b .= "\n※ このお客様へは LINEのチャット（{$userId}）から返信してください。\n";
+                $b .= "■ 内容:\n{$question}\n";
+                if ($ai !== null) {
+                    $b .= "\n■ AIによる一次回答（送信済み）:\n{$ai}\n";
+                } else {
+                    $b .= "\n■ AI一次回答: なし（エラーまたは未設定。受付メッセージのみ送信済み）\n";
+                }
+                $b .= "\n※ このお客様へは LINEのチャット（{$userId}）から正式にご返信ください。\n";
                 @mb_send_mail($STAFF_EMAIL, "【LINEお問い合わせ】{$catLabel}", $b, 'From: ' . $FROM_EMAIL);
                 clearState($userId);
-                replyMessages($replyToken, [textMsg(
-                    "お問い合わせを受け付けました！🌲\nスタッフが営業時間内にこのトークでご返信します。\n\n" .
-                    "▼営業時間\n平日 8:00〜17:00（土日祝休み）\n" .
-                    "お急ぎの場合はお電話（0538-58-2395）もどうぞ。"
-                )], $ACCESS_TOKEN);
+
+                if ($ai !== null) {
+                    $reply = "🤖 AIによる自動の一次回答です：\n\n" . $ai . "\n\n"
+                           . "──────────\n"
+                           . "※AIは間違えることもあります。内容はあくまで参考とし、最終的なご判断はご自身でお願いします。\n"
+                           . "スタッフが営業時間内（平日8:00〜17:00）にあらためて正式にご返信します。\n"
+                           . "お急ぎの場合はお電話（0538-58-2395）もどうぞ。";
+                } else {
+                    $reply = "お問い合わせを受け付けました！🌲\nスタッフが営業時間内にこのトークでご返信します。\n\n"
+                           . "▼営業時間\n平日 8:00〜17:00（土日祝休み）\n"
+                           . "お急ぎの場合はお電話（0538-58-2395）もどうぞ。";
+                }
+                replyMessages($replyToken, [textMsg($reply)], $ACCESS_TOKEN);
                 continue;
             }
 
