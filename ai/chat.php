@@ -21,6 +21,11 @@ if ($origin !== '' && strpos($origin, 'hayazai.com') === false && strpos($origin
 }
 
 $config = @include __DIR__ . '/config.php';
+if (is_array($config) && isset($config['api_key'])) {
+    // BOM・空白の混入対策（Secrets経由で先頭にBOMが付く事故があった）
+    $config['api_key'] = trim($config['api_key'], " \t\n\r\0\x0B");
+    $config['api_key'] = preg_replace('/^\xEF\xBB\xBF/', '', $config['api_key']);
+}
 if (!$config || empty($config['api_key'])) {
     http_response_code(503);
     echo json_encode(['error' => 'AIチャットは現在準備中です。お電話（0538-58-2395）またはLINEでお問い合わせください。']);
@@ -112,13 +117,7 @@ curl_close($ch);
 
 if ($res === false || $code >= 400) {
     http_response_code(502);
-    $out = ['error' => 'AIの応答に失敗しました。お急ぎの場合はお電話（0538-58-2395）・LINEでお問い合わせください。'];
-    if (!empty($body['debug'])) {
-        $out['debug_code'] = $code;
-        $out['debug_body'] = mb_substr((string)$res, 0, 300);
-        $out['debug_keylen'] = strlen((string)$config['api_key']);
-    }
-    echo json_encode($out, JSON_UNESCAPED_UNICODE);
+    echo json_encode(['error' => 'AIの応答に失敗しました。お急ぎの場合はお電話（0538-58-2395）・LINEでお問い合わせください。']);
     exit;
 }
 
