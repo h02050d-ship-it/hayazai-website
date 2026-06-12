@@ -66,6 +66,15 @@ $DELIVERIES = [
     'm3'     => '2〜3ヶ月',
     'undec'  => '時期未定',
 ];
+// お問い合わせカテゴリ
+$INQ_CATS = [
+    'product'  => '商品について',
+    'sample'   => '無料サンプル請求',
+    'shipping' => '配送・納期',
+    'payment'  => '注文・お支払い',
+    'other'    => 'その他',
+];
+
 // 施工写真キャンペーン：購入店舗（photos.php と表記を揃える）
 $PC_STORES = [
     'rakuten' => '楽天市場店',
@@ -328,6 +337,28 @@ foreach ($payload['events'] as $ev) {
             continue;
         }
 
+        // お問い合わせ（i=...）
+        if (isset($pb['i'])) {
+            if ($pb['i'] === 'cat' && isset($INQ_CATS[$pb['v'] ?? ''])) {
+                $cat = $pb['v'];
+                $state = ['flow' => 'inquiry', 'step' => 'iq_detail', 'cat' => $cat, 'cat_label' => $INQ_CATS[$cat]];
+                saveState($userId, $state);
+                if ($cat === 'sample') {
+                    $msg = "無料サンプルのご請求ですね！🌲\n以下をまとめてご記入ください。\n\n"
+                         . "①お名前\n②お届け先のご住所（郵便番号も）\n③ご希望の商品・グレード\n例）桧フローリング 小節\n\n"
+                         . "✏️ 画面下の「メッセージを入力」欄に入力して送信してください。\n"
+                         . "※メニュー画像で入力欄がかくれているときは、左下のキーボードのマークをタップすると入力欄が出てきます。";
+                } else {
+                    $msg = "「" . $INQ_CATS[$cat] . "」についてですね。\nご質問・ご相談の内容をご記入ください。\n\n"
+                         . "✏️ 画面下の「メッセージを入力」欄に入力して送信してください。\n"
+                         . "※メニュー画像で入力欄がかくれているときは、左下のキーボードのマークをタップすると入力欄が出てきます。";
+                }
+                replyMessages($replyToken, [textMsg($msg)], $ACCESS_TOKEN);
+                continue;
+            }
+            continue;
+        }
+
         // 施工写真キャンペーン（p=...）
         if (isset($pb['p'])) {
             $step = $pb['p']; $val = $pb['v'] ?? '';
@@ -422,22 +453,37 @@ foreach ($payload['events'] as $ev) {
             // トリガー（いつでも開始）
             if (in_array($text, QUOTE_TRIGGERS, true)) { startQuote($replyToken, $userId, $ACCESS_TOKEN, $PRODUCTS); continue; }
             if (in_array($text, PHOTO_TRIGGERS, true)) { startPhoto($replyToken, $userId, $ACCESS_TOKEN); continue; }
-            // お問い合わせボタン（専用応答・キャンペーン案内は出さない）
+            // お問い合わせボタン（カテゴリ選択式・キャンペーン案内は出さない）
             if (in_array($text, ['お問い合わせ', 'お問合せ', '問い合わせ'], true)) {
-                clearState($userId);
+                saveState($userId, ['flow' => 'inquiry', 'step' => 'iq_cat']);
+                $items = [];
+                foreach ($INQ_CATS as $k => $label) $items[] = qrPostback($label, 'i=cat&v=' . $k, $label);
                 replyMessages($replyToken, [textMsg(
-                    "お問い合わせありがとうございます！🌲\n" .
-                    "ご用件をこのままメッセージでお送りください。スタッフが営業時間内にご返信します。\n\n" .
-                    "▼営業時間\n平日 8:00〜17:00（土日祝休み）\n" .
-                    "お急ぎの場合はお電話（0538-58-2395）もどうぞ。\n\n" .
-                    "✏️ 画面下の「メッセージを入力」欄に入力して送信してください。\n" .
-                    "※メニュー画像で入力欄がかくれているときは、左下のキーボードのマークをタップすると入力欄が出てきます。"
-                )], $ACCESS_TOKEN);
+                    "お問い合わせありがとうございます！🌲\nご用件に近いものを下のボタンからお選びください。", $items)], $ACCESS_TOKEN);
                 continue;
             }
             if (in_array($text, ['キャンセル', 'やめる', '最初から'], true)) {
                 clearState($userId);
                 replyMessages($replyToken, [textMsg("入力をリセットしました。\n・お見積もり →「見積もり」\n・施工写真のご提供 →「施工写真」\nと送るといつでも再開できます。")], $ACCESS_TOKEN);
+                continue;
+            }
+
+            // お問い合わせの内容入力 → スタッフ通知＋受付返信
+            if ($flow === 'inquiry' && $step === 'iq_detail' && $text !== '') {
+                $name = fetchDisplayName($userId, $ACCESS_TOKEN);
+                $catLabel = $state['cat_label'] ?? 'その他';
+                $b  = "LINEからお問い合わせが届きました。\n\n";
+                $b .= "■ カテゴリ: {$catLabel}\n";
+                $b .= "■ LINE表示名: {$name}\n";
+                $b .= "■ 内容:\n" . mb_substr($text, 0, 3000) . "\n";
+                $b .= "\n※ このお客様へは LINEのチャット（{$userId}）から返信してください。\n";
+                @mb_send_mail($STAFF_EMAIL, "【LINEお問い合わせ】{$catLabel}", $b, 'From: ' . $FROM_EMAIL);
+                clearState($userId);
+                replyMessages($replyToken, [textMsg(
+                    "お問い合わせを受け付けました！🌲\nスタッフが営業時間内にこのトークでご返信します。\n\n" .
+                    "▼営業時間\n平日 8:00〜17:00（土日祝休み）\n" .
+                    "お急ぎの場合はお電話（0538-58-2395）もどうぞ。"
+                )], $ACCESS_TOKEN);
                 continue;
             }
 
