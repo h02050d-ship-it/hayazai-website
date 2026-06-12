@@ -18,7 +18,13 @@ OUT.mkdir(parents=True, exist_ok=True)
 JSON_PATH = ROOT / "data" / "outlet.json"
 
 # Drive内の全jpgを一度だけ走査して {小文字ファイル名: パス} の索引を作る
+# 同名ファイルが複数ある（例: 2.楽天/トップ配下に部屋写真版）ため、
+# サイト用の統一デザイン画像がある「1.ヤフー」配下を必ず優先する
 index = {}
+for p in (DRIVE / "1.ヤフー").rglob("*.jpg"):
+    if "施工写真" in str(p):
+        continue
+    index.setdefault(p.name.lower(), p)
 for p in DRIVE.rglob("*.jpg"):
     index.setdefault(p.name.lower(), p)
 
