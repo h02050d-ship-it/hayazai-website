@@ -48,6 +48,9 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # AIチャットのレート制限状態ファイル（ai/state/）への外部アクセス遮断
+  RewriteRule ^ai/state/ - [F,L]
+
   # 旧WP固定ページ → 新静的HTML（301恒久リダイレクト）
   RewriteRule ^company-profile/?$ /company.html [R=301,L]
   RewriteRule ^個人情報保護方針/?$ /privacy.html [R=301,L,NE]
