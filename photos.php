@@ -54,12 +54,8 @@ if ($consent !== '1')                                   respond(false, 'consent'
 if (mb_strlen($place) > 300)   $place   = mb_substr($place, 0, 300);
 if (mb_strlen($comment) > 3000) $comment = mb_substr($comment, 0, 3000);
 
-// 謝礼種別はチャネルに応じてサーバー側で強制（出し分けの担保）
-if ($channel === 'rakuten')     $reward = '楽天ポイント';
-elseif ($channel === 'yahoo')   $reward = 'PayPayポイント';
-elseif (!in_array($reward, ['楽天ポイント', 'PayPayポイント', 'Amazonギフトカード'], true)) {
-  respond(false, 'reward');
-}
+// 謝礼は全チャネル共通でAmazonギフトカード（2026-06-12 Amazon統一決定）
+$reward = 'Amazonギフトカード';
 
 // 写真チェック
 if (empty($_FILES['photos']) || !is_array($_FILES['photos']['name'])) {

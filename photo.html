@@ -291,8 +291,12 @@
 
     <div class="reward-box">
       <p class="reward-title">🎁 ご提供への謝礼</p>
-      <p class="reward-main" id="reward-display">300円分のポイントを進呈</p>
+      <div style="display:inline-block;background:#232F3E;border-radius:12px;padding:16px 28px;margin:8px 0 4px;box-shadow:0 4px 12px rgba(35,47,62,0.25);">
+        <span style="display:block;font-size:0.7rem;color:#FF9900;font-weight:700;letter-spacing:0.18em;margin-bottom:4px;">GIFT CARD</span>
+        <span style="display:block;font-family:'Noto Serif JP',serif;font-size:1.3rem;font-weight:700;color:#fff;line-height:1.4;">Amazonギフトカード<br><span style="color:#FF9900;font-size:1.5rem;">300円分</span> 進呈</span>
+      </div>
       <p class="reward-note">
+        謝礼はEメールタイプのギフトコードをメールでお送りします。<br>
         進呈は商品到着後、ご提供内容の確認後となります。<br>
         ご感想は率直な内容で構いません。内容の良し悪しは謝礼の条件ではありません。
       </p>
@@ -352,16 +356,6 @@
         <textarea id="f-comment" name="comment" placeholder="例：張り終えた瞬間の香りに感動しました。子どもがはだしで走り回っています。"></textarea>
       </div>
 
-      <div class="form-group" id="reward-group" style="display:none;">
-        <label class="form-label" for="f-reward">謝礼の受け取り方法 <span class="req">必須</span></label>
-        <select id="f-reward" name="reward">
-          <option value="">選択してください</option>
-          <option value="楽天ポイント">楽天ポイント</option>
-          <option value="PayPayポイント">PayPayポイント</option>
-          <option value="Amazonギフトカード">Amazonギフトカード</option>
-        </select>
-      </div>
-
       <div class="consent-box">
         <details>
           <summary>写真・ご感想の利用について（タップして全文を表示）</summary>
@@ -383,6 +377,11 @@
       <p class="form-hint" style="text-align:center;margin-top:10px;">送信には数十秒かかる場合があります。完了画面が出るまでお待ちください。</p>
     </form>
 
+    <p style="font-size:0.68rem;color:#aaa;line-height:1.7;margin-top:20px;text-align:center;">
+      ※Amazonは本企画のスポンサーではありません。<br>
+      Amazon、Amazon.co.jpおよびそのロゴはAmazon.com, Inc.またはその関連会社の商標です。
+    </p>
+
   </div>
 
   <div id="thanks-view">
@@ -402,28 +401,12 @@
 <script src="js/components.js?v=6"></script>
 <script>
 (function () {
-  // ===== チャネル出し分け =====
-  var REWARD_LABEL = {
-    rakuten: '楽天ポイント 300円分を進呈',
-    yahoo: 'PayPayポイント 300円分を進呈',
-    own: '300円分のポイントを進呈（楽天ポイント／PayPayポイント／Amazonギフトカードから選択）'
-  };
+  // ===== URLパラメータで購入店舗を事前選択（注文番号の突合用） =====
   var channelSel = document.getElementById('f-channel');
-  var rewardGroup = document.getElementById('reward-group');
-  var rewardDisplay = document.getElementById('reward-display');
-
-  function applyChannel(ch) {
-    if (REWARD_LABEL[ch]) rewardDisplay.textContent = REWARD_LABEL[ch];
-    else rewardDisplay.textContent = '300円分のポイントを進呈';
-    rewardGroup.style.display = (ch === 'own') ? '' : 'none';
-  }
-
   var param = new URLSearchParams(location.search).get('ch');
-  if (param && REWARD_LABEL[param]) {
+  if (param && ['rakuten', 'yahoo', 'own'].indexOf(param) !== -1) {
     channelSel.value = param;
-    applyChannel(param);
   }
-  channelSel.addEventListener('change', function () { applyChannel(this.value); });
 
   // ===== 写真選択＋クライアント圧縮 =====
   var MAX_PHOTOS = 10;
@@ -493,7 +476,6 @@
     var email = document.getElementById('f-email').value.trim();
     var channel = channelSel.value;
     var order = document.getElementById('f-order').value.trim();
-    var reward = document.getElementById('f-reward').value;
     var consent = document.getElementById('f-consent').checked;
 
     if (!name) errors.push('お名前を入力してください');
@@ -501,7 +483,6 @@
     if (!channel) errors.push('ご購入店舗を選択してください');
     if (!order) errors.push('ご注文番号を入力してください');
     if (photoFiles.length === 0) errors.push('施工写真を1枚以上追加してください');
-    if (channel === 'own' && !reward) errors.push('謝礼の受け取り方法を選択してください');
     if (!consent) errors.push('利用条件への同意が必要です');
 
     if (errors.length) {
@@ -521,7 +502,7 @@
     fd.append('order_no', order);
     fd.append('place', document.getElementById('f-place').value.trim());
     fd.append('comment', document.getElementById('f-comment').value.trim());
-    fd.append('reward', channel === 'own' ? reward : (channel === 'rakuten' ? '楽天ポイント' : 'PayPayポイント'));
+    fd.append('reward', 'Amazonギフトカード');
     fd.append('consent', '1');
     fd.append('website', form.querySelector('[name="website"]').value);
     photoFiles.forEach(function (p) { fd.append('photos[]', p.blob, p.name); });
