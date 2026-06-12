@@ -203,7 +203,8 @@ function startPhoto(string $replyToken, string $userId, string $token): void {
         "施工写真のご提供ありがとうございます！🌲\n" .
         "無垢桧フローリング・羽目板を使った施工写真を募集しています。確認後、謝礼としてAmazonギフトカード300円分をメールでお送りします。\n\n" .
         "まず、お名前を教えてください。\n\n" .
-        "✏️ 入力のしかた：画面いちばん下の「メッセージを入力」欄に文字を入力して、右の送信ボタン（紙飛行機マーク）を押してください。"
+        "✏️ 入力のしかた：画面下の「メッセージを入力」欄に文字を入力して、送信ボタン（紙飛行機マーク）を押してください。\n" .
+        "※メニュー画像で入力欄がかくれているときは、左下のキーボードのマーク（または「メニュー」の文字）をタップすると入力欄が出てきます。"
     )], $token);
 }
 function pcFinalize(array $state, string $userId, string $displayName, array $PC_STORES, string $staffEmail): bool {
@@ -298,7 +299,7 @@ foreach ($payload['events'] as $ev) {
                 $state['product'] = $val; $state['product_label'] = $PRODUCTS[$val];
                 if ($val === 'other') {
                     $state['step'] = 'qty'; $state['grade_label'] = '-'; saveState($userId, $state);
-                    replyMessages($replyToken, [textMsg("ご相談内容（樹種・寸法・用途など）を自由にご記入ください。\n\n✏️ 入力のしかた：画面いちばん下の「メッセージを入力」欄に文字を入力して、送信ボタン（紙飛行機マーク）を押してください。")], $ACCESS_TOKEN);
+                    replyMessages($replyToken, [textMsg("ご相談内容（樹種・寸法・用途など）を自由にご記入ください。\n\n✏️ 入力のしかた：画面下の「メッセージを入力」欄に文字を入力して、送信ボタン（紙飛行機マーク）を押してください。\n※メニュー画像で入力欄がかくれているときは、左下のキーボードのマーク（または「メニュー」の文字）をタップすると入力欄が出てきます。")], $ACCESS_TOKEN);
                 } else {
                     $state['step'] = 'grade'; saveState($userId, $state);
                     $items = []; foreach ($GRADES as $k => $label) $items[] = qrPostback($label, 'q=grade&v=' . $k, $label);
@@ -308,7 +309,7 @@ foreach ($payload['events'] as $ev) {
             }
             if ($step === 'grade' && isset($GRADES[$val])) {
                 $state['grade_label'] = $GRADES[$val]; $state['step'] = 'qty'; saveState($userId, $state);
-                replyMessages($replyToken, [textMsg("数量または面積をご記入ください。\n例）30㎡ / 200枚 など\n\n✏️ 入力のしかた：画面いちばん下の「メッセージを入力」欄に文字を入力して、送信ボタン（紙飛行機マーク）を押してください。")], $ACCESS_TOKEN);
+                replyMessages($replyToken, [textMsg("数量または面積をご記入ください。\n例）30㎡ / 200枚 など\n\n✏️ 入力のしかた：画面下の「メッセージを入力」欄に文字を入力して、送信ボタン（紙飛行機マーク）を押してください。\n※メニュー画像で入力欄がかくれているときは、左下のキーボードのマーク（または「メニュー」の文字）をタップすると入力欄が出てきます。")], $ACCESS_TOKEN);
                 continue;
             }
             if ($step === 'delivery' && isset($DELIVERIES[$val])) {
@@ -472,7 +473,8 @@ foreach ($payload['events'] as $ev) {
                     "では施工写真を送ってください📷\n" .
                     "（目安：リフォームは施工前3枚＋施工後3枚／新築はいろんな角度から5枚ほど。難しければ　できる範囲でOKです）\n\n" .
                     "📷 写真の送り方：\n" .
-                    "画面下の入力欄の左にある【＋】か【写真マーク🖼】をタップ → アルバムから写真を選んで送信してください。複数まとめて選んでもOKです。\n\n" .
+                    "画面下の入力欄の左にある【＋】か【写真マーク🖼】をタップ → アルバムから写真を選んで送信してください。複数まとめて選んでもOKです。\n" .
+                    "※入力欄が見えないときは、左下のキーボードのマークをタップするとメニューが閉じて入力欄が出てきます。\n\n" .
                     "送り終えたら下の「写真を送り終えた」ボタンを押してください。", $items)], $ACCESS_TOKEN);
                 continue;
             }
