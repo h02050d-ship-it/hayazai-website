@@ -102,16 +102,22 @@
       display: flex;
       align-items: center;
       padding: 80px 40px;
-      opacity: 0;
+      opacity: 1;            /* 各スライドは不透明。重なり順(z-index)で見せる＝白が透けない */
       visibility: hidden;
-      transition: opacity 2s ease-in-out;
+      z-index: 0;
+    }
+    /* 直前のスライドは下層で不透明のまま残す（この上に次がフェードインするので白が出ない） */
+    .hero-slide.prev {
+      visibility: visible;
       z-index: 1;
     }
+    /* 表示中スライドは最前面で 0→1 にフェードイン（下に不透明な prev があるので白なし） */
     .hero-slide.is-active {
-      opacity: 1;
       visibility: visible;
       z-index: 2;
+      animation: heroFade 2s ease-in-out;
     }
+    @keyframes heroFade { from { opacity: 0; } to { opacity: 1; } }
     .hero-slide-bg {
       position: absolute;
       inset: 0;
@@ -1418,13 +1424,16 @@
     });
 
     function go(n) {
-      slides[idx].classList.remove('is-active');
-      slides[idx].setAttribute('aria-hidden', 'true');
-      dots[idx].setAttribute('aria-current', 'false');
+      var old = idx;
       idx = (n + slides.length) % slides.length;
-      slides[idx].classList.add('is-active');
-      slides[idx].setAttribute('aria-hidden', 'false');
-      dots[idx].setAttribute('aria-current', 'true');
+      if (idx === old) return;
+      slides.forEach(function (s, i) {
+        // 直前のスライドだけ prev（下層に不透明で残す）、それ以外の非表示は prev も外す
+        s.classList.toggle('prev', i === old);
+        s.classList.toggle('is-active', i === idx);
+        s.setAttribute('aria-hidden', i === idx ? 'false' : 'true');
+        dots[i].setAttribute('aria-current', i === idx ? 'true' : 'false');
+      });
     }
     function next() { go(idx + 1); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
