@@ -1427,8 +1427,8 @@
       dots[idx].setAttribute('aria-current', 'true');
     }
     function next() { go(idx + 1); }
-    function start() { if (!reduceMotion) timer = setInterval(next, INTERVAL); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() { stop(); if (!reduceMotion) timer = setInterval(next, INTERVAL); }  // 必ず1本だけ
     function restart() { stop(); start(); }
 
     dots[0].setAttribute('aria-current', 'true');
