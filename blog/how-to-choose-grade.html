@@ -101,6 +101,11 @@
       color: var(--text-mid);
     }
     .grade-compare-table tr:nth-child(even) td { background: var(--wood-cream); }
+    .grade-photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0 8px; }
+    .grade-photo-grid figure { margin: 0; }
+    .grade-photo-grid img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; display: block; }
+    .grade-photo-grid figcaption { text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--wood-dark); margin-top: 6px; }
+    @media (max-width: 600px) { .grade-photo-grid { grid-template-columns: repeat(2, 1fr); } }
     .highlight-box {
       background: #f0f8f0;
       border-left: 4px solid var(--green-mid);
@@ -228,6 +233,15 @@
         </tr>
       </tbody>
     </table>
+
+    <h3>実物で見比べる4グレード</h3>
+    <p>当店の桧フローリングを、節の量の違いがわかるように並べました（左から「節有 → 小節 → 特上小 → 無節」）。同じ桧でも、グレードによって表情がこれだけ変わります。いずれも超仕上げ・無塗装の実物です。</p>
+    <div class="grade-photo-grid">
+      <figure><img src="../images/grade/grade_setsuari.webp" alt="節有グレードの桧フローリング実物" loading="lazy"><figcaption>節有</figcaption></figure>
+      <figure><img src="../images/grade/grade_kobushi.webp" alt="小節グレードの桧フローリング実物" loading="lazy"><figcaption>小節</figcaption></figure>
+      <figure><img src="../images/grade/grade_tokujosho.webp" alt="特上小グレードの桧フローリング実物" loading="lazy"><figcaption>特上小</figcaption></figure>
+      <figure><img src="../images/grade/grade_musetsu.webp" alt="無節グレードの桧フローリング実物" loading="lazy"><figcaption>無節</figcaption></figure>
+    </div>
 
     <h3>① 節有（ふしあり）— 自然素材らしい表情</h3>
     <p>
