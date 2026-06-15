@@ -25,6 +25,13 @@
     '.aichat-input{flex:1;border:1px solid #d0c4b4;border-radius:8px;padding:9px 12px;font-size:0.85rem;font-family:inherit;resize:none;height:40px;}',
     '.aichat-send{background:#2e7d32;color:#fff;border:none;border-radius:8px;padding:0 16px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:inherit;}',
     '.aichat-send:disabled{background:#aaa;cursor:default;}',
+    '.aichat-consent{position:absolute;inset:0;z-index:5;background:#fff;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:24px 22px;text-align:left;}',
+    '.aichat-consent h4{margin:0;font-size:0.95rem;color:#3d2b1f;}',
+    '.aichat-consent p{margin:0;font-size:0.8rem;line-height:1.8;color:#5a4a3a;}',
+    '.aichat-consent ul{margin:0;padding-left:18px;font-size:0.78rem;line-height:1.8;color:#5a4a3a;}',
+    '.aichat-consent .agree{background:#2e7d32;color:#fff;border:none;border-radius:8px;padding:12px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;}',
+    '.aichat-consent .agree:hover{background:#256528;}',
+    '.aichat-panel.consented .aichat-consent{display:none;}',
     '@media(max-width:768px){.aichat-fab{bottom:12px;left:12px;padding:10px 14px;font-size:0.8rem;}.aichat-panel{left:8px;bottom:70px;}}'
   ].join('\n');
 
@@ -59,8 +66,29 @@
       '<div class="aichat-head"><h3>🤖 AIアシスタント</h3><button class="aichat-close" aria-label="閉じる">×</button></div>' +
       '<div class="aichat-note">' + escapeHtml(DISCLAIMER) + '</div>' +
       '<div class="aichat-log"></div>' +
-      '<form class="aichat-form"><textarea class="aichat-input" placeholder="例：6畳に必要な枚数は？" maxlength="1000" rows="1"></textarea><button type="submit" class="aichat-send">送信</button></form>';
+      '<form class="aichat-form"><textarea class="aichat-input" placeholder="例：6畳に必要な枚数は？" maxlength="1000" rows="1"></textarea><button type="submit" class="aichat-send">送信</button></form>' +
+      '<div class="aichat-consent">' +
+        '<h4>ご利用前にご確認ください</h4>' +
+        '<p>このチャットはAIが自動で回答します。便利な反面、<strong>内容に誤りが含まれることがあります</strong>。</p>' +
+        '<ul>' +
+          '<li>価格・在庫・納期などの最終確認は、お電話（0538-58-2395）またはLINEでお願いします。</li>' +
+          '<li>ご回答内容にもとづく最終的なご判断は、お客様ご自身の責任でお願いいたします。</li>' +
+        '</ul>' +
+        '<button type="button" class="agree">了承して相談をはじめる</button>' +
+      '</div>';
     document.body.appendChild(panel);
+
+    // 了承ゲート（了承するまで入力不可。同意はこのブラウザに記憶）
+    var consented = false;
+    try { consented = localStorage.getItem('aichat_consent') === '1'; } catch (e) {}
+    if (consented) panel.classList.add('consented');
+    panel.querySelector('.aichat-consent .agree').addEventListener('click', function () {
+      panel.classList.add('consented');
+      try { localStorage.setItem('aichat_consent', '1'); } catch (e) {}
+      if (window.gtag) gtag('event', 'ai_chat_consent', { page_path: location.pathname });
+      var inp = panel.querySelector('.aichat-input');
+      if (inp) inp.focus();
+    });
 
     var log = panel.querySelector('.aichat-log');
     var form = panel.querySelector('.aichat-form');

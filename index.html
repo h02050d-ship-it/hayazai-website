@@ -191,7 +191,28 @@
       background: #fff;
       transform: scale(1.15);
     }
+    /* 両端の前後ボタン */
+    .hero-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      width: 40px; height: 40px;
+      border: none; border-radius: 50%;
+      background: rgba(0,0,0,0.32);
+      color: #fff; font-size: 1.2rem; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background .25s;
+      -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+    }
+    .hero-arrow:hover { background: rgba(0,0,0,0.55); }
+    .hero-arrow.prev-btn { left: 16px; }
+    .hero-arrow.next-btn { right: 16px; }
     @media (max-width: 640px) {
+      .hero-arrow { width: 34px; height: 34px; font-size: 1rem; }
+      .hero-arrow.prev-btn { left: 8px; }
+      .hero-arrow.next-btn { right: 8px; }
       .hero-brand { right: 18px; bottom: 56px; }
       .hero-brand b { font-size: 1.05rem; }
     }
@@ -639,6 +660,8 @@
     <div class="hero-brand"><b>林材木店</b><span>SHIZUOKA / IWATA JAPAN</span></div>
   </div>
 
+  <button type="button" class="hero-arrow prev-btn" aria-label="前のスライド">‹</button>
+  <button type="button" class="hero-arrow next-btn" aria-label="次のスライド">›</button>
   <div class="hero-dots" role="tablist" aria-label="スライド切り替え"></div>
   <div class="hero-scroll">↓ スクロール</div>
 </section>
@@ -1347,7 +1370,7 @@
 
 <div id="site-footer"></div>
 
-<script src="js/components.js?v=7"></script>
+<script src="js/components.js?v=8"></script>
 
 <!-- ===== LP ANIMATIONS (added 2026-04-30) ===== -->
 <script>
@@ -1442,6 +1465,11 @@
 
     dots[0].setAttribute('aria-current', 'true');
     start();
+
+    var prevBtn = hero.querySelector('.prev-btn');
+    var nextBtn = hero.querySelector('.next-btn');
+    if (prevBtn) prevBtn.addEventListener('click', function () { go(idx - 1); restart(); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { go(idx + 1); restart(); });
 
     hero.addEventListener('mouseenter', stop);
     hero.addEventListener('mouseleave', start);
