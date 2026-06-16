@@ -3,7 +3,7 @@
   'use strict';
 
   var ENDPOINT = (location.pathname.indexOf('/blog/') === 0 ? '../' : '') + 'ai/chat.php';
-  var DISCLAIMER = '※AIによる自動回答です。内容に誤りが含まれる場合があります。最終的なご判断はお客様ご自身の責任でお願いいたします。正確な情報・ご注文はお電話（0538-58-2395）またはLINEでご確認ください。';
+  var DISCLAIMER = '※AIによる自動回答です。内容に誤りが含まれる場合があります。最終的なご判断はお客様ご自身の責任でお願いいたします。正確な情報・ご注文はお問い合わせフォームまたはLINEでご確認ください。';
   var GREETING = 'こんにちは！林材木店のAIアシスタントです🌲\n桧フローリングの選び方・DIYの張り方・お手入れなど、お気軽にご質問ください。\n\n' + DISCLAIMER;
 
   var css = [
@@ -71,7 +71,7 @@
         '<h4>ご利用前にご確認ください</h4>' +
         '<p>このチャットはAIが自動で回答します。便利な反面、<strong>内容に誤りが含まれることがあります</strong>。</p>' +
         '<ul>' +
-          '<li>価格・在庫・納期などの最終確認は、お電話（0538-58-2395）またはLINEでお願いします。</li>' +
+          '<li>価格・在庫・納期などの最終確認は、お問い合わせフォームまたはLINEでお願いします。</li>' +
           '<li>ご回答内容にもとづく最終的なご判断は、お客様ご自身の責任でお願いいたします。</li>' +
         '</ul>' +
         '<button type="button" class="agree">了承して相談をはじめる</button>' +
@@ -142,13 +142,13 @@
         body: JSON.stringify({ messages: history.slice(-12) })
       }).then(function (r) { return r.json(); }).then(function (data) {
         typing.remove();
-        var reply = data.reply || data.error || '通信に失敗しました。お電話（0538-58-2395）・LINEでお問い合わせください。';
+        var reply = data.reply || data.error || '通信に失敗しました。お問い合わせフォームまたはLINEでお問い合わせください。';
         addMsg('ai', reply);
         if (data.reply) history.push({ role: 'assistant', content: data.reply });
         try { sessionStorage.setItem('aichat_history', JSON.stringify(history.slice(-12))); } catch (err) {}
       }).catch(function () {
         typing.remove();
-        addMsg('ai', '通信に失敗しました。お電話（0538-58-2395）・LINEでお問い合わせください。');
+        addMsg('ai', '通信に失敗しました。お問い合わせフォームまたはLINEでお問い合わせください。');
       }).finally(function () {
         send.disabled = false;
         input.focus();
