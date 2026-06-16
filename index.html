@@ -142,6 +142,14 @@
       width: 100%;
     }
 
+    /* 切替中、下層に残る前スライドの文字・ブランドは先に消して二重表示を防ぐ
+       （背景画像と覆い(::before)は不透明のまま残るので白は出ない） */
+    .hero-slide.prev .hero-inner,
+    .hero-slide.prev .hero-brand {
+      opacity: 0;
+      transition: opacity .5s ease;
+    }
+
     /* スライド切替時に文字をふわっと */
     .hero-slide.is-active .hero-inner > * {
       animation: heroTextIn 0.9s ease both;
