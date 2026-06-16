@@ -7,8 +7,9 @@
   var GREETING = 'こんにちは！林材木店のAIアシスタントです🌲\n桧フローリングの選び方・DIYの張り方・お手入れなど、お気軽にご質問ください。\n\n' + DISCLAIMER;
 
   var css = [
-    '.aichat-fab{position:fixed;left:16px;bottom:16px;z-index:9000;display:flex;align-items:center;gap:8px;background:#3d2b1f;color:#fff;border:none;border-radius:28px;padding:12px 18px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);font-family:inherit;}',
+    '.aichat-fab{position:fixed;left:18px;bottom:18px;z-index:9000;display:flex;align-items:center;gap:10px;background:#3d2b1f;color:#fff;border:none;border-radius:32px;padding:10px 22px 10px 12px;font-size:0.95rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.28);font-family:inherit;}',
     '.aichat-fab:hover{background:#5a4030;}',
+    '.aichat-fab .aichat-ico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#2e7d32;font-size:1.15rem;flex:0 0 auto;}',
     '.aichat-panel{position:fixed;left:16px;bottom:80px;z-index:9001;width:min(360px,calc(100vw - 32px));height:min(520px,calc(100vh - 120px));background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden;font-family:inherit;}',
     '.aichat-panel.open{display:flex;}',
     '.aichat-head{background:#3d2b1f;color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}',
@@ -32,7 +33,7 @@
     '.aichat-consent .agree{background:#2e7d32;color:#fff;border:none;border-radius:8px;padding:12px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;}',
     '.aichat-consent .agree:hover{background:#256528;}',
     '.aichat-panel.consented .aichat-consent{display:none;}',
-    '@media(max-width:768px){.aichat-fab{bottom:12px;left:12px;padding:10px 14px;font-size:0.8rem;}.aichat-panel{left:8px;bottom:70px;}}'
+    '@media(max-width:768px){.aichat-fab{bottom:14px;left:12px;padding:8px 18px 8px 10px;font-size:0.88rem;}.aichat-fab .aichat-ico{width:30px;height:30px;font-size:1.05rem;}.aichat-panel{left:8px;bottom:76px;}}'
   ].join('\n');
 
   var history = [];
@@ -55,7 +56,7 @@
     var fab = document.createElement('button');
     fab.className = 'aichat-fab';
     fab.setAttribute('aria-label', 'AIチャットで質問する');
-    fab.innerHTML = '🤖 AIに質問';
+    fab.innerHTML = '<span class="aichat-ico">🤖</span><span>AIに質問</span>';
     document.body.appendChild(fab);
 
     var panel = document.createElement('div');

@@ -172,7 +172,7 @@ function renderFloatingLineButton() {
 function loadAiChat() {
   const s = document.createElement('script');
   const base = location.pathname.indexOf('/blog/') === 0 ? '../' : '';
-  s.src = base + 'js/ai-chat.js?v=3';
+  s.src = base + 'js/ai-chat.js?v=4';
   s.defer = true;
   document.body.appendChild(s);
 }
