@@ -1400,9 +1400,8 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 .btn-pulse::before { animation-delay: 0.8s; }
 .btn-pulse::after  { animation-delay: 1.6s; }
 @keyframes btnPulse {
-  0%   { box-shadow: 0 0 10px 0 rgba(240, 217, 190, 0.55); }
-  70%  { box-shadow: 0 0 18px 15px rgba(240, 217, 190, 0); }
-  100% { box-shadow: 0 0 18px 15px rgba(240, 217, 190, 0); }
+  0%   { box-shadow: 0 0 6px 0 rgba(240, 217, 190, 0.6); }
+  100% { box-shadow: 0 0 12px 36px rgba(240, 217, 190, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
   .btn-pulse::before, .btn-pulse::after { animation: none !important; box-shadow: none !important; }
