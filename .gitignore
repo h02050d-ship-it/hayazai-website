@@ -9,3 +9,7 @@ line/config.php
 line/state/*.json
 ai/config.php
 ai/state/
+
+# 出荷依頼送信（秘密情報と状態は除外）
+shukka/config.php
+shukka/state/

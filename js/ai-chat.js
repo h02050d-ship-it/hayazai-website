@@ -5,6 +5,7 @@
   var BASE = (location.pathname.indexOf('/blog/') === 0 ? '../' : '');
   var ENDPOINT = BASE + 'ai/chat.php';
   var ICON = BASE + 'images/ai_assistant_icon.png';
+  var AVATAR = BASE + 'images/ai_assistant_avatar.png';
   var DISCLAIMER = '※AIによる自動回答です。内容に誤りが含まれる場合があります。最終的なご判断はお客様ご自身の責任でお願いいたします。正確な情報・ご注文はお問い合わせフォームまたはLINEでご確認ください。';
   var GREETING = 'こんにちは！林材木店のAIアシスタントです🌲\n桧フローリングの選び方・DIYの張り方・お手入れなど、お気軽にご質問ください。\n\n' + DISCLAIMER;
 
@@ -15,7 +16,8 @@
     '.aichat-panel{position:fixed;left:16px;bottom:80px;z-index:9001;width:min(360px,calc(100vw - 32px));height:min(520px,calc(100vh - 120px));background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden;font-family:inherit;}',
     '.aichat-panel.open{display:flex;}',
     '.aichat-head{background:#3d2b1f;color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}',
-    '.aichat-head h3{margin:0;font-size:0.95rem;color:#fff;}',
+    '.aichat-head h3{margin:0;font-size:0.95rem;color:#fff;display:flex;align-items:center;gap:8px;}',
+    '.aichat-head .aichat-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#f3e6cf;flex:0 0 auto;}',
     '.aichat-close{background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;line-height:1;padding:4px;}',
     '.aichat-note{background:#fff8e1;color:#7a5c00;font-size:0.68rem;line-height:1.5;padding:8px 12px;border-bottom:1px solid #f0e0b0;}',
     '.aichat-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:#faf6f0;}',
@@ -75,7 +77,7 @@
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-label', 'AIチャット');
     panel.innerHTML =
-      '<div class="aichat-head"><h3>🤖 AIアシスタント</h3><button class="aichat-close" aria-label="閉じる">×</button></div>' +
+      '<div class="aichat-head"><h3><img class="aichat-avatar" src="' + AVATAR + '" alt="">AIアシスタント</h3><button class="aichat-close" aria-label="閉じる">×</button></div>' +
       '<div class="aichat-note">' + escapeHtml(DISCLAIMER) + '</div>' +
       '<div class="aichat-log"></div>' +
       '<form class="aichat-form"><textarea class="aichat-input" placeholder="例：6畳に必要な枚数は？" maxlength="1000" rows="1"></textarea><button type="submit" class="aichat-send">送信</button></form>' +
