@@ -1384,11 +1384,11 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
 
 /* CTAボタンの控えめなパルス（box-shadowのみ） */
 .btn-pulse {
-  animation: btnPulse 2.6s ease-in-out infinite;
+  animation: btnPulse 2.1s ease-in-out infinite;
 }
 @keyframes btnPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 217, 190, 0.55); }
-  50%      { box-shadow: 0 0 0 10px rgba(240, 217, 190, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 217, 190, 0.85), 0 0 12px 1px rgba(240, 217, 190, 0.30); }
+  50%      { box-shadow: 0 0 0 17px rgba(240, 217, 190, 0), 0 0 26px 7px rgba(240, 217, 190, 0.55); }
 }
 
 /* 画像・カードのホバー演出（PCのみ） */
