@@ -94,6 +94,7 @@ jobs:
         env:
           SHUKKA_CHANNEL_ACCESS_TOKEN: ${{ secrets.SHUKKA_CHANNEL_ACCESS_TOKEN }}
           SHUKKA_SEND_PIN: ${{ secrets.SHUKKA_SEND_PIN }}
+          SHUKKA_FIREBASE_SECRET: ${{ secrets.SHUKKA_FIREBASE_SECRET }}
         run: |
           {
             echo '<?php'
@@ -101,6 +102,7 @@ jobs:
             echo 'return ['
             printf "    'channel_access_token' => '%s',\n" "$SHUKKA_CHANNEL_ACCESS_TOKEN"
             printf "    'send_pin'             => '%s',\n" "$SHUKKA_SEND_PIN"
+            printf "    'firebase_secret'      => '%s',\n" "$SHUKKA_FIREBASE_SECRET"
             echo '];'
           } > shukka/config.php
           echo "Generated shukka/config.php (token set: $([ -n "$SHUKKA_CHANNEL_ACCESS_TOKEN" ] && echo yes || echo NO))"
