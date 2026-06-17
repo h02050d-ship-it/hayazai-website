@@ -238,6 +238,20 @@
       color: #fff;
       font-weight: 600;
       backdrop-filter: blur(3px);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s, border-color 0.15s;
+    }
+    a.hero-badge::after {
+      content: "›";
+      margin-left: 2px;
+      font-weight: 800;
+      opacity: 0.75;
+    }
+    a.hero-badge:hover {
+      background: rgba(255,255,255,0.26);
+      border-color: rgba(255,255,255,0.6);
+      transform: translateY(-1px);
     }
     .hero-badge .stars { color: #ffd24d; letter-spacing: 1px; font-size: 0.86rem; }
     .hero-badge b { font-weight: 800; }
@@ -631,7 +645,7 @@
   <div class="hero-slide is-active" aria-roledescription="slide" aria-hidden="false">
     <img class="hero-slide-bg" src="images/hero/hero_baby_real.webp" srcset="images/hero/hero_baby_real_mobile.webp 900w, images/hero/hero_baby_real.webp 1600w" sizes="100vw" alt="桧の無垢フローリングの上で笑顔でハイハイする赤ちゃん" fetchpriority="high">
     <div class="hero-inner">
-      <div class="hero-badge"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></div>
+      <a class="hero-badge" href="#reviews" aria-label="お客様の声・レビューを見る"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></a>
       <p class="hero-label">Hinoki Wood Specialist Since 1968</p>
       <h1 class="hero-title">あなたの暮らしに、<br><em>桧の幸せ</em>を。</h1>
       <p class="hero-desc">木のぬくもりで、冬でも素足があたたか。夏はさらり。<br>素足で歩きたくなる、国産無垢桧の床。<br>自社工場から全国のお客様へ、直接お届けします。</p>
@@ -647,7 +661,7 @@
   <div class="hero-slide" aria-roledescription="slide" aria-hidden="true">
     <img class="hero-slide-bg" src="images/hero/hero3_kobiki.webp" srcset="images/hero/hero3_kobiki_mobile.webp 900w, images/hero/hero3_kobiki.webp 1600w" sizes="100vw" alt="磐田の自社工場で桧フローリングの仕上がりを一枚ずつ確認する職人" loading="lazy">
     <div class="hero-inner">
-      <div class="hero-badge"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></div>
+      <a class="hero-badge" href="#reviews" aria-label="お客様の声・レビューを見る"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></a>
       <p class="hero-label">Hinoki Wood Specialist Since 1968</p>
       <h1 class="hero-title">桧一筋、半世紀以上。<br><em>一枚一枚、手で仕上げる。</em></h1>
       <p class="hero-desc">親子三代で受け継いだ、目利きと手仕事。<br>一枚ずつていねいにカンナをかけ、なめらかな肌ざわりに。<br>長く愛せる本物の国産無垢桧を、心を込めてお届けします。</p>
@@ -663,7 +677,7 @@
   <div class="hero-slide" aria-roledescription="slide" aria-hidden="true">
     <img class="hero-slide-bg" src="images/hero/hero1_living.webp" srcset="images/hero/hero1_living_mobile.webp 900w, images/hero/hero1_living.webp 1600w" sizes="100vw" alt="桧の無垢フローリングの明るいリビング" loading="lazy">
     <div class="hero-inner">
-      <div class="hero-badge"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></div>
+      <a class="hero-badge" href="#reviews" aria-label="お客様の声・レビューを見る"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></a>
       <p class="hero-label">Factory-Direct Hinoki Flooring</p>
       <h1 class="hero-title">本物の国産ひのきを、<br><em>手の届く価格で。</em></h1>
       <p class="hero-desc">磐田の自社工場で、製材から仕上げまで一貫生産。<br>だから本物の国産桧を、お求めやすい価格で。<br>まずは無料サンプルで、質感をお確かめください（全国発送）。</p>
@@ -1090,7 +1104,7 @@
 </section>
 
 <!-- ===== REVIEWS ===== -->
-<section class="reveal">
+<section id="reviews" class="reveal" style="scroll-margin-top:90px;">
   <div class="section-inner">
     <p class="section-label">Reviews</p>
     <h2 class="section-title">お客様の声</h2>
@@ -1386,6 +1400,25 @@
 <div id="site-footer"></div>
 
 <script src="js/components.js?v=10"></script>
+
+<!-- ヒーローのレビューバッジ → お客様の声へスクロール（遅延読込のレイアウト伸長に追従して再整列） -->
+<script>
+(function(){
+  function toReviews(){
+    var t = document.getElementById('reviews');
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a.hero-badge');
+    if (!a) return;
+    e.preventDefault();
+    toReviews();
+    setTimeout(toReviews, 500);
+    setTimeout(toReviews, 1100);
+    if (window.gtag) gtag('event', 'reviews_badge_click', { page_path: location.pathname });
+  });
+})();
+</script>
 
 <!-- ===== LP ANIMATIONS (added 2026-04-30) ===== -->
 <script>
