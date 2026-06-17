@@ -400,6 +400,24 @@
       margin-top: 4px;
     }
 
+    /* クリックで関連ページへ飛べる実績（レビュー・配送） */
+    .stat-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .stat-link:hover {
+      background: rgba(255,255,255,0.07);
+      transform: translateY(-2px);
+    }
+    .stat-link .stat-label::after {
+      content: " ›";
+      opacity: 0.7;
+      font-weight: 700;
+    }
+
     /* ===== FEATURES ===== */
     .features-grid {
       display: grid;
@@ -702,18 +720,18 @@
       <div class="stat-num"><span class="count-up" data-count="55" data-duration="1100">0</span><sub>年以上</sub></div>
       <div class="stat-label">創業からの実績</div>
     </div>
-    <div class="stat-item">
+    <a class="stat-item stat-link" href="#reviews" aria-label="お客様の声・レビューを見る">
       <div class="stat-num"><span class="count-up" data-count="4.97" data-decimals="2" data-duration="1200">0.00</span><span style="font-size:1.6rem;">以上</span></div>
       <div class="stat-label">600件以上のレビュー実績</div>
-    </div>
+    </a>
     <div class="stat-item">
       <div class="stat-num"><span class="count-up" data-count="2" data-duration="900">0</span><span style="font-size:0.55em;">万束</span><sub style="font-size:0.45em;">以上</sub></div>
       <div class="stat-label">年間販売実績</div>
     </div>
-    <div class="stat-item">
+    <a class="stat-item stat-link" href="shipping.html" aria-label="配送案内を見る">
       <div class="stat-num">全国</div>
       <div class="stat-label">発送対応</div>
-    </div>
+    </a>
   </div>
 </div>
 
@@ -1409,13 +1427,13 @@
     if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   document.addEventListener('click', function(e){
-    var a = e.target.closest && e.target.closest('a.hero-badge');
+    var a = e.target.closest && e.target.closest('a[href="#reviews"]');
     if (!a) return;
     e.preventDefault();
     toReviews();
     setTimeout(toReviews, 500);
     setTimeout(toReviews, 1100);
-    if (window.gtag) gtag('event', 'reviews_badge_click', { page_path: location.pathname });
+    if (window.gtag) gtag('event', 'reviews_anchor_click', { page_path: location.pathname });
   });
 })();
 </script>
