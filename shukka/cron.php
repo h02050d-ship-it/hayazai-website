@@ -103,7 +103,7 @@ function buildMsg($title, $list, $markNew){
         $blocks[] = '■ ' . $c . "\n" . implode("\n", $lines);
     }
     $txt = $title . ' 林材木店  ' . date('Y/n/j') . "\n\n" . implode("\n\n", $blocks);
-    $txt .= "\n\n計" . count($list) . "件（製造完了$done／製造未完了$und）";
+    $txt .= "\n\n計" . count($list) . "件（製造完了" . $done . "／製造未完了" . $und . "）";
     return $txt;
 }
 
