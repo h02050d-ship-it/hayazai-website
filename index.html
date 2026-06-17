@@ -225,6 +225,25 @@
       .hero-brand b { font-size: 1.05rem; }
     }
 
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 999px;
+      padding: 6px 15px;
+      margin-bottom: 18px;
+      font-size: 0.82rem;
+      color: #fff;
+      font-weight: 600;
+      backdrop-filter: blur(3px);
+    }
+    .hero-badge .stars { color: #ffd24d; letter-spacing: 1px; font-size: 0.86rem; }
+    .hero-badge b { font-weight: 800; }
+    .hero-badge .sep { opacity: 0.5; }
+    @media(max-width:768px){ .hero-badge { font-size: 0.74rem; padding: 5px 12px; } }
+
     .hero-label {
       font-size: 0.72rem;
       letter-spacing: 0.3em;
@@ -612,11 +631,12 @@
   <div class="hero-slide is-active" aria-roledescription="slide" aria-hidden="false">
     <img class="hero-slide-bg" src="images/hero/hero_baby_real.webp" srcset="images/hero/hero_baby_real_mobile.webp 900w, images/hero/hero_baby_real.webp 1600w" sizes="100vw" alt="桧の無垢フローリングの上で笑顔でハイハイする赤ちゃん" fetchpriority="high">
     <div class="hero-inner">
+      <div class="hero-badge"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></div>
       <p class="hero-label">Hinoki Wood Specialist Since 1968</p>
       <h1 class="hero-title">あなたの暮らしに、<br><em>桧の幸せ</em>を。</h1>
-      <p class="hero-desc">国産無垢桧フローリング・羽目板を自社工場で天然乾燥・超仕上げし、全国の工務店・個人のお客様へ直販。長年愛される品質をお届けします。</p>
+      <p class="hero-desc">冬もひんやりしない、夏はさらり。素足で歩きたくなる国産無垢桧の床を、自社工場から全国へ直販。家族をやさしく包む、長年愛される本物の質感です。</p>
       <div class="hero-actions">
-        <a href="sample.html" class="btn btn-lg btn-pulse" style="background:#fff;color:var(--wood-dark);">無料サンプルを請求する</a>
+        <a href="sample.html" class="btn btn-lg btn-pulse" style="background:#fff;color:var(--wood-dark);">無料サンプルで質感を確かめる</a>
         <a href="products.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">商品・価格を見る</a>
       </div>
     </div>
@@ -627,12 +647,13 @@
   <div class="hero-slide" aria-roledescription="slide" aria-hidden="true">
     <img class="hero-slide-bg" src="images/hero/hero3_kobiki.webp" srcset="images/hero/hero3_kobiki_mobile.webp 900w, images/hero/hero3_kobiki.webp 1600w" sizes="100vw" alt="磐田の自社工場で桧フローリングの仕上がりを一枚ずつ確認する職人" loading="lazy">
     <div class="hero-inner">
+      <div class="hero-badge"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></div>
       <p class="hero-label">Hinoki Wood Specialist Since 1968</p>
       <h1 class="hero-title">桧一筋、半世紀以上。<br><em>一枚一枚、手で仕上げる。</em></h1>
-      <p class="hero-desc">親子三代で築き上げてきた、伝統と技術。最新のAI技術も取り入れ、国産無垢桧フローリング・羽目板を磐田の自社工場から製造直販でお届けします。</p>
+      <p class="hero-desc">親子三代で受け継いだ目利きと手仕事に、品質管理では最新のAI技術も。だから一枚ごとに表情が美しく、長く愛せる国産無垢桧をお届けできます。</p>
       <div class="hero-actions">
-        <a href="sample.html" class="btn btn-lg btn-pulse" style="background:#fff;color:var(--wood-dark);">無料サンプルを請求する</a>
-        <a href="products.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">商品・価格を見る</a>
+        <a href="sample.html" class="btn btn-lg btn-pulse" style="background:#fff;color:var(--wood-dark);">無料サンプルを取り寄せる</a>
+        <a href="gallery.php" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">施工事例を見る</a>
       </div>
     </div>
     <div class="hero-brand"><b>林材木店</b><span>SHIZUOKA / IWATA JAPAN</span></div>
@@ -642,12 +663,13 @@
   <div class="hero-slide" aria-roledescription="slide" aria-hidden="true">
     <img class="hero-slide-bg" src="images/hero/hero1_living.webp" srcset="images/hero/hero1_living_mobile.webp 900w, images/hero/hero1_living.webp 1600w" sizes="100vw" alt="桧の無垢フローリングの明るいリビング" loading="lazy">
     <div class="hero-inner">
+      <div class="hero-badge"><span class="stars">★★★★★</span><b>4.97</b><span class="sep">｜</span><span>レビュー600件以上</span></div>
       <p class="hero-label">Factory-Direct Hinoki Flooring</p>
       <h1 class="hero-title">本物の国産ひのきを、<br><em>手の届く価格で。</em></h1>
-      <p class="hero-desc">磐田の自社工場で、製材から仕上げまで一貫生産。だから本物の国産桧を、お求めやすい価格でお届けできます。</p>
+      <p class="hero-desc">磐田の自社工場で、製材から仕上げまで一貫生産。だから本物の国産桧を、お求めやすい価格で。まずは無料サンプルで、質感をお確かめください（全国発送）。</p>
       <div class="hero-actions">
-        <a href="sample.html" class="btn btn-lg btn-pulse" style="background:#fff;color:var(--wood-dark);">無料サンプルを請求する</a>
-        <a href="products.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">商品・価格を見る</a>
+        <a href="products.html" class="btn btn-lg btn-pulse" style="background:#fff;color:var(--wood-dark);">価格表を見る</a>
+        <a href="sample.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">無料サンプルを請求</a>
       </div>
     </div>
     <div class="hero-brand"><b>林材木店</b><span>SHIZUOKA / IWATA JAPAN</span></div>
