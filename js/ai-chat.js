@@ -35,7 +35,16 @@
     '.aichat-consent .agree{background:#2e7d32;color:#fff;border:none;border-radius:8px;padding:12px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;}',
     '.aichat-consent .agree:hover{background:#256528;}',
     '.aichat-panel.consented .aichat-consent{display:none;}',
-    '@media(max-width:768px){.aichat-fab{bottom:14px;left:12px;padding:7px 18px 7px 9px;font-size:0.88rem;}.aichat-fab .aichat-ico{width:31px;height:31px;border-radius:8px;}.aichat-panel{left:8px;bottom:76px;}}'
+    '@media(max-width:768px){' +
+      '.aichat-fab{bottom:14px;left:12px;padding:7px 18px 7px 9px;font-size:0.88rem;}' +
+      '.aichat-fab .aichat-ico{width:31px;height:31px;border-radius:8px;}' +
+      /* モバイルは下から出るボトムシート（全幅・dvhで高さ最適化） */
+      '.aichat-panel{left:0;right:0;bottom:0;top:auto;width:100%;height:88vh;height:88dvh;max-height:88dvh;border-radius:18px 18px 0 0;}' +
+      '.aichat-head{padding:16px;}' +
+      /* 入力欄は16px以上＝iOSのタップ時の自動ズームを防ぐ */
+      '.aichat-input{font-size:16px;height:46px;}' +
+      '.aichat-send{font-size:0.95rem;padding:0 18px;}' +
+    '}'
   ].join('\n');
 
   var history = [];
