@@ -386,6 +386,7 @@
       font-weight: 700;
       color: var(--wood-light);
       line-height: 1.2;
+      white-space: nowrap;
     }
 
     .stat-num sub {
@@ -636,8 +637,10 @@
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .hero { min-height: 80vh; padding: 60px 20px; }
-      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
       .stat-item:nth-child(2) { border-right: none; }
+      .stat-num { font-size: 1.6rem; }
+      .stat-item { padding: 22px 8px; }
       .features-grid { grid-template-columns: 1fr; gap: 16px; }
       .grade-grid { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
@@ -725,7 +728,7 @@
       <div class="stat-label">600件以上のレビュー実績</div>
     </a>
     <div class="stat-item">
-      <div class="stat-num"><span class="count-up" data-count="2" data-duration="900">0</span><span style="font-size:0.55em;">万束</span><sub style="font-size:0.45em;">以上</sub></div>
+      <div class="stat-num"><span class="count-up" data-count="20000" data-duration="1500">0</span><span style="font-size:0.55em;">束</span><sub style="font-size:0.45em;">以上</sub></div>
       <div class="stat-label">年間販売実績</div>
     </div>
     <a class="stat-item stat-link" href="shipping.html" aria-label="配送案内を見る">
@@ -1479,14 +1482,19 @@
     var duration = parseInt(el.getAttribute('data-duration') || '1000', 10);
     var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
     var start = performance.now();
+    function fmt(n) {
+      var s = n.toFixed(dec), parts = s.split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return parts.join('.');
+    }
     function tick(now) {
       var p = Math.min((now - start) / duration, 1);
       // ease-out cubic
       var eased = 1 - Math.pow(1 - p, 3);
       var v = target * eased;
-      el.textContent = v.toFixed(dec);
+      el.textContent = fmt(v);
       if (p < 1) requestAnimationFrame(tick);
-      else el.textContent = target.toFixed(dec);
+      else el.textContent = fmt(target);
     }
     requestAnimationFrame(tick);
   }
