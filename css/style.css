@@ -1493,7 +1493,6 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
   border-radius: 14px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.18);
   text-decoration: none;
-  overflow: hidden;
   transition: transform 0.18s, box-shadow 0.18s;
 }
 .floating-line-banner:hover {
@@ -1511,20 +1510,22 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
   padding: 4px 0;
   letter-spacing: 0.04em;
   text-align: center;
+  border-radius: 12px 12px 0 0;
 }
 
-/* LINEアイコン円 */
+/* LINE公式ロゴ調アイコン（緑の角丸スクエア＋白の吹き出し） */
 .flb-icon {
   margin: 10px 0 6px;
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   background: #06C755;
-  border-radius: 50%;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 6px rgba(6,199,85,0.35);
 }
+.flb-icon svg { width: 30px; height: 30px; }
 
 /* コピー */
 .flb-copy {
@@ -1547,25 +1548,31 @@ h1,h2,h3 { font-family: 'Noto Serif JP', Georgia, serif; line-height: 1.4; }
   text-align: center;
   padding: 6px 0;
   letter-spacing: 0.03em;
+  border-radius: 0 0 12px 12px;
 }
 
-/* 閉じるボタン */
+/* 閉じるボタン（カード右上の外側に浮かせて文字との重なりを回避） */
 .flb-close {
   position: absolute;
-  top: 2px;
-  right: 4px;
-  background: rgba(255,255,255,0.85);
-  border: none;
-  width: 18px;
-  height: 18px;
+  top: -9px;
+  right: -9px;
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   line-height: 1;
-  color: #888;
+  color: #777;
   cursor: pointer;
   padding: 0;
+  z-index: 3;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.flb-close:hover { color: #333; background: #fff; }
+.flb-close:hover { color: #222; background: #f3f3f3; }
 
 @media (max-width: 480px) {
   .floating-line-banner {
