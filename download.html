@@ -3,18 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>販促チラシ・資料ダウンロード | 林材木店</title>
-  <meta name="description" content="林材木店の桧フローリング・羽目板の販促チラシ（PDF）をダウンロードいただけます。店頭設置・配布・商談資料にご活用ください。">
-  <link rel="canonical" href="https://hayazai.com/download.html">
   <meta name="robots" content="noindex,nofollow">
-
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="株式会社林材木店">
-  <meta property="og:title" content="販促チラシ・資料ダウンロード | 林材木店">
-  <meta property="og:description" content="桧フローリング・羽目板の販促チラシ（PDF）をダウンロード。店頭設置・配布・商談資料にどうぞ。">
-  <meta property="og:url" content="https://hayazai.com/download.html">
-  <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
-  <meta property="og:locale" content="ja_JP">
+  <title>販促チラシ ダウンロード＆お申し込み（市場・代理店専用） | 林材木店</title>
+  <meta name="description" content="取り扱い市場・販売代理店専用。販促チラシのPDFダウンロードと、紙チラシのお申し込みができます。">
+  <link rel="canonical" href="https://hayazai.com/download.html">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,57 +14,48 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css?v=11">
   <style>
+    html { scroll-behavior: smooth; }
     .dl-layout { max-width: 920px; margin: 0 auto; padding: 40px 28px 80px; }
     .dl-lead {
       background: linear-gradient(135deg, #f8f2ea, #edf5ed);
-      border: 2px solid var(--wood-mid);
-      border-radius: 12px;
-      padding: 24px 30px;
-      margin-bottom: 36px;
+      border: 2px solid var(--wood-mid); border-radius: 12px;
+      padding: 24px 30px; margin-bottom: 34px;
     }
     .dl-lead p { font-size: 0.95rem; color: var(--text-mid); line-height: 1.9; margin: 0; }
-    .dl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .dl-h2 {
+      font-family: 'Noto Serif JP', serif; font-size: 1.4rem; color: var(--wood-dark);
+      font-weight: 700; padding: 10px 18px; background: var(--wood-pale);
+      border-left: 6px solid var(--wood-mid); border-radius: 0 6px 6px 0; margin: 0 0 22px;
+    }
+    .dl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
     @media (max-width: 680px) { .dl-grid { grid-template-columns: 1fr; } }
-    .dl-card {
-      border: 1px solid var(--wood-mid);
-      border-radius: 12px;
-      padding: 22px 22px 24px;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-    }
-    .dl-card h3 {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 1.08rem;
-      color: var(--wood-dark);
-      margin: 0 0 6px;
-    }
-    .dl-card .meta { font-size: 0.82rem; color: var(--text-mid); margin: 0 0 16px; }
-    .dl-card .dl-btn {
-      margin-top: auto;
-      display: inline-block;
-      text-align: center;
-      background: var(--wood-dark);
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 8px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: opacity .2s;
-    }
+    .dl-card { border: 1px solid var(--wood-mid); border-radius: 12px; padding: 16px 16px 20px; background: #fff; display: flex; flex-direction: column; }
+    .dl-card img.thumb { width: 100%; height: auto; border: 1px solid #e3dac8; border-radius: 8px; display: block; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .dl-card h3 { font-family: 'Noto Serif JP', serif; font-size: 1.04rem; color: var(--wood-dark); margin: 0 0 4px; }
+    .dl-card .meta { font-size: 0.8rem; color: var(--text-mid); margin: 0 0 14px; }
+    .dl-card .dl-btn { margin-top: auto; display: inline-block; text-align: center; background: var(--wood-dark); color: #fff; padding: 12px 18px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: opacity .2s; }
     .dl-card .dl-btn:hover { opacity: .85; }
-    .dl-note {
-      margin-top: 36px;
-      border-left: 5px solid var(--wood-mid);
-      background: var(--wood-pale);
-      border-radius: 0 8px 8px 0;
-      padding: 18px 22px;
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      line-height: 1.9;
+    .jump-apply { text-align: center; margin: 30px 0 4px; }
+    .jump-apply a { display: inline-block; background: var(--wood-mid); color: #fff; padding: 15px 32px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 1.02rem; }
+    .dl-note { margin-top: 30px; border-left: 5px solid var(--wood-mid); background: var(--wood-pale); border-radius: 0 8px 8px 0; padding: 18px 22px; font-size: 0.92rem; color: var(--text-mid); line-height: 1.9; }
+    .dl-note strong { color: var(--wood-dark); } .dl-note a { color: var(--wood-dark); font-weight: 700; }
+    .dl-divider { border: none; border-top: 2px dashed var(--wood-mid); margin: 54px 0 36px; }
+    /* form */
+    .af-form { display: flex; flex-direction: column; gap: 20px; }
+    .af-field label.q { display: block; font-weight: 700; color: var(--wood-dark); margin-bottom: 8px; font-size: 0.95rem; }
+    .af-field .req { color: #c62828; font-size: 0.78rem; margin-left: 6px; }
+    .af-field input[type=text], .af-field input[type=email], .af-field input[type=tel], .af-field textarea {
+      width: 100%; padding: 11px 13px; border: 1px solid #cfc4b2; border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #fff;
     }
-    .dl-note strong { color: var(--wood-dark); }
-    .dl-note a { color: var(--wood-dark); font-weight: 700; }
+    .af-field textarea { min-height: 90px; resize: vertical; }
+    .af-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+    @media (max-width: 560px){ .af-checks { grid-template-columns: 1fr; } }
+    .af-checks label, .af-inline label { font-size: 0.93rem; color: var(--text-mid); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .af-row2 { display: grid; grid-template-columns: 160px 1fr; gap: 14px; }
+    @media (max-width: 560px){ .af-row2 { grid-template-columns: 1fr; } }
+    .af-submit { background: var(--wood-dark); color: #fff; border: none; border-radius: 8px; padding: 15px; font-size: 1.05rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .af-submit:hover { opacity: .88; }
+    .af-tag { display:inline-block; background: var(--wood-pale); color: var(--wood-dark); font-size:0.78rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:12px; }
   </style>
 </head>
 <body>
@@ -80,58 +63,110 @@
 <div id="site-header"></div>
 
 <div class="page-hero">
-  <h1>販促チラシ・資料ダウンロード</h1>
-  <p>最新の販促チラシ（PDF）をダウンロードいただけます。店頭設置・お客様への配布・商談資料にご活用ください。</p>
+  <h1>販促チラシ ダウンロード＆お申し込み</h1>
+  <p>取り扱い市場・販売代理店の皆さま専用ページです</p>
 </div>
 
 <nav class="breadcrumb">
   <a href="index.html">トップ</a>
   <span class="sep">›</span>
-  <span>販促チラシ・資料ダウンロード</span>
+  <span>販促チラシ ダウンロード＆お申し込み</span>
 </nav>
 
 <div class="dl-layout">
 
   <div class="dl-lead">
     <p>
-      取り扱い市場・販売代理店の皆さま、いつもお世話になっております。<br>
-      国産無垢桧フローリング・羽目板の<strong>販促チラシ（PDF・両面A4）</strong>です。印刷して店頭設置やエンドユーザー様（工務店様・お施主様）への配布に、また商談資料・サイト掲載にもご自由にお使いください。<strong>常にこのページから最新版</strong>をご利用いただけます。
+      いつもお世話になっております。国産無垢桧フローリング・羽目板の<strong>販促チラシ（両面A4）</strong>です。印刷して店頭設置やエンドユーザー様（工務店様・お施主様）への配布に、また商談資料・サイト掲載にもご自由にお使いください。<strong>常にこのページから最新版</strong>をご利用いただけます。
     </p>
   </div>
 
+  <!-- ===== 上：ダウンロード ===== -->
+  <h2 class="dl-h2">① PDFをダウンロード</h2>
   <div class="dl-grid">
     <div class="dl-card">
+      <img class="thumb" src="images/flyer_market_thumb.png" alt="販促チラシ（市場・代理店向け）プレビュー">
       <h3>販促チラシ（市場・代理店向け／両面A4）</h3>
       <p class="meta">PDF・A4両面｜約11MB</p>
       <a class="dl-btn" href="pdf/hayazai_flyer_market.pdf" download>PDFをダウンロード</a>
     </div>
     <div class="dl-card">
+      <img class="thumb" src="images/flyer_standard_thumb.png" alt="販促チラシ（標準）プレビュー">
       <h3>販促チラシ（標準／両面A4）</h3>
       <p class="meta">PDF・A4両面｜約11MB</p>
       <a class="dl-btn" href="pdf/hayazai_flyer_standard.pdf" download>PDFをダウンロード</a>
     </div>
   </div>
 
-  <div style="text-align:center; margin-top:30px;">
-    <a href="market_apply.html" style="display:inline-block; background:var(--wood-mid); color:#fff; padding:15px 32px; border-radius:10px; font-weight:700; text-decoration:none; font-size:1.02rem;">📋 紙のチラシを申し込む（市場・代理店専用フォーム）</a>
+  <div class="jump-apply">
+    <a href="#apply">📋 紙のチラシを申し込む（下の申込フォームへ）</a>
   </div>
 
   <div class="dl-note">
     <p>
-      ◆ <strong>紙のチラシの追加は無料</strong>でお送りします。ご希望の部数を <a href="mailto:info@hayazai.com">info@hayazai.com</a>（TEL 0538-58-2395）までお知らせください。<br>
-      ◆ <strong>「こんな資料がほしい」</strong>等のご要望もお気軽にどうぞ。商品チラシ・施工事例・価格表など、順次ご用意してまいります。<br>
-      ◆ 無料サンプル・お見積りのご依頼も随時承っております。
+      ◆ <strong>紙のチラシの追加は無料</strong>でお送りします。下のフォーム、またはメール <a href="mailto:info@hayazai.com">info@hayazai.com</a>（TEL 0538-58-2395）でも承ります。<br>
+      ◆ <strong>「こんな資料がほしい」</strong>等のご要望もお気軽にどうぞ。商品チラシ・施工事例・価格表など、順次ご用意してまいります。
     </p>
   </div>
 
-  <div class="closing-cta">
-    <h2>無料サンプル・お問い合わせ</h2>
-    <p>実物の質感をご確認いただける無料サンプルもご用意しております。お気軽にどうぞ。</p>
-    <div class="btn-row">
-      <a href="sample.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">無料サンプル請求</a>
-      <a href="contact.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">お問い合わせ・見積もり</a>
+  <hr class="dl-divider">
+
+  <!-- ===== 下：申込フォーム ===== -->
+  <h2 class="dl-h2" id="apply">② 販促物 お申し込み</h2>
+  <span class="af-tag">市場・代理店専用</span>
+  <p class="dl-lead" style="background:none;border:none;padding:0;margin:0 0 22px;">
+    ご希望の販促物・部数・送付先をご記入のうえ送信してください。<strong>紙チラシの追加送付は無料</strong>です。
+  </p>
+
+  <form class="af-form" action="market_apply.php" method="post">
+    <div class="af-field">
+      <label class="q">貴社名（市場・代理店名）<span class="req">必須</span></label>
+      <input type="text" name="company" required placeholder="例）〇〇木材市売（株）〇〇営業所">
     </div>
-  </div>
+    <div class="af-row2">
+      <div class="af-field">
+        <label class="q">ご担当者名<span class="req">必須</span></label>
+        <input type="text" name="name" required placeholder="例）山田 太郎">
+      </div>
+      <div class="af-field">
+        <label class="q">お電話番号</label>
+        <input type="tel" name="tel" placeholder="例）0538-58-2395">
+      </div>
+    </div>
+    <div class="af-field">
+      <label class="q">メールアドレス<span class="req">必須</span></label>
+      <input type="email" name="email" required placeholder="例）info@example.co.jp">
+    </div>
+    <div class="af-field">
+      <label class="q">送付先住所<span class="req">必須</span></label>
+      <div class="af-row2">
+        <input type="text" name="zip" placeholder="〒（例 438-0000）">
+        <input type="text" name="address" required placeholder="都道府県市区町村・番地・建物名">
+      </div>
+    </div>
+    <div class="af-field">
+      <label class="q">ご希望の販促物<span class="req">必須・複数可</span></label>
+      <div class="af-checks">
+        <label><input type="checkbox" name="items[]" value="flyer_market"> 販促チラシ（市場・代理店向け）</label>
+        <label><input type="checkbox" name="items[]" value="flyer_standard"> 販促チラシ（標準）</label>
+        <label><input type="checkbox" name="items[]" value="sample"> 無料サンプル</label>
+        <label><input type="checkbox" name="items[]" value="pricelist"> 価格表</label>
+        <label><input type="checkbox" name="items[]" value="other"> その他（備考にご記入）</label>
+      </div>
+    </div>
+    <div class="af-field">
+      <label class="q">必要部数</label>
+      <input type="text" name="quantity" placeholder="例）チラシ20部　など">
+    </div>
+    <div class="af-field af-inline">
+      <label><input type="checkbox" name="pdf_data" value="1"> PDFデータ（メール送付）も希望する</label>
+    </div>
+    <div class="af-field">
+      <label class="q">備考・ご要望</label>
+      <textarea name="note" placeholder="「こんな資料がほしい」等のご要望もお気軽にどうぞ"></textarea>
+    </div>
+    <button type="submit" class="af-submit">この内容で申し込む</button>
+  </form>
 
 </div>
 
