@@ -106,7 +106,7 @@
 </nav>
 
 <div class="sim-wrap">
-  <p class="sim-lead">畳数または面積（㎡）と、商品・グレード・お部屋の条件を選ぶだけ。当店の桧フローリングの<strong>実規格</strong>で、必要な枚数・束数と<strong>商品代の概算（税込）</strong>を自動計算。長さ別の比較もその場でできます。</p>
+  <p class="sim-lead">畳数・面積（㎡）・縦×横（m）のどれでもOK。商品・グレード・お部屋の条件を選ぶだけ。当店の桧フローリングの<strong>実規格</strong>で、必要な枚数・束数と<strong>商品代の概算（税込）</strong>を自動計算。長さ別の比較もその場でできます。</p>
 
   <div class="sim-grid">
     <!-- 入力 -->
@@ -135,7 +135,12 @@
       </div>
 
       <div class="sim-block">
-        <div class="sim-label">🛏 広さ（畳数からどうぞ）</div>
+        <div class="sim-label">🛏 広さ（入れやすい方法でどうぞ）</div>
+        <div class="sim-unit-toggle" id="unit-toggle" style="margin-bottom:12px;">
+          <button data-unit="jo" class="active">畳</button>
+          <button data-unit="m2">㎡</button>
+          <button data-unit="dim">縦×横(m)</button>
+        </div>
         <div class="chips" id="jo-chips">
           <button class="chip" data-jo="4.5">4.5畳</button>
           <button class="chip" data-jo="6">6畳</button>
@@ -144,12 +149,16 @@
           <button class="chip" data-jo="12">12畳</button>
           <button class="chip" data-jo="20">20畳(LDK)</button>
         </div>
-        <div class="sim-inline">
+        <div class="sim-inline" id="single-wrap">
           <input class="num" id="sim-size" type="number" min="0.5" step="0.5" inputmode="decimal" placeholder="6">
-          <div class="sim-unit-toggle" id="unit-toggle">
-            <button data-unit="jo" class="active">畳</button>
-            <button data-unit="m2">㎡</button>
-          </div>
+          <span id="single-unit-label" style="font-weight:700;color:var(--wood-dark);">畳</span>
+        </div>
+        <div class="sim-inline" id="dim-wrap" style="display:none;">
+          <span style="font-size:0.85rem;color:var(--text-mid);">縦</span>
+          <input class="num" id="sim-d" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="3.6" style="width:78px;">
+          <span style="font-size:0.85rem;color:var(--text-mid);">m　×　横</span>
+          <input class="num" id="sim-w" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="2.7" style="width:78px;">
+          <span style="font-size:0.85rem;color:var(--text-mid);">m</span>
         </div>
       </div>
 
@@ -264,7 +273,7 @@
   function yen(n) { return '¥' + n.toLocaleString(); }
 
   var POPULAR = 1820;
-  var state = { cat:'flooring15', grade:'節有', unit:'jo', size:6, shape:1.00, loss:1.10, length:POPULAR };
+  var state = { cat:'flooring15', grade:'節有', unit:'jo', size:6, d:3.6, w:2.7, shape:1.00, loss:1.10, length:POPULAR };
   var SPECS = specsForCat(state.cat);
 
   // ===== 長さチップ生成（商品により規格が変わるため再生成） =====
@@ -284,6 +293,9 @@
 
   // ===== 計算 =====
   function floorArea() {
+    if (state.unit === 'dim') {
+      return (state.d > 0 && state.w > 0) ? state.d * state.w : 0;
+    }
     if (!state.size || state.size <= 0) return 0;
     return state.unit === 'jo' ? state.size * 1.62 : state.size;
   }
@@ -312,12 +324,21 @@
     var fa = floorArea();
     var floorAreaEl = document.getElementById('floor-area');
     var floorSub = document.getElementById('floor-sub');
+    var fw = document.querySelector('.sim-floor-wrap');
+    if (state.unit === 'dim' && state.d > 0 && state.w > 0) {
+      var ar = state.w / state.d; ar = Math.max(0.45, Math.min(2.4, ar));
+      fw.style.aspectRatio = ar.toFixed(3);
+    } else {
+      fw.style.aspectRatio = '16 / 9';
+    }
     if (!fa) {
       floorAreaEl.textContent = '— ㎡';
       floorSub.textContent = '広さを入れてください';
     } else {
       floorAreaEl.textContent = '約' + fa.toFixed(1) + ' ㎡';
-      floorSub.textContent = (state.unit === 'jo' ? state.size + '畳 × 1.62㎡　/　' : '') + 'ロス込 約' + needArea().toFixed(1) + '㎡';
+      var pre = state.unit === 'jo' ? (state.size + '畳 × 1.62㎡　/　')
+              : state.unit === 'dim' ? ('縦' + state.d + 'm × 横' + state.w + 'm　/　') : '';
+      floorSub.textContent = pre + 'ロス込 約' + needArea().toFixed(1) + '㎡';
     }
 
     var spec = SPECS.filter(function(s){return s.length===state.length;})[0] || SPECS[0];
@@ -371,10 +392,19 @@
     state.unit = 'jo'; state.size = parseFloat(b.dataset.jo);
     document.getElementById('sim-size').value = state.size; render();
   });
+  function updateMode() {
+    var u = state.unit;
+    document.getElementById('jo-chips').style.display = u === 'jo' ? 'flex' : 'none';
+    document.getElementById('single-wrap').style.display = (u === 'jo' || u === 'm2') ? 'flex' : 'none';
+    document.getElementById('dim-wrap').style.display = u === 'dim' ? 'flex' : 'none';
+    document.getElementById('single-unit-label').textContent = u === 'jo' ? '畳' : '㎡';
+  }
   document.getElementById('unit-toggle').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    state.unit = b.dataset.unit; render();
+    state.unit = b.dataset.unit; updateMode(); render();
   });
+  document.getElementById('sim-d').addEventListener('input', function () { state.d = parseFloat(this.value); render(); });
+  document.getElementById('sim-w').addEventListener('input', function () { state.w = parseFloat(this.value); render(); });
   document.getElementById('sim-size').addEventListener('input', function () {
     state.size = parseFloat(this.value); render();
   });
@@ -391,6 +421,9 @@
 
   // 初期化
   document.getElementById('sim-size').value = state.size;
+  document.getElementById('sim-d').value = state.d;
+  document.getElementById('sim-w').value = state.w;
+  updateMode();
   buildLenChips();
   render();
 })();
