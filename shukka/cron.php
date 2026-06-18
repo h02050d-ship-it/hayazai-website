@@ -36,6 +36,7 @@ foreach ($items as $key => $it) {
     $l = isset($it['length']) ? trim((string)$it['length']) : '';
     if ($l === '' || $l === '-') continue;
     if (shkSkip(isset($it['customer']) ? $it['customer'] : '')) continue;
+    if (preg_match('/西濃/u', isset($it['remark']) ? (string)$it['remark'] : '')) continue;
     $it['_key'] = $key;
     $cands[$key] = $it;
 }
