@@ -11,4 +11,11 @@ Disallow: /cart.html
 Disallow: /hero_preview.html
 Disallow: /favicon_preview.html
 
+# 市場・代理店専用（一般非公開・検索除外）
+Disallow: /download.html
+Disallow: /market_apply.html
+Disallow: /market_apply.php
+Disallow: /market_apply_complete.html
+Disallow: /pdf/
+
 Sitemap: https://hayazai.com/sitemap.xml

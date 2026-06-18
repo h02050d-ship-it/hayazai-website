@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>販促物 お申し込み（市場・代理店専用） | 林材木店</title>
+  <meta name="description" content="取り扱い市場・販売代理店専用の販促物お申し込みフォームです。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css?v=11">
+  <style>
+    .af-layout { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+    .af-lead { font-size: 0.92rem; color: var(--text-mid); line-height: 1.9; margin-bottom: 28px; }
+    .af-form { display: flex; flex-direction: column; gap: 22px; }
+    .af-field label.q { display: block; font-weight: 700; color: var(--wood-dark); margin-bottom: 8px; font-size: 0.95rem; }
+    .af-field .req { color: #c62828; font-size: 0.8rem; margin-left: 6px; }
+    .af-field input[type=text], .af-field input[type=email], .af-field input[type=tel], .af-field textarea {
+      width: 100%; padding: 11px 13px; border: 1px solid #cfc4b2;
+      border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #fff;
+    }
+    .af-field textarea { min-height: 90px; resize: vertical; }
+    .af-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+    @media (max-width: 560px){ .af-checks { grid-template-columns: 1fr; } }
+    .af-checks label, .af-inline label { font-size: 0.93rem; color: var(--text-mid); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .af-row2 { display: grid; grid-template-columns: 160px 1fr; gap: 14px; }
+    @media (max-width: 560px){ .af-row2 { grid-template-columns: 1fr; } }
+    .af-submit {
+      background: var(--wood-dark); color: #fff; border: none; border-radius: 8px;
+      padding: 15px; font-size: 1.05rem; font-weight: 700; cursor: pointer; font-family: inherit;
+    }
+    .af-submit:hover { opacity: .88; }
+    .af-tag { display:inline-block; background: var(--wood-pale); color: var(--wood-dark); font-size:0.78rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-bottom:10px; }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>販促物 お申し込み</h1>
+  <p>取り扱い市場・販売代理店の皆さま専用のお申し込みフォームです</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <a href="download.html">販促資料ダウンロード</a>
+  <span class="sep">›</span>
+  <span>販促物お申し込み</span>
+</nav>
+
+<div class="af-layout">
+  <span class="af-tag">市場・代理店専用</span>
+  <p class="af-lead">
+    販促チラシ（紙）の<strong>追加送付は無料</strong>です。ご希望の販促物・部数・送付先をご記入のうえ送信してください。PDFデータは <a href="download.html">ダウンロードページ</a> からも取得いただけます。
+  </p>
+
+  <form class="af-form" action="market_apply.php" method="post">
+
+    <div class="af-field">
+      <label class="q">貴社名（市場・代理店名）<span class="req">必須</span></label>
+      <input type="text" name="company" required placeholder="例）〇〇木材市売（株）〇〇営業所">
+    </div>
+
+    <div class="af-row2">
+      <div class="af-field">
+        <label class="q">ご担当者名<span class="req">必須</span></label>
+        <input type="text" name="name" required placeholder="例）山田 太郎">
+      </div>
+      <div class="af-field">
+        <label class="q">お電話番号</label>
+        <input type="tel" name="tel" placeholder="例）0538-58-2395">
+      </div>
+    </div>
+
+    <div class="af-field">
+      <label class="q">メールアドレス<span class="req">必須</span></label>
+      <input type="email" name="email" required placeholder="例）info@example.co.jp">
+    </div>
+
+    <div class="af-field">
+      <label class="q">送付先住所<span class="req">必須</span></label>
+      <div class="af-row2" style="grid-template-columns:160px 1fr;">
+        <input type="text" name="zip" placeholder="〒（例 438-0000）">
+        <input type="text" name="address" required placeholder="都道府県市区町村・番地・建物名">
+      </div>
+    </div>
+
+    <div class="af-field">
+      <label class="q">ご希望の販促物<span class="req">必須・複数可</span></label>
+      <div class="af-checks">
+        <label><input type="checkbox" name="items[]" value="flyer_market"> 販促チラシ（市場・代理店向け）</label>
+        <label><input type="checkbox" name="items[]" value="flyer_standard"> 販促チラシ（標準）</label>
+        <label><input type="checkbox" name="items[]" value="sample"> 無料サンプル</label>
+        <label><input type="checkbox" name="items[]" value="pricelist"> 価格表</label>
+        <label><input type="checkbox" name="items[]" value="other"> その他（備考にご記入）</label>
+      </div>
+    </div>
+
+    <div class="af-field">
+      <label class="q">必要部数</label>
+      <input type="text" name="quantity" placeholder="例）チラシ20部　など">
+    </div>
+
+    <div class="af-field af-inline">
+      <label><input type="checkbox" name="pdf_data" value="1"> PDFデータ（メール送付）も希望する</label>
+    </div>
+
+    <div class="af-field">
+      <label class="q">備考・ご要望</label>
+      <textarea name="note" placeholder="「こんな資料がほしい」等のご要望もお気軽にどうぞ"></textarea>
+    </div>
+
+    <button type="submit" class="af-submit">この内容で申し込む</button>
+  </form>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="js/components.js?v=12"></script>
+</body>
+</html>
