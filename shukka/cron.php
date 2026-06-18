@@ -46,9 +46,9 @@ foreach ($cands as $k => $it) { if (empty($it['shk_sent'])) $news[$k] = $it; }
 
 $action = 'none';
 if (count($news) > 0) {
-    // 新規があれば、未出荷の全品目（🆕新規＋既送で未出荷の残り）を送る。
+    // 新規(未送信)があれば、未出荷の全品目を送る（🆕表示はしない）。
     // 送るのは候補(=非アーカイブ)全部。実際に出荷完了(archived)するまでリストに残る。
-    $msg = buildMsg('【出荷依頼】', array_values($cands), true);
+    $msg = buildMsg('【出荷依頼】', array_values($cands), false);
     if ($DRY) { echo "[DRYRUN 出荷依頼]\n$msg\n"; $action = 'dry_send:' . count($cands) . '(new ' . count($news) . ')'; }
     elseif (broadcast($token, $msg)) {
         // 新規だけを送信済みにマーク（次回は🆕が外れるが、未出荷ならリストには残る）
