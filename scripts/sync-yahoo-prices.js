@@ -24,6 +24,16 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { execFileSync } = require('child_process');
+
+// products.js 更新後、価格表の静的HTML（products.html）を再生成する
+function runPrerenderPrices() {
+  try {
+    execFileSync('node', [path.join(__dirname, 'prerender-prices.js')], { stdio: 'inherit' });
+  } catch (e) {
+    err('prerender-prices.js 実行失敗（価格表の静的化はスキップ）:', e.message);
+  }
+}
 
 // ===== 設定 =====
 const SELLER_ID = 'hayazaimuku';
@@ -275,6 +285,7 @@ function buildNewProductLine(code, info) {
 
   if (updateCount === 0 && removedCount === 0 && newCount === 0) {
     log('変更なしのため終了します。');
+    runPrerenderPrices(); // products.js 手動編集等との整合のため毎回再生成
     return;
   }
 
@@ -286,6 +297,7 @@ function buildNewProductLine(code, info) {
   const out = lines.join('\n');
   fs.writeFileSync(PRODUCTS_FILE, out, 'utf8');
   log(`${PRODUCTS_FILE} を更新しました。`);
+  runPrerenderPrices(); // 価格更新を静的HTMLへ反映
 })().catch(e => {
   err('予期せぬエラー:', e);
   process.exit(1);
