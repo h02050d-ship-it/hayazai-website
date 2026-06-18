@@ -46,15 +46,18 @@ foreach ($cands as $k => $it) { if (empty($it['shk_sent'])) $news[$k] = $it; }
 
 $action = 'none';
 if (count($news) > 0) {
-    $msg = buildMsg('【出荷依頼】', array_values($news), true);
-    if ($DRY) { echo "[DRYRUN 出荷依頼]\n$msg\n"; $action = 'dry_new:' . count($news); }
+    // 新規があれば、未出荷の全品目（🆕新規＋既送で未出荷の残り）を送る。
+    // 送るのは候補(=非アーカイブ)全部。実際に出荷完了(archived)するまでリストに残る。
+    $msg = buildMsg('【出荷依頼】', array_values($cands), true);
+    if ($DRY) { echo "[DRYRUN 出荷依頼]\n$msg\n"; $action = 'dry_send:' . count($cands) . '(new ' . count($news) . ')'; }
     elseif (broadcast($token, $msg)) {
+        // 新規だけを送信済みにマーク（次回は🆕が外れるが、未出荷ならリストには残る）
         $ts = (int)round(microtime(true) * 1000);
         foreach ($news as $k => $it) {
             fbPatch($DBURL . '/items/' . rawurlencode($k) . '.json?auth=' . urlencode($fb), array('shk_sent' => $ts));
         }
-        $action = 'sent_new:' . count($news);
-    } else { $action = 'new_send_failed'; }
+        $action = 'sent:' . count($cands) . '(new ' . count($news) . ')';
+    } else { $action = 'send_failed'; }
 } else {
     // 現状報告：月(1)/木(4) の 9時のみ
     if ($hour === 9 && ($dow === 1 || $dow === 4)) {
