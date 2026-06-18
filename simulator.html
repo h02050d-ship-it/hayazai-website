@@ -35,6 +35,14 @@
     .sim-label { font-size: 0.82rem; font-weight: 700; color: var(--wood-dark); margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
     .sim-two { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 
+    /* 商品の2択（必須） */
+    .prod-choice { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .prod-btn { display:flex; flex-direction:column; gap:3px; align-items:flex-start; text-align:left; border:2px solid #d9cdbc; background:#fbf8f3; border-radius:12px; padding:14px 16px; cursor:pointer; font-family:inherit; transition:all .15s; }
+    .prod-btn:hover { border-color:var(--wood-mid,#7a5c3e); }
+    .prod-btn.active { border-color:var(--wood-dark); background:#fff; box-shadow:0 0 0 3px rgba(61,43,31,0.10); }
+    .prod-btn .pc-name { font-size:1rem; font-weight:700; color:var(--wood-dark); }
+    .prod-btn .pc-sub { font-size:0.73rem; color:var(--text-light); line-height:1.4; }
+
     .chips { display:flex; flex-wrap:wrap; gap:8px; }
     .chip { border:1.5px solid #d9cdbc; background:#fbf8f3; color:var(--wood-dark); border-radius:999px; padding:8px 15px; font-size:0.85rem; font-weight:700; cursor:pointer; transition:all .15s; font-family:inherit; }
     .chip:hover { border-color:var(--wood-mid,#7a5c3e); }
@@ -106,7 +114,7 @@
 </nav>
 
 <div class="sim-wrap">
-  <p class="sim-lead">畳数・面積（㎡）・縦×横（m）のどれでもOK。商品・グレード・お部屋の条件を選ぶだけ。当店の桧フローリングの<strong>実規格</strong>で、必要な枚数・束数と<strong>商品代の概算（税込）</strong>を自動計算。長さ別の比較もその場でできます。</p>
+  <p class="sim-lead">まず<strong>商品（フローリング／羽目板）</strong>を選び、広さは畳数・面積（㎡）・縦×横（m）のどれでもOK。当店の<strong>実規格</strong>で必要な枚数・束数と<strong>商品代の概算（税込）</strong>を自動計算します。長さ別の比較もその場でできます。</p>
 
   <div class="sim-grid">
     <!-- 入力 -->
@@ -114,23 +122,17 @@
       <span class="sim-step">STEP 1</span>
       <p class="sim-card-title">商品とお部屋の条件を選ぶ</p>
 
-      <div class="sim-two" style="margin-top:14px;">
-        <div>
-          <div class="sim-label">🪵 商品</div>
-          <select class="sim-select" id="sim-cat">
-            <option value="flooring15">桧フローリング 15mm</option>
-            <option value="flooring12">桧フローリング 12mm</option>
-            <option value="panel">桧羽目板 12mm（壁/天井）</option>
-          </select>
-        </div>
-        <div>
-          <div class="sim-label">⭐ グレード</div>
-          <select class="sim-select" id="sim-grade">
-            <option value="節有">節有（お手頃）</option>
-            <option value="小節">小節</option>
-            <option value="特上小">特上小</option>
-            <option value="無節">無節（最高級）</option>
-          </select>
+      <div class="sim-block" style="margin-top:14px;">
+        <div class="sim-label">🪵 商品を選ぶ <span style="color:#c0392b;font-size:0.72rem;font-weight:700;">必須</span></div>
+        <div class="prod-choice" id="prod-choice">
+          <button type="button" class="prod-btn" data-cat="flooring15">
+            <span class="pc-name">フローリング</span>
+            <span class="pc-sub">床材・幅108mm（12/15mm 共通）</span>
+          </button>
+          <button type="button" class="prod-btn" data-cat="panel">
+            <span class="pc-name">羽目板</span>
+            <span class="pc-sub">壁・天井材・幅103mm</span>
+          </button>
         </div>
       </div>
 
@@ -268,18 +270,25 @@
     } catch (e) {}
     return null; // 価格不明
   }
+  var GRADES = ['節有','小節','特上小','無節'];
+  function priceRange(cat, length) {
+    var vals = GRADES.map(function (g) { return unitPrice(cat, g, length); }).filter(function (v) { return v != null; });
+    if (!vals.length) return null;
+    return { min: Math.min.apply(null, vals), max: Math.max.apply(null, vals) };
+  }
   function caseArea(s) { return (s.width/1000) * (s.length/1000) * s.qty; }
   function fmtLen(mm) { return mm.toLocaleString() + 'mm'; }
   function yen(n) { return '¥' + n.toLocaleString(); }
 
   var POPULAR = 1820;
-  var state = { cat:'flooring15', grade:'節有', unit:'jo', size:6, d:3.6, w:2.7, shape:1.00, loss:1.10, length:POPULAR };
-  var SPECS = specsForCat(state.cat);
+  var state = { cat:null, unit:'jo', size:6, d:3.6, w:2.7, shape:1.00, loss:1.10, length:POPULAR };
+  var SPECS = [];
 
   // ===== 長さチップ生成（商品により規格が変わるため再生成） =====
   function buildLenChips() {
     var wrap = document.getElementById('len-chips');
     wrap.innerHTML = '';
+    if (!SPECS.length) { wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--text-light);">↑ まず商品を選んでください</span>'; return; }
     var lengths = SPECS.map(function(s){return s.length;});
     if (lengths.indexOf(state.length) < 0) state.length = lengths.indexOf(POPULAR) >= 0 ? POPULAR : lengths[0];
     SPECS.forEach(function (s) {
@@ -305,8 +314,9 @@
     if (!need) return null;
     var a1 = caseArea(spec);
     var cases = Math.ceil(need / a1);
-    var unit = unitPrice(state.cat, state.grade, spec.length);
-    return { cases:cases, sheets:cases*spec.qty, cover:a1*cases, area1:a1, unit:unit, total: unit!=null ? unit*cases : null };
+    var pr = priceRange(state.cat, spec.length);
+    return { cases:cases, sheets:cases*spec.qty, cover:a1*cases, area1:a1,
+             min: pr ? pr.min*cases : null, max: pr ? pr.max*cases : null };
   }
 
   // ===== 描画 =====
@@ -319,6 +329,9 @@
     });
     document.querySelectorAll('#len-chips .chip').forEach(function (c) {
       c.classList.toggle('active', parseInt(c.dataset.len,10) === state.length);
+    });
+    document.querySelectorAll('#prod-choice .prod-btn').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.cat === state.cat);
     });
 
     var fa = floorArea();
@@ -341,12 +354,24 @@
       floorSub.textContent = pre + 'ロス込 約' + needArea().toFixed(1) + '㎡';
     }
 
-    var spec = SPECS.filter(function(s){return s.length===state.length;})[0] || SPECS[0];
-    var r = calc(spec);
-    document.getElementById('hero-spec').textContent = '幅' + spec.width + 'mm × 長さ' + fmtLen(spec.length) + '（' + spec.qty + '枚入＝約' + caseArea(spec).toFixed(2) + '㎡/束）';
+    var heroSpec = document.getElementById('hero-spec');
     var heroCases = document.getElementById('hero-cases');
     var heroMeta = document.getElementById('hero-meta');
     var heroPrice = document.getElementById('hero-price');
+    var cmp = document.getElementById('compare');
+
+    if (!state.cat) {
+      heroSpec.textContent = '商品が未選択です';
+      heroCases.textContent = '—';
+      heroMeta.textContent = '上で「フローリング／羽目板」を選んでください';
+      heroPrice.style.display = 'none';
+      cmp.innerHTML = '<div style="grid-column:1/-1;font-size:0.82rem;color:var(--text-light);">商品を選ぶと、長さ別の比較が表示されます。</div>';
+      return;
+    }
+
+    var spec = SPECS.filter(function(s){return s.length===state.length;})[0] || SPECS[0];
+    var r = calc(spec);
+    heroSpec.textContent = '幅' + spec.width + 'mm × 長さ' + fmtLen(spec.length) + '（' + spec.qty + '枚入＝約' + caseArea(spec).toFixed(2) + '㎡/束）';
     if (!r) {
       heroCases.textContent = '—';
       heroMeta.textContent = '広さを入力すると必要な束数が表示されます';
@@ -354,38 +379,36 @@
     } else {
       heroCases.textContent = r.cases;
       heroMeta.innerHTML = '＝ <strong>' + r.sheets + '枚</strong>（約' + r.cover.toFixed(2) + '㎡分をカバー）';
-      if (r.total != null) {
-        heroPrice.style.display = '';
-        heroPrice.innerHTML = '商品代の概算（税込）<br><b>' + yen(r.total) + '</b>　<small style="opacity:.8;">＋送料</small>';
+      heroPrice.style.display = '';
+      if (r.min != null) {
+        var pstr = r.min === r.max ? yen(r.min) : (yen(r.min) + ' 〜 ' + yen(r.max));
+        heroPrice.innerHTML = '商品代の概算（グレードにより・税込）<br><b>' + pstr + '</b>　<small style="opacity:.8;">＋送料</small>';
       } else {
-        heroPrice.style.display = '';
-        heroPrice.innerHTML = '<small style="opacity:.85;">この規格の価格は<a href="products.html" style="color:#f0d9be;">商品一覧</a>でご確認ください</small>';
+        heroPrice.innerHTML = '<small style="opacity:.85;">価格は<a href="products.html" style="color:#f0d9be;">商品一覧</a>でご確認ください</small>';
       }
     }
 
-    var cmp = document.getElementById('compare');
     cmp.innerHTML = '';
     SPECS.forEach(function (s) {
       var rr = calc(s);
       var card = document.createElement('div');
       card.className = 'cmp-card' + (s.length === state.length ? ' active' : '');
       card.dataset.len = s.length;
+      var ptxt = (rr && rr.min != null) ? (yen(rr.min) + (rr.min !== rr.max ? '〜' : '') + '<span style="font-size:0.64rem;font-weight:400;color:var(--text-light);">（税込・送料別）</span>') : '';
       card.innerHTML =
         '<div class="len">' + fmtLen(s.length) + (s.length === POPULAR ? '<span class="badge">人気</span>' : '') + '</div>' +
         '<div class="qty">' + (rr ? rr.cases : '—') + '<span> 束</span></div>' +
         '<div class="sheets">' + (rr ? rr.sheets + '枚 / 約' + rr.cover.toFixed(1) + '㎡' : '広さ未入力') + '</div>' +
-        '<div class="cprice">' + (rr && rr.total != null ? yen(rr.total) + '<span style="font-size:0.66rem;font-weight:400;color:var(--text-light);">（税込・送料別）</span>' : '') + '</div>';
+        '<div class="cprice">' + ptxt + '</div>';
       card.addEventListener('click', function () { state.length = s.length; render(); });
       cmp.appendChild(card);
     });
   }
 
   // ===== イベント =====
-  document.getElementById('sim-cat').addEventListener('change', function () {
-    state.cat = this.value; SPECS = specsForCat(state.cat); buildLenChips(); render();
-  });
-  document.getElementById('sim-grade').addEventListener('change', function () {
-    state.grade = this.value; render();
+  document.getElementById('prod-choice').addEventListener('click', function (e) {
+    var b = e.target.closest('.prod-btn'); if (!b) return;
+    state.cat = b.dataset.cat; SPECS = specsForCat(state.cat); buildLenChips(); render();
   });
   document.getElementById('jo-chips').addEventListener('click', function (e) {
     var b = e.target.closest('.chip'); if (!b) return;
