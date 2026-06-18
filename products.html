@@ -305,53 +305,14 @@
 
 <div class="products-layout">
 
-  <!-- 概算シミュレーター -->
-  <div class="freight-widget" id="simulator">
-    <h2>かんたん概算シミュレーター — 何束必要？いくらかかる？</h2>
-    <div class="freight-grid" style="grid-template-columns:1fr 1fr 1fr 1fr auto;">
-      <div class="fg-group">
-        <label>お部屋の広さ</label>
-        <div style="display:flex;gap:6px;">
-          <input type="number" id="sim-area" min="0.5" step="0.5" value="6" style="flex:1;">
-          <select id="sim-unit" style="width:70px;">
-            <option value="jo">畳</option>
-            <option value="m2">㎡</option>
-          </select>
-        </div>
-      </div>
-      <div class="fg-group">
-        <label>商品</label>
-        <select id="sim-cat">
-          <option value="flooring15">フローリング15mm</option>
-          <option value="flooring12">フローリング12mm</option>
-          <option value="panel">羽目板12mm</option>
-        </select>
-      </div>
-      <div class="fg-group">
-        <label>グレード</label>
-        <select id="sim-grade">
-          <option value="節有">節有（お手頃）</option>
-          <option value="小節">小節</option>
-          <option value="特上小">特上小</option>
-          <option value="無節">無節（最高級）</option>
-        </select>
-      </div>
-      <div class="fg-group">
-        <label>長さ</label>
-        <select id="sim-length">
-          <option value="910">910mm</option>
-          <option value="1820" selected>1,820mm</option>
-          <option value="3000">3,000mm</option>
-          <option value="4000">4,000mm</option>
-        </select>
-      </div>
-      <div class="fg-btn">
-        <button class="freight-calc-btn" onclick="calcSim()">計算</button>
-      </div>
+  <!-- 必要量シミュレーターへの導線（数量＋概算価格＋長さ比較は simulator.html に一本化） -->
+  <a href="simulator.html" id="simulator" class="freight-widget" style="display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;text-decoration:none;">
+    <div style="min-width:240px;flex:1;">
+      <h2 style="margin:0 0 6px;">📐 必要量シミュレーター — 何束必要？いくら？</h2>
+      <p style="margin:0;font-size:0.86rem;color:var(--text-mid);line-height:1.8;">畳数を入れるだけで、必要な<strong>枚数・束数</strong>と<strong>商品代の概算（税込）</strong>を自動計算。長さ別の比較や床のイメージもその場で確認できます。</p>
     </div>
-    <div id="sim-result"></div>
-    <p style="font-size:0.75rem;color:var(--text-light);margin-top:10px;">※ 施工ロス5%を見込んだ概算（税込）です。送料は下部の「送料かんたん計算」でご確認ください。1畳=1.62㎡で換算。</p>
-  </div>
+    <span class="btn btn-lg" style="background:var(--wood-dark);color:#fff;white-space:nowrap;">シミュレーターを開く →</span>
+  </a>
 
   <!-- 桧フローリング 12mm・15mm（同価格） -->
   <section class="price-section">

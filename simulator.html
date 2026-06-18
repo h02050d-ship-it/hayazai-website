@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>必要量シミュレーター｜何束いる？桧フローリング枚数計算 | 林材木店</title>
-  <meta name="description" content="お部屋の畳数・㎡を入れるだけで、桧フローリングの必要枚数・束（ケース）数を自動計算。長さ別（910/1820/3000/4000mm）の必要束数をその場で比較できる無料シミュレーターです。">
+  <title>必要量シミュレーター｜何束いる？いくら？桧フローリング枚数・概算価格計算 | 林材木店</title>
+  <meta name="description" content="お部屋の畳数・㎡を入れるだけで、桧フローリングの必要枚数・束数と商品代の概算（税込）を自動計算。長さ別（910/1820/3000/4000mm）の必要束数・価格をその場で比較できる無料シミュレーターです。">
   <link rel="canonical" href="https://hayazai.com/simulator.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="株式会社林材木店">
-  <meta property="og:title" content="必要量シミュレーター｜桧フローリング枚数計算 | 林材木店">
-  <meta property="og:description" content="畳数・㎡を入れるだけで必要な枚数・束数を自動計算。長さ別に比較できる無料ツール。">
+  <meta property="og:title" content="必要量シミュレーター｜桧フローリング枚数・概算価格計算 | 林材木店">
+  <meta property="og:description" content="畳数・㎡を入れるだけで必要な枚数・束数と概算価格を自動計算。長さ別に比較できる無料ツール。">
   <meta property="og:url" content="https://hayazai.com/simulator.html">
   <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
   <meta property="og:locale" content="ja_JP">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="必要量シミュレーター｜桧フローリング枚数計算 | 林材木店">
-  <meta name="twitter:description" content="畳数・㎡を入れるだけで必要な枚数・束数を自動計算。">
+  <meta name="twitter:title" content="必要量シミュレーター｜桧フローリング枚数・概算価格計算 | 林材木店">
+  <meta name="twitter:description" content="畳数・㎡を入れるだけで必要な枚数・束数と概算価格を自動計算。">
   <meta name="twitter:image" content="https://hayazai.com/images/og/og-image.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,11 +30,11 @@
     .sim-card { background: #fff; border: 1px solid #e8ddd0; border-radius: 16px; padding: 26px 26px 28px; box-shadow: 0 8px 26px rgba(61,43,31,0.07); }
     .sim-card-title { font-family:'Noto Serif JP',serif; font-size: 1.02rem; color: var(--wood-dark); font-weight: 700; margin: 0 0 4px; }
     .sim-step { display:inline-block; font-size:0.66rem; font-weight:700; letter-spacing:.12em; color:#fff; background:var(--wood-mid,#7a5c3e); border-radius:20px; padding:3px 10px; margin-bottom:12px; }
-    .sim-block { margin-top: 22px; }
-    .sim-block:first-of-type { margin-top: 16px; }
+    .sim-block { margin-top: 18px; }
+    .sim-block:first-of-type { margin-top: 14px; }
     .sim-label { font-size: 0.82rem; font-weight: 700; color: var(--wood-dark); margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+    .sim-two { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 
-    /* 畳プリセット・長さチップ */
     .chips { display:flex; flex-wrap:wrap; gap:8px; }
     .chip { border:1.5px solid #d9cdbc; background:#fbf8f3; color:var(--wood-dark); border-radius:999px; padding:8px 15px; font-size:0.85rem; font-weight:700; cursor:pointer; transition:all .15s; font-family:inherit; }
     .chip:hover { border-color:var(--wood-mid,#7a5c3e); }
@@ -48,7 +48,6 @@
 
     .sim-select { width:100%; padding:11px 12px; border:1px solid #d0c4b4; border-radius:8px; font-size:0.9rem; background:#fff; font-family:inherit; color:var(--wood-dark); }
 
-    /* 床ビジュアル */
     .sim-floor-wrap { position:relative; border-radius:12px; overflow:hidden; border:6px solid #efe6d7; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04); aspect-ratio: 16/9; background:#e7c79b; }
     .sim-floor { position:absolute; inset:0;
       background:
@@ -60,25 +59,26 @@
     .sim-floor-label .big { font-family:'Noto Serif JP',serif; font-size:1.9rem; font-weight:700; line-height:1.1; }
     .sim-floor-label .sub { font-size:0.78rem; margin-top:4px; }
 
-    /* 結果ヒーロー */
     .sim-result-hero { background:linear-gradient(150deg,var(--wood-dark),#1f2f1a); color:#fff; border-radius:14px; padding:24px 24px 22px; text-align:center; margin-top:18px; }
-    .sim-result-hero .ttl { font-size:0.78rem; letter-spacing:.06em; color:rgba(255,255,255,0.72); }
+    .sim-result-hero .ttl { font-size:0.76rem; letter-spacing:.04em; color:rgba(255,255,255,0.72); }
     .sim-result-hero .main { font-family:'Noto Serif JP',serif; line-height:1.05; margin:8px 0 6px; }
-    .sim-result-hero .main b { font-size:3.2rem; color:#f0d9be; }
-    .sim-result-hero .main span { font-size:1.1rem; }
-    .sim-result-hero .meta { font-size:0.84rem; color:rgba(255,255,255,0.85); }
+    .sim-result-hero .main b { font-size:3.1rem; color:#f0d9be; }
+    .sim-result-hero .main span { font-size:1.05rem; }
+    .sim-result-hero .meta { font-size:0.82rem; color:rgba(255,255,255,0.82); }
     .sim-result-hero .meta strong { color:#fff; }
+    .sim-result-hero .price { margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.18); font-size:0.84rem; color:rgba(255,255,255,0.82); }
+    .sim-result-hero .price b { font-size:1.5rem; color:#fff; font-family:'Noto Serif JP',serif; }
 
-    /* 長さ別比較 */
     .sim-compare { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:16px; }
     .cmp-card { border:1.5px solid #e8ddd0; border-radius:10px; padding:12px 14px; cursor:pointer; transition:all .15s; background:#fff; }
     .cmp-card:hover { border-color:var(--wood-mid,#7a5c3e); }
     .cmp-card.active { border-color:var(--wood-dark); background:#fbf8f3; box-shadow:0 0 0 2px rgba(61,43,31,0.12); }
     .cmp-card .len { font-size:0.82rem; font-weight:700; color:var(--wood-dark); }
     .cmp-card .badge { font-size:0.62rem; font-weight:700; color:#256528; background:#e8f5e9; border-radius:20px; padding:2px 8px; margin-left:6px; }
-    .cmp-card .qty { font-size:1.5rem; font-family:'Noto Serif JP',serif; font-weight:700; color:var(--wood-dark); margin-top:6px; }
-    .cmp-card .qty span { font-size:0.8rem; font-weight:500; }
-    .cmp-card .sheets { font-size:0.74rem; color:var(--text-light); margin-top:2px; }
+    .cmp-card .qty { font-size:1.45rem; font-family:'Noto Serif JP',serif; font-weight:700; color:var(--wood-dark); margin-top:6px; }
+    .cmp-card .qty span { font-size:0.78rem; font-weight:500; }
+    .cmp-card .sheets { font-size:0.72rem; color:var(--text-light); margin-top:2px; }
+    .cmp-card .cprice { font-size:0.8rem; font-weight:700; color:var(--wood-dark); margin-top:4px; }
 
     .sim-note { font-size:0.74rem; color:var(--text-light); line-height:1.8; margin-top:16px; }
     .sim-note a { color:var(--green-mid,#2e7d32); }
@@ -88,9 +88,7 @@
     .sim-cta p { font-size:0.86rem; color:var(--text-mid); margin-bottom:18px; }
     .sim-cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 
-    @media (max-width: 860px) {
-      .sim-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 860px) { .sim-grid { grid-template-columns: 1fr; } }
   </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"桧フローリング 必要量シミュレーター","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"},"publisher":{"@type":"Organization","name":"林材木店"}}</script>
 </head>
@@ -99,7 +97,7 @@
 
 <div class="page-hero">
   <h1>必要量シミュレーター</h1>
-  <p>お部屋の広さを入れるだけ。必要な枚数・束（ケース）数がその場でわかります。</p>
+  <p>お部屋の広さを入れるだけ。必要な枚数・束数と、商品代の概算がその場でわかります。</p>
 </div>
 
 <nav class="breadcrumb">
@@ -108,13 +106,33 @@
 </nav>
 
 <div class="sim-wrap">
-  <p class="sim-lead">畳数または面積（㎡）と、お部屋の形・ロス率を選ぶだけ。当店の桧フローリングの<strong>実規格（幅108mm・長さ別の入数）</strong>で、必要な枚数と束数を自動計算します。長さ別の比較もその場でできます。</p>
+  <p class="sim-lead">畳数または面積（㎡）と、商品・グレード・お部屋の条件を選ぶだけ。当店の桧フローリングの<strong>実規格</strong>で、必要な枚数・束数と<strong>商品代の概算（税込）</strong>を自動計算。長さ別の比較もその場でできます。</p>
 
   <div class="sim-grid">
     <!-- 入力 -->
     <div class="sim-card">
       <span class="sim-step">STEP 1</span>
-      <p class="sim-card-title">お部屋の広さ・条件を入れる</p>
+      <p class="sim-card-title">商品とお部屋の条件を選ぶ</p>
+
+      <div class="sim-two" style="margin-top:14px;">
+        <div>
+          <div class="sim-label">🪵 商品</div>
+          <select class="sim-select" id="sim-cat">
+            <option value="flooring15">桧フローリング 15mm</option>
+            <option value="flooring12">桧フローリング 12mm</option>
+            <option value="panel">桧羽目板 12mm（壁/天井）</option>
+          </select>
+        </div>
+        <div>
+          <div class="sim-label">⭐ グレード</div>
+          <select class="sim-select" id="sim-grade">
+            <option value="節有">節有（お手頃）</option>
+            <option value="小節">小節</option>
+            <option value="特上小">特上小</option>
+            <option value="無節">無節（最高級）</option>
+          </select>
+        </div>
+      </div>
 
       <div class="sim-block">
         <div class="sim-label">🛏 広さ（畳数からどうぞ）</div>
@@ -163,7 +181,7 @@
     <!-- 結果 -->
     <div class="sim-card">
       <span class="sim-step">STEP 2</span>
-      <p class="sim-card-title">必要量の結果</p>
+      <p class="sim-card-title">必要量・概算価格の結果</p>
 
       <div class="sim-floor-wrap">
         <div class="sim-floor"></div>
@@ -177,13 +195,14 @@
         <div class="ttl" id="hero-spec">選択中の規格</div>
         <div class="main"><b id="hero-cases">—</b><span> 束</span></div>
         <div class="meta" id="hero-meta">広さを入力すると必要な束数が表示されます</div>
+        <div class="price" id="hero-price" style="display:none;"></div>
       </div>
 
       <div class="sim-label" style="margin-top:20px;">📊 長さ別に比べる</div>
       <div class="sim-compare" id="compare"></div>
 
       <p class="sim-note" id="sim-note">
-        ※ 「束（ケース）」＝梱包単位。必要数は<strong>小数点以下を切り上げ</strong>ています。畳数は<strong>1畳＝1.62㎡</strong>で換算（実際の畳は地域差あり）。最終確認は<strong>お部屋の実測</strong>がおすすめです。天然木のため追加注文で色味が変わることがあり、余裕があれば1束多めが安心。詳しい考え方は<a href="blog/how-many-sheets.html">必要枚数の計算ガイド</a>をご覧ください。
+        ※ 価格は<strong>商品代の概算（税込）</strong>で、別途送料がかかります。「束（ケース）」＝梱包単位、必要数は<strong>小数点以下を切り上げ</strong>。畳数は<strong>1畳＝1.62㎡</strong>換算（実際の畳は地域差あり／最終確認は実測推奨）。最新の価格・在庫・送料は<a href="products.html">商品一覧</a>でご確認ください。天然木のため追加注文で色味が変わることがあり、余裕があれば1束多めが安心です。詳しい考え方は<a href="blog/how-many-sheets.html">必要枚数の計算ガイド</a>へ。
       </p>
     </div>
   </div>
@@ -205,53 +224,63 @@
 <script src="js/components.js?v=12"></script>
 <script>
 (function () {
-  // ===== 当店実規格（data/products.js の PRODUCTS から取得。無ければフォールバック） =====
-  var FALLBACK = [
-    { width:108, length:910,  qty:20 },
-    { width:108, length:1820, qty:20 },
-    { width:108, length:3000, qty:10 },
-    { width:108, length:4000, qty:8  }
-  ];
-  function getSpecs() {
-    var specs = [];
+  // ===== フォールバック規格（PRODUCTS が無い場合の数量計算用。価格は不明扱い） =====
+  var FALLBACK_SPECS = {
+    flooring15: [ {width:108,length:910,qty:20},{width:108,length:1820,qty:20},{width:108,length:3000,qty:10},{width:108,length:4000,qty:8} ],
+    flooring12: [ {width:108,length:910,qty:20},{width:108,length:1820,qty:20},{width:108,length:3000,qty:10},{width:108,length:4000,qty:8} ],
+    panel:      [ {width:103,length:910,qty:20},{width:103,length:1820,qty:20},{width:103,length:3000,qty:10},{width:103,length:4000,qty:8} ]
+  };
+  function specsForCat(cat) {
+    var specs = [], seen = {};
     try {
       if (typeof PRODUCTS !== 'undefined') {
-        var seen = {};
         PRODUCTS.forEach(function (p) {
-          if (p.cat !== 'flooring15') return; // 15mm品を代表規格に（12mmも同寸・同入数）
-          var key = p.width + 'x' + p.length + 'x' + p.qty;
-          if (seen[key]) return; seen[key] = true;
+          if (p.cat !== cat) return;
+          var k = p.width + 'x' + p.length + 'x' + p.qty;
+          if (seen[k]) return; seen[k] = true;
           specs.push({ width:p.width, length:p.length, qty:p.qty });
         });
       }
     } catch (e) {}
-    if (!specs.length) specs = FALLBACK;
+    if (!specs.length) specs = (FALLBACK_SPECS[cat] || FALLBACK_SPECS.flooring15).map(function(o){return o;});
     specs.sort(function (a,b){ return a.length - b.length; });
     return specs;
   }
-  function caseArea(s){ return (s.width/1000) * (s.length/1000) * s.qty; }
-  function fmtLen(mm){ return mm.toLocaleString() + 'mm'; }
+  // HP税込 = Yahoo税込 × 0.95（100円単位四捨五入）— products.html と同一ロジック
+  function hpPriceIncTax(y) { return Math.round(y * 0.95 / 100) * 100; }
+  function unitPrice(cat, grade, length) {
+    try {
+      if (typeof PRODUCTS !== 'undefined') {
+        var p = PRODUCTS.find(function (p) {
+          return p.cat === cat && p.grade === 'A' && p.quality === grade && p.length === length;
+        });
+        if (p && p.price) return hpPriceIncTax(p.price);
+      }
+    } catch (e) {}
+    return null; // 価格不明
+  }
+  function caseArea(s) { return (s.width/1000) * (s.length/1000) * s.qty; }
+  function fmtLen(mm) { return mm.toLocaleString() + 'mm'; }
+  function yen(n) { return '¥' + n.toLocaleString(); }
 
-  var SPECS = getSpecs();
-  var POPULAR = 1820; // 人気・標準
+  var POPULAR = 1820;
+  var state = { cat:'flooring15', grade:'節有', unit:'jo', size:6, shape:1.00, loss:1.10, length:POPULAR };
+  var SPECS = specsForCat(state.cat);
 
-  var state = {
-    unit: 'jo',
-    size: 6,
-    shape: 1.00,
-    loss: 1.10,
-    length: SPECS.some(function(s){return s.length===POPULAR;}) ? POPULAR : SPECS[0].length
-  };
-
-  // ===== チップ生成 =====
-  var lenChips = document.getElementById('len-chips');
-  SPECS.forEach(function (s) {
-    var b = document.createElement('button');
-    b.className = 'chip';
-    b.dataset.len = s.length;
-    b.textContent = fmtLen(s.length) + (s.length === POPULAR ? '★' : '');
-    lenChips.appendChild(b);
-  });
+  // ===== 長さチップ生成（商品により規格が変わるため再生成） =====
+  function buildLenChips() {
+    var wrap = document.getElementById('len-chips');
+    wrap.innerHTML = '';
+    var lengths = SPECS.map(function(s){return s.length;});
+    if (lengths.indexOf(state.length) < 0) state.length = lengths.indexOf(POPULAR) >= 0 ? POPULAR : lengths[0];
+    SPECS.forEach(function (s) {
+      var b = document.createElement('button');
+      b.className = 'chip';
+      b.dataset.len = s.length;
+      b.textContent = fmtLen(s.length) + (s.length === POPULAR ? '★' : '');
+      wrap.appendChild(b);
+    });
+  }
 
   // ===== 計算 =====
   function floorArea() {
@@ -264,12 +293,12 @@
     if (!need) return null;
     var a1 = caseArea(spec);
     var cases = Math.ceil(need / a1);
-    return { cases: cases, sheets: cases * spec.qty, cover: a1 * cases, area1: a1 };
+    var unit = unitPrice(state.cat, state.grade, spec.length);
+    return { cases:cases, sheets:cases*spec.qty, cover:a1*cases, area1:a1, unit:unit, total: unit!=null ? unit*cases : null };
   }
 
   // ===== 描画 =====
   function render() {
-    // チップのactive状態
     document.querySelectorAll('#jo-chips .chip').forEach(function (c) {
       c.classList.toggle('active', state.unit === 'jo' && parseFloat(c.dataset.jo) === state.size);
     });
@@ -288,48 +317,59 @@
       floorSub.textContent = '広さを入れてください';
     } else {
       floorAreaEl.textContent = '約' + fa.toFixed(1) + ' ㎡';
-      floorSub.textContent = state.unit === 'jo'
-        ? (state.size + '畳 × 1.62㎡)').replace(')','') + '　/　ロス込 約' + needArea().toFixed(1) + '㎡'
-        : 'ロス・形状込み 約' + needArea().toFixed(1) + '㎡';
+      floorSub.textContent = (state.unit === 'jo' ? state.size + '畳 × 1.62㎡　/　' : '') + 'ロス込 約' + needArea().toFixed(1) + '㎡';
     }
 
     var spec = SPECS.filter(function(s){return s.length===state.length;})[0] || SPECS[0];
-    var heroSpec = document.getElementById('hero-spec');
+    var r = calc(spec);
+    document.getElementById('hero-spec').textContent = '幅' + spec.width + 'mm × 長さ' + fmtLen(spec.length) + '（' + spec.qty + '枚入＝約' + caseArea(spec).toFixed(2) + '㎡/束）';
     var heroCases = document.getElementById('hero-cases');
     var heroMeta = document.getElementById('hero-meta');
-    heroSpec.textContent = '幅' + spec.width + 'mm × 長さ' + fmtLen(spec.length) + '（' + spec.qty + '枚入＝約' + caseArea(spec).toFixed(2) + '㎡/束）';
-    var rMain = calc(spec);
-    if (!rMain) {
+    var heroPrice = document.getElementById('hero-price');
+    if (!r) {
       heroCases.textContent = '—';
       heroMeta.textContent = '広さを入力すると必要な束数が表示されます';
+      heroPrice.style.display = 'none';
     } else {
-      heroCases.textContent = rMain.cases;
-      heroMeta.innerHTML = '＝ <strong>' + rMain.sheets + '枚</strong>（約' + rMain.cover.toFixed(2) + '㎡分をカバー）';
+      heroCases.textContent = r.cases;
+      heroMeta.innerHTML = '＝ <strong>' + r.sheets + '枚</strong>（約' + r.cover.toFixed(2) + '㎡分をカバー）';
+      if (r.total != null) {
+        heroPrice.style.display = '';
+        heroPrice.innerHTML = '商品代の概算（税込）<br><b>' + yen(r.total) + '</b>　<small style="opacity:.8;">＋送料</small>';
+      } else {
+        heroPrice.style.display = '';
+        heroPrice.innerHTML = '<small style="opacity:.85;">この規格の価格は<a href="products.html" style="color:#f0d9be;">商品一覧</a>でご確認ください</small>';
+      }
     }
 
-    // 長さ別比較
     var cmp = document.getElementById('compare');
     cmp.innerHTML = '';
     SPECS.forEach(function (s) {
-      var r = calc(s);
+      var rr = calc(s);
       var card = document.createElement('div');
       card.className = 'cmp-card' + (s.length === state.length ? ' active' : '');
       card.dataset.len = s.length;
       card.innerHTML =
         '<div class="len">' + fmtLen(s.length) + (s.length === POPULAR ? '<span class="badge">人気</span>' : '') + '</div>' +
-        '<div class="qty">' + (r ? r.cases : '—') + '<span> 束</span></div>' +
-        '<div class="sheets">' + (r ? r.sheets + '枚 / 約' + r.cover.toFixed(1) + '㎡' : '広さ未入力') + '</div>';
+        '<div class="qty">' + (rr ? rr.cases : '—') + '<span> 束</span></div>' +
+        '<div class="sheets">' + (rr ? rr.sheets + '枚 / 約' + rr.cover.toFixed(1) + '㎡' : '広さ未入力') + '</div>' +
+        '<div class="cprice">' + (rr && rr.total != null ? yen(rr.total) + '<span style="font-size:0.66rem;font-weight:400;color:var(--text-light);">（税込・送料別）</span>' : '') + '</div>';
       card.addEventListener('click', function () { state.length = s.length; render(); });
       cmp.appendChild(card);
     });
   }
 
   // ===== イベント =====
+  document.getElementById('sim-cat').addEventListener('change', function () {
+    state.cat = this.value; SPECS = specsForCat(state.cat); buildLenChips(); render();
+  });
+  document.getElementById('sim-grade').addEventListener('change', function () {
+    state.grade = this.value; render();
+  });
   document.getElementById('jo-chips').addEventListener('click', function (e) {
     var b = e.target.closest('.chip'); if (!b) return;
     state.unit = 'jo'; state.size = parseFloat(b.dataset.jo);
-    document.getElementById('sim-size').value = state.size;
-    render();
+    document.getElementById('sim-size').value = state.size; render();
   });
   document.getElementById('unit-toggle').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
@@ -349,8 +389,9 @@
     state.length = parseInt(b.dataset.len,10); render();
   });
 
-  // 初期値
+  // 初期化
   document.getElementById('sim-size').value = state.size;
+  buildLenChips();
   render();
 })();
 </script>
