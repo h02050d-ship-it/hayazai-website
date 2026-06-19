@@ -184,6 +184,28 @@
       line-height: 1;
       cursor: pointer;
     }
+    /* 応募条件 */
+    .apply-terms {
+      border: 1px solid #e8d8c4;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      background: #fffdf9;
+    }
+    .apply-terms .at-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      margin-bottom: 8px;
+    }
+    .apply-terms ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 0.76rem;
+      color: var(--text-mid);
+      line-height: 1.85;
+    }
+    .apply-terms strong { color: var(--wood-dark); }
     /* 同意 */
     .consent-box {
       background: #faf5ef;
@@ -326,13 +348,20 @@
           <option value="rakuten">楽天市場店</option>
           <option value="yahoo">Yahoo!ショッピング店</option>
           <option value="own">公式サイト（hayazai.com）</option>
+          <option value="market">市場・販売店・工務店から購入</option>
         </select>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="order-group">
         <label class="form-label" for="f-order">ご注文番号 <span class="req">必須</span></label>
         <input type="text" id="f-order" name="order_no" placeholder="ご購入時の注文番号" autocomplete="off">
         <p class="form-hint">ご購入の確認に使用します。注文確認メールに記載されています。</p>
+      </div>
+
+      <div class="form-group" id="shop-group" style="display:none;">
+        <label class="form-label" for="f-shop">お買い上げの販売店・市場・工務店名 <span class="req">必須</span></label>
+        <input type="text" id="f-shop" name="shop_name" placeholder="例：〇〇木材市場 ／ 〇〇工務店" autocomplete="off">
+        <p class="form-hint">どちらで当店の桧をお求めいただいたか、確認のためご記入ください。</p>
       </div>
 
       <div class="form-group">
@@ -354,6 +383,16 @@
       <div class="form-group">
         <label class="form-label" for="f-comment">ご感想 <span class="opt">任意・ひとことでOK</span></label>
         <textarea id="f-comment" name="comment" placeholder="例：張り終えた瞬間の香りに感動しました。子どもがはだしで走り回っています。"></textarea>
+      </div>
+
+      <div class="apply-terms">
+        <p class="at-title">ご応募の前にご確認ください</p>
+        <ul>
+          <li>ご応募は<strong>お一人様（1ご注文）につき1回</strong>までとさせていただきます。</li>
+          <li><strong>同一世帯・同一の方から複数のご応募</strong>と判断した場合や、ご購入・ご注文内容が確認できない場合は、<strong>謝礼の対象外</strong>とさせていただくことがあります。</li>
+          <li>ご応募者ご本人（またはご家族）が撮影した、<strong>当店の桧を使ったお住まい</strong>の写真に限ります。他からの転用・なりすまし等は対象外です。</li>
+          <li>謝礼の進呈は、ご購入およびご提供内容の<strong>確認後</strong>となります。最終的な可否は当店にて判断させていただきます。</li>
+        </ul>
       </div>
 
       <div class="consent-box">
@@ -403,10 +442,19 @@
 (function () {
   // ===== URLパラメータで購入店舗を事前選択（注文番号の突合用） =====
   var channelSel = document.getElementById('f-channel');
+  var orderGroup = document.getElementById('order-group');
+  var shopGroup = document.getElementById('shop-group');
+  function toggleChannelFields() {
+    var isMarket = channelSel.value === 'market';
+    shopGroup.style.display = isMarket ? '' : 'none';
+    orderGroup.style.display = isMarket ? 'none' : '';
+  }
+  channelSel.addEventListener('change', toggleChannelFields);
   var param = new URLSearchParams(location.search).get('ch');
-  if (param && ['rakuten', 'yahoo', 'own'].indexOf(param) !== -1) {
+  if (param && ['rakuten', 'yahoo', 'own', 'market'].indexOf(param) !== -1) {
     channelSel.value = param;
   }
+  toggleChannelFields();
 
   // ===== 写真選択＋クライアント圧縮 =====
   var MAX_PHOTOS = 10;
@@ -476,12 +524,17 @@
     var email = document.getElementById('f-email').value.trim();
     var channel = channelSel.value;
     var order = document.getElementById('f-order').value.trim();
+    var shop = document.getElementById('f-shop').value.trim();
     var consent = document.getElementById('f-consent').checked;
 
     if (!name) errors.push('お名前を入力してください');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('メールアドレスを正しく入力してください');
     if (!channel) errors.push('ご購入店舗を選択してください');
-    if (!order) errors.push('ご注文番号を入力してください');
+    if (channel === 'market') {
+      if (!shop) errors.push('販売店・市場・工務店名を入力してください');
+    } else if (channel) {
+      if (!order) errors.push('ご注文番号を入力してください');
+    }
     if (photoFiles.length === 0) errors.push('施工写真を1枚以上追加してください');
     if (!consent) errors.push('利用条件への同意が必要です');
 
@@ -500,6 +553,7 @@
     fd.append('email', email);
     fd.append('channel', channel);
     fd.append('order_no', order);
+    fd.append('shop_name', shop);
     fd.append('place', document.getElementById('f-place').value.trim());
     fd.append('comment', document.getElementById('f-comment').value.trim());
     fd.append('reward', 'Amazonギフトカード');

@@ -25,6 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   respond(false, 'method_not_allowed', 405);
 }
 
+// 送信元チェック（hayazai.com 以外からの直接POSTを拒否。ヘッダ欠落時は通す）
+$src = $_SERVER['HTTP_ORIGIN'] ?? ($_SERVER['HTTP_REFERER'] ?? '');
+if ($src !== '' && stripos($src, 'hayazai.com') === false) {
+  respond(false, 'bad_origin', 403);
+}
+
 // ハニーポット（bot は無音で成功扱い）
 if (!empty($_POST['website'])) {
   respond(true);
@@ -34,6 +40,7 @@ $name    = trim($_POST['name'] ?? '');
 $email   = trim($_POST['email'] ?? '');
 $channel = $_POST['channel'] ?? '';
 $order   = trim($_POST['order_no'] ?? '');
+$shop    = trim($_POST['shop_name'] ?? '');
 $place   = trim($_POST['place'] ?? '');
 $comment = trim($_POST['comment'] ?? '');
 $reward  = trim($_POST['reward'] ?? '');
@@ -43,14 +50,24 @@ $channels = [
   'rakuten' => '楽天市場店',
   'yahoo'   => 'Yahoo!ショッピング店',
   'own'     => '公式サイト',
+  'market'  => '市場・販売店・工務店',
 ];
 
 // バリデーション
 if ($name === '' || mb_strlen($name) > 100)            respond(false, 'name');
 if (!filter_var($email, FILTER_VALIDATE_EMAIL))         respond(false, 'email');
 if (!isset($channels[$channel]))                        respond(false, 'channel');
-if ($order === '' || mb_strlen($order) > 100)           respond(false, 'order_no');
+if ($channel === 'market') {
+  // 市場・販売店経由：注文番号の代わりに販売店名を必須
+  if ($shop === '' || mb_strlen($shop) > 200)           respond(false, 'shop_name');
+  $order = '';
+} else {
+  if ($order === '' || mb_strlen($order) > 100)         respond(false, 'order_no');
+  $shop = '';
+}
 if ($consent !== '1')                                   respond(false, 'consent');
+// 購入元の表示用（注文番号 or 販売店名）
+$purchaseRef = $channel === 'market' ? ('販売店：' . $shop) : ('注文番号：' . $order);
 if (mb_strlen($place) > 300)   $place   = mb_substr($place, 0, 300);
 if (mb_strlen($comment) > 3000) $comment = mb_substr($comment, 0, 3000);
 
@@ -99,18 +116,31 @@ foreach ($valid as $i => $f) {
 }
 if (count($saved) === 0) respond(false, 'storage', 500);
 
+// 重複チェック（過去ログに同じ注文番号 or 販売店名 or メールがあれば通知にフラグ）
+$dupFlag = '';
+$logFile = $baseDir . '/log.csv';
+if (is_file($logFile)) {
+  $existing = file_get_contents($logFile);
+  if ($order !== '' && mb_strpos($existing, $order) !== false) {
+    $dupFlag = '⚠️ 重複の可能性（同じ注文番号が過去にあり）';
+  } elseif ($email !== '' && mb_strpos($existing, $email) !== false) {
+    $dupFlag = '⚠️ 重複の可能性（同じメールが過去にあり）';
+  }
+}
+
 // メタ情報保存
 $meta = [
   '受付日時'   => date('Y-m-d H:i:s'),
   'お名前'     => $name,
   'メール'     => $email,
   '購入店舗'   => $channels[$channel],
-  '注文番号'   => $order,
+  '購入の確認' => $purchaseRef,
   '施工箇所'   => $place,
   '謝礼種別'   => $reward,
   '写真枚数'   => count($saved),
   'ご感想'     => $comment,
 ];
+if ($dupFlag !== '') $meta = ['⚠️注意' => $dupFlag] + $meta;
 $metaText = '';
 foreach ($meta as $k => $v) $metaText .= "■ {$k}\n{$v}\n\n";
 file_put_contents($dir . '/meta.txt', $metaText);
@@ -118,17 +148,21 @@ file_put_contents($dir . '/meta.txt', $metaText);
 // CSVログ追記
 $logLine = [
   date('Y-m-d H:i:s'), $subDir, $name, $email, $channels[$channel],
-  $order, $reward, count($saved), str_replace(["\r", "\n"], ' ', mb_substr($comment, 0, 200)),
+  ($channel === 'market' ? $shop : $order), $reward, count($saved),
+  str_replace(["\r", "\n"], ' ', mb_substr($comment, 0, 200)),
 ];
 $fp = fopen($baseDir . '/log.csv', 'a');
 if ($fp) { fputcsv($fp, $logLine); fclose($fp); }
 
 // 通知メール（自分宛て）
-$subject = "【施工写真】{$name}様より受付（{$channels[$channel]}・" . count($saved) . '枚）';
-$body = "施工写真のご提供を受け付けました。\n\n"
+$flagPrefix = $dupFlag !== '' ? '【要確認】' : '';
+$subject = "{$flagPrefix}【施工写真】{$name}様より受付（{$channels[$channel]}・" . count($saved) . '枚）';
+$body = ($dupFlag !== '' ? "{$dupFlag}\n\n" : '')
+      . "施工写真のご提供を受け付けました。\n\n"
       . $metaText
       . "■ 保存先\n~/hayazai.com/photo_uploads/{$subDir}/\n\n"
-      . "確認後、謝礼（{$reward} 300円分）の進呈をお願いします。";
+      . "確認後、謝礼（{$reward} 300円分）の進呈をお願いします。\n"
+      . "※ 注文番号／販売店・ご購入が確認できない、または重複と判断される場合は、応募条件に基づき対象外とできます。";
 @mb_send_mail(NOTIFY_TO, $subject, $body, 'From: ' . FROM_EMAIL);
 
 // 応募者への受付確認メール
@@ -137,7 +171,7 @@ $ackBody = "{$name} 様\n\n"
          . "このたびは施工写真のご提供、誠にありがとうございます。\n"
          . "以下の内容で受け付けました。\n\n"
          . "■ ご購入店舗：{$channels[$channel]}\n"
-         . "■ ご注文番号：{$order}\n"
+         . "■ {$purchaseRef}\n"
          . "■ 写真：" . count($saved) . "枚\n"
          . "■ 謝礼：{$reward} 300円分\n\n"
          . "内容を確認のうえ、通常3営業日以内に謝礼のご案内をお送りします。\n"
