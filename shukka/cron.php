@@ -50,7 +50,7 @@ $action = 'none';
 if (count($news) > 0) {
     // 新規(未送信)があれば、未出荷の全品目を送る（🆕表示はしない）。
     // 送るのは候補(=非アーカイブ)全部。実際に出荷完了(archived)するまでリストに残る。
-    $msg = buildMsg('【出荷依頼】', array_values($cands), false);
+    $msg = buildMsg('', array_values($cands), false);
     if ($DRY) { echo "[DRYRUN 出荷依頼]\n$msg\n"; $action = 'dry_send:' . count($cands) . '(new ' . count($news) . ')'; }
     elseif (broadcast($token, $msg)) {
         // 新規だけを送信済みにマーク（次回は🆕が外れるが、未出荷ならリストには残る）
@@ -108,7 +108,9 @@ function buildMsg($title, $list, $markNew){
         }
         $blocks[] = '■ ' . $c . "\n" . implode("\n", $lines);
     }
-    $txt = $title . ' 林材木店  ' . date('Y/n/j') . "\n\n" . implode("\n\n", $blocks);
+    $wd = array('日','月','火','水','木','金','土');
+    $head = date('Y/n/j') . '（' . $wd[(int)date('w')] . '）';
+    $txt = ($title !== '' ? $title . ' ' : '') . $head . "\n\n" . implode("\n\n", $blocks);
     $txt .= "\n\n計" . count($list) . "件（製造完了" . $done . "／製造未完了" . $und . "）";
     return $txt;
 }
