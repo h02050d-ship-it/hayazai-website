@@ -57,17 +57,19 @@ $channels = [
 if ($name === '' || mb_strlen($name) > 100)            respond(false, 'name');
 if (!filter_var($email, FILTER_VALIDATE_EMAIL))         respond(false, 'email');
 if (!isset($channels[$channel]))                        respond(false, 'channel');
+// 注文番号・販売店名は任意（性善説運用。確認は人の目＋注意書きで担保）
 if ($channel === 'market') {
-  // 市場・販売店経由：注文番号の代わりに販売店名を必須
-  if ($shop === '' || mb_strlen($shop) > 200)           respond(false, 'shop_name');
+  if (mb_strlen($shop) > 200) $shop = mb_substr($shop, 0, 200);
   $order = '';
 } else {
-  if ($order === '' || mb_strlen($order) > 100)         respond(false, 'order_no');
+  if (mb_strlen($order) > 100) $order = mb_substr($order, 0, 100);
   $shop = '';
 }
 if ($consent !== '1')                                   respond(false, 'consent');
 // 購入元の表示用（注文番号 or 販売店名）
-$purchaseRef = $channel === 'market' ? ('販売店：' . $shop) : ('注文番号：' . $order);
+$purchaseRef = $channel === 'market'
+  ? ('販売店：' . ($shop !== '' ? $shop : '（未記入）'))
+  : ('注文番号：' . ($order !== '' ? $order : '（未記入）'));
 if (mb_strlen($place) > 300)   $place   = mb_substr($place, 0, 300);
 if (mb_strlen($comment) > 3000) $comment = mb_substr($comment, 0, 3000);
 

@@ -353,15 +353,15 @@
       </div>
 
       <div class="form-group" id="order-group">
-        <label class="form-label" for="f-order">ご注文番号 <span class="req">必須</span></label>
+        <label class="form-label" for="f-order">ご注文番号 <span class="opt">任意</span></label>
         <input type="text" id="f-order" name="order_no" placeholder="ご購入時の注文番号" autocomplete="off">
-        <p class="form-hint">ご購入の確認に使用します。注文確認メールに記載されています。</p>
+        <p class="form-hint">分かる方はご記入ください（ご購入の確認に使わせていただきます）。</p>
       </div>
 
       <div class="form-group" id="shop-group" style="display:none;">
-        <label class="form-label" for="f-shop">お買い上げの販売店・市場・工務店名 <span class="req">必須</span></label>
+        <label class="form-label" for="f-shop">お買い上げの販売店・市場・工務店名 <span class="opt">任意</span></label>
         <input type="text" id="f-shop" name="shop_name" placeholder="例：〇〇木材市場 ／ 〇〇工務店" autocomplete="off">
-        <p class="form-hint">どちらで当店の桧をお求めいただいたか、確認のためご記入ください。</p>
+        <p class="form-hint">分かる範囲でご記入ください。</p>
       </div>
 
       <div class="form-group">
@@ -530,11 +530,6 @@
     if (!name) errors.push('お名前を入力してください');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('メールアドレスを正しく入力してください');
     if (!channel) errors.push('ご購入店舗を選択してください');
-    if (channel === 'market') {
-      if (!shop) errors.push('販売店・市場・工務店名を入力してください');
-    } else if (channel) {
-      if (!order) errors.push('ご注文番号を入力してください');
-    }
     if (photoFiles.length === 0) errors.push('施工写真を1枚以上追加してください');
     if (!consent) errors.push('利用条件への同意が必要です');
 
