@@ -9,6 +9,7 @@
 // =====================================================
 return [
     'channel_access_token' => 'YOUR_SHUKKA_CHANNEL_ACCESS_TOKEN',
+    'channel_secret'       => 'YOUR_SHUKKA_CHANNEL_SECRET',
     'send_pin'             => 'YOUR_PIN',
     'firebase_secret'      => 'YOUR_FIREBASE_DB_SECRET',
 ];

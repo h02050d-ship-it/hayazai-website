@@ -93,6 +93,7 @@ jobs:
       - name: Generate Shukka (shipping) config (from Secrets, not committed)
         env:
           SHUKKA_CHANNEL_ACCESS_TOKEN: ${{ secrets.SHUKKA_CHANNEL_ACCESS_TOKEN }}
+          SHUKKA_CHANNEL_SECRET: ${{ secrets.SHUKKA_CHANNEL_SECRET }}
           SHUKKA_SEND_PIN: ${{ secrets.SHUKKA_SEND_PIN }}
           SHUKKA_FIREBASE_SECRET: ${{ secrets.SHUKKA_FIREBASE_SECRET }}
         run: |
@@ -101,6 +102,7 @@ jobs:
             echo '// 自動生成（GitHub Actions）: 編集しない。値は GitHub Secrets で管理。'
             echo 'return ['
             printf "    'channel_access_token' => '%s',\n" "$SHUKKA_CHANNEL_ACCESS_TOKEN"
+            printf "    'channel_secret'       => '%s',\n" "$SHUKKA_CHANNEL_SECRET"
             printf "    'send_pin'             => '%s',\n" "$SHUKKA_SEND_PIN"
             printf "    'firebase_secret'      => '%s',\n" "$SHUKKA_FIREBASE_SECRET"
             echo '];'
