@@ -36,6 +36,30 @@ if (!empty($_POST['website'])) {
   respond(true);
 }
 
+// 簡易レート制限（同一IPの連投のみ抑止。ファイル操作失敗時は通す＝誤ブロックしない）
+$ip = $_SERVER['REMOTE_ADDR'] ?? '';
+if ($ip !== '') {
+  $rateDir = dirname(__DIR__) . '/photo_uploads/rate';
+  if (!is_dir($rateDir)) @mkdir($rateDir, 0705, true);
+  $rateFile = $rateDir . '/' . substr(sha1($ip), 0, 16) . '.txt';
+  $now = time();
+  $window = 900;  // 15分
+  $limit  = 5;    // 15分あたり5件まで
+  $times = [];
+  if (is_file($rateFile)) {
+    $raw = @file_get_contents($rateFile);
+    if ($raw !== false) {
+      foreach (explode(',', trim($raw)) as $t) {
+        $t = (int)$t;
+        if ($t > 0 && ($now - $t) < $window) $times[] = $t;
+      }
+    }
+  }
+  if (count($times) >= $limit) respond(false, 'rate_limited', 429);
+  $times[] = $now;
+  @file_put_contents($rateFile, implode(',', $times), LOCK_EX);
+}
+
 $name    = trim($_POST['name'] ?? '');
 $email   = trim($_POST['email'] ?? '');
 $channel = $_POST['channel'] ?? '';
