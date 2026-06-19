@@ -37,6 +37,8 @@ foreach ($items as $key => $it) {
     if ($l === '' || $l === '-') continue;
     if (shkSkip(isset($it['customer']) ? $it['customer'] : '')) continue;
     if (preg_match('/西濃/u', isset($it['remark']) ? (string)$it['remark'] : '')) continue;
+    $ln = (int)preg_replace('/[^0-9]/', '', (string)$it['length']);
+    if (!in_array($ln, array(2000, 3000, 4000), true)) continue; // 2m/3m/4m のみ通知
     $it['_key'] = $key;
     $cands[$key] = $it;
 }
