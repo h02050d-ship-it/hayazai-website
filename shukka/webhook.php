@@ -53,12 +53,12 @@ foreach ($data['events'] as $ev) {
                 : '現在、出荷予定の品目はありません。';
         }
         replyText($token, $replyToken, $msg);
-        whLog("keyword reply text=" . str_replace("\n", "/", $text));
+        whLog("keyword uid=$userId reply text=" . str_replace("\n", "/", $text));
     } else {
         // info@ へメール通知
         $name = getDisplayName($token, $userId);
         notifyEmail($name, $text);
-        whLog("mail from=$name text=" . str_replace("\n", "/", $text));
+        whLog("mail uid=$userId from=$name text=" . str_replace("\n", "/", $text));
     }
 }
 
