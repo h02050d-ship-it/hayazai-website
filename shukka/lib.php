@@ -69,5 +69,6 @@ function shkBuildMsg($title, $list, $markNew){
     $head = date('Y/n/j') . '（' . $wd[(int)date('w')] . '）';
     $txt = ($title !== '' ? $title . ' ' : '') . $head . "\n\n" . implode("\n\n", $blocks);
     $txt .= "\n\n計" . count($list) . "件（完了" . $done . "／未完了" . $und . "）";
+    $txt .= "\n\n※「現状」と送ると、最新の情報をお返しします。";
     return $txt;
 }
