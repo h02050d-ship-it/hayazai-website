@@ -61,13 +61,13 @@ function shkBuildMsg($title, $list, $markNew){
             $bun = shkBun($it);
             $nw  = ($markNew && empty($it['shk_sent'])) ? '🆕 ' : '';
             $bunStr = $bun !== null ? (shkNumStr($bun) . '束') : '?束';
-            $lines[] = $nw . shkLenM($it['length']) . ' ' . $bunStr . '（' . (shkDone($it) ? '製造完了' : '製造未完了') . '）';
+            $lines[] = $nw . shkLenM($it['length']) . ' ' . $bunStr . '（' . (shkDone($it) ? '完了' : '未完了') . '）';
         }
         $blocks[] = '■ ' . $c . "\n" . implode("\n", $lines);
     }
     $wd = array('日','月','火','水','木','金','土');
     $head = date('Y/n/j') . '（' . $wd[(int)date('w')] . '）';
     $txt = ($title !== '' ? $title . ' ' : '') . $head . "\n\n" . implode("\n\n", $blocks);
-    $txt .= "\n\n計" . count($list) . "件（製造完了" . $done . "／製造未完了" . $und . "）";
+    $txt .= "\n\n計" . count($list) . "件（完了" . $done . "／未完了" . $und . "）";
     return $txt;
 }
