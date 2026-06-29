@@ -2,7 +2,7 @@
 // =====================================================
 // 出荷自動通知 cron（平日 9/12/15 実行想定・PHP8.3 CLIで実行）
 //  - 新規(未送信=shk_sentなし)があれば「出荷依頼」を送信し、送った分を送信済みにマーク
-//  - 新規がなく、月/木の9時なら「現状報告」を送信
+//  - 新規が無ければ何もしない（※月/木9時の現状報告は2026-06-29に廃止）
 //  - dryrun 引数を付けると送信・マークせず、生成文面を表示するだけ
 // 実行例: /usr/bin/php8.3 /path/to/shukka/cron.php          （本番）
 //         /usr/bin/php8.3 /path/to/shukka/cron.php dryrun    （テスト）
@@ -45,17 +45,8 @@ if (count($news) > 0) {
         $action = 'sent:' . count($cands) . '(new ' . count($news) . ')';
     } else { $action = 'send_failed'; }
 } else {
-    // 現状報告：月(1)/木(4) の 9時のみ。ただし本日すでに（手動 or 自動で）送信済みなら出さない。
-    if ($hour === 9 && ($dow === 1 || $dow === 4)) {
-        if (shkGetLastSendDate($fb) === $now->format('Y-m-d')) {
-            $action = 'status_skip_sent_today';
-        } elseif (count($cands) > 0) {
-            $msg = shkBuildMsg('【現状報告】', array_values($cands), false);
-            if ($DRY) { echo "[DRYRUN 現状報告]\n$msg\n"; $action = 'dry_status:' . count($cands); }
-            elseif (broadcast($token, $msg)) { shkSetLastSendDate($fb, $now->format('Y-m-d')); $action = 'status_sent:' . count($cands); }
-            else { $action = 'status_failed'; }
-        } else { $action = 'status_no_items'; }
-    } else { $action = 'no_new_no_status'; }
+    // 新規(未送信)なし → 何もしない。（月/木9時の現状報告は廃止：2026-06-29）
+    $action = 'no_new';
 }
 
 cronLog("dow=$dow hour=$hour new=" . count($news) . ($DRY ? " DRY" : "") . " -> $action");
