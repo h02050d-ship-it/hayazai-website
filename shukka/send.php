@@ -6,6 +6,8 @@
 // PIN照合で送信をガード（PINはクライアントソースに出さない）。
 // =====================================================
 header('Content-Type: application/json; charset=utf-8');
+require __DIR__ . '/lib.php';
+date_default_timezone_set('Asia/Tokyo');
 
 // --- CORS: 加工予定表のオリジンのみ許可 ---
 $ALLOW_ORIGIN = 'https://h02050d-ship-it.github.io';
@@ -27,6 +29,7 @@ if (!is_file($cfgPath)) { http_response_code(500); echo json_encode(['ok' => fal
 $cfg = require $cfgPath;
 $token = (string)($cfg['channel_access_token'] ?? '');
 $pin   = (string)($cfg['send_pin'] ?? '');
+$fb    = (string)($cfg['firebase_secret'] ?? '');
 
 $raw = file_get_contents('php://input');
 $in  = json_decode($raw, true);
@@ -34,6 +37,7 @@ if (!is_array($in)) { http_response_code(400); echo json_encode(['ok' => false, 
 
 $reqPin = (string)($in['pin'] ?? '');
 $text   = trim((string)($in['text'] ?? ''));
+$keys   = (isset($in['keys']) && is_array($in['keys'])) ? $in['keys'] : array();
 
 if ($pin === '' || !hash_equals($pin, $reqPin)) {
     http_response_code(403); echo json_encode(['ok' => false, 'error' => 'pin']); exit;
@@ -62,7 +66,18 @@ curl_close($ch);
     date('c') . " code=$code text=" . str_replace("\n", '/', $text) . "\n", FILE_APPEND);
 
 if ($code >= 200 && $code < 300) {
-    echo json_encode(['ok' => true]);
+    // 手動送信したぶんをサーバー側で「送信済み(shk_sent)」にマーク＋本日送信済みを記録。
+    // → 自動cronが同じ内容を1時間後などに再送しないようにする（手動優先・重複防止）。
+    $marked = 0;
+    if ($fb !== '') {
+        $items = shkFetchItems($fb);
+        if (is_array($items)) {
+            $ts = (int)round(microtime(true) * 1000);
+            $marked = shkMarkSent($fb, $items, $keys, $ts);
+            shkSetLastSendDate($fb, date('Y-m-d'));
+        }
+    }
+    echo json_encode(['ok' => true, 'marked' => $marked]);
 } else {
     http_response_code(502);
     echo json_encode(['ok' => false, 'error' => 'line', 'code' => $code, 'detail' => $resp, 'curl' => $cerr]);

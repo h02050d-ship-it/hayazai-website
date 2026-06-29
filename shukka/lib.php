@@ -17,10 +17,43 @@ function shkHttpGet($url){
     $r = curl_exec($ch); curl_close($ch); return $r;
 }
 // Firebase items 取得（失敗時 null）
+function shkFbBase(){ return 'https://kakou-yotei-default-rtdb.firebaseio.com'; }
 function shkFetchItems($fb){
-    $raw = shkHttpGet('https://kakou-yotei-default-rtdb.firebaseio.com/items.json?auth=' . urlencode($fb));
+    $raw = shkHttpGet(shkFbBase() . '/items.json?auth=' . urlencode($fb));
     $d = json_decode($raw, true);
     return is_array($d) ? $d : null;
+}
+// Firebase PATCH（cron.php / send.php 共有）
+function shkFbPatch($fb, $path, $data){
+    $ch = curl_init(shkFbBase() . $path . '.json?auth=' . urlencode($fb));
+    curl_setopt_array($ch, array(
+        CURLOPT_CUSTOMREQUEST => 'PATCH',
+        CURLOPT_POSTFIELDS => json_encode($data, JSON_UNESCAPED_UNICODE),
+        CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
+        CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 20,
+    ));
+    curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
+    return $code >= 200 && $code < 300;
+}
+// 指定キー（空なら現在の全候補）に送信済み shk_sent を付ける。戻り=新たにマークした件数
+function shkMarkSent($fb, $items, $keys, $ts){
+    if (!is_array($keys) || count($keys) === 0) { $keys = array_keys(shkCandidates($items)); }
+    $n = 0;
+    foreach ($keys as $k) {
+        if (!is_string($k) || $k === '') continue;
+        if (isset($items[$k]['shk_sent']) && !empty($items[$k]['shk_sent'])) continue; // 既に送信済みは触らない
+        if (shkFbPatch($fb, '/items/' . rawurlencode($k), array('shk_sent' => $ts))) $n++;
+    }
+    return $n;
+}
+// 「今日もう送ったか」マーカー（手動・自動の二重送信防止用。値は 'Y-m-d'）
+function shkGetLastSendDate($fb){
+    $raw = shkHttpGet(shkFbBase() . '/shukka_meta/last_send_date.json?auth=' . urlencode($fb));
+    $d = json_decode($raw, true);
+    return is_string($d) ? $d : '';
+}
+function shkSetLastSendDate($fb, $date){
+    return shkFbPatch($fb, '/shukka_meta', array('last_send_date' => $date));
 }
 // 通知対象の候補（key=>item, _key付き）
 function shkCandidates($items){

@@ -41,15 +41,19 @@ if (count($news) > 0) {
         foreach ($news as $k => $it) {
             fbPatch($DBURL . '/items/' . rawurlencode($k) . '.json?auth=' . urlencode($fb), array('shk_sent' => $ts));
         }
+        shkSetLastSendDate($fb, $now->format('Y-m-d'));
         $action = 'sent:' . count($cands) . '(new ' . count($news) . ')';
     } else { $action = 'send_failed'; }
 } else {
-    // 現状報告：月(1)/木(4) の 9時のみ
+    // 現状報告：月(1)/木(4) の 9時のみ。ただし本日すでに（手動 or 自動で）送信済みなら出さない。
     if ($hour === 9 && ($dow === 1 || $dow === 4)) {
-        if (count($cands) > 0) {
+        if (shkGetLastSendDate($fb) === $now->format('Y-m-d')) {
+            $action = 'status_skip_sent_today';
+        } elseif (count($cands) > 0) {
             $msg = shkBuildMsg('【現状報告】', array_values($cands), false);
             if ($DRY) { echo "[DRYRUN 現状報告]\n$msg\n"; $action = 'dry_status:' . count($cands); }
-            else { $action = broadcast($token, $msg) ? ('status_sent:' . count($cands)) : 'status_failed'; }
+            elseif (broadcast($token, $msg)) { shkSetLastSendDate($fb, $now->format('Y-m-d')); $action = 'status_sent:' . count($cands); }
+            else { $action = 'status_failed'; }
         } else { $action = 'status_no_items'; }
     } else { $action = 'no_new_no_status'; }
 }
