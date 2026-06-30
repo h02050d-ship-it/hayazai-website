@@ -105,6 +105,15 @@
 
     <form action="contact.php" method="post">
 
+      <!-- ▼ スパム・営業ボット対策（人間には見えません。絶対に入力しないでください） -->
+      <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:0;height:0;overflow:hidden;" tabindex="-1">
+        <label>会社のホームページURL（このフィールドは空のままにしてください）
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
+      <input type="hidden" name="hp_token" id="hp_token" value="">
+      <!-- ▲ スパム対策ここまで -->
+
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">お名前 <span class="req">必須</span></label>
@@ -315,6 +324,10 @@ document.querySelector('form').addEventListener('submit', function(e) {
 // URLハッシュで種別自動選択 & 見積もりシミュレーターからの引き継ぎ
 document.addEventListener('DOMContentLoaded', () => {
   const sel = document.querySelector('select[name="type"]');
+
+  // スパム対策：JavaScriptが動いている本物のブラウザだけがトークンをセットできる
+  const hpToken = document.getElementById('hp_token');
+  if (hpToken) hpToken.value = 'ok';
 
   // 見積もりシミュレーターからのデータ引き継ぎ
   const orderMsg = sessionStorage.getItem('orderMessage');
