@@ -1,10 +1,19 @@
 <?php
 // =====================================================
 // 出荷依頼の共通ロジック（cron.php / webhook.php で共有）
-// 除外: 取引先が 楽天/ヤフー/ネット で始まる ／ 備考に「西濃」 ／ 長さが2m3m4m以外
+// 除外: 取引先が 楽天/ヤフー/ネット で始まる ／ 自社配送(滝川/ひかり/ナイス沼津) ／ 備考に「西濃」 ／ 長さが2m3m4m以外
 //       ／ 取引先が未入力 ／ 束数(予定または実際)が未入力 …入力途中を送らない
 // =====================================================
 function shkSkip($c){ return (bool)preg_match('/^(ヤフ|楽天|ネット)/u', trim((string)$c)); }
+// 自社配送が多く内藤運輸へは出さない取引先（クライアントの既定OFFと一致）→ 出荷通知の対象外。
+// これらは shk_sent が付かなくても cron リマインドの「未送信」に数えない。
+function shkSelfDeliver($c){
+    $x = preg_replace('/[\s　()（）]/u', '', (string)$c);
+    if (mb_strpos($x, '滝川') !== false) return true;
+    if (mb_strpos($x, 'ひかり') !== false) return true;
+    if (mb_strpos($x, 'ナイス') !== false && mb_strpos($x, '沼津') !== false) return true;
+    return false;
+}
 function shkNum($v){ $v = str_replace(',', '', (string)$v); return is_numeric($v) ? (float)$v : null; }
 function shkNumStr($n){ return rtrim(rtrim(number_format((float)$n, 2, '.', ''), '0'), '.'); }
 function shkLenM($l){ $n = preg_replace('/[^0-9.]/', '', (string)$l); if ($n === '') return (string)$l; return shkNumStr(round(((float)$n) / 1000, 2)) . 'm'; }
@@ -64,6 +73,7 @@ function shkCandidates($items){
         $l = isset($it['length']) ? trim((string)$it['length']) : '';
         if ($l === '' || $l === '-') continue;
         if (shkSkip(isset($it['customer']) ? $it['customer'] : '')) continue;
+        if (shkSelfDeliver(isset($it['customer']) ? $it['customer'] : '')) continue; // 自社配送は対象外
         if (preg_match('/西濃/u', isset($it['remark']) ? (string)$it['remark'] : '')) continue;
         $ln = (int)preg_replace('/[^0-9]/', '', (string)$it['length']);
         if (!in_array($ln, array(2000, 3000, 4000), true)) continue;
