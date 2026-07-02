@@ -533,17 +533,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ===== 運賃計算 =====
-// 910mm → 佐川急便（都道府県別固定・1束あたり税込）
-const FR_SAGAWA_1M = {
-  "北海道":3000,"青森":2700,"岩手":2700,"宮城":2500,"秋田":2700,"山形":2500,"福島":2500,
-  "東京":2400,"神奈川":2400,"埼玉":2400,"千葉":2400,"茨城":2400,"栃木":2400,"群馬":2400,
-  "山梨":2400,"新潟":2400,"長野":2400,"富山":2400,"石川":2400,"福井":2400,
-  "愛知":2400,"岐阜":2400,"静岡":2400,"三重":2400,
-  "大阪":2400,"兵庫":2400,"京都":2400,"滋賀":2400,"奈良":2400,"和歌山":2400,
-  "鳥取":2500,"島根":2500,"岡山":2500,"広島":2500,"山口":2500,
-  "徳島":2700,"香川":2700,"愛媛":2700,"高知":2700,
-  "福岡":2700,"佐賀":2700,"長崎":2700,"熊本":2700,"大分":2700,"宮崎":2700,"鹿児島":2700
+// ===== 運賃計算（改定2026・運賃ツールと同一ロジック）=====
+const FR_DISCOUNT = 0.90;      // 西濃標準表→実費
+const FR_FUEL_SC = 0.028;      // 燃料サーチャージ
+const FR_MULT = 1.25;          // 全チャネル一律
+const FR_QUOTE_2M = ["北海道","沖縄"];  // 2m以上(西濃)は個別見積
+function frPrice(sub) { return Math.round(Math.ceil(sub * FR_MULT / 100) * 100 * 1.1); }
+
+// 910mm → 佐川急便 160サイズ実費（税抜・1口=2束40枚まで）＋段ボール320円/口
+const FR_SAGAWA_160 = {
+  "北海道":2120,
+  "青森":1850,"岩手":1850,"秋田":1850,
+  "宮城":1760,"山形":1760,"福島":1760,
+  "茨城":1670,"栃木":1670,"群馬":1670,"埼玉":1670,"千葉":1670,"東京":1670,"神奈川":1670,"山梨":1670,
+  "新潟":1670,"長野":1670,
+  "岐阜":1670,"静岡":1670,"愛知":1670,"三重":1670,
+  "富山":1670,"石川":1670,"福井":1670,
+  "滋賀":1670,"京都":1670,"大阪":1670,"兵庫":1670,"奈良":1670,"和歌山":1670,
+  "鳥取":1760,"島根":1760,"岡山":1760,"広島":1760,"山口":1760,
+  "徳島":1850,"香川":1850,"愛媛":1850,"高知":1850,
+  "福岡":1850,"佐賀":1850,"長崎":1850,"熊本":1850,"大分":1850,"宮崎":1850,"鹿児島":1850
 };
 // 2m以上 → 西濃運輸
 const FR_PREF_MAP = {"静岡":0,"愛知":1,"岐阜":2,"神奈川":3,"滋賀":4,"三重":5,"東京":6,"奈良":7,"京都":8,"山梨":9,"埼玉":10,"千葉":11,"大阪":12,"長野":13,"栃木":14,"和歌山":15,"石川":16,"徳島":17,"茨城":18,"群馬":19,"兵庫":20,"福島":21,"鳥取":22,"岡山":23,"高知":24,"新潟":25,"香川":26,"福井":27,"富山":28,"宮城":29,"広島":30,"愛媛":31,"山形":32,"島根":33,"秋田":34,"岩手":35,"山口":36,"福岡":37,"佐賀":38,"青森":39,"長崎":40,"熊本":41,"大分":42,"宮崎":43,"鹿児島":44,"北海道":45};
@@ -576,25 +585,30 @@ function calcFreight() {
     return;
   }
 
-  // 910mm → 佐川急便
+  // 910mm → 佐川急便（2束=1口の口建て）
   if (length === 1) {
-    const rate = FR_SAGAWA_1M[pref];
-    if (!rate) {
-      area.innerHTML = '<p style="color:#c0392b;font-size:0.85rem;margin-top:8px;">この都道府県の佐川送料データがありません。</p>';
+    const cost = FR_SAGAWA_160[pref];
+    if (!cost) {
+      area.innerHTML = '<p style="color:#c0392b;font-size:0.85rem;margin-top:8px;">この都道府県は個別見積となります。お問い合わせください。</p>';
       return;
     }
-    const total = rate * qty;
+    const units = Math.ceil(qty / 2);
+    const total = frPrice((cost + 320) * units);
     area.innerHTML = `
       <div class="freight-result">
         <div class="fr-total">送料目安（税込）：<strong>¥${total.toLocaleString()}</strong></div>
         <div class="fr-detail">
-          ${pref}／${lenLabel} × ${qty}束（佐川急便）／ 1束 ¥${rate.toLocaleString()}
+          ${pref}／${lenLabel} × ${qty}束＝${units}口（佐川急便・2束=1口）／ 1束あたり 約¥${Math.round(total/qty).toLocaleString()}
         </div>
       </div>`;
     return;
   }
 
-  // 2m以上 → 西濃運輸
+  // 2m以上 → 西濃運輸（北海道・沖縄・離島は個別見積）
+  if (FR_QUOTE_2M.includes(pref)) {
+    area.innerHTML = '<p style="color:#c0392b;font-size:0.85rem;margin-top:8px;">この都道府県（1,820mm以上）は個別見積となります。お問い合わせください。</p>';
+    return;
+  }
   const distIdx = FR_DIST_IDX[FR_PREF_MAP[pref]];
   const d = FR_DANBALL[length];
   const shipCount = Math.ceil(qty / FR_MAX);
@@ -607,12 +621,10 @@ function calcFreight() {
     const sbox = sq * d.box;
     const ti = FR_WEIGHTS.findIndex(w => w >= sw);
     if (ti === -1) { area.innerHTML = '<p style="color:#c0392b;font-size:0.85rem;margin-top:8px;">重量超過。数量を減らしてください。</p>'; return; }
-    totalFare += FR_FARES[ti][distIdx];
+    totalFare += Math.ceil(FR_FARES[ti][distIdx] * FR_DISCOUNT * (1 + FR_FUEL_SC) / 10) * 10;
     totalBox += sbox;
   }
-  const subtotal = totalFare + totalBox;
-  const tax = Math.round(subtotal * 0.1);
-  const total = Math.round((subtotal + tax) / 100) * 100;
+  const total = frPrice(totalFare + totalBox);
   const shipNote = shipCount > 1 ? `（${shipCount}便分割）` : '';
   area.innerHTML = `
     <div class="freight-result">
@@ -626,10 +638,11 @@ function calcFreight() {
 
 function calcFreightRef(pref, length, qty) {
   if (length === 1) {
-    const rate = FR_SAGAWA_1M[pref];
-    if (!rate) return null;
-    return rate * qty;
+    const cost = FR_SAGAWA_160[pref];
+    if (!cost) return null;
+    return frPrice((cost + 320) * Math.ceil(qty / 2));
   }
+  if (FR_QUOTE_2M.includes(pref)) return null; // 個別見積
   const distIdx = FR_DIST_IDX[FR_PREF_MAP[pref]];
   const d = FR_DANBALL[length];
   const shipCount = Math.ceil(qty / FR_MAX);
@@ -642,12 +655,10 @@ function calcFreightRef(pref, length, qty) {
     const sbox = sq * d.box;
     const ti = FR_WEIGHTS.findIndex(w => w >= sw);
     if (ti === -1) return null;
-    totalFare += FR_FARES[ti][distIdx];
+    totalFare += Math.ceil(FR_FARES[ti][distIdx] * FR_DISCOUNT * (1 + FR_FUEL_SC) / 10) * 10;
     totalBox += sbox;
   }
-  const subtotal = totalFare + totalBox;
-  const tax = Math.round(subtotal * 0.1);
-  return Math.round((subtotal + tax) / 100) * 100;
+  return frPrice(totalFare + totalBox);
 }
 
 function buildFreightRefTable() {
