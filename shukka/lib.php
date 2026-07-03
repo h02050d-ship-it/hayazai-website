@@ -24,7 +24,13 @@ function shkNum($v){ $v = str_replace(',', '', (string)$v); return is_numeric($v
 function shkNumStr($n){ return rtrim(rtrim(number_format((float)$n, 2, '.', ''), '0'), '.'); }
 function shkLenM($l){ $n = preg_replace('/[^0-9.]/', '', (string)$l); if ($n === '') return (string)$l; return shkNumStr(round(((float)$n) / 1000, 2)) . 'm'; }
 function shkDone($it){ $o = isset($it['order']) ? (int)$it['order'] : 0; return $o >= 9; }
-function shkBun($it){ $a = shkNum(isset($it['actual']) ? $it['actual'] : ''); return $a !== null ? $a : shkNum(isset($it['planned']) ? $it['planned'] : ''); }
+// 束数: 製造完了=実際／製造中=予定（実際は製造完了まで増えていくため確定値でない）
+function shkBun($it){
+    $a = shkNum(isset($it['actual']) ? $it['actual'] : '');
+    $p = shkNum(isset($it['planned']) ? $it['planned'] : '');
+    if (shkDone($it)) return $a !== null ? $a : $p;
+    return $p !== null ? $p : $a;
+}
 
 function shkHttpGet($url){
     $ch = curl_init($url);
