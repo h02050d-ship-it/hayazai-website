@@ -5,6 +5,12 @@
 //       ／ 取引先が未入力 ／ 束数(予定または実際)が未入力 …入力途中を送らない
 // =====================================================
 function shkSkip($c){ return (bool)preg_match('/^(ヤフ|楽天|ネット)/u', trim((string)$c)); }
+// 取引先ごとの固定注記：出荷依頼テキストの当該ブロック最終行に毎回付ける（クライアントのshkCustNoteと一致させる）。
+function shkCustNote($c){
+    $x = preg_replace('/[\s　()（）]/u', '', (string)$c);
+    if (mb_strpos($x, 'ニッチ') !== false) return '※8月1日以降着希望';
+    return '';
+}
 // 自社配送が多く内藤運輸へは出さない取引先（クライアントの既定OFFと一致）→ 出荷通知の対象外。
 // これらは shk_sent が付かなくても cron リマインドの「未送信」に数えない。
 function shkSelfDeliver($c){
@@ -110,6 +116,7 @@ function shkBuildMsg($title, $list, $markNew){
             $bunStr = $bun !== null ? (shkNumStr($bun) . '束') : '?束';
             $lines[] = $nw . shkLenM($it['length']) . ' ' . $bunStr . '（' . (shkDone($it) ? '完了' : '未完了') . '）';
         }
+        $note = shkCustNote($c); if ($note !== '') $lines[] = $note; // 取引先ごとの固定注記
         $blocks[] = '■ ' . $c . "\n" . implode("\n", $lines);
     }
     $wd = array('日','月','火','水','木','金','土');
