@@ -258,18 +258,14 @@
     specs.sort(function (a,b){ return a.length - b.length; });
     return specs;
   }
-  // HP税込 = Yahoo税込 × 0.95（100円単位四捨五入）— products.html と同一ロジック
-  function hpPriceIncTax(y) { return Math.round(y * 0.95 / 100) * 100; }
+  // HP税込 = 市売価格（税抜/束）×2 × 1.10（2026-07-10改定・products.html と同一価格）
+  var HP_PRICE_EX = { 1820:[8400,10600,12000,17600], 3000:[17600,23200,33000,40000], 4000:[18800,24000,40000,48000] };
+  var HP_GRADE_IDX = { '節有':0, '小節':1, '特上小':2, '無節':3 };
   function unitPrice(cat, grade, length) {
-    try {
-      if (typeof PRODUCTS !== 'undefined') {
-        var p = PRODUCTS.find(function (p) {
-          return p.cat === cat && p.grade === 'A' && p.quality === grade && p.length === length;
-        });
-        if (p && p.price) return hpPriceIncTax(p.price);
-      }
-    } catch (e) {}
-    return null; // 価格不明
+    var row = HP_PRICE_EX[length];
+    var i = HP_GRADE_IDX[grade];
+    if (!row || i == null) return null; // 価格不明
+    return Math.round(row[i] * 1.10);
   }
   var GRADES = ['節有','小節','特上小','無節'];
   function priceRange(cat, length) {
