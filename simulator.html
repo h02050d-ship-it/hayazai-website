@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>必要量シミュレーター｜何束いる？いくら？桧フローリング枚数・概算価格計算 | 林材木店</title>
-  <meta name="description" content="お部屋の畳数・㎡を入れるだけで、桧フローリングの必要枚数・束数と商品代の概算（税込）を自動計算。長さ別（1820/3000/4000mm）の必要束数・価格をその場で比較できる無料シミュレーターです。">
+  <meta name="description" content="お部屋の畳数・㎡を入れるだけで、桧フローリングの必要枚数・束数と商品代の概算（税込）を自動計算。長さ別（2000/3000/4000mm）の必要束数・価格をその場で比較できる無料シミュレーターです。">
   <link rel="canonical" href="https://hayazai.com/simulator.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="株式会社林材木店">
@@ -275,7 +275,7 @@
     return { min: Math.min.apply(null, vals), max: Math.max.apply(null, vals) };
   }
   function caseArea(s) { return (s.width/1000) * (s.length/1000) * s.qty; }
-  function fmtLen(mm) { return mm.toLocaleString() + 'mm'; }
+  function fmtLen(mm) { return (mm === 1820 ? '2,000' : mm.toLocaleString()) + 'mm'; } // 2mは市売呼称で表示（実寸1820のまま計算）
   function yen(n) { return '¥' + n.toLocaleString(); }
 
   var POPULAR = 1820;
