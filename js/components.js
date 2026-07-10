@@ -45,7 +45,6 @@ function renderHeader() {
       </a>
       <nav class="header-nav">
         <a href="/products.html">商品一覧</a>
-        <a href="/outlet.html">アウトレット</a>
         <a href="/gallery.html">施工事例</a>
         <a href="/faq.html">お悩み解決</a>
         <a href="/blog.html">ブログ</a>
@@ -71,7 +70,6 @@ function renderHeader() {
       <button class="mobile-nav-close" id="mobile-close">✕</button>
       <a href="/">トップ</a>
       <a href="/products.html">商品一覧</a>
-      <a href="/outlet.html">アウトレット・B級品</a>
       <a href="/gallery.html">施工事例</a>
       <a href="/faq.html">お悩み解決</a>
       <a href="/blog.html">ブログ</a>
@@ -111,7 +109,6 @@ function renderFooter() {
             <li><a href="/products.html?cat=flooring15">桧フローリング 15mm</a></li>
             <li><a href="/products.html?cat=flooring12">桧フローリング 12mm</a></li>
             <li><a href="/products.html?cat=panel">桧羽目板</a></li>
-            <li><a href="/outlet.html">アウトレット・B級品</a></li>
             <li><a href="/sample.html">🎁 無料サンプル請求</a></li>
           </ul>
         </div>

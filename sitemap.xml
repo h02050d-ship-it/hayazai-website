@@ -62,12 +62,6 @@
   </url>
 
   <url>
-    <loc>https://hayazai.com/outlet.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
     <loc>https://hayazai.com/business.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
