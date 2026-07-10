@@ -22,6 +22,11 @@
 
 'use strict';
 
+// 【廃止・実行禁止】2026-07 価格改定でHP掲載はメーカー希望小売価格（products.html内 HP_PRICE_EX）に
+// 切り替わったため、Yahoo価格ベースの本スクリプトを実行すると静的価格表が誤った価格で上書きされる。
+console.error('【停止】このスクリプトは2026-07の定価化により廃止されました。実行すると静的価格表がYahoo価格で上書きされるため中断します。');
+process.exit(1);
+
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');

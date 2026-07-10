@@ -5,9 +5,18 @@
 
 const CART_KEY = 'hayazai_cart';
 
-// Yahoo価格は「税込」表示。HP税込 = Yahoo税込 × 0.95、100円単位四捨五入
-function hpPriceIncTax(yahooIncTax) {
-  return Math.round(yahooIncTax * 0.95 / 100) * 100;
+// 掲載・注文価格＝メーカー希望小売価格（税抜/1枚 × 入数 × 1.10）。実売EC価格(products.jsのprice)とは独立
+// 対象外（910mm・B級品）は null ＝ オンライン掲載・注文休止
+const HP_MSRP_PER_SHEET = {
+  1820: { '節有': 1050, '小節': 1325, '特上小': 1500, '無節': 2200 },
+  3000: { '節有': 1760, '小節': 2320, '特上小': 3300, '無節': 4000 },
+  4000: { '節有': 2350, '小節': 3000, '特上小': 5000, '無節': 6000 },
+};
+function hpMsrpIncTax(p) {
+  if (!p || p.grade !== 'A') return null;
+  const row = HP_MSRP_PER_SHEET[p.length];
+  const per = row ? row[p.quality] : null;
+  return per ? Math.round(per * p.qty * 1.10) : null;
 }
 
 // ---------- カートデータ操作 ----------
@@ -29,6 +38,12 @@ function addToCart(productId, qty = 1) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return false;
 
+  const msrp = hpMsrpIncTax(product);
+  if (msrp == null) {
+    showToast('この商品は現在オンライン注文を休止しています');
+    return false;
+  }
+
   const cart = getCart();
   const existing = cart.find(item => item.id === productId);
 
@@ -38,7 +53,7 @@ function addToCart(productId, qty = 1) {
     cart.push({
       id:    product.id,
       name:  product.name,
-      price: hpPriceIncTax(product.price),
+      price: msrp,
       img:   product.img,
       qty:   qty,
     });

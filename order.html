@@ -981,9 +981,8 @@
 <script src="js/components.js?v=14"></script>
 <script>
 // ===================== 価格計算 =====================
-// Yahoo価格は税込。HP税込 = Yahoo税込 × 0.95（100円単位四捨五入）
-// HP税抜 = HP税込 ÷ 1.10（100円単位四捨五入）
-function inPrice(p) { return Math.round(p * 0.95 / 100) * 100; }
+// 注文価格＝メーカー希望小売価格（js/cart.js の hpMsrpIncTax・税込/束）。引数は商品オブジェクト
+function inPrice(p) { return hpMsrpIncTax(p) || 0; }
 function exPrice(p) { return Math.round(inPrice(p) / 1.10 / 100) * 100; }
 
 // ===================== 西濃運輸データ =====================
@@ -1095,12 +1094,14 @@ function findProduct(row) {
   if (!row.type || !row.thick || !row.length || !row.quality) return null;
   const cat = row.type === 'panel' ? 'panel'
     : (row.thick === '15' ? 'flooring15' : 'flooring12');
-  return PRODUCTS.find(p =>
-    p.cat === cat &&
-    p.grade === 'A' &&
-    p.quality === row.quality &&
-    p.length === parseInt(row.length)
+  const p = PRODUCTS.find(x =>
+    x.cat === cat &&
+    x.grade === 'A' &&
+    x.quality === row.quality &&
+    x.length === parseInt(row.length)
   ) || null;
+  // 定価（メーカー希望小売価格）のない商品はオンライン注文休止
+  return p && hpMsrpIncTax(p) != null ? p : null;
 }
 
 function getSelectedItems() {
@@ -1134,7 +1135,6 @@ function rowHTML(id) {
       <span class="bsel-label">長さ</span>
       <select class="bsel" id="len-${id}" onchange="onRowChange(${id})">
         <option value="">長さ</option>
-        <option value="910">910mm</option>
         <option value="1820">1820mm</option>
         <option value="3000">3000mm</option>
         <option value="4000">4000mm</option>
@@ -1227,7 +1227,7 @@ function onRowChange(id) {
   const subEl   = document.getElementById('sub-'   + id);
 
   if (p) {
-    const inc = inPrice(p.price);
+    const inc = inPrice(p);
     if (insuEl)  insuEl.textContent  = p.qty + '枚/束';
     if (priceEl) priceEl.textContent = '¥' + inc.toLocaleString();
     if (subEl)   subEl.textContent   = '¥' + (inc * row.qty).toLocaleString();
@@ -1242,7 +1242,7 @@ function onRowChange(id) {
 
 function updateBottomBar() {
   const items = getSelectedItems();
-  const subtotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
+  const subtotal = items.reduce((s, item) => s + item.qty * inPrice(item.p), 0);
   document.getElementById('item-count').textContent = items.length;
   document.getElementById('subtotal-display').textContent = '¥' + subtotal.toLocaleString();
 }
@@ -1283,7 +1283,7 @@ function buildConfirmTable(items) {
   let html = '';
   let total = 0;
   items.forEach(({ p, qty }) => {
-    const inc = inPrice(p.price);
+    const inc = inPrice(p);
     const sub = qty * inc;
     total += sub;
     const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
@@ -1427,7 +1427,7 @@ function calcStep2Shipping() {
   }
 
   if (ok && shippingTotal > 0) {
-    const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
+    const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p), 0);
     const grand = productTotal + shippingTotal;
     shippingResult = { shippingTotal, grand, pref };
     document.getElementById('grand-total-section').style.display = '';
@@ -1457,12 +1457,12 @@ function buildShippingResultHTML(pref, distance, res) {
 // ===================== STEP 3 =====================
 function buildStep3Summary() {
   const items = getSelectedItems();
-  const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
+  const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p), 0);
 
   let html = '<table style="width:100%;font-size:0.85rem;border-collapse:collapse;">';
   items.forEach(({ p, qty }) => {
     const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
-    const sub = qty * inPrice(p.price);
+    const sub = qty * inPrice(p);
     html += `<tr>
       <td style="padding:6px 8px;border-bottom:1px solid #e8d8c4;">
         ${typeName} ${p.thick}×${p.width}×${p.length}mm　等級：${p.quality}
@@ -1491,12 +1491,12 @@ function buildStep3Summary() {
 
 function saveOrderToSession() {
   const items = getSelectedItems();
-  const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p.price), 0);
+  const productTotal = items.reduce((s, item) => s + item.qty * inPrice(item.p), 0);
 
   let msg = '【お見積もりシミュレーション内容】\n\n';
   items.forEach(({ p, qty }) => {
     const typeName = p.cat === 'panel' ? '桧羽目板' : '桧フローリング';
-    const sub = qty * inPrice(p.price);
+    const sub = qty * inPrice(p);
     msg += `・${typeName} ${p.thick}×${p.width}×${p.length}mm 等級:${p.quality} × ${qty}束 → ¥${sub.toLocaleString()}（税込）\n`;
   });
   msg += `\n商品合計（税込）：¥${productTotal.toLocaleString()}`;

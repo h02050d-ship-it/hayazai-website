@@ -287,10 +287,7 @@ function isOutOfStock(p) {
   return STOCK[p.id] === false;
 }
 
-// Yahoo価格は「税込」表示。HP税込 = Yahoo税込 × 0.95、100円単位四捨五入
-function hpPriceIncTax(yahooIncTax) {
-  return Math.round(yahooIncTax * 0.95 / 100) * 100;
-}
+// 掲載価格＝メーカー希望小売価格（js/cart.js の hpMsrpIncTax を使用）
 // 税抜価格 = 税込 ÷ 1.10、100円単位四捨五入
 function exclTax(incTax) {
   return Math.round(incTax / 1.10 / 100) * 100;
@@ -328,7 +325,7 @@ function initProduct() {
     "brand": { "@type": "Brand", "name": "林材木店" },
     "offers": {
       "@type": "Offer",
-      "price": hpPriceIncTax(p.price),
+      "price": hpMsrpIncTax(p) || undefined,
       "priceCurrency": "JPY",
       "availability": isOutOfStock(p) ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "林材木店" }
@@ -375,11 +372,23 @@ function initProduct() {
       `<strong>${qd.label}について：</strong>${qd.desc}`;
   }
 
-  // 価格（Yahoo価格×0.95、税込メイン/税抜カッコ）
-  const inc = hpPriceIncTax(p.price);
-  const ex = exclTax(inc);
-  document.getElementById('product-price').innerHTML =
-    `¥${inc.toLocaleString()}<small style="display:block;font-size:0.7rem;font-weight:400;color:var(--text-light);margin-top:4px;">（税抜 ¥${ex.toLocaleString()}）</small>`;
+  // 価格＝メーカー希望小売価格。対象外（910mm・B級品）は掲載・注文休止
+  const inc = hpMsrpIncTax(p);
+  if (inc == null) {
+    document.getElementById('product-price').innerHTML =
+      `<span style="font-size:1rem;">オンライン掲載休止中</span><small style="display:block;font-size:0.7rem;font-weight:400;color:var(--text-light);margin-top:4px;">価格・ご注文はお問い合わせフォーム・LINEにてご案内します</small>`;
+    const cartBtn = document.getElementById('add-to-cart-btn');
+    if (cartBtn) {
+      cartBtn.textContent = 'オンライン注文休止中';
+      cartBtn.disabled = true;
+      cartBtn.style.background = '#ccc';
+      cartBtn.style.cursor = 'not-allowed';
+    }
+  } else {
+    const ex = exclTax(inc);
+    document.getElementById('product-price').innerHTML =
+      `¥${inc.toLocaleString()}<small style="display:block;font-size:0.7rem;font-weight:400;color:var(--text-light);margin-top:4px;">（税抜 ¥${ex.toLocaleString()}）メーカー希望小売価格</small>`;
+  }
 
   // 在庫切れ（stock.json で明示的に false の商品のみ）
   if (isOutOfStock(p)) {
@@ -399,7 +408,7 @@ function initProduct() {
 
   // 関連商品（同カテゴリ 最大4件）
   const related = PRODUCTS
-    .filter(x => x.cat === p.cat && x.id !== p.id && !isOutOfStock(x))
+    .filter(x => x.cat === p.cat && x.id !== p.id && !isOutOfStock(x) && hpMsrpIncTax(x) != null)
     .slice(0, 4);
 
   document.getElementById('related-grid').innerHTML = related.map(r => `
@@ -413,7 +422,7 @@ function initProduct() {
         </div>
         <div class="product-card-name">${r.name}</div>
         <div class="product-card-spec">${r.thick}×${r.width}×${r.length}mm / ${r.qty}枚</div>
-        <div class="product-card-price">¥${hpPriceIncTax(r.price).toLocaleString()} <span>（税込）</span></div>
+        <div class="product-card-price">¥${hpMsrpIncTax(r).toLocaleString()} <span>（税込）</span></div>
         <div class="product-card-actions">
           <a href="product.html?id=${r.id}" class="btn btn-outline btn-sm">詳細</a>
           <button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}');this.textContent='追加済';">カートへ</button>
@@ -426,7 +435,7 @@ function initProduct() {
   // フローリング → 羽目板、羽目板 → フローリング を優先
   const crossCat = p.cat.startsWith('flooring') ? 'panel' : 'flooring15';
   const recommend = PRODUCTS
-    .filter(x => x.cat === crossCat && x.quality === p.quality && !isOutOfStock(x) && x.id !== p.id)
+    .filter(x => x.cat === crossCat && x.quality === p.quality && !isOutOfStock(x) && x.id !== p.id && hpMsrpIncTax(x) != null)
     .slice(0, 3);
 
   if (recommend.length > 0) {
@@ -442,7 +451,7 @@ function initProduct() {
           </div>
           <div class="product-card-name">${r.name}</div>
           <div class="product-card-spec">${r.thick}×${r.width}×${r.length}mm / ${r.qty}枚</div>
-          <div class="product-card-price">¥${hpPriceIncTax(r.price).toLocaleString()} <span>（税込）</span></div>
+          <div class="product-card-price">¥${hpMsrpIncTax(r).toLocaleString()} <span>（税込）</span></div>
           <div class="product-card-actions">
             <a href="product.html?id=${r.id}" class="btn btn-outline btn-sm">詳細</a>
             <button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}');this.textContent='追加済';">カートへ</button>
@@ -471,7 +480,8 @@ function calcQty() {
   // 必要セット数（切り上げ）
   const sets = Math.ceil(needed / setArea);
   const totalSheets = sets * p.qty;
-  const totalPrice = sets * hpPriceIncTax(p.price);
+  const msrp = hpMsrpIncTax(p);
+  const totalPrice = msrp != null ? sets * msrp : null;
   const totalArea = (setArea * sets).toFixed(2);
 
   const result = document.getElementById('calc-result');
@@ -479,7 +489,7 @@ function calcQty() {
   result.innerHTML = `
     必要セット数：<strong>${sets}セット</strong>（${totalSheets}枚）<br>
     合計面積：約 ${totalArea}㎡（余裕：約${((setArea*sets - area)*100/area).toFixed(0)}%）<br>
-    合計金額目安：<strong>¥${totalPrice.toLocaleString()}</strong>（税込・送料別）
+    ${totalPrice != null ? `合計金額目安：<strong>¥${totalPrice.toLocaleString()}</strong>（税込・送料別）` : '価格はお問い合わせフォーム・LINEにてご案内します'}
   `;
 }
 
