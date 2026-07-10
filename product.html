@@ -188,12 +188,6 @@
   <!-- 画像 -->
   <div class="product-img-wrap">
     <img class="product-main-img" id="product-img" src="" alt="">
-    <div style="margin-top:16px;">
-      <a id="yahoo-link" href="#" target="_blank" rel="noopener"
-        class="btn btn-outline" style="width:100%;justify-content:center;margin-top:0;">
-        Yahoo!ショッピングでも購入できます →
-      </a>
-    </div>
   </div>
 
   <!-- 情報 -->
@@ -349,9 +343,6 @@ function initProduct() {
   img.src = p.img;
   img.alt = p.name;
   img.onerror = () => { img.style.background = '#f5ede0'; img.removeAttribute('src'); };
-
-  // Yahooリンク
-  document.getElementById('yahoo-link').href = p.yahooUrl;
 
   // バッジ
   document.getElementById('product-badges').innerHTML = `
