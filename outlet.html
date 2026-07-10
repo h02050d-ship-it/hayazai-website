@@ -209,61 +209,25 @@
     </a>
   </div>
 
-  <div class="outlet-grid" id="outlet-grid">
-    <p style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:40px 0;">読み込み中…</p>
+  <!-- ▼ 価格改定作業中の案内（2026-07-10 追加）。商品掲載を再開する際は git 履歴（このコミットの直前）から grid＋描画スクリプト＋data/outlet.json を復元 ▼ -->
+  <div style="background:#fff8e8;border:1px solid #e0c48a;border-radius:10px;padding:32px 26px;margin-bottom:8px;text-align:center;">
+    <p style="font-family:'Noto Serif JP',serif;font-size:1.15rem;font-weight:700;color:var(--wood-dark);margin:0 0 12px;">🛠 ただいま価格改定の作業を行っております</p>
+    <p style="font-size:0.9rem;color:var(--text-mid);line-height:2;margin:0;">
+      誠に恐れ入りますが、アウトレット・B級品の掲載は準備が整い次第あらためて再開いたします。<br>
+      在庫・価格のご確認は、お電話またはお問い合わせフォームよりお気軽にお問い合わせください。
+    </p>
+    <p style="margin:18px 0 0;">
+      <a href="tel:0538582395" style="font-size:1.05rem;font-weight:700;color:var(--wood-dark);text-decoration:none;">📞 0538-58-2395（平日 9:00〜17:00）</a>
+    </p>
+    <p style="margin:14px 0 0;">
+      <a href="contact.html" class="btn" style="background:var(--wood-dark);color:#fff;">お問い合わせフォームへ →</a>
+    </p>
   </div>
-
-  <p style="font-size:0.78rem;color:var(--text-light);margin-top:28px;line-height:1.8;">
-    ※ 価格は税込・1束あたり。在庫状況はYahoo!ショッピング店と連動していますが、タイミングにより売り切れの場合があります。<br>
-    ※ ご注文は「注文・在庫確認」ボタンのフォーム、またはLINE・お電話（0538-58-2395）で承ります。
-  </p>
 
 </div>
 
 <div id="site-footer"></div>
 
 <script src="js/components.js?v=13"></script>
-<script>
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-}
-
-fetch('data/outlet.json?t=' + Date.now())
-  .then(r => r.json())
-  .then(items => {
-    const grid = document.getElementById('outlet-grid');
-    if (!items || items.length === 0) {
-      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:40px 0;">現在掲載中の商品はありません。入荷をお待ちください。</p>';
-      return;
-    }
-    grid.innerHTML = items.map(p => {
-      const badge = p.original
-        ? '<span class="outlet-badge original">オリジナル加工</span>'
-        : (p.grade === 'B' ? '<span class="outlet-badge">B級品</span>' : '<span class="outlet-badge offwidth">規格外サイズ</span>');
-      const oosBadge = p.inStock ? '' : '<span class="outlet-oos-badge">在庫切れ</span>';
-      const spec = (p.thick && p.width && p.length) ? `${p.thick}×${p.width}×${p.length}mm／${p.qty || '-'}枚入` : '';
-      const name = escapeHtml(p.name.replace(/^(オリジナル加工\s*)?[ABＡＢ]級品\s*/,'').trim());
-      const contactUrl = 'contact.html?item=' + encodeURIComponent(p.id);
-      const actions = p.inStock
-        ? `<a href="${contactUrl}" class="outlet-btn-order">注文・在庫確認</a>
-           <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" class="outlet-btn-line">LINEで質問</a>`
-        : `<a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" class="outlet-btn-line" style="flex:1;">入荷通知を受け取る</a>`;
-      return `
-      <div class="outlet-card${p.inStock ? '' : ' oos'}">
-        ${badge}${oosBadge}
-        <img src="${p.img}" alt="${name}" class="outlet-card-img" loading="lazy" decoding="async" onerror="this.style.display='none'">
-        <div class="outlet-card-body">
-          <div class="outlet-card-name">${name}</div>
-          <div class="outlet-card-spec">${spec}</div>
-          <div class="outlet-card-price">¥${(p.hpPrice).toLocaleString()}<small>（税込・1束）</small></div>
-          <div class="outlet-card-actions">${actions}</div>
-        </div>
-      </div>`;
-    }).join('');
-  })
-  .catch(() => {
-    document.getElementById('outlet-grid').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:40px 0;">読み込みに失敗しました。お手数ですが再読み込みしてください。</p>';
-  });
-</script>
 </body>
 </html>
