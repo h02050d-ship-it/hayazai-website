@@ -45,11 +45,11 @@ function renderHeader() {
       </a>
       <nav class="header-nav">
         <a href="/products.html">商品一覧</a>
+        <a href="/markets.html">取扱店一覧</a>
         <a href="/gallery.html">施工事例</a>
         <a href="/faq.html">お悩み解決</a>
         <a href="/blog.html">ブログ</a>
         <a href="/order.html">お見積もり</a>
-        <a href="/markets.html">取引市場一覧</a>
         <a href="/contact.html">お問い合わせ</a>
         <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" class="nav-line-link" aria-label="LINEで相談">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 3C6.48 3 2 6.76 2 11.4c0 2.93 1.97 5.5 4.94 6.96-.18 1.05-.71 3-.81 3.47-.12.59.22.59.46.43.19-.12 3.04-2.07 4.27-2.92.37.05.74.07 1.14.07 5.52 0 10-3.76 10-8.4S17.52 3 12 3z"/></svg>
@@ -70,11 +70,11 @@ function renderHeader() {
       <button class="mobile-nav-close" id="mobile-close">✕</button>
       <a href="/">トップ</a>
       <a href="/products.html">商品一覧</a>
+      <a href="/markets.html">取扱店一覧</a>
       <a href="/gallery.html">施工事例</a>
       <a href="/faq.html">お悩み解決</a>
       <a href="/blog.html">ブログ</a>
       <a href="/order.html">お見積もり</a>
-      <a href="/markets.html">取引市場一覧</a>
       <a href="/contact.html">お問い合わせ</a>
       <a href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener" class="mobile-line-link">💬 LINEで相談</a>
       <a href="/sample.html">無料サンプル請求</a>
@@ -119,7 +119,7 @@ function renderFooter() {
             <li><a href="/blog.html">ブログ・コラム</a></li>
             <li><a href="/faq.html">よくある質問</a></li>
             <li><a href="/shipping.html">送料のご案内</a></li>
-            <li><a href="/markets.html">木材市場一覧</a></li>
+            <li><a href="/markets.html">取扱店一覧（市場・代理店）</a></li>
             <li><a href="/contact.html">お問い合わせ</a></li>
           </ul>
         </div>

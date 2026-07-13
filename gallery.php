@@ -271,7 +271,7 @@ if (is_dir($gallery_dir)) {
 
 <script src="data/products.js"></script>
 <script src="js/cart.js"></script>
-<script src="js/components.js?v=4"></script>
+<script src="js/components.js?v=15"></script>
 <script>
 const galleryData = <?= json_encode(array_values($images)) ?>;
 let currentIndex = 0;

@@ -723,6 +723,14 @@
 
 <div class="order-layout">
 
+  <!-- ご注文前の案内（市場・取扱店経由が基本） -->
+  <div style="background:linear-gradient(135deg,#f8f2ea,#edf5ed);border:2px solid var(--wood-mid);border-radius:12px;padding:20px 24px;margin-bottom:28px;">
+    <p style="font-weight:700;color:var(--wood-dark);font-size:0.95rem;margin:0 0 6px;">🏬 ご注文の前に — お近くに取扱店はありませんか？</p>
+    <p style="font-size:0.84rem;color:var(--text-mid);line-height:1.9;margin:0;">
+      当社製品は全国の木材市場・販売代理店でもお買い求めいただけます。<strong>取扱店経由のほうが送料面で総額が抑えられることが多い</strong>ため、まずは<a href="markets.html" style="color:var(--wood-mid);font-weight:600;">取扱店一覧</a>をご確認ください。お近くに取扱店がない方・お急ぎの方は、このままお見積もり・ご注文いただけます（工場から直接お届けします）。
+    </p>
+  </div>
+
   <!-- ============ カートからのご注文（カートに商品がある場合のみ表示） ============ -->
   <div id="cart-order-section" style="display:none;">
 
@@ -978,7 +986,7 @@
 
 <script src="data/products.js"></script>
 <script src="js/cart.js"></script>
-<script src="js/components.js?v=14"></script>
+<script src="js/components.js?v=15"></script>
 <script>
 // ===================== 価格計算 =====================
 // 注文価格＝メーカー希望小売価格（js/cart.js の hpMsrpIncTax・税込/束）。引数は商品オブジェクト
