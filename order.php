@@ -1,13 +1,12 @@
 <?php
 // =====================================================
-// 林材木店 注文受付処理
+// 林材木店 お見積もり依頼受付処理
 // Xサーバー PHP対応
 // =====================================================
 
 // メール設定
 define('SHOP_EMAIL', 'info@hayazai.com');
 define('SHOP_NAME',  '林材木店');
-define('BANK_INFO',  "遠州信用金庫\n普通預金 口座番号：0131004660\n口座名義：カ）ハヤシザイモクテン");
 
 // POST以外はリダイレクト
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -41,7 +40,7 @@ if (!$address1)   $errors[] = '住所は必須です';
 
 // カートデータ
 $cart = json_decode($cart_json, true) ?: [];
-if (empty($cart)) $errors[] = 'カートが空です';
+if (empty($cart)) $errors[] = '商品が選択されていません';
 
 if (!empty($errors)) {
     $msg = implode("\n", $errors);
@@ -52,51 +51,37 @@ if (!empty($errors)) {
     exit;
 }
 
-// 合計計算
-$total = 0;
+// ご依頼内容（金額は提示せず、商品名・数量のみ）
 $itemText = '';
 foreach ($cart as $item) {
-    $subtotal = (int)($item['price'] ?? 0) * (int)($item['qty'] ?? 1);
-    $total += $subtotal;
     $itemText .= sprintf(
-        "  ・%s\n    単価：¥%s × %d個 = ¥%s\n",
+        "  ・%s × %d\n",
         $item['name'] ?? '不明',
-        number_format((int)($item['price'] ?? 0)),
-        (int)($item['qty'] ?? 1),
-        number_format($subtotal)
+        (int)($item['qty'] ?? 1)
     );
 }
 
-// 注文番号
+// 受付番号
 $orderNo = date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 6));
-
-// ヒアドキュメント内で使う変数（本文より先に定義しないと空欄になる）
-$total_fmt = number_format($total);
-$bank = BANK_INFO;
 
 // お客様へのメール本文
 $customerBody = <<<EOT
 {$name} 様
 
-このたびは林材木店へご注文いただきありがとうございます。
-以下の内容でご注文を承りました。
+このたびは林材木店へお見積もりのご依頼をいただきありがとうございます。
+以下の内容でお見積もり依頼を受け付けました。
 
-■ 注文番号
+■ 受付番号
   {$orderNo}
 
-■ ご注文内容
+■ ご依頼内容
 {$itemText}
   ──────────────────
-  商品合計（税込）：¥{$total_fmt}
-  送　料：別途ご案内
-  ※送料はお届け先・荷量により異なります。
+  担当より、送料を含めた正式なお見積もり金額をメールでご案内いたします。
+  金額にご納得いただいてから、ご注文へお進みいただけます。
+  （この時点ではまだご注文は確定していません。ご安心ください）
 
-■ お支払い方法（銀行振込）
-  {$bank}
-  振込確認後、順次発送いたします。
-  振込手数料はお客様負担となります。
-
-■ お届け先
+■ お届け先（ご記入内容）
   〒{$zip} {$prefecture}
   {$address1} {$address2}
 
@@ -119,7 +104,7 @@ EOT;
 
 // 店舗へのメール本文
 $shopBody = <<<EOT
-【新規注文】 注文番号：{$orderNo}
+【新規 見積もり依頼】 受付番号：{$orderNo}
 
 ■ お客様情報
   お名前：{$name}
@@ -131,9 +116,9 @@ $shopBody = <<<EOT
   〒{$zip} {$prefecture}
   {$address1} {$address2}
 
-■ ご注文内容
+■ ご依頼内容
 {$itemText}
-  商品合計：¥{$total_fmt}
+※ 送料を含めた見積もり金額を返信してください。
 
 ■ 備考
   {$note}
@@ -148,8 +133,8 @@ $headers_shop = "From: order-noreply@hayazai.com\r\n"
     . "Reply-To: {$email}\r\n"
     . "Content-Type: text/plain; charset=UTF-8\r\n";
 
-$subject_customer = "[林材木店] ご注文ありがとうございます（注文番号：{$orderNo}）";
-$subject_shop     = "【新規注文】{$name} 様より（{$orderNo}）";
+$subject_customer = "[林材木店] お見積もり依頼を受け付けました（受付番号：{$orderNo}）";
+$subject_shop     = "【見積もり依頼】{$name} 様より（{$orderNo}）";
 
 // メール送信（mb_send_mail）
 $sent1 = mb_send_mail($email,      $subject_customer, $customerBody, $headers_customer);
