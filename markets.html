@@ -93,6 +93,92 @@
       color: #fff;
     }
 
+    .region-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0 0 26px;
+    }
+
+    .rf-btn {
+      border: 1px solid var(--wood-mid);
+      background: #fff;
+      color: var(--wood-dark);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 9px 20px;
+      border-radius: 22px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .rf-btn:hover { background: var(--wood-pale); }
+
+    .rf-btn.is-active {
+      background: var(--wood-dark);
+      border-color: var(--wood-dark);
+      color: #fff;
+    }
+
+    .region-block { margin-bottom: 34px; }
+
+    .region-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.12rem;
+      color: var(--wood-dark);
+      font-weight: 700;
+      margin: 0 0 10px 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .region-title .rt-count {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--wood-mid);
+      border-radius: 12px;
+      padding: 2px 10px;
+    }
+
+    tr.pref-row td {
+      background: #f5ede2;
+      color: var(--wood-dark);
+      font-weight: 700;
+      font-size: 0.84rem;
+      padding: 8px 18px !important;
+      letter-spacing: 0.05em;
+    }
+
+    .dealer-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      background: linear-gradient(135deg, #f8f2ea, #edf5ed);
+      border: 2px solid var(--wood-mid);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-top: 48px;
+    }
+
+    .dealer-strip .ds-title {
+      font-weight: 700;
+      color: var(--wood-dark);
+      font-size: 1.02rem;
+      margin: 0 0 6px;
+    }
+
+    .dealer-strip .ds-desc {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      line-height: 1.85;
+      margin: 0;
+    }
+
     .markets-table-wrap {
       overflow-x: auto;
       border-radius: 10px;
@@ -257,226 +343,348 @@
   </div>
 
   <h2 class="section-title">取扱店一覧</h2>
+  <p class="section-desc">地域ボタンを押すと、お近くの取扱店に絞り込めます。</p>
 
-  <div class="markets-table-wrap">
-    <table class="markets-table">
-      <thead>
-        <tr>
-          <th class="col-name">会社名</th>
-          <th class="col-addr">所在地</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="col-name">（株）アイザワ</td>
-          <td class="col-addr">茨城県水戸市千波町1884</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://katsuichi-okayama.com/" target="_blank" rel="noopener">（株）勝山木材市場</a></td>
-          <td class="col-addr">岡山県真庭市三田211</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="http://kanehira-tochigi.jp/" target="_blank" rel="noopener">（株）金平</a></td>
-          <td class="col-addr">栃木県宇都宮市中里718-4</td>
-        </tr>
-        <tr>
-          <td class="col-name">北隅木材（株）</td>
-          <td class="col-addr">神奈川県横浜市金沢区幸浦1-5-3</td>
-        </tr>
-        <tr>
-          <td class="col-name">佐藤工業（株）</td>
-          <td class="col-addr">静岡県島田市金谷東二丁目3483番地</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）西部営業所</a></td>
-          <td class="col-addr">愛知県海部郡飛島村木場1-17</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）大口営業所</a></td>
-          <td class="col-addr">愛知県丹羽郡大口町河北2丁目2番地</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="http://www.mokuichi.or.jp/" target="_blank" rel="noopener">千葉県木材市場協同組合</a></td>
-          <td class="col-addr">千葉県東金市山田800</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）宇都宮</a></td>
-          <td class="col-addr">栃木県宇都宮市宮の内2-814</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）岡山</a></td>
-          <td class="col-addr">岡山県瀬戸内市邑久町福山663-6</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）香川</a></td>
-          <td class="col-addr">香川県観音寺市植田町41</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）小牧</a></td>
-          <td class="col-addr">愛知県小牧市大字下末777</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）埼玉</a></td>
-          <td class="col-addr">埼玉県入間郡越生町大谷352</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）滋賀</a></td>
-          <td class="col-addr">滋賀県野洲市南桜156</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）相模原</a></td>
-          <td class="col-addr">神奈川県相模原市中央区田名塩田3-11-8</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）長野</a></td>
-          <td class="col-addr">長野県長野市大字大田580-1</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）新潟</a></td>
-          <td class="col-addr">新潟県西浦原郡味方村大字白根73-1</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）沼津</a></td>
-          <td class="col-addr">静岡県沼津市一本松666-1</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）浜松</a></td>
-          <td class="col-addr">静岡県磐田市上万能294</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）前橋</a></td>
-          <td class="col-addr">群馬県前橋市下大島町568</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）横浜</a></td>
-          <td class="col-addr">神奈川県横浜市金沢区幸浦1-5-2</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.hikarimokuzai.com/" target="_blank" rel="noopener">（株）HIKARI</a></td>
-          <td class="col-addr">愛知県名古屋市瑞穂区桃園町3番23号</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）大栄浜市場</a></td>
-          <td class="col-addr">千葉県成田市伊能567</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）北浜市場</a></td>
-          <td class="col-addr">埼玉県さいたま市岩槻区鈞上新田291</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）下館市場</a></td>
-          <td class="col-addr">茨城県下妻市大字半谷1100-3</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）京葉市場</a></td>
-          <td class="col-addr">千葉県鎌ケ谷市軽井沢2153</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.mitomoku.co.jp/" target="_blank" rel="noopener">（株）ミトモク</a></td>
-          <td class="col-addr">茨城県水戸市千波町1884</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.mitomoku.co.jp/" target="_blank" rel="noopener">（株）ミトモク日立</a></td>
-          <td class="col-addr">茨城県日立市留町2435-62</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 熊谷市場</a></td>
-          <td class="col-addr">埼玉県熊谷市中奈良1412</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 高崎市場</a></td>
-          <td class="col-addr">群馬県高崎市飯塚町1150</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 佐野市場</a></td>
-          <td class="col-addr">栃木県佐野市免鳥町295</td>
-        </tr>
-        <tr>
-          <td class="col-name">（株）糸永</td>
-          <td class="col-addr">神奈川県相模原市中央区横山台1-29-20</td>
-        </tr>
-        <tr>
-          <td class="col-name">（有）井出木建材</td>
-          <td class="col-addr">静岡県静岡市清水区宮代町3-18</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.lumber.jp/" target="_blank" rel="noopener">（株）オオツカ（満天木材）</a></td>
-          <td class="col-addr">千葉県八街市四木321-5</td>
-        </tr>
-        <tr>
-          <td class="col-name">カネ信木材（株）</td>
-          <td class="col-addr">静岡県静岡市葵区辰起町7-1</td>
-        </tr>
-        <tr>
-          <td class="col-name">（株）木下銘木店</td>
-          <td class="col-addr">東京都江東区冬木7番6号</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.kuwabara.co.jp/" target="_blank" rel="noopener">桑原木材（株）</a></td>
-          <td class="col-addr">愛知県犬山市大字羽黒新田字下蝉屋38</td>
-        </tr>
-        <tr>
-          <td class="col-name">山都銘木</td>
-          <td class="col-addr">山形県山形市下柳38-1-1</td>
-        </tr>
-        <tr>
-          <td class="col-name">（有）滝川</td>
-          <td class="col-addr">静岡県磐田市上万能300</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）浜松営業所</a></td>
-          <td class="col-addr">静岡県浜松市中区西丘町259-2</td>
-        </tr>
-        <tr>
-          <td class="col-name">（有）東京丸文</td>
-          <td class="col-addr">千葉県富里市新橋665-1</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）資材事業部</a></td>
-          <td class="col-addr">神奈川県横浜市鶴見区中央4丁目33番1号 ナイスビル5階</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）木材事業部</a></td>
-          <td class="col-addr">神奈川県横浜市鶴見区中央4丁目33番1号 ナイスビル5階</td>
-        </tr>
-        <tr>
-          <td class="col-name">（株）ニッチ</td>
-          <td class="col-addr">長野県長野市大字大町740-3</td>
-        </tr>
-        <tr>
-          <td class="col-name">（株）ニッチ 松本営業所</td>
-          <td class="col-addr">長野県松本市大字笹賀7804</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://www.horiuchikenei.com/" target="_blank" rel="noopener">ホリウチ建営（株）</a></td>
-          <td class="col-addr">長野県諏訪市中州神宮寺1635</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="https://maruchi.org/" target="_blank" rel="noopener">（株）マルチ</a></td>
-          <td class="col-addr">静岡県静岡市葵区飯間5-4</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="http://www.e-03.co.jp/" target="_blank" rel="noopener">マルサンアークウッド（株）</a></td>
-          <td class="col-addr">埼玉県所沢市下富1346</td>
-        </tr>
-        <tr>
-          <td class="col-name"><a href="http://www.maruyamanishi.co.jp/" target="_blank" rel="noopener">丸山西木材産業（株）</a></td>
-          <td class="col-addr">静岡県磐田市一言3201</td>
-        </tr>
-        <tr>
-          <td class="col-name">山田銘建</td>
-          <td class="col-addr">静岡県静岡市清水区宍原1198番地</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="region-filter" aria-label="地域で絞り込み">
+    <button type="button" class="rf-btn is-active" data-region="all">すべて</button>
+    <button type="button" class="rf-btn" data-region="tohoku">東北</button>
+    <button type="button" class="rf-btn" data-region="kanto">関東</button>
+    <button type="button" class="rf-btn" data-region="chubu">中部・東海</button>
+    <button type="button" class="rf-btn" data-region="kinki">近畿</button>
+    <button type="button" class="rf-btn" data-region="chushi">中国・四国</button>
+  </div>
+
+  <!-- 東北 -->
+  <div class="region-block" data-region="tohoku">
+    <h3 class="region-title">東北 <span class="rt-count">1店</span></h3>
+    <div class="markets-table-wrap">
+      <table class="markets-table">
+        <thead>
+          <tr>
+            <th class="col-name">会社名</th>
+            <th class="col-addr">所在地</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pref-row"><td colspan="2">山形県</td></tr>
+          <tr>
+            <td class="col-name">山都銘木</td>
+            <td class="col-addr">山形県山形市下柳38-1-1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 関東 -->
+  <div class="region-block" data-region="kanto">
+    <h3 class="region-title">関東 <span class="rt-count">25店</span></h3>
+    <div class="markets-table-wrap">
+      <table class="markets-table">
+        <thead>
+          <tr>
+            <th class="col-name">会社名</th>
+            <th class="col-addr">所在地</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pref-row"><td colspan="2">茨城県</td></tr>
+          <tr>
+            <td class="col-name">（株）アイザワ</td>
+            <td class="col-addr">茨城県水戸市千波町1884</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.mitomoku.co.jp/" target="_blank" rel="noopener">（株）ミトモク</a></td>
+            <td class="col-addr">茨城県水戸市千波町1884</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.mitomoku.co.jp/" target="_blank" rel="noopener">（株）ミトモク日立</a></td>
+            <td class="col-addr">茨城県日立市留町2435-62</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）下館市場</a></td>
+            <td class="col-addr">茨城県下妻市大字半谷1100-3</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">栃木県</td></tr>
+          <tr>
+            <td class="col-name"><a href="http://kanehira-tochigi.jp/" target="_blank" rel="noopener">（株）金平</a></td>
+            <td class="col-addr">栃木県宇都宮市中里718-4</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）宇都宮</a></td>
+            <td class="col-addr">栃木県宇都宮市宮の内2-814</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 佐野市場</a></td>
+            <td class="col-addr">栃木県佐野市免鳥町295</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">群馬県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）前橋</a></td>
+            <td class="col-addr">群馬県前橋市下大島町568</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 高崎市場</a></td>
+            <td class="col-addr">群馬県高崎市飯塚町1150</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">埼玉県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）埼玉</a></td>
+            <td class="col-addr">埼玉県入間郡越生町大谷352</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）北浜市場</a></td>
+            <td class="col-addr">埼玉県さいたま市岩槻区鈞上新田291</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.yoshisada.co.jp/" target="_blank" rel="noopener">（株）吉貞 熊谷市場</a></td>
+            <td class="col-addr">埼玉県熊谷市中奈良1412</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="http://www.e-03.co.jp/" target="_blank" rel="noopener">マルサンアークウッド（株）</a></td>
+            <td class="col-addr">埼玉県所沢市下富1346</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">千葉県</td></tr>
+          <tr>
+            <td class="col-name"><a href="http://www.mokuichi.or.jp/" target="_blank" rel="noopener">千葉県木材市場協同組合</a></td>
+            <td class="col-addr">千葉県東金市山田800</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）大栄浜市場</a></td>
+            <td class="col-addr">千葉県成田市伊能567</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.maruu.co.jp/" target="_blank" rel="noopener">丸宇木材市売（株）京葉市場</a></td>
+            <td class="col-addr">千葉県鎌ケ谷市軽井沢2153</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.lumber.jp/" target="_blank" rel="noopener">（株）オオツカ（満天木材）</a></td>
+            <td class="col-addr">千葉県八街市四木321-5</td>
+          </tr>
+          <tr>
+            <td class="col-name">（有）東京丸文</td>
+            <td class="col-addr">千葉県富里市新橋665-1</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">東京都</td></tr>
+          <tr>
+            <td class="col-name">（株）木下銘木店</td>
+            <td class="col-addr">東京都江東区冬木7番6号</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">神奈川県</td></tr>
+          <tr>
+            <td class="col-name">北隅木材（株）</td>
+            <td class="col-addr">神奈川県横浜市金沢区幸浦1-5-3</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）横浜</a></td>
+            <td class="col-addr">神奈川県横浜市金沢区幸浦1-5-2</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）資材事業部</a></td>
+            <td class="col-addr">神奈川県横浜市鶴見区中央4丁目33番1号 ナイスビル5階</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）木材事業部</a></td>
+            <td class="col-addr">神奈川県横浜市鶴見区中央4丁目33番1号 ナイスビル5階</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）相模原</a></td>
+            <td class="col-addr">神奈川県相模原市中央区田名塩田3-11-8</td>
+          </tr>
+          <tr>
+            <td class="col-name">（株）糸永</td>
+            <td class="col-addr">神奈川県相模原市中央区横山台1-29-20</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 中部・東海 -->
+  <div class="region-block" data-region="chubu">
+    <h3 class="region-title">中部・東海 <span class="rt-count">20店</span></h3>
+    <div class="markets-table-wrap">
+      <table class="markets-table">
+        <thead>
+          <tr>
+            <th class="col-name">会社名</th>
+            <th class="col-addr">所在地</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pref-row"><td colspan="2">新潟県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）新潟</a></td>
+            <td class="col-addr">新潟県西浦原郡味方村大字白根73-1</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">長野県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）長野</a></td>
+            <td class="col-addr">長野県長野市大字大田580-1</td>
+          </tr>
+          <tr>
+            <td class="col-name">（株）ニッチ</td>
+            <td class="col-addr">長野県長野市大字大町740-3</td>
+          </tr>
+          <tr>
+            <td class="col-name">（株）ニッチ 松本営業所</td>
+            <td class="col-addr">長野県松本市大字笹賀7804</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.horiuchikenei.com/" target="_blank" rel="noopener">ホリウチ建営（株）</a></td>
+            <td class="col-addr">長野県諏訪市中州神宮寺1635</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">静岡県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）沼津</a></td>
+            <td class="col-addr">静岡県沼津市一本松666-1</td>
+          </tr>
+          <tr>
+            <td class="col-name">佐藤工業（株）</td>
+            <td class="col-addr">静岡県島田市金谷東二丁目3483番地</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）浜松</a></td>
+            <td class="col-addr">静岡県磐田市上万能294</td>
+          </tr>
+          <tr>
+            <td class="col-name">（有）滝川</td>
+            <td class="col-addr">静岡県磐田市上万能300</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="http://www.maruyamanishi.co.jp/" target="_blank" rel="noopener">丸山西木材産業（株）</a></td>
+            <td class="col-addr">静岡県磐田市一言3201</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）浜松営業所</a></td>
+            <td class="col-addr">静岡県浜松市中区西丘町259-2</td>
+          </tr>
+          <tr>
+            <td class="col-name">（有）井出木建材</td>
+            <td class="col-addr">静岡県静岡市清水区宮代町3-18</td>
+          </tr>
+          <tr>
+            <td class="col-name">山田銘建</td>
+            <td class="col-addr">静岡県静岡市清水区宍原1198番地</td>
+          </tr>
+          <tr>
+            <td class="col-name">カネ信木材（株）</td>
+            <td class="col-addr">静岡県静岡市葵区辰起町7-1</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://maruchi.org/" target="_blank" rel="noopener">（株）マルチ</a></td>
+            <td class="col-addr">静岡県静岡市葵区飯間5-4</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">愛知県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）西部営業所</a></td>
+            <td class="col-addr">愛知県海部郡飛島村木場1-17</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://chuuou-jp.com/" target="_blank" rel="noopener">中央木材市売（株）大口営業所</a></td>
+            <td class="col-addr">愛知県丹羽郡大口町河北2丁目2番地</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）小牧</a></td>
+            <td class="col-addr">愛知県小牧市大字下末777</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.kuwabara.co.jp/" target="_blank" rel="noopener">桑原木材（株）</a></td>
+            <td class="col-addr">愛知県犬山市大字羽黒新田字下蝉屋38</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.hikarimokuzai.com/" target="_blank" rel="noopener">（株）HIKARI</a></td>
+            <td class="col-addr">愛知県名古屋市瑞穂区桃園町3番23号</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 近畿 -->
+  <div class="region-block" data-region="kinki">
+    <h3 class="region-title">近畿 <span class="rt-count">1店</span></h3>
+    <div class="markets-table-wrap">
+      <table class="markets-table">
+        <thead>
+          <tr>
+            <th class="col-name">会社名</th>
+            <th class="col-addr">所在地</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pref-row"><td colspan="2">滋賀県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）滋賀</a></td>
+            <td class="col-addr">滋賀県野洲市南桜156</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 中国・四国 -->
+  <div class="region-block" data-region="chushi">
+    <h3 class="region-title">中国・四国 <span class="rt-count">3店</span></h3>
+    <div class="markets-table-wrap">
+      <table class="markets-table">
+        <thead>
+          <tr>
+            <th class="col-name">会社名</th>
+            <th class="col-addr">所在地</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pref-row"><td colspan="2">岡山県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://katsuichi-okayama.com/" target="_blank" rel="noopener">（株）勝山木材市場</a></td>
+            <td class="col-addr">岡山県真庭市三田211</td>
+          </tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）岡山</a></td>
+            <td class="col-addr">岡山県瀬戸内市邑久町福山663-6</td>
+          </tr>
+          <tr class="pref-row"><td colspan="2">香川県</td></tr>
+          <tr>
+            <td class="col-name"><a href="https://www.nice.co.jp/" target="_blank" rel="noopener">ナイス（株）香川</a></td>
+            <td class="col-addr">香川県観音寺市植田町41</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var btns = document.querySelectorAll('.rf-btn');
+    var blocks = document.querySelectorAll('.region-block');
+    btns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var region = btn.getAttribute('data-region');
+        btns.forEach(function(b){ b.classList.toggle('is-active', b === btn); });
+        blocks.forEach(function(bl){
+          bl.style.display = (region === 'all' || bl.getAttribute('data-region') === region) ? '' : 'none';
+        });
+      });
+    });
+  })();
+  </script>
+
+  <!-- 取扱店向け販促素材 -->
+  <div class="dealer-strip">
+    <div style="flex:1;min-width:260px;">
+      <p class="ds-title">🏬 取扱店の皆さまへ — 販促素材のご案内</p>
+      <p class="ds-desc">店頭設置やお客様への配布にお使いいただける<strong>販促チラシ（両面A4）のPDFダウンロード</strong>と、<strong>紙チラシ・サンプル・価格表の無料お申し込み</strong>ができます。新たにお取り扱いをご希望の市場・販売店様のご相談も歓迎です。</p>
+    </div>
+    <a href="download.html" class="btn btn-lg" style="background:var(--wood-dark);color:#fff;white-space:nowrap;">販促素材ダウンロード →</a>
   </div>
 
   <!-- 末尾CTA -->
   <div class="closing-cta">
-    <h2>上記以外でのお取り扱い・直接購入をご希望の方</h2>
+    <h2>お近くに取扱店がない方・新規お取り扱いをご希望の市場様へ</h2>
     <p>
-      上記以外でもお取り扱いをご希望の方、市場・代理店経由でのご購入が難しい方は、お気軽にお問い合わせください。<br>
-      工場から全国へ直接発送いたします。無料サンプルもご用意しております。
+      お近くに取扱店がなく直接購入をご希望の方は、工場から全国へ直接発送いたします（個別見積もり・無料サンプルあり）。<br>
+      また、<strong>新たに当社製品のお取り扱いをご希望の木材市場・販売店様</strong>のご相談も歓迎です。お気軽にお問い合わせください。
     </p>
     <div class="btn-row">
       <a href="contact.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">お問い合わせ・見積もり</a>
@@ -488,6 +696,6 @@
 
 <div id="site-footer"></div>
 
-<script src="js/components.js?v=15"></script>
+<script src="js/components.js?v=16"></script>
 </body>
 </html>

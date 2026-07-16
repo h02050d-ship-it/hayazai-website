@@ -120,6 +120,7 @@ function renderFooter() {
             <li><a href="/faq.html">よくある質問</a></li>
             <li><a href="/shipping.html">送料のご案内</a></li>
             <li><a href="/markets.html">取扱店一覧（市場・代理店）</a></li>
+            <li><a href="/download.html">取扱店様専用（販促チラシDL）</a></li>
             <li><a href="/contact.html">お問い合わせ</a></li>
           </ul>
         </div>
