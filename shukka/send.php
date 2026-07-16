@@ -77,8 +77,48 @@ if ($code >= 200 && $code < 300) {
             shkSetLastSendDate($fb, date('Y-m-d'));
         }
     }
+    // --- 社内通知LINE（大樹）へ控えを転送（best-effort・本体レスポンスには影響させない）---
+    shkNotifyNaisya_($text);
     echo json_encode(['ok' => true, 'marked' => $marked]);
 } else {
     http_response_code(502);
     echo json_encode(['ok' => false, 'error' => 'line', 'code' => $code, 'detail' => $resp, 'curl' => $cerr]);
+}
+
+// =====================================================
+// 社内通知LINE（@811hkagd／大樹）へ出荷依頼の控えを転送する。
+// 既存GAS中継（notify_settings ゲート内蔵）へ POST。best-effort：
+// 失敗しても本体レスポンス(ok:true)には一切影響させない。GASは302で
+// 応答を返す仕様のため CURLOPT_FOLLOWLOCATION 必須（302後のGETが本文）。
+// =====================================================
+function shkNotifyNaisya_($text) {
+    $url  = 'https://script.google.com/macros/s/AKfycbxcvQZVi497obS-nRm4MdN0tYtsaTb03n7FLFWy7oZN2vkItKm7oQO9_85WdJYxGjgaiA/exec';
+    $body = json_encode([
+        'key'    => 'sk-edNLrUTi9sCrAo1tJmiiA',
+        'target' => 'daiki',
+        'mode'   => 'notify',
+        'ntype'  => 'shukka',
+        'by'     => '出荷依頼送信',
+        'text'   => "📦 出荷依頼を送信しました\n\n" . $text,
+    ], JSON_UNESCAPED_UNICODE);
+    $ncode = 0;
+    try {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => $body,
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,   // GASは302リダイレクトで応答を返す
+            CURLOPT_TIMEOUT        => 10,
+        ]);
+        curl_exec($ch);
+        $ncode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    } catch (\Throwable $e) {
+        $ncode = 0;
+    }
+    @file_put_contents(__DIR__ . '/state/send.log',
+        date('c') . " naisya=$ncode\n", FILE_APPEND);
+    return $ncode;
 }
