@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>取扱店募集（木材市場・販売店さま） | 林材木店</title>
+  <meta name="description" content="林材木店の桧フローリング・羽目板を新たにお取り扱いいただける木材市場・材木店・販売店さまを募集しています。ホームページが貴社の販売を後押しし、販促素材も無償でご提供します。">
+  <link rel="canonical" href="https://hayazai.com/dealer.html">
+
+  <!-- OGP -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="株式会社林材木店">
+  <meta property="og:title" content="取扱店募集（木材市場・販売店さま） | 林材木店">
+  <meta property="og:description" content="国産無垢桧フローリング・羽目板を、一緒にお客様へ。新規取扱店を募集しています。">
+  <meta property="og:url" content="https://hayazai.com/dealer.html">
+  <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
+  <meta property="og:locale" content="ja_JP">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css?v=11">
+  <style>
+    .dealer-layout { max-width: 960px; margin: 0 auto; padding: 44px 32px 80px; }
+
+    .dealer-lead {
+      background: linear-gradient(135deg, #f8f2ea, #edf5ed);
+      border: 2px solid var(--wood-mid);
+      border-radius: 12px;
+      padding: 26px 32px;
+      margin-bottom: 44px;
+    }
+    .dealer-lead p { font-size: 0.94rem; color: var(--text-mid); line-height: 2.0; margin: 0; }
+    .dealer-lead strong { color: var(--wood-dark); }
+
+    .dealer-h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.35rem;
+      color: var(--wood-dark);
+      font-weight: 700;
+      padding: 12px 18px;
+      background: var(--wood-pale);
+      border-left: 5px solid var(--wood-mid);
+      border-radius: 0 6px 6px 0;
+      margin: 48px 0 24px;
+    }
+
+    .merit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    @media (max-width: 760px) { .merit-grid { grid-template-columns: 1fr; } }
+    .merit-card {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 12px;
+      padding: 24px 22px;
+    }
+    .merit-card .mc-icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .merit-card h3 { font-size: 0.98rem; color: var(--wood-dark); margin: 0 0 10px; }
+    .merit-card p { font-size: 0.84rem; color: var(--text-mid); line-height: 1.9; margin: 0; }
+    .merit-card a { color: var(--wood-mid); font-weight: 600; }
+
+    .flow-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; counter-reset: fstep; }
+    @media (max-width: 760px) { .flow-steps { grid-template-columns: 1fr 1fr; } }
+    .flow-step {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 10px;
+      padding: 18px 16px;
+      counter-increment: fstep;
+    }
+    .flow-step::before {
+      content: "STEP " counter(fstep);
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--wood-mid);
+      margin-bottom: 6px;
+    }
+    .flow-step h3 { font-size: 0.9rem; color: var(--wood-dark); margin: 0 0 6px; }
+    .flow-step p { font-size: 0.78rem; color: var(--text-mid); line-height: 1.8; margin: 0; }
+
+    /* form */
+    .df-form { display: flex; flex-direction: column; gap: 20px; background: #fff; border: 1px solid #e8ddd0; border-radius: 12px; padding: 30px 32px; }
+    .df-field label.q { display: block; font-weight: 700; color: var(--wood-dark); margin-bottom: 8px; font-size: 0.95rem; }
+    .df-field .req { color: #c62828; font-size: 0.78rem; margin-left: 6px; }
+    .df-field input[type=text], .df-field input[type=email], .df-field input[type=tel], .df-field select, .df-field textarea {
+      width: 100%; padding: 11px 13px; border: 1px solid #cfc4b2; border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #fff;
+    }
+    .df-field textarea { min-height: 100px; resize: vertical; }
+    .df-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+    @media (max-width: 560px){ .df-checks { grid-template-columns: 1fr; } }
+    .df-checks label { font-size: 0.93rem; color: var(--text-mid); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .df-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 560px){ .df-row2 { grid-template-columns: 1fr; } }
+    .df-submit { background: var(--wood-dark); color: #fff; border: none; border-radius: 8px; padding: 15px; font-size: 1.05rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .df-submit:hover { opacity: .88; }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>取扱店募集</h1>
+  <p>国産無垢桧のフローリング・羽目板を、一緒にお客様へ届けませんか</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <a href="markets.html">取扱店一覧</a>
+  <span class="sep">›</span>
+  <span>取扱店募集</span>
+</nav>
+
+<div class="dealer-layout">
+
+  <div class="dealer-lead">
+    <p>
+      林材木店は、創業昭和43年から桧一筋の加工専門工場です。当社は<strong>全国の木材市場・販売代理店を通じてお客様へお届けする</strong>ことを販売の基本としており、新たにお取り扱いいただける<strong>木材市場・材木店・販売店さまを募集</strong>しています。取引形態（市売・付売など）や数量は、貴社のご事情に合わせてご相談ください。
+    </p>
+  </div>
+
+  <h2 class="dealer-h2">お取り扱いいただくメリット</h2>
+  <div class="merit-grid">
+    <div class="merit-card">
+      <div class="mc-icon">🏠</div>
+      <h3>ホームページが販売を後押し</h3>
+      <p>当社サイトでは、お客様からのご購入相談を<strong>お近くの取扱店へご案内</strong>しています。お取引開始後は<a href="markets.html">取扱店一覧</a>に貴社を掲載し、地域のお客様をご紹介します。</p>
+    </div>
+    <div class="merit-card">
+      <div class="mc-icon">📣</div>
+      <h3>販促素材を無償でご提供</h3>
+      <p>店頭・営業でそのまま使える<a href="download.html">販促チラシ（PDF・紙）</a>、施工事例写真、価格表をご用意。紙チラシの追加送付も無料です。</p>
+    </div>
+    <div class="merit-card">
+      <div class="mc-icon">🏭</div>
+      <h3>自社工場の一貫生産</h3>
+      <p>原板の厳選・天然乾燥・カンナ超仕上げ・検品まで磐田の自社工場で一貫。品質と安定供給で、貴社の信用にお応えします。</p>
+    </div>
+  </div>
+
+  <h2 class="dealer-h2">お取引開始までの流れ</h2>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <h3>ご相談</h3>
+      <p>下のフォームからお気軽にどうぞ。資料・サンプルのご請求だけでも歓迎です。</p>
+    </div>
+    <div class="flow-step">
+      <h3>お打ち合わせ</h3>
+      <p>取引形態・価格・配送などを、貴社のご事情に合わせてご相談します。</p>
+    </div>
+    <div class="flow-step">
+      <h3>お取引開始</h3>
+      <p>初回は少量からでも構いません。無理のない形でスタートできます。</p>
+    </div>
+    <div class="flow-step">
+      <h3>掲載・販促支援</h3>
+      <p>取扱店一覧への掲載と販促素材のご提供で、販売を後押しします。</p>
+    </div>
+  </div>
+
+  <h2 class="dealer-h2" id="apply">新規お取り扱いのご相談フォーム</h2>
+  <form class="df-form" action="dealer_apply.php" method="post">
+    <div class="df-field">
+      <label class="q">貴社名<span class="req">必須</span></label>
+      <input type="text" name="company" required placeholder="例）〇〇木材市売（株）〇〇営業所">
+    </div>
+    <div class="df-row2">
+      <div class="df-field">
+        <label class="q">業種<span class="req">必須</span></label>
+        <select name="biztype" required>
+          <option value="">選択してください</option>
+          <option>木材市場</option>
+          <option>材木店・木材販売店</option>
+          <option>建材店・商社</option>
+          <option>工務店・施工店</option>
+          <option>その他</option>
+        </select>
+      </div>
+      <div class="df-field">
+        <label class="q">ご担当者名<span class="req">必須</span></label>
+        <input type="text" name="name" required placeholder="例）山田 太郎">
+      </div>
+    </div>
+    <div class="df-row2">
+      <div class="df-field">
+        <label class="q">メールアドレス<span class="req">必須</span></label>
+        <input type="email" name="email" required placeholder="例）info@example.co.jp">
+      </div>
+      <div class="df-field">
+        <label class="q">お電話番号</label>
+        <input type="tel" name="tel" placeholder="例）0538-58-2395">
+      </div>
+    </div>
+    <div class="df-field">
+      <label class="q">所在地<span class="req">必須</span></label>
+      <input type="text" name="address" required placeholder="都道府県＋市区町村（例：静岡県磐田市）">
+    </div>
+    <div class="df-field">
+      <label class="q">ご希望<span class="req">必須・複数可</span></label>
+      <div class="df-checks">
+        <label><input type="checkbox" name="wishes[]" value="atsukai"> 取り扱いを検討したい</label>
+        <label><input type="checkbox" name="wishes[]" value="shiryo"> 資料・サンプルがほしい</label>
+        <label><input type="checkbox" name="wishes[]" value="joken"> 取引条件・価格を聞きたい</label>
+        <label><input type="checkbox" name="wishes[]" value="other"> その他（備考にご記入）</label>
+      </div>
+    </div>
+    <div class="df-field">
+      <label class="q">備考・ご質問</label>
+      <textarea name="note" placeholder="想定される数量・エリア・ご質問など、お気軽にご記入ください"></textarea>
+    </div>
+    <button type="submit" class="df-submit">この内容で相談する</button>
+  </form>
+
+  <p style="font-size:0.82rem;color:var(--text-light);margin-top:18px;line-height:1.9;">
+    お急ぎの場合はお電話でも承ります: <strong>0538-58-2395</strong>（平日9:00〜17:00）／ メール: <strong>info@hayazai.com</strong>
+  </p>
+
+</div>
+
+<div id="site-footer"></div>
+
+<script src="js/components.js?v=17"></script>
+</body>
+</html>
