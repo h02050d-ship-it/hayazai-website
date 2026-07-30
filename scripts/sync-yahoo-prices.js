@@ -239,6 +239,27 @@ function buildNewProductLine(code, info) {
       if (hasRemovedMark(lines[rec.lineNumber])) {
         lines[rec.lineNumber] = lines[rec.lineNumber].replace(/\s*\/\/\s*REMOVED\?\s*$/, '');
       }
+    } else if (/cat\s*:\s*['"]flooring12['"]/.test(rec.raw)) {
+      // 12mmフローリングはYahoo上で15mmページに統合済み（12mm=15mm同価格ポリシー）
+      // → 対応する15mm SKU（ff12...→ff15...）の価格をミラーし、REMOVED?は付けない
+      const aliasId = rec.id.replace(/^([a-z]{2})12/, '$115');
+      if (yahooItems.has(aliasId)) {
+        const newPrice = yahooItems.get(aliasId).price;
+        if (newPrice !== rec.price) {
+          diffs.push(`UPDATE ${rec.id}: ${rec.price} -> ${newPrice} (12mm=15mm同価格ミラー:${aliasId})`);
+          lines[rec.lineNumber] = replacePriceInLine(lines[rec.lineNumber], newPrice);
+          updateCount++;
+        } else {
+          unchangedCount++;
+        }
+        if (hasRemovedMark(lines[rec.lineNumber])) {
+          lines[rec.lineNumber] = lines[rec.lineNumber].replace(/\s*\/\/\s*REMOVED\?\s*$/, '');
+        }
+      } else if (!hasRemovedMark(lines[rec.lineNumber])) {
+        diffs.push(`REMOVED? ${rec.id} (price=${rec.price})`);
+        lines[rec.lineNumber] = appendRemovedMark(lines[rec.lineNumber]);
+        removedCount++;
+      }
     } else {
       // Yahooに無い → REMOVED? マーク（既に付いていればスキップ）
       if (!hasRemovedMark(lines[rec.lineNumber])) {
