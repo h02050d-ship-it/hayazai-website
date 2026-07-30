@@ -10,7 +10,8 @@ mb_language('Japanese');
 mb_internal_encoding('UTF-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: contact.html');
+    header('X-Robots-Tag: noindex, nofollow', true);
+    header('Location: /contact.html', true, 301);
     exit;
 }
 

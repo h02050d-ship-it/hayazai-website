@@ -10,7 +10,8 @@ define('SHOP_NAME',  '林材木店');
 
 // POST以外はリダイレクト
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: cart.html');
+    header('X-Robots-Tag: noindex, nofollow', true);
+    header('Location: /cart.html', true, 301);
     exit;
 }
 
