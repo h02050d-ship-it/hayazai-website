@@ -106,6 +106,13 @@ fi
 # 6. rsync 実行
 # -----------------------------------------------------------------------------
 rsync -avz --delete ${RSYNC_DRY} \
+  --exclude 'nouhin/' \
+  --exclude 'line/state/' \
+  --exclude 'shukka/state/' \
+  --exclude 'ai/state/' \
+  --exclude 'line/config.php' \
+  --exclude 'shukka/config.php' \
+  --exclude 'ai/config.php' \
   --exclude '.DS_Store' \
   --exclude '.git/' \
   --exclude '.github/' \

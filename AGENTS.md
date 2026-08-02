@@ -14,6 +14,16 @@
 
 **理由:** 別マシン・別ディレクトリの古いローカルファイルで本番を上書きする事故を物理的に防ぐため。Claude 自身も、このプロジェクトの編集後は **push のみで完了**とし、rsync は呼ばないこと。
 
+### ⚠️ サーバー専用領域（このリポジトリに存在しない＝ミラー配信すると消える）
+
+`~/hayazai.com/public_html/` 配下には**このリポジトリ由来ではない**ディレクトリがある。`--delete` 付きの全体 rsync や FTP ミラーを除外なしで実行すると**削除される**（2026-07-31 に実際に `nouhin/` が消失し復旧した実害あり）:
+
+- `nouhin/n29im17c/` … 納品書作成ツール（正本: `C:\Users\hayaz\hayazai_nouhin\` の index.html / seikyu.html / db.html。デプロイは個別 scp のみ）
+- `line/state/` `shukka/state/` `ai/state/` … PHP が書く実行時データ
+- `line/config.php` `shukka/config.php` `ai/config.php` … GitHub Actions が Secrets から生成（リポジトリに無い）
+
+GitHub Actions のワークフローと deploy.sh には除外設定済み。**それ以外の手段でのサーバー同期は絶対にしない。**
+
 ---
 
 ## プロジェクト概要
