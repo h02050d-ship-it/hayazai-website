@@ -161,8 +161,33 @@ if (!$is_genuine) {
 //    ここで通してしまうとGmailが「この差出人＝迷惑メール」と学習し、本物の問い合わせまで
 //    迷惑メールに落ちてしまうため、送信自体を行わず静かに破棄する。
 $name_is_gibberish = (bool)preg_match('/^[a-z]{8,24}$/', $name);
-$has_japanese      = (bool)preg_match('/[ぁ-んァ-ヶ一-龥]/u', $name . ' ' . $company . ' ' . $message);
+$has_japanese      = (bool)preg_match('/[ぁ-んァ-ヶ一-龥]/u', $name . ' ' . $company . ' ' . $message . ' ' . $sample_address);
+
+$is_bot = false;
 if (!$js_ok && ($name_is_gibberish || !$has_japanese)) {
+    // JavaScriptが動いていない＝人間のブラウザではない
+    $is_bot = true;
+} elseif ($name_is_gibberish && !$has_japanese) {
+    // hp_tokenを偽装してくるボット対策。お名前がランダム英字で日本語が一文字も無い
+    // 投稿は、国内向けの当社への問い合わせとしては実質あり得ない。
+    $is_bot = true;
+}
+
+if ($is_bot) {
+    // 完全に捨てるのではなく、公開領域の外にログとして残す（誤判定の検証用）。
+    // メールは送らない＝Gmailに「この差出人＝迷惑メール」と再学習させないため。
+    $logDir = dirname(__DIR__) . '/blocked_contacts';
+    if (!is_dir($logDir)) @mkdir($logDir, 0705, true);
+    $logLine = str_repeat('-', 60) . "\n"
+        . '日時：' . date('Y-m-d H:i:s') . "\n"
+        . 'IP：' . ($_SERVER['REMOTE_ADDR'] ?? '') . "\n"
+        . "種別：{$type_label}\n"
+        . "お名前：{$name}\n会社名：{$company}\nEmail：{$email}\nTEL：{$tel}\n"
+        . "内容：{$message}\n"
+        . ($sample_address ? "送付先：〒{$sample_zip} {$sample_address}\n" : '')
+        . 'JS実行：' . ($js_ok ? 'あり' : 'なし') . "\n";
+    @file_put_contents($logDir . '/' . date('Y-m') . '.log', $logLine, FILE_APPEND | LOCK_EX);
+
     header('Location: contact_complete.html');
     exit;
 }
