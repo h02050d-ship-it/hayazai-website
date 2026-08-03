@@ -109,6 +109,51 @@ function clearState(string $userId): void {
     if (is_file($p)) @unlink($p);
 }
 
+// --- 自動案内（フォールバック）の抑制 --------------------------------
+// 以前は「どのフローにも当てはまらないテキスト」に毎回案内文を返していたため、
+// お礼や相づちにも反応して会話中にうるさかった（2026-08-03 対応）。
+//   ① 「ありがとうございます」等のあいさつ・相づちには返さない
+//   ② 同じ相手には24時間に1回だけ
+// タイムスタンプはフロー状態（clearStateで消える）とは別ファイルに持つ。
+const GUIDE_COOLDOWN_SEC = 86400;
+function guidePath(string $userId): string {
+    return __DIR__ . '/state/guide_' . safeId($userId) . '.txt';
+}
+function guideRecentlySent(string $userId): bool {
+    $p = guidePath($userId);
+    if (!is_file($p)) return false;
+    $t = (int)trim((string)@file_get_contents($p));
+    return $t > 0 && (time() - $t) < GUIDE_COOLDOWN_SEC;
+}
+function markGuideSent(string $userId): void {
+    @file_put_contents(guidePath($userId), (string)time());
+}
+/** あいさつ・お礼・相づちなど、返信不要の短文か */
+function isSmallTalk(string $text): bool {
+    // 記号・空白・絵文字を落として判定
+    $t = preg_replace('/[\s　。、．，！!？?♪…〜～ｗw]+/u', '', $text);
+    $t = preg_replace('/[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}]/u', '', (string)$t);
+    if ($t === '') return true;                 // スタンプ的な絵文字のみ
+    if (mb_strlen($t) > 25) return false;       // 長文は本文とみなす
+
+    // 単独で来たときだけ相づち扱い（部分一致だと「配送はいつ」等を誤判定するため）
+    $exact = ['はい', 'いえ', 'ええ', 'うん', 'OK', 'ok', 'Ok', 'おけ', 'どうも'];
+    if (in_array($t, $exact, true)) return true;
+
+    $contains = [
+        'ありがとう', '有難う', '有り難う', 'ありがとうございます',
+        '了解', '承知', 'かしこまり', 'わかりました', '分かりました',
+        'よろしくお願い', '宜しくお願い', 'こちらこそ',
+        '助かります', '失礼します', '楽しみにして',
+        '届きました', '受け取りました', '確認しました',
+        'おつかれ', 'お疲れ', 'ではまた', 'また連絡',
+    ];
+    foreach ($contains as $p) {
+        if (mb_strpos($t, $p) !== false) return true;
+    }
+    return false;
+}
+
 // --- LINE 返信 ------------------------------------------------------
 function replyMessages(string $replyToken, array $messages, string $token): void {
     $ch = curl_init('https://api.line.me/v2/bot/message/reply');
@@ -648,6 +693,12 @@ foreach ($payload['events'] as $ev) {
             }
 
             // それ以外（お問い合わせ等）→ 案内
+            // ただし ①相づち・お礼 ②24時間以内に案内済み の場合は無言でスルーし、
+            // 担当者の手動返信にまかせる（自動返信が会話に割り込まないように）
+            if (isSmallTalk($text) || guideRecentlySent($userId)) {
+                continue;
+            }
+            markGuideSent($userId);
             replyMessages($replyToken, [textMsg(
                 "メッセージありがとうございます！🌲\n" .
                 "・お見積もり →「見積もり」と送信、または下メニューから\n" .
