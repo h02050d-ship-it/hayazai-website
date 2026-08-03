@@ -11,7 +11,9 @@ mb_language('ja');
 mb_internal_encoding('UTF-8');
 
 const NOTIFY_TO   = 'info@hayazai.com';
-const FROM_EMAIL  = 'noreply@hayazai.com';
+// 差出人は実在するアドレスを使う（存在しない noreply@ 名義はGmailでなりすまし扱いされ
+// 迷惑メールに入るため 2026-08 に変更）
+const FROM_EMAIL  = 'info@hayazai.com';
 const MAX_PHOTOS  = 10;
 const MAX_SIZE    = 15728640; // 15MB/枚
 

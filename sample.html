@@ -132,6 +132,15 @@
     <form action="contact.php" method="post">
       <input type="hidden" name="type" value="sample">
 
+      <!-- ▼ スパム・営業ボット対策（人間には見えません。絶対に入力しないでください） -->
+      <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:0;height:0;overflow:hidden;" tabindex="-1">
+        <label>会社のホームページURL（このフィールドは空のままにしてください）
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
+      <input type="hidden" name="hp_token" id="hp_token" value="">
+      <!-- ▲ スパム対策ここまで -->
+
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">お名前 <span class="req">必須</span></label>
@@ -272,6 +281,9 @@
 <script src="js/cart.js"></script>
 <script src="js/components.js?v=17"></script>
 <script>
+// スパム対策：JavaScriptが動いている本物のブラウザだけがトークンをセットできる
+(function(){ const t = document.getElementById('hp_token'); if (t) t.value = 'ok'; })();
+
 // チェックカードのハイライト
 document.querySelectorAll('.check-card input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', function() {

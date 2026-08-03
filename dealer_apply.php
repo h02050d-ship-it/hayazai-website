@@ -91,11 +91,14 @@ TEL：{$tel}
 {$note}
 EOT;
 
+// 差出人は実在する info@hayazai.com（存在しない dealer-noreply@ 名義はGmailで
+// なりすまし扱いされ迷惑メールに入るため 2026-08 に変更）
 $headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">";
-$headers_shop     = "From: dealer-noreply@hayazai.com\r\nReply-To: {$email}";
+$headers_shop     = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\nReply-To: {$email}";
+$envelope         = '-f ' . SHOP_EMAIL;
 
-mb_send_mail($email,     "[林材木店] お取り扱いのご相談を受け付けました", $customer_body, $headers_customer);
-mb_send_mail(SHOP_EMAIL, "【新規取扱店のご相談】{$company}／{$name}様",       $shop_body,     $headers_shop);
+mb_send_mail($email,     "[林材木店] お取り扱いのご相談を受け付けました", $customer_body, $headers_customer, $envelope);
+mb_send_mail(SHOP_EMAIL, "【新規取扱店のご相談】{$company}／{$name}様",       $shop_body,     $headers_shop,     $envelope);
 
 header('Location: dealer_apply_complete.html');
 exit;

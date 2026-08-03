@@ -26,7 +26,9 @@ $ACCESS_TOKEN   = $CONFIG['channel_access_token'] ?? '';
 $STAFF_EMAIL    = $CONFIG['staff_email'] ?? 'info@hayazai.com';
 $FROM_EMAIL     = $CONFIG['from_email'] ?? 'info@hayazai.com';
 $OPENAI_KEY     = $CONFIG['openai_api_key'] ?? '';
-const CAMPAIGN_FROM = 'noreply@hayazai.com';
+// 差出人は実在するアドレスを使う（存在しない noreply@ 名義はGmailでなりすまし扱いされ
+// 迷惑メールに入るため 2026-08 に変更）
+const CAMPAIGN_FROM = 'info@hayazai.com';
 
 // --- 署名検証 -------------------------------------------------------
 $body      = file_get_contents('php://input');

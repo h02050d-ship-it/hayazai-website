@@ -142,7 +142,9 @@ $has_url = (bool)preg_match('#https?://#i', $message);
 $is_freemail = (bool)preg_match('#@(gmail|yahoo|outlook|hotmail|icloud|aol|gmx|proton)\.#i', $email);
 
 // サンプル請求・見積もり依頼で品目が選ばれている問い合わせは確実に本物→除外
-$is_genuine = in_array($type, ['sample','quote'], true) && ($sample_items_str || $quote_info);
+// ただしJS未実行（＝ボット疑い）の場合はこの「本物」扱いを適用しない。
+// 自動投稿ボットは全項目を埋めるため、品目選択だけを根拠にすると素通りしてしまう。
+$is_genuine = in_array($type, ['sample','quote'], true) && ($sample_items_str || $quote_info) && $js_ok;
 
 $is_sales = false;
 if (!$is_genuine) {
@@ -150,6 +152,19 @@ if (!$is_genuine) {
     elseif  ($sales_hits >= 1 && $has_url)           $is_sales = true; // 営業語＋誘導URL
     elseif  ($sales_hits >= 1 && !$js_ok)            $is_sales = true; // 営業語＋ボット疑い
     elseif  (!$js_ok && $has_url && $is_freemail)    $is_sales = true; // ボット＋URL＋フリメ
+}
+
+// 3) 自動投稿ボットの確定判定（ハニーポットをすり抜けた分をここで止める）
+//    例：お名前が「edkvmxgjhp」のようなランダム英字だけ、本文にも日本語が一切ない。
+//    いずれも「JavaScriptが動いていない（＝人間のブラウザではない）」場合に限って適用するため、
+//    JSが動く通常のお客様は絶対にブロックされない。
+//    ここで通してしまうとGmailが「この差出人＝迷惑メール」と学習し、本物の問い合わせまで
+//    迷惑メールに落ちてしまうため、送信自体を行わず静かに破棄する。
+$name_is_gibberish = (bool)preg_match('/^[a-z]{8,24}$/', $name);
+$has_japanese      = (bool)preg_match('/[ぁ-んァ-ヶ一-龥]/u', $name . ' ' . $company . ' ' . $message);
+if (!$js_ok && ($name_is_gibberish || !$has_japanese)) {
+    header('Location: contact_complete.html');
+    exit;
 }
 
 // お客様へのメール
@@ -205,8 +220,13 @@ if ($type === 'sample') {
     $shop_body .= "\n\nサンプル送付先：〒{$sample_zip} {$sample_address}\nご希望品目：{$sample_items_str}\nご希望グレード：{$sample_grades_str}";
 }
 
+// 差出人は実在する info@hayazai.com を使う（存在しない contact-noreply@ 名義は
+// なりすまし扱いされGmailの迷惑メール判定を受けやすいため 2026-08 に変更）。
+// お客様への返信は Reply-To で成立するので運用は変わらない。
 $headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">";
-$headers_shop     = "From: contact-noreply@hayazai.com\r\nReply-To: {$email}";
+$headers_shop     = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\nReply-To: {$email}";
+// エンベロープ送信者もドメインを揃える（SPF/DMARCの整合を取り迷惑メール判定を避ける）
+$envelope = '-f ' . SHOP_EMAIL;
 
 // 営業判定なら件名に印を付け、Gmailの自動仕分け（フィルタ）で受信トレイから外せるようにする
 $shop_subject = ($is_sales ? '【営業の可能性】' : '') . "【お問い合わせ】{$type_label}／{$name}様";
@@ -216,9 +236,9 @@ if ($is_sales) {
 
 // 営業判定の場合は相手（スパマー）への自動返信は送らない。本物の問い合わせにのみ自動返信。
 if (!$is_sales) {
-    mb_send_mail($email, "[林材木店] お問い合わせを受け付けました", $customer_body, $headers_customer);
+    mb_send_mail($email, "[林材木店] お問い合わせを受け付けました", $customer_body, $headers_customer, $envelope);
 }
-mb_send_mail(SHOP_EMAIL, $shop_subject, $shop_body, $headers_shop);
+mb_send_mail(SHOP_EMAIL, $shop_subject, $shop_body, $headers_shop, $envelope);
 
 header('Location: contact_complete.html');
 exit;

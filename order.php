@@ -130,16 +130,20 @@ $headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"
     . "Reply-To: " . SHOP_EMAIL . "\r\n"
     . "Content-Type: text/plain; charset=UTF-8\r\n";
 
-$headers_shop = "From: order-noreply@hayazai.com\r\n"
+// 差出人は実在する info@hayazai.com（存在しない order-noreply@ 名義はGmailで
+// なりすまし扱いされ迷惑メールに入るため 2026-08 に変更）
+$headers_shop = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"
     . "Reply-To: {$email}\r\n"
     . "Content-Type: text/plain; charset=UTF-8\r\n";
+// エンベロープ送信者もドメインを揃える（SPF/DMARCの整合）
+$envelope = '-f ' . SHOP_EMAIL;
 
 $subject_customer = "[林材木店] お見積もり依頼を受け付けました（受付番号：{$orderNo}）";
 $subject_shop     = "【見積もり依頼】{$name} 様より（{$orderNo}）";
 
 // メール送信（mb_send_mail）
-$sent1 = mb_send_mail($email,      $subject_customer, $customerBody, $headers_customer);
-$sent2 = mb_send_mail(SHOP_EMAIL,  $subject_shop,     $shopBody,     $headers_shop);
+$sent1 = mb_send_mail($email,      $subject_customer, $customerBody, $headers_customer, $envelope);
+$sent2 = mb_send_mail(SHOP_EMAIL,  $subject_shop,     $shopBody,     $headers_shop,     $envelope);
 
 // 完了ページへリダイレクト
 header("Location: order_complete.html?order={$orderNo}");

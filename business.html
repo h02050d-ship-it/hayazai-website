@@ -535,6 +535,15 @@
       <input type="hidden" name="type" value="quote">
       <input type="hidden" name="source" value="business-page">
 
+      <!-- ▼ スパム・営業ボット対策（人間には見えません。絶対に入力しないでください） -->
+      <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:0;height:0;overflow:hidden;" tabindex="-1">
+        <label>会社のホームページURL（このフィールドは空のままにしてください）
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
+      <input type="hidden" name="hp_token" id="hp_token" value="">
+      <!-- ▲ スパム対策ここまで -->
+
       <div class="biz-form-row">
         <div class="form-group">
           <label class="form-label">ご担当者名 <span class="req">必須</span></label>
@@ -614,5 +623,9 @@
 <div id="site-footer"></div>
 
 <script src="js/components.js?v=17"></script>
+<script>
+// スパム対策：JavaScriptが動いている本物のブラウザだけがトークンをセットできる
+(function(){ const t = document.getElementById('hp_token'); if (t) t.value = 'ok'; })();
+</script>
 </body>
 </html>
