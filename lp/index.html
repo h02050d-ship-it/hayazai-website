@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -336,8 +336,7 @@ footer a{color:rgba(255,255,255,.8)}
 
     <div class="sample-cta">
       <p class="s1">写真では、香りも手触りも伝わりません。</p>
-      <p class="s2">等級選びに迷ったら、<b>実物のサンプルをお送りします</b>。手に取って、確かめてください。</p>
-      <a class="s-btn sans" id="sampleBtn" href="../contact.html">サンプルを請求する</a>
+      <p class="s2">等級選びに迷ったら、実物のサンプルを。<b>お渡しした市場・取扱店の担当者に、お気軽にお申し付けください</b>。</p>
     </div>
   </div>
 </section>
@@ -415,19 +414,19 @@ footer a{color:rgba(255,255,255,.8)}
 <!-- ============ CTA ============ -->
 <section class="cta">
   <div class="wrap">
-    <h2 id="ctaH">この床は、市場でお求めいただけます。</h2>
-    <p class="lead sans" id="ctaLead">弊社の桧フローリングは、全国の木材市場・お取扱店を通じて流通しています。</p>
+    <h2>この床は、市場でお求めいただけます。</h2>
+    <p class="lead sans">弊社の桧フローリングは、全国の木材市場・お取扱店を通じて流通しています。</p>
     <div class="paths two sans">
-      <a class="path" id="path1" href="../markets.html">
-        <span class="who">ご購入をお考えの方</span>
-        <span class="act">お近くの市場・取扱店へ</span>
-        <span class="desc">お取引のある木材市場・材木店で「林材木店の桧」とお申し付けください。取扱店のご案内もいたします。</span>
-      </a>
-      <a class="path" id="path2" href="../contact.html">
+      <div class="path">
+        <span class="who">ご注文・お見積り</span>
+        <span class="act">担当者にお申し付けください</span>
+        <span class="desc">このページをお渡しした市場・取扱店の担当者に、「林材木店の桧」とお気軽にお申し付けください。</span>
+      </div>
+      <div class="path">
         <span class="who">まず実物を見たい方</span>
-        <span class="act">サンプルを手に取る</span>
-        <span class="desc">等級の違いも、超仕上げの艶も、手に取るのがいちばん早い。実物サンプルをお送りします。</span>
-      </a>
+        <span class="act">サンプルもお気軽に</span>
+        <span class="desc">等級の違いも、超仕上げの艶も、手に取るのがいちばん早い。実物サンプルも担当者にご相談ください。</span>
+      </div>
     </div>
     <p class="tel sans">株式会社林材木店（静岡県磐田市）</p>
   </div>
@@ -457,77 +456,6 @@ footer a{color:rgba(255,255,255,.8)}
     });
   }, {threshold:.18, rootMargin:'0px 0px -6% 0px'});
   document.querySelectorAll('.rv, .rv-ph').forEach(function(el){ io.observe(el); });
-
-  // 市場専用モード: ?n=市場名&u=市場HP&c=問い合わせURL&t=電話&f=FAX で出口を市場に切り替える
-  (function(){
-    var q = new URLSearchParams(location.search);
-    var n = (q.get('n')||'').trim();
-    if(!n || n.length > 30) return;
-    function safeUrl(s){
-      if(!s) return null;
-      try{ var x = new URL(s); return (x.protocol==='https:'||x.protocol==='http:') ? x.href : null; }
-      catch(e){ return null; }
-    }
-    function safeNum(s){
-      s = (s||'').trim();
-      return /^[0-9+\-() ]{6,20}$/.test(s) ? s : null;
-    }
-    var u = safeUrl(q.get('u'));
-    var c = safeUrl(q.get('c')) || u;
-    var t = safeNum(q.get('t'));
-    var f = safeNum(q.get('f'));
-
-    document.getElementById('ctaH').textContent = 'この床は、' + n + 'でお求めいただけます。';
-    document.getElementById('ctaLead').textContent = '弊社の桧フローリングは、' + n + 'を通じてご購入いただけます。';
-
-    // 連絡先の併記行（TEL/FAX）を作る
-    function contactLine(){
-      if(!t && !f) return null;
-      var d = document.createElement('span');
-      d.style.cssText = 'display:block;margin-top:12px;font-size:14px;font-weight:700;color:#f5efe6;letter-spacing:.06em;';
-      if(t){
-        var a = document.createElement('a');
-        a.href = 'tel:' + t.replace(/[^0-9+]/g,'');
-        a.style.cssText = 'color:#fff;text-decoration:none;';
-        a.textContent = 'TEL ' + t;
-        d.appendChild(a);
-      }
-      if(t && f){ d.appendChild(document.createTextNode('　')); }
-      if(f){ d.appendChild(document.createTextNode('FAX ' + f)); }
-      return d;
-    }
-
-    var p1 = document.getElementById('path1');
-    var p2 = document.getElementById('path2');
-
-    if(u){
-      p1.querySelector('.who').textContent = 'ご購入をお考えの方';
-      p1.querySelector('.act').textContent = n + 'のご案内';
-      p1.querySelector('.desc').textContent = n + 'で「林材木店の桧」とお申し付けください。';
-      p1.href = u; p1.target = '_blank'; p1.rel = 'noopener';
-    } else {
-      // HPなし市場: 購入カードは畳んで問い合わせカード1枚に
-      p1.style.display = 'none';
-      p2.parentElement.style.gridTemplateColumns = '1fr';
-      p2.parentElement.style.maxWidth = '460px';
-    }
-
-    p2.querySelector('.who').textContent = '商品のこと・実物サンプル';
-    p2.querySelector('.act').textContent = 'お問い合わせは' + n + 'へ';
-    p2.querySelector('.desc').textContent = u
-      ? '在庫・価格・サンプルのご用命は、' + n + 'にお気軽にお問い合わせください。'
-      : '在庫・価格・サンプルのご用命は、お電話・FAXにてお気軽にお問い合わせください。';
-    var cl = contactLine();
-    if(cl){ p2.querySelector('.desc').appendChild(cl); }
-    if(c){ p2.href = c; p2.target = '_blank'; p2.rel = 'noopener'; }
-    else { p2.removeAttribute('href'); p2.style.cursor = 'default'; }
-
-    var sb = document.getElementById('sampleBtn');
-    sb.textContent = 'サンプルは' + n + 'へ';
-    if(c){ sb.href = c; sb.target = '_blank'; sb.rel = 'noopener'; }
-    else if(t){ sb.href = 'tel:' + t.replace(/[^0-9+]/g,''); sb.textContent = 'サンプルは' + n + 'へ（TEL ' + t + '）'; }
-    else { sb.removeAttribute('href'); }
-  })();
 
   // 断面のゆるいパララックス
   var dm = document.querySelector('.danmen');
