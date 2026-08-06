@@ -30,9 +30,11 @@ img{max-width:100%;display:block}
 
 /* ---------- HERO ---------- */
 .hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#191512}
-.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.62}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.62;animation:kenburns 16s ease-out forwards}
+@keyframes kenburns{from{transform:scale(1.1)}to{transform:scale(1)}}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,15,10,.25) 0%,rgba(20,15,10,.05) 45%,rgba(20,15,10,.55) 100%)}
-.hero-in{position:relative;z-index:2;text-align:center;color:#fff;padding:80px 24px}
+.hero-in{position:relative;z-index:2;text-align:center;color:#fff;padding:80px 24px;animation:heroin 1.8s cubic-bezier(.22,.61,.36,1) both .3s}
+@keyframes heroin{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 .hero-in .en{font-size:11px;letter-spacing:.42em;text-transform:uppercase;opacity:.85;margin-bottom:26px}
 .hero-in h1{
   font-size:clamp(30px,6vw,58px);font-weight:600;letter-spacing:.08em;line-height:1.7;
@@ -126,6 +128,22 @@ img{max-width:100%;display:block}
 
 footer{background:#191512;color:rgba(255,255,255,.55);text-align:center;padding:34px 20px;font-size:12px;letter-spacing:.1em}
 footer a{color:rgba(255,255,255,.8)}
+
+/* ---------- スクロール演出（JSが .js を付けた時のみ有効） ---------- */
+.js .rv{opacity:0;transform:translateY(34px);transition:opacity 1.15s cubic-bezier(.22,.61,.36,1),transform 1.15s cubic-bezier(.22,.61,.36,1)}
+.js .rv.in{opacity:1;transform:none}
+.js .rv-ph{opacity:0;transform:translateY(26px) scale(1.035);transition:opacity 1.35s cubic-bezier(.22,.61,.36,1),transform 1.35s cubic-bezier(.22,.61,.36,1)}
+.js .rv-ph.in{opacity:1;transform:none}
+.js .rv-d1{transition-delay:.12s}
+.js .rv-d2{transition-delay:.24s}
+.js .rv-d3{transition-delay:.36s}
+.danmen{overflow:hidden}
+.js .danmen img{transform:translateY(var(--para,0)) scale(1.12);will-change:transform}
+@media (prefers-reduced-motion: reduce){
+  .hero>img,.hero-in{animation:none}
+  .js .rv,.js .rv-ph{opacity:1;transform:none;transition:none}
+  .js .danmen img{transform:none}
+}
 
 @media(max-width:860px){
   .step{grid-template-columns:1fr;gap:22px;margin-bottom:72px}
@@ -348,5 +366,43 @@ footer a{color:rgba(255,255,255,.8)}
   <p>&copy; 株式会社林材木店 ｜ <a href="https://hayazai.com/">hayazai.com</a></p>
 </footer>
 
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+
+  // ふわっと表示の対象を付与
+  document.querySelectorAll('.step .ph, .danmen .cap, .living-grid figure, .company .fact, .company .msg, .path').forEach(function(el){ el.classList.add('rv-ph'); });
+  document.querySelectorAll('.step .txt, .sec-head, .intro p, .grade, .cta h2, .cta .lead, .cta .tel').forEach(function(el){ el.classList.add('rv'); });
+  // 横並びカードは順にずらす
+  document.querySelectorAll('.grades .grade').forEach(function(el,i){ el.classList.add('rv-d'+(i%4===0?1:i%4)); });
+  document.querySelectorAll('.living-grid figure').forEach(function(el,i){ el.classList.add('rv-d'+((i%3)+1)); });
+  document.querySelectorAll('.company .fact').forEach(function(el,i){ el.classList.add('rv-d'+((i%3)+1)); });
+  document.querySelectorAll('.paths .path').forEach(function(el,i){ el.classList.add('rv-d'+((i%3)+1)); });
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.18, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.rv, .rv-ph').forEach(function(el){ io.observe(el); });
+
+  // 断面のゆるいパララックス
+  var dm = document.querySelector('.danmen');
+  var dimg = dm && dm.querySelector('img');
+  if(dimg && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var ticking = false;
+    var update = function(){
+      ticking = false;
+      var r = dm.getBoundingClientRect();
+      var vh = innerHeight;
+      if(r.bottom < 0 || r.top > vh) return;
+      var progress = (r.top + r.height/2 - vh/2) / (vh/2 + r.height/2); // -1〜1
+      dimg.style.setProperty('--para', (progress * -34).toFixed(1) + 'px');
+    };
+    addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+    update();
+  }
+})();
+</script>
 </body>
 </html>
