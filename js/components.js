@@ -116,6 +116,7 @@ function renderFooter() {
           <h4>情報・サポート</h4>
           <ul>
             <li><a href="/gallery.html">施工事例</a></li>
+            <li><a href="/voice.html">お客様の声</a></li>
             <li><a href="/blog.html">ブログ・コラム</a></li>
             <li><a href="/faq.html">よくある質問</a></li>
             <li><a href="/shipping.html">送料のご案内</a></li>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お客様の声 | 林材木店 無垢桧フローリング・羽目板</title>
+  <meta name="description" content="林材木店の無垢桧フローリング・羽目板をお使いいただいたお客様からのご感想。香り・仕上がり・施工のしやすさなど、実際のお声をご紹介します。">
+  <link rel="canonical" href="https://hayazai.com/voice.html">
+
+  <!-- OGP -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="株式会社林材木店">
+  <meta property="og:title" content="お客様の声 | 林材木店 無垢桧フローリング・羽目板">
+  <meta property="og:description" content="無垢桧フローリング・羽目板をお使いいただいたお客様からのご感想をご紹介します。">
+  <meta property="og:url" content="https://hayazai.com/voice.html">
+  <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
+  <meta property="og:locale" content="ja_JP">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css?v=11">
+  <style>
+    .voice-layout { max-width: 1040px; margin: 0 auto; padding: 44px 32px 80px; }
+
+    /* 評価サマリー */
+    .voice-summary {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      background: linear-gradient(135deg, #f8f2ea, #edf5ed);
+      border: 2px solid var(--wood-mid);
+      border-radius: 12px;
+      padding: 28px 34px;
+      margin-bottom: 20px;
+    }
+    .vs-score { text-align: center; min-width: 150px; }
+    .vs-score .num {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 3.6rem;
+      font-weight: 700;
+      color: var(--wood-dark);
+      line-height: 1;
+    }
+    .vs-score .num span { font-size: 1.5rem; vertical-align: middle; }
+    .vs-score .stars { color: #f0a500; font-size: 1.3rem; margin: 6px 0; }
+    .vs-score .cnt { font-size: 0.76rem; color: var(--text-light); }
+    .vs-score .cnt strong { color: var(--wood-dark); }
+    .vs-bars { flex: 1; min-width: 240px; }
+    .vs-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 7px;
+      font-size: 0.82rem;
+    }
+    .vs-bar-row .lbl { min-width: 32px; color: var(--text-mid); }
+    .vs-bar-row .track {
+      flex: 1;
+      height: 9px;
+      background: #e8ddd0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .vs-bar-row .fill { height: 100%; background: #f0a500; border-radius: 5px; }
+    .vs-bar-row .pct { color: var(--text-light); min-width: 30px; text-align: right; }
+
+    .voice-note {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      line-height: 1.85;
+      margin-bottom: 44px;
+    }
+
+    /* カテゴリ見出し */
+    .voice-cat {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.22rem;
+      color: var(--wood-dark);
+      font-weight: 700;
+      padding: 11px 18px;
+      background: var(--wood-pale);
+      border-left: 5px solid var(--wood-mid);
+      border-radius: 0 6px 6px 0;
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .voice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 46px;
+    }
+    @media (max-width: 720px) { .voice-grid { grid-template-columns: 1fr; } }
+
+    .voice-card {
+      background: #fff;
+      border: 1px solid #e8ddd0;
+      border-radius: 12px;
+      padding: 24px 26px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .voice-card .vc-stars { color: #f0a500; font-size: 1rem; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .voice-card .vc-text {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 2.0;
+      margin: 0 0 14px;
+    }
+    .voice-card .vc-author {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-align: right;
+      padding-top: 10px;
+      border-top: 1px solid #f0e8dc;
+    }
+
+    /* 末尾CTA */
+    .voice-cta {
+      background: var(--wood-dark);
+      color: #fff;
+      border-radius: 12px;
+      padding: 36px 40px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .voice-cta h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.28rem;
+      color: var(--wood-light, #f5ede2);
+      margin-bottom: 12px;
+    }
+    .voice-cta p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.95;
+      margin: 0 auto 24px;
+      max-width: 620px;
+    }
+    .voice-cta .btn-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      .voice-layout { padding: 32px 16px 60px; }
+      .voice-summary { padding: 22px 20px; gap: 20px; }
+      .voice-cta { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="page-hero">
+  <h1>お客様の声</h1>
+  <p>無垢桧の床・壁をお使いいただいたお客様から、たくさんのご感想をいただいています</p>
+</div>
+
+<nav class="breadcrumb">
+  <a href="index.html">トップ</a>
+  <span class="sep">›</span>
+  <span>お客様の声</span>
+</nav>
+
+<div class="voice-layout">
+
+  <!-- 評価サマリー -->
+  <div class="voice-summary">
+    <div class="vs-score">
+      <div class="num">4.97<span>以上</span></div>
+      <div class="stars">★★★★★</div>
+      <div class="cnt">お寄せいただいたご感想 累計<strong>600件以上</strong></div>
+    </div>
+    <div class="vs-bars">
+      <div class="vs-bar-row">
+        <span class="lbl">★5</span>
+        <span class="track"><span class="fill" style="width:97%;"></span></span>
+        <span class="pct">97%</span>
+      </div>
+      <div class="vs-bar-row">
+        <span class="lbl">★4</span>
+        <span class="track"><span class="fill" style="width:3%;"></span></span>
+        <span class="pct">3%</span>
+      </div>
+      <div class="vs-bar-row">
+        <span class="lbl">★3</span>
+        <span class="track"></span>
+        <span class="pct">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="voice-note">
+    ※ 商品をお届けしたお客様よりお寄せいただいたご感想を掲載しています。個人が特定される情報は伏せ、イニシャルで表記しております。
+  </p>
+
+  <!-- 香り・仕上がり -->
+  <h2 class="voice-cat">🌿 香り・仕上がりについて</h2>
+  <div class="voice-grid">
+    <div class="voice-card">
+      <div class="vc-stars">★★★★★</div>
+      <p class="vc-text">「木の香りが素晴らしく、張った後も家中がいい香りです。品質も想像以上で大満足。また購入したいです。」</p>
+      <div class="vc-author">Y様</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-stars">★★★★★</div>
+      <p class="vc-text">「迅速丁寧な取引ありがとうございました。檜の香りでとてもリラックスした部屋になりました。」</p>
+      <div class="vc-author">E様</div>
+    </div>
+  </div>
+
+  <!-- 施工のしやすさ -->
+  <h2 class="voice-cat">🔨 施工のしやすさについて</h2>
+  <div class="voice-grid">
+    <div class="voice-card">
+      <div class="vc-stars">★★★★★</div>
+      <p class="vc-text">「DIYで自宅のリビングに張りましたが、仕上げが綺麗で素人でも施工しやすかった。価格も手頃で助かりました。」</p>
+      <div class="vc-author">T様</div>
+    </div>
+  </div>
+
+  <!-- 対応・お届け -->
+  <h2 class="voice-cat">📦 対応・お届けについて</h2>
+  <div class="voice-grid">
+    <div class="voice-card">
+      <div class="vc-stars">★★★★★</div>
+      <p class="vc-text">「電話での問い合わせも丁寧に対応して頂き、発送連絡も都度頂きましたので、とても安心して取引できました。ありがとうございます。」</p>
+      <div class="vc-author">P様</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-stars">★★★★★</div>
+      <p class="vc-text">「配送トラブルにも素早くフォローしてくださり、また宜しくお願い致します。とても良いショップさんです。」</p>
+      <div class="vc-author">A様</div>
+    </div>
+    <div class="voice-card">
+      <div class="vc-stars">★★★★★</div>
+      <p class="vc-text">「誠実で迅速な対応ありがとうございます。商品も満足しています。また機会がありましたらよろしくお願いします。」</p>
+      <div class="vc-author">S様</div>
+    </div>
+  </div>
+
+  <!-- 施工事例への導線 -->
+  <div style="background:#faf5ef;border:1px solid #e8d8c4;border-radius:12px;padding:26px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:40px;">
+    <div style="flex:1;min-width:260px;">
+      <p style="font-weight:700;color:var(--wood-dark);font-size:1.02rem;margin:0 0 8px;">📷 実際の施工写真もご覧いただけます</p>
+      <p style="font-size:0.86rem;color:var(--text-mid);line-height:1.9;margin:0;">リビング・和室・天井・腰板など、お客様のお宅に実際に張られた桧の表情をご紹介しています。</p>
+    </div>
+    <a href="gallery.html" class="btn" style="background:var(--wood-dark);color:#fff;white-space:nowrap;">施工事例を見る →</a>
+  </div>
+
+  <!-- 末尾CTA -->
+  <div class="voice-cta">
+    <h2>まずは、手に取ってお確かめください</h2>
+    <p>
+      香り・手触り・木目の表情は、写真では伝わりません。無料サンプルで実物をご確認いただけます。<br>
+      お求めは、お近くの木材市場・取扱店をご利用ください。
+    </p>
+    <div class="btn-row">
+      <a href="markets.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">お近くの取扱店を探す</a>
+      <a href="sample.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.6);color:#fff;">無料サンプルを請求</a>
+    </div>
+  </div>
+
+</div>
+
+<div id="site-footer"></div>
+
+<script src="js/components.js?v=18"></script>
+</body>
+</html>
