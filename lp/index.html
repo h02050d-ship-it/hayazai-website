@@ -75,11 +75,11 @@ img{max-width:100%;display:block}
 
 /* ---------- 断面（フルブリード） ---------- */
 .danmen{position:relative;padding:0}
-.danmen img{width:100%;height:clamp(380px,62vh,600px);object-fit:cover}
+.danmen img{width:100%;height:clamp(420px,66vh,640px);object-fit:cover}
 .danmen .cap{
-  position:absolute;left:50%;bottom:clamp(28px,6vh,60px);transform:translateX(-50%);
-  background:rgba(250,248,244,.93);padding:26px clamp(24px,5vw,48px);max-width:640px;width:calc(100% - 48px);
-  text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.22);
+  position:absolute;top:clamp(26px,6vh,58px);left:24px;right:24px;margin:0 auto;max-width:620px;
+  background:rgba(250,248,244,.92);padding:24px clamp(22px,4vw,44px) 22px;
+  text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.18);
 }
 .danmen .cap h3{font-size:clamp(17px,2.4vw,22px);font-weight:600;letter-spacing:.14em;margin-bottom:10px}
 .danmen .cap p{font-size:13.8px;color:var(--ink-soft);letter-spacing:.06em;line-height:2}
@@ -106,8 +106,21 @@ img{max-width:100%;display:block}
 .company .facts{display:flex;justify-content:center;gap:clamp(30px,7vw,90px);margin-top:56px;flex-wrap:wrap}
 .company .fact .v{font-size:clamp(30px,4.6vw,44px);font-weight:600;color:var(--accent-deep);letter-spacing:.04em}
 .company .fact .v small{font-size:.45em;margin-left:2px}
+.company .fact .v .star{color:#c9a24b;font-size:.55em;vertical-align:.25em;margin-right:6px;letter-spacing:.06em}
 .company .fact .k{margin-top:8px;font-size:12.5px;color:var(--ink-faint);letter-spacing:.22em}
 .company .msg{max-width:680px;margin:64px auto 0;font-size:15px;color:var(--ink-soft);letter-spacing:.08em;line-height:2.5;text-align:left}
+
+/* ---------- 三拍子 ---------- */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:940px;margin:72px auto 0}
+.pillar{background:#fff;border:1px solid var(--line);padding:44px 30px 40px;text-align:center}
+.pillar .kanji{
+  display:inline-block;width:72px;height:72px;line-height:72px;border-radius:50%;
+  border:1px solid var(--accent);color:var(--accent-deep);
+  font-size:30px;font-weight:600;margin-bottom:22px;
+}
+.pillar h3{font-size:16.5px;font-weight:600;letter-spacing:.14em;margin-bottom:16px;line-height:1.8}
+.pillar p{font-size:13.6px;color:var(--ink-soft);letter-spacing:.05em;line-height:2.15;text-align:left}
+@media(max-width:860px){.pillars{grid-template-columns:1fr}}
 
 /* ---------- CTA ---------- */
 .cta{background:#241d16;color:#f5efe6;padding:100px 0 90px;text-align:center}
@@ -224,8 +237,8 @@ footer a{color:rgba(255,255,255,.8)}
       <div class="txt">
         <span class="stage sans">MOLDING</span>
         <h3>0.1ミリを合わせる機械加工。</h3>
-        <p>四面を一度に削り出すモルダーで、厚みと幅を整え、実（さね）を刻みます。刃物の状態と送りの調整で、仕上がりは大きく変わります。</p>
-        <p>刃物の管理は当社が最も神経を使う仕事のひとつ。切れる刃で削った面は、塗装がなくても光ります。</p>
+        <p>四面を一度に削り出すモルダーで、厚みと幅を整え、実（さね）を刻みます。当社はこの心臓部を、2026年に最新機へ入れ替えました。</p>
+        <p>機械が古いと送りにムラが出て、寸法の狂いや面の波打ちの原因になります。最新のモルダーと、研ぎ澄ました刃物。この組み合わせが、塗装がなくても光る面を作ります。</p>
       </div>
     </div>
 
@@ -328,15 +341,35 @@ footer a{color:rgba(255,255,255,.8)}
   <div class="wrap">
     <div class="sec-head">
       <span class="en sans">ABOUT US</span>
-      <h2>桧の専門店であること。</h2>
+      <h2>数字にできる実績と、<br>数字にできない心と。</h2>
     </div>
     <div class="facts">
       <div class="fact"><div class="v">1968<small>年</small></div><div class="k sans">創業（昭和43年）</div></div>
-      <div class="fact"><div class="v">桧<small>専門</small></div><div class="k sans">扱う木を絞る</div></div>
-      <div class="fact"><div class="v">一貫<small></small></div><div class="k sans">乾燥から出荷まで自社</div></div>
+      <div class="fact"><div class="v"><span class="star">★</span>4.97</div><div class="k sans">レビュー600件以上</div></div>
+      <div class="fact"><div class="v">20,000<small>束</small></div><div class="k sans">年間販売実績</div></div>
+      <div class="fact"><div class="v">100<small>%</small></div><div class="k sans">国産無垢桧</div></div>
     </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <span class="kanji">技</span>
+        <h3>親子三代、受け継いできた技術。</h3>
+        <p>昭和43年の創業から、親から子へ、そのまた子へ。乾かし方、削り方、節の見極め ── 桧一筋の技術を、三代かけて磨いてきました。</p>
+      </div>
+      <div class="pillar">
+        <span class="kanji">新</span>
+        <h3>新しくできることは、新しく。</h3>
+        <p>加工の心臓部・モルダーは2026年に最新機へ更新。受注や在庫管理は最新のAIで自動化。人の手と目を、事務ではなく木に使うためです。</p>
+      </div>
+      <div class="pillar">
+        <span class="kanji">心</span>
+        <h3>この床の先の、顔を思う。</h3>
+        <p>この一枚の上を、素足の子どもが走るかもしれない。お客様の顔を思い浮かべながら仕上げる ── 最後はそこに尽きます。</p>
+      </div>
+    </div>
+
     <p class="msg">
-      いろいろな木を少しずつではなく、桧だけを五十八年。扱う木を一つに絞ってきたから、乾かし方も、削り方も、節の見極めも、桧のことなら体で覚えています。それが林材木店の商いです。
+      古い技術と、新しい道具と、変わらない心。三つ揃って、林材木店の桧フローリングです。
     </p>
   </div>
 </section>
@@ -346,11 +379,16 @@ footer a{color:rgba(255,255,255,.8)}
   <div class="wrap">
     <h2>この床は、市場でお求めいただけます。</h2>
     <p class="lead sans">弊社の桧フローリングは、全国の木材市場・お取扱店を通じて流通しています。</p>
-    <div class="paths two sans">
+    <div class="paths sans">
       <a class="path" href="../markets.html">
         <span class="who">ご購入をお考えの方</span>
         <span class="act">お近くの市場・取扱店へ</span>
         <span class="desc">お取引のある木材市場・材木店で「林材木店の桧」とお申し付けください。取扱店のご案内もいたします。</span>
+      </a>
+      <a class="path" href="../contact.html">
+        <span class="who">まず実物を見たい方</span>
+        <span class="act">サンプルを手に取る</span>
+        <span class="desc">等級の違いも、超仕上げの艶も、手に取るのがいちばん早い。実物サンプルをお送りします。</span>
       </a>
       <a class="path" href="../contact.html">
         <span class="who">商品について気になることが</span>
@@ -358,7 +396,7 @@ footer a{color:rgba(255,255,255,.8)}
         <span class="desc">等級の選び方、寸法、施工のこと。商品に関するご質問は、作った私たちが直接お答えします。</span>
       </a>
     </div>
-    <p class="tel sans">お電話でも承ります　<a href="tel:0538582395">0538-58-2395</a><br>株式会社林材木店（静岡県磐田市）</p>
+    <p class="tel sans">株式会社林材木店（静岡県磐田市）</p>
   </div>
 </section>
 
@@ -371,12 +409,13 @@ footer a{color:rgba(255,255,255,.8)}
   document.documentElement.classList.add('js');
 
   // ふわっと表示の対象を付与
-  document.querySelectorAll('.step .ph, .danmen .cap, .living-grid figure, .company .fact, .company .msg, .path').forEach(function(el){ el.classList.add('rv-ph'); });
+  document.querySelectorAll('.step .ph, .danmen .cap, .living-grid figure, .company .fact, .company .msg, .pillar, .path').forEach(function(el){ el.classList.add('rv-ph'); });
   document.querySelectorAll('.step .txt, .sec-head, .intro p, .grade, .cta h2, .cta .lead, .cta .tel').forEach(function(el){ el.classList.add('rv'); });
   // 横並びカードは順にずらす
   document.querySelectorAll('.grades .grade').forEach(function(el,i){ el.classList.add('rv-d'+(i%4===0?1:i%4)); });
   document.querySelectorAll('.living-grid figure').forEach(function(el,i){ el.classList.add('rv-d'+((i%3)+1)); });
   document.querySelectorAll('.company .fact').forEach(function(el,i){ el.classList.add('rv-d'+((i%3)+1)); });
+  document.querySelectorAll('.pillar').forEach(function(el,i){ el.classList.add('rv-d'+((i%3)+1)); });
   document.querySelectorAll('.paths .path').forEach(function(el,i){ el.classList.add('rv-d'+((i%3)+1)); });
 
   var io = new IntersectionObserver(function(entries){
