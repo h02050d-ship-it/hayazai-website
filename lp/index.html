@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一枚の桧に、五十八年。｜ 株式会社林材木店</title>
+<meta name="description" content="創業昭和43年、静岡県磐田市の桧専門製材所。天然乾燥から埋木、モルダー加工、超仕上げ、手作業の補修まで。国産無垢桧フローリングができるまでの、すべての工程をお見せします。">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../favicon.svg">
+<meta property="og:title" content="一枚の桧に、五十八年。｜ 株式会社林材木店">
+<meta property="og:description" content="国産無垢桧フローリングができるまでの、すべての工程をお見せします。">
+<meta property="og:image" content="https://hayazai.com/lp/img/p4_choshiage.webp">
+<style>
+:root{
+  --ink:#221c16; --ink-soft:#4d4238; --ink-faint:#8a7d6f;
+  --paper:#faf8f4; --paper-warm:#f3eee5; --line:#e3dbcd;
+  --accent:#8c6f4e; --accent-deep:#5f4a30;
+  --green:#3e5c46;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  color:var(--ink); background:var(--paper); line-height:2.05; font-size:16px;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+.sans{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#191512}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.62}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,15,10,.25) 0%,rgba(20,15,10,.05) 45%,rgba(20,15,10,.55) 100%)}
+.hero-in{position:relative;z-index:2;text-align:center;color:#fff;padding:80px 24px}
+.hero-in .en{font-size:11px;letter-spacing:.42em;text-transform:uppercase;opacity:.85;margin-bottom:26px}
+.hero-in h1{
+  font-size:clamp(30px,6vw,58px);font-weight:600;letter-spacing:.08em;line-height:1.7;
+  text-shadow:0 2px 30px rgba(0,0,0,.6);
+}
+.hero-in .sub{margin-top:26px;font-size:clamp(13.5px,1.8vw,16.5px);letter-spacing:.12em;opacity:.94;text-shadow:0 2px 16px rgba(0,0,0,.6)}
+.hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;color:#fff;font-size:10px;letter-spacing:.3em;opacity:.75}
+.hero-scroll::after{content:"";display:block;width:1px;height:44px;background:#fff;margin:10px auto 0;animation:drop 2.2s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- 導入 ---------- */
+.intro{padding:110px 0 96px;text-align:center}
+.intro p{font-size:clamp(15px,2vw,17.5px);letter-spacing:.1em;line-height:2.6}
+.intro p+p{margin-top:2.2em}
+.intro .em{color:var(--accent-deep)}
+
+/* ---------- セクション見出し ---------- */
+.sec-head{text-align:center;margin-bottom:64px}
+.sec-head .en{font-size:10.5px;letter-spacing:.4em;color:var(--accent);text-transform:uppercase;display:block;margin-bottom:16px}
+.sec-head h2{font-size:clamp(22px,3.4vw,32px);font-weight:600;letter-spacing:.14em;line-height:1.8}
+.sec-head .note{margin-top:18px;font-size:14px;color:var(--ink-soft);letter-spacing:.08em}
+
+/* ---------- 工程 ---------- */
+.process{background:var(--paper-warm);padding:110px 0 60px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.step{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center;margin-bottom:96px}
+.step:nth-child(even) .ph{order:2}
+.step .ph{position:relative}
+.step .ph img{border-radius:2px;box-shadow:0 18px 50px rgba(60,45,30,.18);aspect-ratio:4/3;object-fit:cover;width:100%}
+.step .num{
+  position:absolute;top:-24px;left:-10px;font-size:64px;line-height:1;color:var(--accent);
+  opacity:.28;font-weight:600;font-style:italic;z-index:1;
+}
+.step:nth-child(even) .num{left:auto;right:-10px}
+.step .txt .stage{font-size:10.5px;letter-spacing:.34em;color:var(--accent);text-transform:uppercase;display:block;margin-bottom:14px}
+.step .txt h3{font-size:clamp(19px,2.6vw,25px);font-weight:600;letter-spacing:.12em;margin-bottom:20px;line-height:1.75}
+.step .txt p{font-size:14.8px;color:var(--ink-soft);letter-spacing:.06em;line-height:2.3}
+.step .txt p+p{margin-top:1em}
+
+/* ---------- 断面（フルブリード） ---------- */
+.danmen{position:relative;padding:0}
+.danmen img{width:100%;height:clamp(380px,62vh,600px);object-fit:cover}
+.danmen .cap{
+  position:absolute;left:50%;bottom:clamp(28px,6vh,60px);transform:translateX(-50%);
+  background:rgba(250,248,244,.93);padding:26px clamp(24px,5vw,48px);max-width:640px;width:calc(100% - 48px);
+  text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.22);
+}
+.danmen .cap h3{font-size:clamp(17px,2.4vw,22px);font-weight:600;letter-spacing:.14em;margin-bottom:10px}
+.danmen .cap p{font-size:13.8px;color:var(--ink-soft);letter-spacing:.06em;line-height:2}
+
+/* ---------- 等級 ---------- */
+.grades-sec{padding:110px 0}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.grade{background:#fff;border:1px solid var(--line)}
+.grade img{aspect-ratio:3/4.2;object-fit:cover;width:100%}
+.grade .b{padding:18px 18px 22px;text-align:center}
+.grade .b .n{font-size:16.5px;font-weight:600;letter-spacing:.2em}
+.grade .b .d{margin-top:8px;font-size:12.8px;color:var(--ink-soft);line-height:1.9;letter-spacing:.04em;text-align:left}
+
+/* ---------- 暮らし ---------- */
+.living{background:var(--paper-warm);padding:110px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.living-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.living-grid figure{position:relative;overflow:hidden}
+.living-grid img{aspect-ratio:4/3;object-fit:cover;width:100%;transition:transform .6s ease}
+.living-grid figure:hover img{transform:scale(1.04)}
+.living-grid figcaption{padding:12px 4px 0;font-size:12.8px;color:var(--ink-soft);letter-spacing:.08em;text-align:center}
+
+/* ---------- 会社 ---------- */
+.company{padding:110px 0;text-align:center}
+.company .facts{display:flex;justify-content:center;gap:clamp(30px,7vw,90px);margin-top:56px;flex-wrap:wrap}
+.company .fact .v{font-size:clamp(30px,4.6vw,44px);font-weight:600;color:var(--accent-deep);letter-spacing:.04em}
+.company .fact .v small{font-size:.45em;margin-left:2px}
+.company .fact .k{margin-top:8px;font-size:12.5px;color:var(--ink-faint);letter-spacing:.22em}
+.company .msg{max-width:680px;margin:64px auto 0;font-size:15px;color:var(--ink-soft);letter-spacing:.08em;line-height:2.5;text-align:left}
+
+/* ---------- CTA ---------- */
+.cta{background:#241d16;color:#f5efe6;padding:100px 0 90px;text-align:center}
+.cta h2{font-size:clamp(21px,3.2vw,30px);font-weight:600;letter-spacing:.16em;line-height:1.9}
+.cta .lead{margin-top:20px;font-size:14.5px;opacity:.85;letter-spacing:.08em}
+.paths{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:900px;margin:56px auto 0}
+.path{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);
+  padding:34px 26px 30px;text-decoration:none;color:#f5efe6;transition:.3s ease;display:block;
+}
+.path:hover{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.4);transform:translateY(-3px)}
+.path .who{font-size:11px;letter-spacing:.3em;color:#cfa972;display:block;margin-bottom:14px}
+.path .act{font-size:17.5px;font-weight:600;letter-spacing:.1em;line-height:1.7}
+.path .desc{margin-top:12px;font-size:12.8px;opacity:.75;line-height:1.95;letter-spacing:.04em}
+.cta .tel{margin-top:52px;font-size:13px;letter-spacing:.1em;opacity:.85}
+.cta .tel a{color:#fff;font-size:21px;letter-spacing:.14em;text-decoration:none;font-weight:600}
+
+footer{background:#191512;color:rgba(255,255,255,.55);text-align:center;padding:34px 20px;font-size:12px;letter-spacing:.1em}
+footer a{color:rgba(255,255,255,.8)}
+
+@media(max-width:860px){
+  .step{grid-template-columns:1fr;gap:22px;margin-bottom:72px}
+  .step:nth-child(even) .ph{order:0}
+  .grades{grid-template-columns:repeat(2,1fr)}
+  .living-grid{grid-template-columns:1fr}
+  .paths{grid-template-columns:1fr}
+  .hero{min-height:78vh}
+  .intro{padding:80px 0 64px}
+  .process,.grades-sec,.living,.company{padding:76px 0}
+  .process{padding-bottom:36px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <img src="img/p4_choshiage.webp" alt="超仕上げを終えた桧フローリングの艶やかな表面" fetchpriority="high">
+  <div class="hero-in">
+    <div class="en sans">HAYASHI LUMBER — SINCE 1968</div>
+    <h1>一枚の桧に、<br>五十八年。</h1>
+    <p class="sub">静岡県磐田市 ── 桧だけを挽き続けてきた製材所の、無垢フローリング。</p>
+  </div>
+  <div class="hero-scroll sans">SCROLL</div>
+</header>
+
+<!-- ============ 導入 ============ -->
+<section class="intro">
+  <div class="wrap">
+    <p>塗装で着飾らない。<br>プリントで似せない。</p>
+    <p>桧の無垢材は、木そのものが商品です。<br>だからごまかしが利きません。</p>
+    <p><span class="em">乾かし方、削り方、仕上げ方。</span><br>その一つひとつが、そのまま床の表情になります。</p>
+    <p>私たちがふだん何をしているか、<br>この頁でぜんぶお見せします。</p>
+  </div>
+</section>
+
+<!-- ============ 工程 ============ -->
+<section class="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="en sans">OUR PROCESS</span>
+      <h2>一枚の板ができるまで。</h2>
+      <p class="note">すべて、磐田の自社工場で。</p>
+    </div>
+
+    <div class="step">
+      <div class="ph"><span class="num sans">01</span><img src="img/p1_kanso.webp" alt="青空の下、桟積みして天然乾燥させている桧の板" loading="lazy"></div>
+      <div class="txt">
+        <span class="stage sans">AIR DRYING</span>
+        <h3>太陽と風で、ゆっくり乾かす。</h3>
+        <p>一枚一枚のあいだに桟を挟み、外気にさらして乾かします。機械で急がせず、時間をかけて水分を抜いていく ── 昔ながらの天然乾燥です。</p>
+        <p>ゆっくり乾いた桧は、色艶と香りが残り、狂いが出にくくなります。ここで急ぐと、その分だけ床になってから木が暴れます。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="ph"><span class="num sans">02</span><img src="img/p2_umeki_yama.webp" alt="埋木処理を終えて出番を待つ桧材の山" loading="lazy"></div>
+      <div class="txt">
+        <span class="stage sans">STOCK</span>
+        <h3>手を入れた材が、出番を待つ。</h3>
+        <p>乾燥を終えた材は、節の抜けた箇所に桧の埋木を施し、倉庫で静かに出番を待ちます。</p>
+        <p>倉庫に常に材を寝かせてあるから、ご注文をいただいてから慌てて集めることがありません。安定した供給は、この山が支えています。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="ph"><span class="num sans">03</span><img src="img/p3_molder.webp" alt="モルダーに桧の板を投入する工程" loading="lazy"></div>
+      <div class="txt">
+        <span class="stage sans">MOLDING</span>
+        <h3>0.1ミリを合わせる機械加工。</h3>
+        <p>四面を一度に削り出すモルダーで、厚みと幅を整え、実（さね）を刻みます。刃物の状態と送りの調整で、仕上がりは大きく変わります。</p>
+        <p>刃物の管理は当社が最も神経を使う仕事のひとつ。切れる刃で削った面は、塗装がなくても光ります。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="ph"><span class="num sans">04</span><img src="img/p4b_men2.webp" alt="超仕上げを終えた桧の板の表面" loading="lazy"></div>
+      <div class="txt">
+        <span class="stage sans">SUPER FINISHING</span>
+        <h3>超仕上げ。鉋の艶を、機械で。</h3>
+        <p>モルダーの後、超仕上げ鉋盤でごく薄く表面を引きます。鉋がけと同じ原理で木の表面を「切る」ので、繊維がつぶれず、しっとりとした艶が出ます。</p>
+        <p>サンドペーパーで磨いた面とは、手触りも、光り方も、汚れのつきにくさも違います。無塗装のまま素足で歩ける床は、この一手間から生まれます。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="ph"><span class="num sans">05</span><img src="img/p5_pate.webp" alt="職人が手作業でパテ補修をしている様子" loading="lazy"></div>
+      <div class="txt">
+        <span class="stage sans">HAND REPAIR</span>
+        <h3>最後は、人の手と目。</h3>
+        <p>小さな節の欠けやヤニ壺は、一枚ずつ人の手で埋めて均します。機械はここまでやってくれません。</p>
+        <p>天然の木ですから、表情は一枚ごとに違います。その一枚ごとに手を入れて、床材として恥ずかしくない顔にしてから出荷します。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="ph"><span class="num sans">06</span><img src="img/p7_kessoku.webp" alt="結束され出荷を待つ桧フローリングの束" loading="lazy"></div>
+      <div class="txt">
+        <span class="stage sans">SHIPPING</span>
+        <h3>束ねて、まっすぐ届ける。</h3>
+        <p>検品を終えた板は結束し、問屋を挟まず、市場・工務店・お客様のもとへ直接出荷します。</p>
+        <p>製材所から直接届くということは、中間のコストがないだけでなく、「誰が作ったか分かる床」だということです。何かあれば、作った本人が答えます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 断面 ============ -->
+<section class="danmen">
+  <img src="img/p6_danmen.webp" alt="桧フローリングの断面。実（さね）加工の精度" loading="lazy">
+  <div class="cap">
+    <h3>断面が、仕事を語る。</h3>
+    <p>実（さね）の噛み合わせは、床鳴りと隙間を左右する生命線。層のように積まれた断面の揃いが、当社の加工精度です。</p>
+  </div>
+</section>
+
+<!-- ============ 等級 ============ -->
+<section class="grades-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="en sans">GRADES</span>
+      <h2>節をどこまで許すか、で選ぶ。</h2>
+      <p class="note">写真はすべて実物です。等級で価格は変わりますが、作り方は変わりません。</p>
+    </div>
+    <div class="grades">
+      <div class="grade">
+        <img src="../images/grade/grade_setsuari.webp" alt="節有グレードの桧フローリング実物" loading="lazy">
+        <div class="b"><div class="n">節有</div><div class="d sans">節の表情をそのまま活かす、いちばん気取らない顔。広い面積・コスト重視の床に。</div></div>
+      </div>
+      <div class="grade">
+        <img src="../images/grade/grade_kobushi.webp" alt="小節グレードの桧フローリング実物" loading="lazy">
+        <div class="b"><div class="n">小節</div><div class="d sans">小さな節が点在する、自然で落ち着いた表情。住宅の床として最も選ばれています。</div></div>
+      </div>
+      <div class="grade">
+        <img src="../images/grade/grade_tokujosho.webp" alt="特上小グレードの桧フローリング実物" loading="lazy">
+        <div class="b"><div class="n">特上小</div><div class="d sans">節がごく小さく、少ない上級品。上質さと価格のつり合いが取れた一枚。</div></div>
+      </div>
+      <div class="grade">
+        <img src="../images/grade/grade_musetsu.webp" alt="無節グレードの桧フローリング実物" loading="lazy">
+        <div class="b"><div class="n">無節</div><div class="d sans">節のない最上級。和室や見せ場に。木目と色だけで勝負する、桧の到達点。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 暮らし ============ -->
+<section class="living">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="en sans">IN THE HOME</span>
+      <h2>納めた桧の、その後。</h2>
+    </div>
+    <div class="living-grid">
+      <figure>
+        <img src="../images/gallery/IMG00584_HDR_md.webp" alt="囲炉裏部屋の羽目板・腰板施工" loading="lazy">
+        <figcaption class="sans">囲炉裏のある部屋の腰板に。</figcaption>
+      </figure>
+      <figure>
+        <img src="../images/gallery/IMG00607_HDR_md.webp" alt="囲炉裏部屋の天井羽目板施工" loading="lazy">
+        <figcaption class="sans">天井に張れば、香りが降りてくる。</figcaption>
+      </figure>
+      <figure>
+        <img src="../images/hero/hero_baby_real_mobile.webp" alt="桧の無垢フローリングの上でハイハイする赤ちゃん" loading="lazy">
+        <figcaption class="sans">素足とハイハイが、いちばんの検品。</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 会社 ============ -->
+<section class="company">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="en sans">ABOUT US</span>
+      <h2>桧の専門店であること。</h2>
+    </div>
+    <div class="facts">
+      <div class="fact"><div class="v">1968<small>年</small></div><div class="k sans">創業（昭和43年）</div></div>
+      <div class="fact"><div class="v">桧<small>専門</small></div><div class="k sans">扱う木を絞る</div></div>
+      <div class="fact"><div class="v">一貫<small></small></div><div class="k sans">乾燥から出荷まで自社</div></div>
+    </div>
+    <p class="msg">
+      いろいろな木を少しずつではなく、桧だけを五十八年。扱う木を一つに絞ってきたから、乾かし方も、削り方も、節の見極めも、桧のことなら体で覚えています。国産の無垢桧を、製材所から直接。それが林材木店の商いです。
+    </p>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta">
+  <div class="wrap">
+    <h2>この床と、暮らしてみませんか。</h2>
+    <p class="lead sans">お立場に合わせて、3つの入り口をご用意しています。</p>
+    <div class="paths sans">
+      <a class="path" href="../products.html">
+        <span class="who">ご自宅・DIYの方</span>
+        <span class="act">商品と価格を見る</span>
+        <span class="desc">規格・等級ごとの一覧から、オンラインでそのままご購入いただけます。</span>
+      </a>
+      <a class="path" href="../contact.html">
+        <span class="who">じっくり選びたい方</span>
+        <span class="act">サンプルを取り寄せる</span>
+        <span class="desc">等級の違いは、手に取るのがいちばん早い。実物サンプルをお送りします。</span>
+      </a>
+      <a class="path" href="../contact.html">
+        <span class="who">工務店・設計・同業の方</span>
+        <span class="act">仕入れ・大口の相談</span>
+        <span class="desc">数量・寸法・等級の組み合わせなど、専門のご相談を承ります。</span>
+      </a>
+    </div>
+    <p class="tel sans">お電話でも承ります　<a href="tel:0538582395">0538-58-2395</a><br>株式会社林材木店（静岡県磐田市）</p>
+  </div>
+</section>
+
+<footer class="sans">
+  <p>&copy; 株式会社林材木店 ｜ <a href="https://hayazai.com/">hayazai.com</a></p>
+</footer>
+
+</body>
+</html>
