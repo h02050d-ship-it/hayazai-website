@@ -209,7 +209,7 @@ footer a{color:rgba(255,255,255,.8)}
   <img src="img/p4_choshiage.webp" alt="超仕上げを終えた桧フローリングの艶やかな表面" fetchpriority="high">
   <div class="hero-in">
     <div class="en sans">HAYASHI LUMBER — SINCE 1968</div>
-    <h1>一枚の桧に、<br>五十八年。</h1>
+    <h1>一枚の桧に、<br><span class="js-years">五十八</span>年。</h1>
     <p class="sub">静岡県磐田市 ── 桧ひと筋の材木店がつくる、無垢フローリング。</p>
   </div>
   <div class="hero-scroll sans">SCROLL</div>
@@ -452,6 +452,17 @@ footer a{color:rgba(255,255,255,.8)}
 <script>
 (function(){
   document.documentElement.classList.add('js');
+
+  // 創業(1968年)からの年数を自動更新（漢数字）
+  (function(){
+    var y = new Date().getFullYear() - 1968;
+    if(y < 58 || y > 150) return;
+    var d = '〇一二三四五六七八九';
+    var t = Math.floor(y/10), o = y%10;
+    var k = (t>1 ? d[t] : '') + (t>=1 ? '十' : '') + (o ? d[o] : '');
+    document.querySelectorAll('.js-years').forEach(function(el){ el.textContent = k; });
+    document.title = document.title.replace(/五十八/, k);
+  })();
 
   // ふわっと表示の対象を付与
   document.querySelectorAll('.step .ph, .danmen .cap, .living-grid figure, .company .fact, .company .msg, .pillar, .kokoro figure, .kokoro .ktxt, .path').forEach(function(el){ el.classList.add('rv-ph'); });
