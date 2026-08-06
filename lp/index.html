@@ -122,6 +122,15 @@ img{max-width:100%;display:block}
 .pillar p{font-size:13.6px;color:var(--ink-soft);letter-spacing:.05em;line-height:2.15;text-align:left}
 @media(max-width:860px){.pillars{grid-template-columns:1fr}}
 
+/* ---------- 心の見せ場 ---------- */
+.kokoro{display:grid;grid-template-columns:1.08fr 1fr;gap:clamp(28px,5vw,58px);align-items:center;max-width:940px;margin:76px auto 0;text-align:left}
+.kokoro figure{margin:0}
+.kokoro img{border-radius:2px;box-shadow:0 18px 50px rgba(60,45,30,.18);aspect-ratio:4/3;object-fit:cover;width:100%}
+.kokoro .ktxt h3{font-size:clamp(19px,2.6vw,25px);font-weight:600;letter-spacing:.1em;line-height:1.85;margin-bottom:20px}
+.kokoro .ktxt p{font-size:14.8px;color:var(--ink-soft);letter-spacing:.06em;line-height:2.3}
+.kokoro .ktxt p+p{margin-top:1em}
+@media(max-width:860px){.kokoro{grid-template-columns:1fr;gap:22px}}
+
 /* ---------- CTA ---------- */
 .cta{background:#241d16;color:#f5efe6;padding:100px 0 90px;text-align:center}
 .cta h2{font-size:clamp(21px,3.2vw,30px);font-weight:600;letter-spacing:.16em;line-height:1.9}
@@ -216,9 +225,9 @@ footer a{color:rgba(255,255,255,.8)}
       <div class="ph"><span class="num sans">02</span><img src="img/p8_anaake.webp" alt="抜け節をドリルでくり抜く穴あけ工程" loading="lazy"></div>
       <div class="txt">
         <span class="stage sans">BORING</span>
-        <h3>悪い節は、迷わず抜く。</h3>
+        <h3>抜くか、残すか。一枚ずつ見極める。</h3>
         <p>乾燥を終えた板は、一枚ずつ目で見て、抜け落ちそうな節や欠けをドリルでくり抜きます。</p>
-        <p>隠すのではなく、悪いところを潔く取り除く。無垢材を長く使える床にするための、最初の見極めです。</p>
+        <p>ただし、抜けばいいというものではありません。抜きすぎれば木を傷め、残しすぎれば床になってから抜け落ちる。ここは埋木で直すか、パテで納めるか ── その見極めこそが、この工程の仕事です。</p>
       </div>
     </div>
 
@@ -329,8 +338,8 @@ footer a{color:rgba(255,255,255,.8)}
         <figcaption class="sans">天井に張れば、香りが降りてくる。</figcaption>
       </figure>
       <figure>
-        <img src="../images/hero/hero_baby_real_mobile.webp" alt="桧の無垢フローリングの上でハイハイする赤ちゃん" loading="lazy">
-        <figcaption class="sans">素足とハイハイが、いちばんの検品。</figcaption>
+        <img src="../images/gallery/IMG00608_HDR_md.webp" alt="天井羽目板の仕上がりクローズアップ" loading="lazy">
+        <figcaption class="sans">仕上がりの表情は、天井でも際立つ。</figcaption>
       </figure>
     </div>
   </div>
@@ -368,6 +377,14 @@ footer a{color:rgba(255,255,255,.8)}
       </div>
     </div>
 
+    <div class="kokoro">
+      <figure><img src="../images/hero/hero_baby_real_mobile.webp" alt="桧の無垢フローリングの上で笑顔でハイハイする作り手の娘" loading="lazy"></figure>
+      <div class="ktxt">
+        <h3>この床の上で、<br>うちの娘も育っています。</h3>
+        <p>素足で歩いて、転んで、また立ち上がる。作り手の家でも、この床は毎日踏まれています。</p>
+        <p>暮らす人の笑顔を思い浮かべながら作る ── それが、機械にも数字にもできない、最後の品質管理です。</p>
+      </div>
+    </div>
     <p class="msg">
       古い技術と、新しい道具と、変わらない心。三つ揃って、林材木店の桧フローリングです。
     </p>
@@ -409,7 +426,7 @@ footer a{color:rgba(255,255,255,.8)}
   document.documentElement.classList.add('js');
 
   // ふわっと表示の対象を付与
-  document.querySelectorAll('.step .ph, .danmen .cap, .living-grid figure, .company .fact, .company .msg, .pillar, .path').forEach(function(el){ el.classList.add('rv-ph'); });
+  document.querySelectorAll('.step .ph, .danmen .cap, .living-grid figure, .company .fact, .company .msg, .pillar, .kokoro figure, .kokoro .ktxt, .path').forEach(function(el){ el.classList.add('rv-ph'); });
   document.querySelectorAll('.step .txt, .sec-head, .intro p, .grade, .cta h2, .cta .lead, .cta .tel').forEach(function(el){ el.classList.add('rv'); });
   // 横並びカードは順にずらす
   document.querySelectorAll('.grades .grade').forEach(function(el,i){ el.classList.add('rv-d'+(i%4===0?1:i%4)); });
