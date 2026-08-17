@@ -20,6 +20,11 @@ function shkSelfDeliver($c){
     if (mb_strpos($x, 'ナイス') !== false && mb_strpos($x, '沼津') !== false) return true;
     return false;
 }
+// 配送欄（加工予定表のcarrier: -/内藤/西濃/佐川/自社/引取）を空白除去して返す。
+function shkCarrierNorm($it){
+    $c = isset($it['carrier']) ? (string)$it['carrier'] : '';
+    return preg_replace('/[\s　]/u', '', $c);
+}
 function shkNum($v){ $v = str_replace(',', '', (string)$v); return is_numeric($v) ? (float)$v : null; }
 function shkNumStr($n){ return rtrim(rtrim(number_format((float)$n, 2, '.', ''), '0'), '.'); }
 function shkLenM($l){ $n = preg_replace('/[^0-9.]/', '', (string)$l); if ($n === '') return (string)$l; return shkNumStr(round(((float)$n) / 1000, 2)) . 'm'; }
@@ -86,6 +91,9 @@ function shkCandidates($items){
         if ($l === '' || $l === '-') continue;
         if (shkSkip(isset($it['customer']) ? $it['customer'] : '')) continue;
         if (shkSelfDeliver(isset($it['customer']) ? $it['customer'] : '')) continue; // 自社配送は対象外
+        // 配送が「内藤」の品目だけが出荷依頼の対象（2026-08-04ユーザー指示・加工予定表の既定チェックと同条件）。
+        // 引取・自社・西濃・佐川・未設定は内藤運輸へ頼まない＝未送信リマインドにも数えない。
+        if (shkCarrierNorm($it) !== '内藤') continue;
         if (preg_match('/西濃/u', isset($it['remark']) ? (string)$it['remark'] : '')) continue;
         $ln = (int)preg_replace('/[^0-9]/', '', (string)$it['length']);
         if (!in_array($ln, array(2000, 3000, 4000), true)) continue;
