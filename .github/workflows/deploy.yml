@@ -1,6 +1,6 @@
 name: Deploy to Cloudflare Pages
 
-# ⏸️2026-08-04 自動実行を停止（手動実行のみ）。
+# ⏸️2026-08-19 自動実行を停止（手動実行のみ）。
 # 本番配信は「Deploy to Xserver」(deploy-xserver.yml)で、hayazai.com はそちらに反映される。
 # こちらは CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID が未設定のため push のたびに必ず失敗し、
 # Actions が常に赤くなって本当の失敗に気づけなくなっていたため push トリガーを外した。

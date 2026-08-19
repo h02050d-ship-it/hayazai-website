@@ -91,7 +91,7 @@ function shkCandidates($items){
         if ($l === '' || $l === '-') continue;
         if (shkSkip(isset($it['customer']) ? $it['customer'] : '')) continue;
         if (shkSelfDeliver(isset($it['customer']) ? $it['customer'] : '')) continue; // 自社配送は対象外
-        // 配送が「内藤」の品目だけが出荷依頼の対象（2026-08-04ユーザー指示・加工予定表の既定チェックと同条件）。
+        // 配送が「内藤」の品目だけが出荷依頼の対象（2026-08-19ユーザー指示・加工予定表の既定チェックと同条件）。
         // 引取・自社・西濃・佐川・未設定は内藤運輸へ頼まない＝未送信リマインドにも数えない。
         if (shkCarrierNorm($it) !== '内藤') continue;
         if (preg_match('/西濃/u', isset($it['remark']) ? (string)$it['remark'] : '')) continue;
