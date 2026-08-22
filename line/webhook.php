@@ -47,6 +47,16 @@ if (!isset($payload['events']) || !is_array($payload['events'])) {
     exit;
 }
 
+// --- 自動応答 全停止スイッチ（2026-08-22 手動チャット運用へ切替） -----
+// 施工写真ウィザードの不具合を受け、Botの返信（見積・施工写真・お問い合わせ・
+// フォールバック案内すべて）を停止中。届いたメッセージはLINEのチャット画面に
+// 残るので、返信は人が手動で行う。再開するときは true に戻すこと。
+const AUTO_REPLY_ENABLED = false;
+if (!AUTO_REPLY_ENABLED) {
+    echo json_encode(['ok' => true, 'auto_reply' => 'disabled']);
+    exit;
+}
+
 // --- マスタ定義 -----------------------------------------------------
 const QUOTE_TRIGGERS = ['見積もり', '見積', 'お見積もり', '見積もり依頼'];
 const PHOTO_TRIGGERS = ['施工写真', '施工写真を送る', '写真を送る', '写真提供', '施工事例'];
