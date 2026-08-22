@@ -51,8 +51,49 @@ if (!isset($payload['events']) || !is_array($payload['events'])) {
 // 施工写真ウィザードの不具合を受け、Botの返信（見積・施工写真・お問い合わせ・
 // フォールバック案内すべて）を停止中。届いたメッセージはLINEのチャット画面に
 // 残るので、返信は人が手動で行う。再開するときは true に戻すこと。
+// 停止中の見落とし防止として、受信メッセージ・友だち追加を会社メールへ通知する。
 const AUTO_REPLY_ENABLED = false;
+
+function notifyStaffOfIncoming(array $events, string $token, string $to): void {
+    $lines = [];
+    foreach ($events as $ev) {
+        $evType = $ev['type'] ?? '';
+        if ($evType !== 'message' && $evType !== 'follow') continue;
+        $userId = $ev['source']['userId'] ?? '';
+        $name = '（名前不明）';
+        if ($userId !== '') {
+            $ch = curl_init('https://api.line.me/v2/bot/profile/' . rawurlencode($userId));
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT        => 3,
+                CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $token],
+            ]);
+            $res = curl_exec($ch);
+            curl_close($ch);
+            if ($res) {
+                $p = json_decode($res, true);
+                if (!empty($p['displayName'])) $name = $p['displayName'];
+            }
+        }
+        if ($evType === 'follow') {
+            $lines[] = $name . ' さんが友だち追加しました';
+            continue;
+        }
+        $m = $ev['message'] ?? [];
+        $mtype = $m['type'] ?? '';
+        $labels = ['image' => '画像', 'video' => '動画', 'audio' => '音声', 'file' => 'ファイル', 'sticker' => 'スタンプ', 'location' => '位置情報'];
+        $content = $mtype === 'text' ? ($m['text'] ?? '') : '［' . ($labels[$mtype] ?? $mtype) . 'が届きました］';
+        $lines[] = $name . ' さん：' . $content;
+    }
+    if (!$lines) return;
+    $subject = '【公式LINE】' . mb_strimwidth($lines[0], 0, 40, '…');
+    $body = implode("\n\n", $lines)
+          . "\n\n▼返信はこちら（チャット画面）\nhttps://chat.line.biz/\n";
+    @mb_send_mail($to, $subject, $body, 'From: ' . CAMPAIGN_FROM);
+}
+
 if (!AUTO_REPLY_ENABLED) {
+    notifyStaffOfIncoming($payload['events'], $ACCESS_TOKEN, $STAFF_EMAIL);
     echo json_encode(['ok' => true, 'auto_reply' => 'disabled']);
     exit;
 }
