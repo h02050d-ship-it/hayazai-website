@@ -72,7 +72,7 @@ if ($type === 'quote' && !$message && $quote_info) {
 $sample_zip      = h($_POST['sample_zip'] ?? '');
 $sample_address  = h($_POST['sample_address'] ?? '');
 $sample_items    = $_POST['sample_items'] ?? [];
-$sample_items_str = implode('・', array_map('h', $sample_items));
+$sample_items_str = implode('・', array_map(fn($v) => $product_type_labels[h($v)] ?? h($v), $sample_items));
 $sample_grades_raw = $_POST['sample_grades'] ?? [];
 $grade_labels_map  = ['fushi_ari' => '節有', 'ko_fushi' => '小節', 'toku_ko' => '特上小', 'mushi' => '無節'];
 $sample_grades_str = implode('・', array_map(fn($v) => $grade_labels_map[h($v)] ?? h($v), $sample_grades_raw));
