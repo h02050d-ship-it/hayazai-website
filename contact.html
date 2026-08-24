@@ -145,8 +145,9 @@
           <input type="email" name="email" class="form-input" placeholder="info@example.com" required>
         </div>
         <div class="form-group">
-          <label class="form-label">電話番号</label>
-          <input type="tel" name="tel" class="form-input" placeholder="090-0000-0000">
+          <label class="form-label">電話番号 <span class="req" id="tel-req" style="display:none;">必須</span></label>
+          <input type="tel" name="tel" id="tel-input" class="form-input" placeholder="090-0000-0000">
+          <p id="tel-note" style="display:none;font-size:0.72rem;color:var(--text-light);margin-top:4px;">サンプル配送伝票の記載に必要です</p>
         </div>
       </div>
 
@@ -315,6 +316,9 @@ typeSelect.addEventListener('change', function() {
   document.getElementById('sample-fields').style.display = isSample ? 'block' : 'none';
   zipInput.required     = isSample;
   addressInput.required = isSample;
+  document.getElementById('tel-input').required = isSample;
+  document.getElementById('tel-req').style.display  = isSample ? '' : 'none';
+  document.getElementById('tel-note').style.display = isSample ? '' : 'none';
 });
 
 // フォーム送信時のバリデーション（グレードは任意）

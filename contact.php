@@ -95,6 +95,7 @@ if (!$message) $errors[] = 'お問い合わせ内容を入力してください'
 
 // サンプル請求の場合の追加バリデーション
 if ($type === 'sample') {
+    if (!$tel)           $errors[] = '電話番号を入力してください（配送伝票の記載に必要です）';
     if (!$sample_zip)    $errors[] = '郵便番号を入力してください';
     if (!$sample_address) $errors[] = '住所を入力してください';
     if (empty($sample_items)) $errors[] = 'サンプルの種類を1つ以上選択してください';
