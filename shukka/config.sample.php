@@ -12,4 +12,5 @@ return [
     'channel_secret'       => 'YOUR_SHUKKA_CHANNEL_SECRET',
     'send_pin'             => 'YOUR_PIN',
     'firebase_secret'      => 'YOUR_FIREBASE_DB_SECRET',
+    'naisya_relay_key'     => 'YOUR_NAISYA_RELAY_KEY', // 社内通知GAS中継のフルキー（Secrets: SHUKKA_NAISYA_RELAY_KEY）
 ];

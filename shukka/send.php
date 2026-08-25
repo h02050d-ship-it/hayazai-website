@@ -78,7 +78,7 @@ if ($code >= 200 && $code < 300) {
         }
     }
     // --- 社内通知LINE（大樹）へ控えを転送（best-effort・本体レスポンスには影響させない）---
-    shkNotifyNaisya_($text);
+    shkNotifyNaisya_($text, (string)($cfg['naisya_relay_key'] ?? ''));
     echo json_encode(['ok' => true, 'marked' => $marked]);
 } else {
     http_response_code(502);
@@ -91,10 +91,12 @@ if ($code >= 200 && $code < 300) {
 // 失敗しても本体レスポンス(ok:true)には一切影響させない。GASは302で
 // 応答を返す仕様のため CURLOPT_FOLLOWLOCATION 必須（302後のGETが本文）。
 // =====================================================
-function shkNotifyNaisya_($text) {
+function shkNotifyNaisya_($text, $relayKey) {
+    // 中継キーは公開リポジトリに置かない（config.php = GitHub Actions Secrets 生成）。未設定なら控え転送だけスキップ。
+    if ($relayKey === '') return 0;
     $url  = 'https://script.google.com/macros/s/AKfycbxcvQZVi497obS-nRm4MdN0tYtsaTb03n7FLFWy7oZN2vkItKm7oQO9_85WdJYxGjgaiA/exec';
     $body = json_encode([
-        'key'    => 'sk-edNLrUTi9sCrAo1tJmiiA',
+        'key'    => $relayKey,
         'target' => 'daiki',
         'mode'   => 'notify',
         'ntype'  => 'shukka',
