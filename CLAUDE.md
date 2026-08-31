@@ -18,7 +18,8 @@
 
 `~/hayazai.com/public_html/` 配下には**このリポジトリ由来ではない**ディレクトリがある。`--delete` 付きの全体 rsync や FTP ミラーを除外なしで実行すると**削除される**（2026-07-31 に実際に `nouhin/` が消失し復旧した実害あり）:
 
-- `nouhin/n29im17c/` … 納品書作成ツール（正本: `C:\Users\hayaz\hayazai_nouhin\` の index.html / seikyu.html / db.html。デプロイは個別 scp のみ）
+- `nouhin/n29im17c/` … 納品書作成ツール（正本: `C:\Users\hayaz\hayazai_nouhin\` の index.html / seikyu.html / db.html。**デプロイは `hayazai_nouhin/deploy_nouhin.sh` のみ**）
+  - **2026-08-31: 2度目の消失を受けて自己修復を設置**。サーバー上の `~/nouhin_master/`（公開領域の外＝ミラー配信で消えない）を正本とし、cron `*/10 * * * * ~/bin/nouhin_selfheal.sh` が10分ごとに公開領域へ復元する。**公開側へ直接 scp しても10分で巻き戻るので、更新は必ず deploy_nouhin.sh（正本→公開の順に配信）を使う。** 復元が起きると `~/nouhin_selfheal.log` に時刻付きで記録される（＝次に消えたとき犯人の時刻が分かる）。
 - `line/state/` `shukka/state/` `ai/state/` … PHP が書く実行時データ
 - `line/config.php` `shukka/config.php` `ai/config.php` … GitHub Actions が Secrets から生成（リポジトリに無い）
 
