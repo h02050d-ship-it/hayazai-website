@@ -174,8 +174,6 @@ $headers_shop = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"
     . "Content-Type: text/plain; charset=UTF-8\r\n";
 $envelope = '-f ' . SHOP_EMAIL;
 
-mb_language('Japanese');
-mb_internal_encoding('UTF-8');
 $sent1 = mb_send_mail($email,     "[ひのき魂] ご注文を受け付けました（受付番号：{$orderNo}）", $customerBody, $headers_customer, $envelope);
 $sent2 = mb_send_mail(SHOP_EMAIL, "【ひのき魂 注文】{$name} 様より {$totalText}円（{$orderNo}）",  $shopBody,     $headers_shop,     $envelope);
 
