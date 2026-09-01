@@ -11,6 +11,11 @@
   gtag('js', new Date());
   gtag('config', 'G-EQLK2295RN');
 
+  // 自前アクセス計測（js/analytics.js・gtagイベントもミラーする）
+  var hz = document.createElement('script');
+  hz.src = '/js/analytics.js';
+  document.head.appendChild(hz);
+
   // LINEリンククリック計測
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href*="line.me"], a[href*="lin.ee"]');

@@ -132,3 +132,15 @@ if ($reply === '') {
 }
 
 echo json_encode(['reply' => $reply], JSON_UNESCAPED_UNICODE);
+
+// ---- Q&Aログ（分析ダッシュボード・日次LINEダイジェスト用。analytics/api.php が読む）----
+$lastUser = '';
+for ($i = count($clean) - 1; $i >= 0; $i--) {
+    if ($clean[$i]['role'] === 'user') { $lastUser = $clean[$i]['content']; break; }
+}
+@file_put_contents($stateDir . '/chat_log.jsonl', json_encode([
+    't'  => time(),
+    'q'  => mb_substr($lastUser, 0, 300),
+    'a'  => mb_substr($reply, 0, 500),
+    'ip' => substr(md5($ip . 'hz_salt'), 0, 8),
+], JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);

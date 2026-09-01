@@ -44,6 +44,8 @@ function addToCart(productId, qty = 1) {
     return false;
   }
 
+  if (window.gtag) gtag('event', 'add_to_cart', { page_path: location.pathname });
+
   const cart = getCart();
   const existing = cart.find(item => item.id === productId);
 

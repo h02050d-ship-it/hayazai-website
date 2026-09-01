@@ -130,6 +130,24 @@ jobs:
           } > ai/config.php
           echo "Generated ai/config.php (secret set: $([ -n "$OPENAI_API_KEY" ] && echo yes || echo NO))"
 
+      - name: Generate Analytics config (from Secrets, not committed)
+        env:
+          ANALYTICS_AUTH_EMAIL: ${{ secrets.ANALYTICS_AUTH_EMAIL }}
+          ANALYTICS_AUTH_PASS: ${{ secrets.ANALYTICS_AUTH_PASS }}
+          SHUKKA_NAISYA_RELAY_KEY: ${{ secrets.SHUKKA_NAISYA_RELAY_KEY }}
+        run: |
+          mkdir -p analytics/state
+          {
+            echo '<?php'
+            echo '// 自動生成（GitHub Actions）: 編集しない。値は GitHub Secrets で管理。'
+            echo 'return ['
+            printf "    'auth_email' => '%s',\n" "$ANALYTICS_AUTH_EMAIL"
+            printf "    'auth_pass'  => '%s',\n" "$ANALYTICS_AUTH_PASS"
+            printf "    'relay_key'  => '%s',\n" "$SHUKKA_NAISYA_RELAY_KEY"
+            echo '];'
+          } > analytics/config.php
+          echo "Generated analytics/config.php (auth set: $([ -n "$ANALYTICS_AUTH_PASS" ] && echo yes || echo NO))"
+
       - name: Setup SSH key & known_hosts
         run: |
           mkdir -p ~/.ssh
@@ -168,7 +186,8 @@ jobs:
             --exclude='shukka/config.sample.php' \
             --exclude='shukka/state/' \
             --exclude='ai/config.sample.php' \
-            --exclude='ai/state/*.json' \
+            --exclude='ai/state/' \
+            --exclude='analytics/state/' \
             -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.XSERVER_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=~/.ssh/known_hosts" \
             ./ "${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ secrets.XSERVER_PATH }}"
 
