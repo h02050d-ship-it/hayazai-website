@@ -13,7 +13,7 @@
 
   // 自前アクセス計測（js/analytics.js・gtagイベントもミラーする）
   var hz = document.createElement('script');
-  hz.src = '/js/analytics.js';
+  hz.src = '/js/analytics.js?v=1';
   document.head.appendChild(hz);
 
   // LINEリンククリック計測
