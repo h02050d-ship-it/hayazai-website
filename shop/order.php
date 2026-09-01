@@ -166,15 +166,21 @@ $shopBody = <<<EOT
   {$note}
 EOT;
 
-$headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"
-    . "Reply-To: " . SHOP_EMAIL . "\r\n"
-    . "Content-Type: text/plain; charset=UTF-8\r\n";
-$headers_shop = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"
-    . "Reply-To: {$email}\r\n"
-    . "Content-Type: text/plain; charset=UTF-8\r\n";
-$envelope = '-f ' . SHOP_EMAIL;
+// mbstringのサーバー設定(mb_language)に依存すると本文がISO-2022-JP化して
+// UTF-8宣言と食い違い文字化けするため、mail()+base64で全てUTF-8明示エンコードする
+function mime_utf8($str) {
+    return '=?UTF-8?B?' . base64_encode($str) . '?=';
+}
+function send_utf8_mail($to, $subject, $body, $replyTo) {
+    $headers = 'From: ' . mime_utf8(SHOP_NAME) . ' <' . SHOP_EMAIL . ">\r\n"
+        . "Reply-To: {$replyTo}\r\n"
+        . "MIME-Version: 1.0\r\n"
+        . "Content-Type: text/plain; charset=UTF-8\r\n"
+        . "Content-Transfer-Encoding: base64\r\n";
+    return mail($to, mime_utf8($subject), chunk_split(base64_encode($body)), $headers, '-f ' . SHOP_EMAIL);
+}
 
-$sent1 = mb_send_mail($email,     "[ひのき魂] ご注文を受け付けました（受付番号：{$orderNo}）", $customerBody, $headers_customer, $envelope);
-$sent2 = mb_send_mail(SHOP_EMAIL, "【ひのき魂 注文】{$name} 様より {$totalText}円（{$orderNo}）",  $shopBody,     $headers_shop,     $envelope);
+$sent1 = send_utf8_mail($email,     "[ひのき魂] ご注文を受け付けました（受付番号：{$orderNo}）", $customerBody, SHOP_EMAIL);
+$sent2 = send_utf8_mail(SHOP_EMAIL, "【ひのき魂 注文】{$name} 様より {$totalText}円（{$orderNo}）",  $shopBody,     $email);
 
 echo json_encode(['ok' => true, 'orderNo' => $orderNo, 'total' => $total], JSON_UNESCAPED_UNICODE);
