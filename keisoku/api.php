@@ -36,15 +36,35 @@ if ($email !== $authEmail || !hash_equals($authPass, $pass)) {
     http_response_code(403); echo json_encode(['ok' => false, 'error' => 'auth']); exit;
 }
 
+// ---- GA4過去データの一括取込（1回だけの移行用・認証済のみ）----
+// body: {email,pass,import_ga4:[{d:'2026-01-01',u:users,s:sessions,v:views},...]}
+$stateDir = __DIR__ . '/state';
+if (isset($in['import_ga4']) && is_array($in['import_ga4'])) {
+    $hist = [];
+    foreach ($in['import_ga4'] as $r) {
+        $d = (string)($r['d'] ?? '');
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $d)) continue;
+        $hist[$d] = ['u' => max(0, (int)($r['u'] ?? 0)), 's' => max(0, (int)($r['s'] ?? 0)), 'v' => max(0, (int)($r['v'] ?? 0))];
+    }
+    if (!is_dir($stateDir)) { @mkdir($stateDir, 0755, true); }
+    @file_put_contents($stateDir . '/ga4_history.json', json_encode($hist), LOCK_EX);
+    echo json_encode(['ok' => true, 'imported' => count($hist)]); exit;
+}
+
 $days = (int)($in['days'] ?? 28);
 if (!in_array($days, [7, 28, 90], true)) $days = 28;
+
+// 自前計測の開始日。これより前の日別はGA4取込データ(ga4_history.json)で補完する
+define('TRACK_START', '2026-09-01');
+$ga4 = [];
+$ga4File = $stateDir . '/ga4_history.json';
+if (is_file($ga4File)) { $ga4 = json_decode((string)file_get_contents($ga4File), true) ?: []; }
 
 $to   = strtotime('tomorrow 00:00');           // 今日を含む
 $from = $to - $days * 86400;
 $prevFrom = $from - $days * 86400;             // 前期間（比較用）
 
 // ---- イベント読み込み（対象月ファイルのみ）----
-$stateDir = __DIR__ . '/state';
 $events = []; $prevEvents = [];
 $months = [];
 for ($t = $prevFrom; $t < $to + 86400; $t += 86400) { $months[date('Ym', $t)] = 1; }
@@ -54,6 +74,7 @@ foreach (array_keys($months) as $ym) {
     foreach (file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
         $r = json_decode($line, true);
         if (!is_array($r)) continue;
+        if (strpos((string)($r['sid'] ?? ''), 'testsid') === 0) continue; // 動作確認用イベントは集計しない
         $tt = (int)($r['t'] ?? 0);
         if ($tt >= $from && $tt < $to) $events[] = $r;
         elseif ($tt >= $prevFrom && $tt < $from) $prevEvents[] = $r;
@@ -88,10 +109,15 @@ foreach ($events as $r) {
     }
 }
 
-// ---- 日別 ----
-$daily = [];
+// ---- 日別（自前計測の開始前はGA4取込データで補完・g=1フラグ）----
+$daily = []; $hasGa = false;
 for ($t = $from; $t < $to; $t += 86400) {
     $d = date('Y-m-d', $t);
+    if ($d < TRACK_START && isset($ga4[$d])) {
+        $daily[] = ['d' => $d, 'pv' => $ga4[$d]['v'], 'ss' => $ga4[$d]['s'], 'vs' => $ga4[$d]['u'], 'g' => 1];
+        $hasGa = true;
+        continue;
+    }
     $m = $dailyMap[$d] ?? null;
     $daily[] = ['d' => $d, 'pv' => $m['pv'] ?? 0, 'ss' => $m ? count($m['ss']) : 0, 'vs' => $m ? count($m['vs']) : 0];
 }
@@ -167,10 +193,17 @@ $refList = [];
 foreach ($refs as $k => $c) { $refList[] = ['k' => $k, 'c' => $c]; }
 $refList = array_slice($refList, 0, 12);
 
-// ---- 前期間の合計（比較用）----
+// ---- 前期間の合計（比較用・自前開始前の日はGA4で補完）----
 $ppv = 0; $pvid = []; $psid = [];
 foreach ($prevEvents as $r) {
     if ($r['e'] === 'pv') { $ppv++; $pvid[$r['vid'] ?? 'na'] = 1; $psid[$r['sid'] ?? 'na'] = 1; }
+}
+$prevTotal = ['pv' => $ppv, 'ss' => count($psid), 'vs' => count($pvid)];
+for ($t = $prevFrom; $t < $from; $t += 86400) {
+    $d = date('Y-m-d', $t);
+    if ($d < TRACK_START && isset($ga4[$d])) {
+        $prevTotal['pv'] += $ga4[$d]['v']; $prevTotal['ss'] += $ga4[$d]['s']; $prevTotal['vs'] += $ga4[$d]['u'];
+    }
 }
 
 // ---- AIチャット Q&A ログ ----
@@ -192,11 +225,15 @@ echo json_encode([
     'ok' => true,
     'range' => ['from' => date('Y-m-d', $from), 'to' => date('Y-m-d', $to - 86400), 'days' => $days],
     'total' => [
-        'pv' => $pvTotal, 'ss' => count($sess), 'vs' => count($vids),
+        // GA4補完日を含む期間は日別の合算（訪問者は日次ユニークの合算＝延べ）で統一する
+        'pv' => $hasGa ? array_sum(array_column($daily, 'pv')) : $pvTotal,
+        'ss' => $hasGa ? array_sum(array_column($daily, 'ss')) : count($sess),
+        'vs' => $hasGa ? array_sum(array_column($daily, 'vs')) : count($vids),
         'bounce' => count($sess) > 0 ? round($bounceSessions / count($sess) * 100) : 0,
         'avgDur' => $durAllN > 0 ? round($durAll / $durAllN) : 0,
+        'hasGa' => $hasGa,
     ],
-    'prev' => ['pv' => $ppv, 'ss' => count($psid), 'vs' => count($pvid)],
+    'prev' => $prevTotal,
     'daily' => $daily,
     'pages' => $pageList,
     'refs' => $refList,

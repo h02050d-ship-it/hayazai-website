@@ -9,6 +9,7 @@
 (function () {
   'use strict';
   if (navigator.webdriver) return; // 自動化ブラウザは計測しない
+  try { if (localStorage.getItem('hz_optout') === '1') return; } catch (e) {} // 自分除外（/keisoku/me.html でON/OFF）
   var EP = '/keisoku/k.php';
 
   function rnd() { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36); }

@@ -13,7 +13,7 @@
 
   // 自前アクセス計測（js/hz.js・gtagイベントもミラーする。adblock対策で名前は hz）
   var hz = document.createElement('script');
-  hz.src = '/js/hz.js?v=1';
+  hz.src = '/js/hz.js?v=2';
   document.head.appendChild(hz);
 
   // LINEリンククリック計測

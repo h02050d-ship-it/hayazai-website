@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>計測の自分除外設定 | 林材木店</title>
+<style>
+body{font-family:"Noto Sans JP","Hiragino Sans",sans-serif;background:#faf6ef;color:#2a231c;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+.box{background:#fff;border:1px solid #e6ddce;border-radius:14px;padding:34px 36px;max-width:440px;text-align:center;box-shadow:0 2px 10px rgba(61,43,31,.08)}
+h1{font-size:19px;color:#3d2b1f;margin:0 0 8px}
+p{font-size:13.5px;color:#6b5d4d;line-height:1.9;margin:0 0 20px}
+.state{font-size:16px;font-weight:700;padding:14px;border-radius:10px;margin-bottom:20px}
+.state.on{background:#e9f4ea;color:#2e7d32}
+.state.off{background:#fbeae7;color:#c0392b}
+button{font-size:15px;font-weight:700;padding:12px 28px;border:none;border-radius:10px;cursor:pointer;background:#3d2b1f;color:#fff;font-family:inherit}
+.note{font-size:11.5px;color:#8a7d6b;margin-top:18px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>🙈 アクセス計測の自分除外</h1>
+  <p>このブラウザからの閲覧を、HPアクセス分析（keisoku）の集計から除外します。<br>事務所PC・自分のスマホなど、<b>普段サイトを見る端末ごとに1回</b>ONにしてください。</p>
+  <div class="state" id="state"></div>
+  <button id="btn"></button>
+  <div class="note">この設定はブラウザに保存されます（Cookie削除で消えるので、その時はまたここでON）。<br>GA4の除外とは別です（GA4は従来どおり全記録）。</div>
+</div>
+<script>
+function render(){
+  var on=false;
+  try{ on=localStorage.getItem('hz_optout')==='1'; }catch(e){}
+  var st=document.getElementById('state'), btn=document.getElementById('btn');
+  st.className='state '+(on?'on':'off');
+  st.textContent=on?'✅ 除外中（このブラウザは計測されません）':'⚠️ 計測対象です';
+  btn.textContent=on?'除外を解除する':'このブラウザを除外する';
+  btn.onclick=function(){ try{ localStorage.setItem('hz_optout', on?'0':'1'); }catch(e){}; render(); };
+}
+render();
+</script>
+</body>
+</html>
