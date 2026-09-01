@@ -147,8 +147,18 @@ function maybeSendDailyDigest_(string $stateDir): void {
     if ($cta) $text .= "\n🎯 CTA: " . implode(' / ', $cta) . "\n";
     $top = array_slice($pages, 0, 3, true);
     if ($top) {
+        // 日本語ページ名（keisoku/pagenames.php）で表示。無ければパスのまま
+        $pn = @include __DIR__ . '/pagenames.php';
+        $pnPages = is_array($pn) ? ($pn['pages'] ?? []) : [];
+        $pnProds = is_array($pn) ? ($pn['products'] ?? []) : [];
         $text .= "\n👀 よく見られたページ:\n";
-        foreach ($top as $pg => $c) { $text .= '・' . $pg . '（' . $c . "PV）\n"; }
+        foreach ($top as $pg => $c) {
+            $label = $pnPages[$pg] ?? $pg;
+            if (!isset($pnPages[$pg]) && preg_match('#^/product\.html\?id=([\w\-]+)#', $pg, $m)) {
+                $label = '商品: ' . ($pnProds[$m[1]] ?? $m[1]);
+            }
+            $text .= '・' . $label . '（' . $c . "PV）\n";
+        }
     }
     $text .= "\n詳細 → https://h02050d-ship-it.github.io/hp-analytics/";
 

@@ -171,6 +171,20 @@ foreach ($pages as $p => $m) {
 usort($pageList, fn($a, $b) => $b['pv'] <=> $a['pv']);
 $pageList = array_slice($pageList, 0, 40);
 
+// ---- 日本語ページ名を付与（keisoku/pagenames.php・ダッシュボード/週次メール/日次LINEで共用）----
+$pn = @include __DIR__ . '/pagenames.php';
+$pnPages = is_array($pn) ? ($pn['pages'] ?? []) : [];
+$pnProds = is_array($pn) ? ($pn['products'] ?? []) : [];
+function pageName_(string $p, array $pages, array $prods): string {
+    if (isset($pages[$p])) return $pages[$p];
+    if (preg_match('#^/product\.html\?id=([\w\-]+)#', $p, $m)) {
+        return '商品: ' . ($prods[$m[1]] ?? $m[1]);
+    }
+    return $p;
+}
+foreach ($pageList as &$pl) { $pl['name'] = pageName_($pl['p'], $pnPages, $pnProds); }
+unset($pl);
+
 // ---- 流入元分類 ----
 function refClass_(string $r): string {
     if ($r === '') return '直接';
