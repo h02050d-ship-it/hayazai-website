@@ -68,6 +68,13 @@ if ($src && preg_match_all(
 }
 if (empty($catalog)) $errors[] = '商品マスタを読み込めませんでした。時間をおいて再度お試しください';
 
+// ---- 基準価格の補正（楽天店の方が安いSKU）: shop/base_prices.js ----
+$overrides = [];
+$ov = @file_get_contents(__DIR__ . '/base_prices.js');
+if ($ov && preg_match('/SHOP_BASE_OVERRIDES\s*=\s*(\{.*?\});/s', $ov, $om)) {
+    $overrides = json_decode($om[1], true) ?: [];
+}
+
 // ---- 金額再計算 ----
 $lines = [];
 $total = 0;
@@ -77,13 +84,15 @@ if (empty($errors)) {
         $qty = max(1, min(999, (int)($item['qty'] ?? 0)));
         if (!isset($catalog[$id])) { $errors[] = "商品が見つかりません: {$id}"; continue; }
         $p = $catalog[$id];
-        $unit = (int)(floor((int)$p['price'] * 0.95 / 10) * 10); // 5%引き・10円未満切捨て
+        $base = (int)$p['price'];
+        if (isset($overrides[$id]) && (int)$overrides[$id] < $base) $base = (int)$overrides[$id]; // 両モールの安い方
+        $unit = (int)(floor($base * 0.95 / 10) * 10); // 5%引き・10円未満切捨て
         $sub  = $unit * $qty;
         $total += $sub;
         $lines[] = [
             'name' => "桧" . ($p['cat'] === 'panel' ? '羽目板' : 'フローリング')
                 . " {$p['thick']}×{$p['width']}×{$p['length']}mm {$p['quality']}（{$p['grade']}級・{$p['qty']}枚入）",
-            'unit' => $unit, 'qty' => $qty, 'sub' => $sub, 'mall' => (int)$p['price'],
+            'unit' => $unit, 'qty' => $qty, 'sub' => $sub, 'mall' => $base,
         ];
     }
 }
@@ -156,7 +165,7 @@ $shopBody = <<<EOT
 ■ お届け先
   〒{$zip} {$prefecture}{$address1} {$address2}
 
-■ ご注文内容（単価＝ヤフー実売×0.95・10円未満切捨て／サーバー側で再計算済み）
+■ ご注文内容（単価＝ヤフー/楽天の安い方×0.95・10円未満切捨て／サーバー側で再計算済み）
 {$itemText}
   商品合計（税込）: {$totalText}円
 
