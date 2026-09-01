@@ -1,8 +1,8 @@
 <?php
 // =====================================================
 // 林材木店 アクセス分析API（ダッシュボード用・要認証）
-// hp-analytics（GitHub Pages） → ここ → analytics/state/*.jsonl を集計して返す
-// 認証情報は analytics/config.php（GitHub Actions Secretsから生成・リポジトリ非含有）
+// hp-analytics（GitHub Pages） → ここ → keisoku/state/*.jsonl を集計して返す
+// 認証情報は keisoku/config.php（GitHub Actions Secretsから生成・リポジトリ非含有）
 // =====================================================
 date_default_timezone_set('Asia/Tokyo');
 header('Content-Type: application/json; charset=UTF-8');

@@ -11,9 +11,9 @@
   gtag('js', new Date());
   gtag('config', 'G-EQLK2295RN');
 
-  // 自前アクセス計測（js/analytics.js・gtagイベントもミラーする）
+  // 自前アクセス計測（js/hz.js・gtagイベントもミラーする。adblock対策で名前は hz）
   var hz = document.createElement('script');
-  hz.src = '/js/analytics.js?v=1';
+  hz.src = '/js/hz.js?v=1';
   document.head.appendChild(hz);
 
   // LINEリンククリック計測

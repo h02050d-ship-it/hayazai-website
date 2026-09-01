@@ -1,14 +1,15 @@
 // =====================================================
 // 林材木店 自前アクセス計測（第一者・Cookie不使用）
 // 収集: ページビュー / 滞在時間 / スクロール到達 / 離脱 / CTAイベント
-// 送信先: /analytics/track.php → analytics/state/*.jsonl（サーバー専用領域）
+// 送信先: /keisoku/k.php → keisoku/state/*.jsonl（サーバー専用領域）
+// ※ファイル名に analytics/track を使うと広告ブロッカーに遮断されるため hz/keisoku 表記
 // GA4と併走。components.js が発火する gtag イベントもラップして取り込む。
 // 閲覧用ダッシュボード: https://h02050d-ship-it.github.io/hp-analytics/
 // =====================================================
 (function () {
   'use strict';
   if (navigator.webdriver) return; // 自動化ブラウザは計測しない
-  var EP = '/analytics/track.php';
+  var EP = '/keisoku/k.php';
 
   function rnd() { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36); }
 

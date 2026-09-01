@@ -1,7 +1,7 @@
 <?php
 // =====================================================
-// 林材木店 自前アクセス計測 収集エンドポイント
-// js/analytics.js → ここ → analytics/state/ev_YYYYMM.jsonl（1行1イベント）
+// 林材木店 自前アクセス計測 収集エンドポイント（keisoku=計測。analytics/track名は広告ブロッカー対策で不可）
+// js/hz.js → ここ → keisoku/state/ev_YYYYMM.jsonl（1行1イベント）
 // 個人情報は保存しない（IPはソルト付きハッシュ先頭8桁のみ）。
 // おまけ: 朝7時以降の最初のアクセスで前日ダイジェストをLINEへ送る（遅延トリガー・cron不要）。
 // =====================================================
@@ -77,7 +77,8 @@ try { maybeSendDailyDigest_($stateDir); } catch (Throwable $ex) { /* best-effort
 // =====================================================
 // 前日ダイジェスト: 7:00以降の最初のイベントで1日1回だけ送信。
 // 送信経路は shukka/send.php と同じGAS中継（notify_settingsゲート内蔵・ntype=hp_daily）。
-// 中継キーは analytics/config.php（GitHub Actions Secretsから生成・リポジトリ非含有）。
+// 中継キーは keisoku/config.php（GitHub Actions Secretsから生成・リポジトリ非含有）。
+// 前日にPVもAI質問も無ければ送らない（空レポは通知しない）。
 // =====================================================
 function maybeSendDailyDigest_(string $stateDir): void {
     if ((int)date('G') < 7) return;
@@ -128,6 +129,9 @@ function maybeSendDailyDigest_(string $stateDir): void {
             if (is_array($r) && ($r['t'] ?? 0) >= $y0 && ($r['t'] ?? 0) < $y1 && ($r['q'] ?? '') !== '') $aiQs[] = $r['q'];
         }
     }
+
+    // 前日にPVもAI質問も無ければ空レポは送らない（日付マークだけ残す）
+    if ($pv === 0 && !$aiQs) return;
 
     $text = "📊 HP昨日レポ {$ymd}\n";
     $text .= '訪問 ' . count($vids) . '人・PV ' . $pv . "\n";
