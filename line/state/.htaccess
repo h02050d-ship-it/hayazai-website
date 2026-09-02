@@ -1,0 +1,9 @@
+# このフォルダには進行中の会話データ（お客様の氏名・メールアドレス等）が入ります。
+# 外部から直接読み取られないよう、Web経由のアクセスを全て拒否します。
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>

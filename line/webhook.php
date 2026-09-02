@@ -47,12 +47,42 @@ if (!isset($payload['events']) || !is_array($payload['events'])) {
     exit;
 }
 
-// --- 自動応答 全停止スイッチ（2026-08-22 手動チャット運用へ切替） -----
-// 施工写真ウィザードの不具合を受け、Botの返信（見積・施工写真・お問い合わせ・
-// フォールバック案内すべて）を停止中。届いたメッセージはLINEのチャット画面に
-// 残るので、返信は人が手動で行う。再開するときは true に戻すこと。
-// 停止中の見落とし防止として、受信メッセージ・友だち追加を会社メールへ通知する。
-const AUTO_REPLY_ENABLED = false;
+// --- 自動応答スイッチ ------------------------------------------------
+// 2026-08-22 施工写真ウィザードの不具合を受けて全停止 →
+// 2026-09-02 見積もり・お問い合わせのみ再開（写真フローだけ停止のまま）。
+// AUTO_REPLY_ENABLED=false にすると全停止（手動チャット運用）に戻せる。
+const AUTO_REPLY_ENABLED = true;
+// 施工写真キャンペーンの受付ウィザード。写真が保存できない不具合の調査が
+// 済むまで false。true に戻すと LINE での写真受付が再開する。
+const PHOTO_FLOW_ENABLED = false;
+
+// LINEプロフィールから表示名を取る（取れなければ「（名前不明）」）
+function lineDisplayName(string $userId, string $token): string {
+    if ($userId === '') return '（名前不明）';
+    $ch = curl_init('https://api.line.me/v2/bot/profile/' . rawurlencode($userId));
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 3,
+        CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $token],
+    ]);
+    $res = curl_exec($ch);
+    curl_close($ch);
+    if ($res) {
+        $p = json_decode($res, true);
+        if (!empty($p['displayName'])) return $p['displayName'];
+    }
+    return '（名前不明）';
+}
+
+// 人の返信が必要なメッセージ（ウィザードに当たらない自由記述・友だち追加）を
+// 会社メールへ通知する。自動応答が動いていても、担当者の見落としを防ぐため。
+function notifyStaffOfManualMessage(string $userId, string $text, string $token, string $to): void {
+    $name = lineDisplayName($userId, $token);
+    $subject = '【公式LINE】' . mb_strimwidth($name . ' さん：' . $text, 0, 40, '…');
+    $body = $name . " さん：\n" . $text
+          . "\n\n▼返信はこちら（チャット画面）\nhttps://chat.line.biz/\n";
+    @mb_send_mail($to, $subject, $body, 'From: ' . CAMPAIGN_FROM);
+}
 
 function notifyStaffOfIncoming(array $events, string $token, string $to): void {
     $lines = [];
@@ -60,21 +90,7 @@ function notifyStaffOfIncoming(array $events, string $token, string $to): void {
         $evType = $ev['type'] ?? '';
         if ($evType !== 'message' && $evType !== 'follow') continue;
         $userId = $ev['source']['userId'] ?? '';
-        $name = '（名前不明）';
-        if ($userId !== '') {
-            $ch = curl_init('https://api.line.me/v2/bot/profile/' . rawurlencode($userId));
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT        => 3,
-                CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $token],
-            ]);
-            $res = curl_exec($ch);
-            curl_close($ch);
-            if ($res) {
-                $p = json_decode($res, true);
-                if (!empty($p['displayName'])) $name = $p['displayName'];
-            }
-        }
+        $name = lineDisplayName($userId, $token);
         if ($evType === 'follow') {
             $lines[] = $name . ' さんが友だち追加しました';
             continue;
@@ -138,11 +154,20 @@ $PC_STORES = [
 const PC_MAX_PHOTOS = 10;
 
 // --- 状態の保存（ユーザー単位の簡易セッション）----------------------
+// 保存先は public_html の外（~/hayazai.com/line_state/）。
+//   ・Webから直接読めない（お客様の氏名・メールを含むため。2026-09-02 対応）
+//   ・デプロイの rsync --delete で進行中の会話が消えない
 function safeId(string $userId): string {
     return preg_replace('/[^A-Za-z0-9_-]/', '', $userId);
 }
+function stateDir(): string {
+    // public_html/line/webhook.php → 2つ上が hayazai.com
+    $dir = dirname(dirname(__DIR__)) . '/line_state';
+    if (!is_dir($dir)) @mkdir($dir, 0700, true);
+    return $dir;
+}
 function statePath(string $userId): string {
-    return __DIR__ . '/state/' . safeId($userId) . '.json';
+    return stateDir() . '/' . safeId($userId) . '.json';
 }
 function loadState(string $userId): array {
     $p = statePath($userId);
@@ -168,7 +193,7 @@ function clearState(string $userId): void {
 // タイムスタンプはフロー状態（clearStateで消える）とは別ファイルに持つ。
 const GUIDE_COOLDOWN_SEC = 86400;
 function guidePath(string $userId): string {
-    return __DIR__ . '/state/guide_' . safeId($userId) . '.txt';
+    return stateDir() . '/guide_' . safeId($userId) . '.txt';
 }
 function guideRecentlySent(string $userId): bool {
     $p = guidePath($userId);
@@ -232,20 +257,6 @@ function qrPostback(string $label, string $data, string $displayText): array {
         'type' => 'postback', 'label' => mb_substr($label, 0, 20),
         'data' => $data, 'displayText' => $displayText,
     ]];
-}
-
-// --- ユーザープロフィール取得（任意）--------------------------------
-function fetchDisplayName(string $userId, string $token): string {
-    $ch = curl_init('https://api.line.me/v2/bot/profile/' . rawurlencode($userId));
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $token],
-        CURLOPT_TIMEOUT => 8,
-    ]);
-    $res = curl_exec($ch);
-    curl_close($ch);
-    $d = json_decode((string)$res, true);
-    return $d['displayName'] ?? '(不明)';
 }
 
 // =====================================================================
@@ -353,24 +364,35 @@ function pcPendingDir(string $userId): string {
 }
 // LINEの画像コンテンツをダウンロードして保存。成功でファイルパス、失敗でnull
 function pcDownloadImage(string $messageId, string $dir, int $idx, string $token): ?string {
-    if (!is_dir($dir)) @mkdir($dir, 0705, true);
+    if (!is_dir($dir) && !@mkdir($dir, 0705, true)) { error_log('[line] pending mkdir failed: ' . $dir); }
+    if (!is_dir($dir)) { error_log('[line] image dir missing: ' . $dir); return null; }
     $url = 'https://api-data.line.me/v2/bot/message/' . rawurlencode($messageId) . '/content';
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $token],
         CURLOPT_TIMEOUT => 30,
+        // LINEのコンテンツ取得はCDNへ302で飛ぶことがある。追従しないと本文が取れない
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_MAXREDIRS => 3,
     ]);
     $data = curl_exec($ch);
+    $err  = curl_error($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $ctype = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
     curl_close($ch);
-    if ($data === false || $code !== 200 || !$data) { error_log('[line] image dl failed code=' . $code); return null; }
+    if ($data === false || $code !== 200 || !$data) {
+        error_log('[line] image dl failed code=' . $code . ' err=' . $err . ' len=' . strlen((string)$data));
+        return null;
+    }
     $ext = 'jpg';
     if (stripos($ctype, 'png') !== false)  $ext = 'png';
     if (stripos($ctype, 'webp') !== false) $ext = 'webp';
     $path = sprintf('%s/photo%02d.%s', $dir, $idx, $ext);
-    if (file_put_contents($path, $data) === false) return null;
+    if (file_put_contents($path, $data) === false) {
+        error_log('[line] image save failed: ' . $path);
+        return null;
+    }
     return $path;
 }
 function startPhoto(string $replyToken, string $userId, string $token): void {
@@ -463,8 +485,11 @@ foreach ($payload['events'] as $ev) {
     $userId     = $ev['source']['userId'] ?? '';
     if (!$userId || !$replyToken) continue;
 
-    // ---- フォロー（友だち追加）：あいさつはOA機能に任せる ----
-    if ($type === 'follow') { continue; }
+    // ---- フォロー（友だち追加）：あいさつはOA機能に任せ、通知だけ出す ----
+    if ($type === 'follow') {
+        notifyStaffOfManualMessage($userId, '（友だち追加がありました）', $ACCESS_TOKEN, $STAFF_EMAIL);
+        continue;
+    }
 
     // ---- postback（ボタン選択）----
     if ($type === 'postback') {
@@ -498,7 +523,7 @@ foreach ($payload['events'] as $ev) {
                 continue;
             }
             if ($step === 'confirm' && $val === 'send') {
-                $name = fetchDisplayName($userId, $ACCESS_TOKEN);
+                $name = lineDisplayName($userId, $ACCESS_TOKEN);
                 notifyQuote($state, $name, $userId, $STAFF_EMAIL, $FROM_EMAIL);
                 clearState($userId);
                 replyMessages($replyToken, [textMsg("お見積もり依頼を受け付けました！🌲\n内容を確認し、担当者より概算をご連絡します。\n\n営業時間 平日8:00〜17:00\nお急ぎの場合はお電話（0538-58-2395）もどうぞ。")], $ACCESS_TOKEN);
@@ -570,7 +595,7 @@ foreach ($payload['events'] as $ev) {
                     continue;
                 }
                 // 同意 → 確定
-                $name = fetchDisplayName($userId, $ACCESS_TOKEN);
+                $name = lineDisplayName($userId, $ACCESS_TOKEN);
                 $ok = pcFinalize($state, $userId, $name, $PC_STORES, $STAFF_EMAIL);
                 clearState($userId);
                 if ($ok) {
@@ -611,8 +636,12 @@ foreach ($payload['events'] as $ev) {
                 }
                 continue;
             }
-            // それ以外の画像は案内
-            replyMessages($replyToken, [textMsg("画像を受け取りました。施工写真のご応募は「施工写真」と送っていただくと受付を開始します🌲")], $ACCESS_TOKEN);
+            // それ以外の画像は案内（写真受付の停止中は文面を変える）
+            notifyStaffOfManualMessage($userId, '［画像が届きました］', $ACCESS_TOKEN, $STAFF_EMAIL);
+            $imgGuide = PHOTO_FLOW_ENABLED
+                ? "画像を受け取りました。施工写真のご応募は「施工写真」と送っていただくと受付を開始します🌲"
+                : "画像を受け取りました🌲 担当者が確認してご返信します。";
+            replyMessages($replyToken, [textMsg($imgGuide)], $ACCESS_TOKEN);
             continue;
         }
 
@@ -622,7 +651,17 @@ foreach ($payload['events'] as $ev) {
 
             // トリガー（いつでも開始）
             if (in_array($text, QUOTE_TRIGGERS, true)) { startQuote($replyToken, $userId, $ACCESS_TOKEN, $PRODUCTS); continue; }
-            if (in_array($text, PHOTO_TRIGGERS, true)) { startPhoto($replyToken, $userId, $ACCESS_TOKEN); continue; }
+            if (in_array($text, PHOTO_TRIGGERS, true)) {
+                if (PHOTO_FLOW_ENABLED) { startPhoto($replyToken, $userId, $ACCESS_TOKEN); continue; }
+                notifyStaffOfManualMessage($userId, $text . '（施工写真・LINE受付は停止中）', $ACCESS_TOKEN, $STAFF_EMAIL);
+                replyMessages($replyToken, [textMsg(
+                    "施工写真のご提供、ありがとうございます🌲\n" .
+                    "ただいまLINEでの写真受付を一時停止しております。お手数ですが、下のページからご応募ください（謝礼のAmazonギフトカード300円分は変わらずお送りします）。\n\n" .
+                    "https://hayazai.com/photo.html\n\n" .
+                    "このトークに直接お送りいただいても構いません。担当者が確認してご連絡します。"
+                )], $ACCESS_TOKEN);
+                continue;
+            }
             // お問い合わせボタン（カテゴリ選択式・キャンペーン案内は出さない）
             if (in_array($text, ['お問い合わせ', 'お問合せ', '問い合わせ'], true)) {
                 saveState($userId, ['flow' => 'inquiry', 'step' => 'iq_cat']);
@@ -634,13 +673,16 @@ foreach ($payload['events'] as $ev) {
             }
             if (in_array($text, ['キャンセル', 'やめる', '最初から'], true)) {
                 clearState($userId);
-                replyMessages($replyToken, [textMsg("入力をリセットしました。\n・お見積もり →「見積もり」\n・施工写真のご提供 →「施工写真」\nと送るといつでも再開できます。")], $ACCESS_TOKEN);
+                $cxGuide = PHOTO_FLOW_ENABLED
+                    ? "入力をリセットしました。\n・お見積もり →「見積もり」\n・施工写真のご提供 →「施工写真」\nと送るといつでも再開できます。"
+                    : "入力をリセットしました。\n「見積もり」と送るとお見積もりの受付をいつでも再開できます。";
+                replyMessages($replyToken, [textMsg($cxGuide)], $ACCESS_TOKEN);
                 continue;
             }
 
             // お問い合わせの内容入力 → AI一次回答＋スタッフ通知
             if ($flow === 'inquiry' && $step === 'iq_detail' && $text !== '') {
-                $name = fetchDisplayName($userId, $ACCESS_TOKEN);
+                $name = lineDisplayName($userId, $ACCESS_TOKEN);
                 $catLabel = $state['cat_label'] ?? 'その他';
                 $question = mb_substr($text, 0, 3000);
 
@@ -746,14 +788,22 @@ foreach ($payload['events'] as $ev) {
             // それ以外（お問い合わせ等）→ 案内
             // ただし ①相づち・お礼 ②24時間以内に案内済み の場合は無言でスルーし、
             // 担当者の手動返信にまかせる（自動返信が会話に割り込まないように）
-            if (isSmallTalk($text) || guideRecentlySent($userId)) {
+            if (isSmallTalk($text)) {
+                continue;
+            }
+            // 人の返信が必要なメッセージ → 会社メールへ通知（案内の有無に関わらず）
+            notifyStaffOfManualMessage($userId, $text, $ACCESS_TOKEN, $STAFF_EMAIL);
+            if (guideRecentlySent($userId)) {
                 continue;
             }
             markGuideSent($userId);
+            $photoLine = PHOTO_FLOW_ENABLED
+                ? "・施工写真のご提供（Amazonギフト券300円分）→「施工写真」と送信\n"
+                : "";
             replyMessages($replyToken, [textMsg(
                 "メッセージありがとうございます！🌲\n" .
                 "・お見積もり →「見積もり」と送信、または下メニューから\n" .
-                "・施工写真のご提供（Amazonギフト券300円分）→「施工写真」と送信\n" .
+                $photoLine .
                 "・その他のお問い合わせはこのままご記入ください。担当者よりご返信します。\n\n" .
                 "営業時間 平日8:00〜17:00"
             )], $ACCESS_TOKEN);
