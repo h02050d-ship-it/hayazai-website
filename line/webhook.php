@@ -55,6 +55,9 @@ const AUTO_REPLY_ENABLED = true;
 // 施工写真キャンペーンの受付ウィザード。写真が保存できない不具合の調査が
 // 済むまで false。true に戻すと LINE での写真受付が再開する。
 const PHOTO_FLOW_ENABLED = false;
+// 「お問い合わせ」に書かれた内容へ AI が一次回答するか。false にすると
+// 「受け付けました。スタッフが返信します」だけを返す（人の返信は変わらず必要）。
+const AI_ANSWER_ENABLED = true;
 
 // LINEプロフィールから表示名を取る（取れなければ「（名前不明）」）
 function lineDisplayName(string $userId, string $token): string {
@@ -686,8 +689,8 @@ foreach ($payload['events'] as $ev) {
                 $catLabel = $state['cat_label'] ?? 'その他';
                 $question = mb_substr($text, 0, 3000);
 
-                // AI一次回答（失敗時はnull→従来の受付メッセージ）
-                $ai = aiAnswer($catLabel, $question, $OPENAI_KEY);
+                // AI一次回答（無効時・失敗時はnull→従来の受付メッセージ）
+                $ai = AI_ANSWER_ENABLED ? aiAnswer($catLabel, $question, $OPENAI_KEY) : null;
 
                 // スタッフ通知（AIが何と答えたかも記載）
                 $b  = "LINEからお問い合わせが届きました。\n\n";
