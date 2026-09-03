@@ -51,6 +51,10 @@
   # AIチャットのレート制限状態ファイル（ai/state/）への外部アクセス遮断
   RewriteRule ^ai/state/ - [F,L]
 
+  # FAX・チラシ・QRコード用の短いURL（?f= が計測の流入コードになる。302=着地先を後で差し替え可能）
+  RewriteRule ^fax/?$ /dealer.html?f=fax [R=302,L,QSA]
+  RewriteRule ^koumuten/?$ /business.html?f=koumuten [R=302,L,QSA]
+
   # 旧WP固定ページ → 新静的HTML（301恒久リダイレクト）
   RewriteRule ^company-profile/?$ /company.html [R=301,L]
   RewriteRule ^個人情報保護方針/?$ /privacy.html [R=301,L,NE]

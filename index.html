@@ -293,6 +293,16 @@
       gap: 14px;
       flex-wrap: wrap;
     }
+    .hero-price {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin: -18px 0 22px; padding: 7px 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.45);
+      color: #fff; font-size: 0.82rem; text-decoration: none; letter-spacing: 0.02em;
+      backdrop-filter: blur(3px);
+    }
+    .hero-price b { font-size: 0.98rem; }
+    .hero-price:hover { background: rgba(255,255,255,0.24); }
+    @media (max-width: 600px) { .hero-price { font-size: 0.76rem; margin-top: -10px; } .hero-price b { font-size: 0.9rem; } }
 
     .hero-scroll {
       position: absolute;
@@ -677,6 +687,7 @@
       <p class="hero-label">Hinoki Wood Specialist Since 1968</p>
       <h1 class="hero-title">あなたの暮らしに、<br><em>桧の幸せ</em>を。</h1>
       <p class="hero-desc">木のぬくもりで、冬でも素足があたたか。夏はさらり。<br>素足で歩きたくなる、国産無垢桧の床。<br>全国の木材市場・取扱店を通じてお届けしています。</p>
+      <a class="hero-price" href="products.html">15mm桧フローリング 参考価格 <b>¥9,240／束〜</b>（8枚・約1.6㎡・税込）｜価格表を見る →</a>
       <div class="hero-actions">
         <a href="markets.html" class="btn btn-lg btn-pulse" style="background:#fff;color:var(--wood-dark);">お近くの取扱店を探す</a>
         <a href="sample.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">無料サンプルで質感を確かめる</a>
@@ -1485,7 +1496,7 @@
 
 <div id="site-footer"></div>
 
-<script src="js/components.js?v=21"></script>
+<script src="js/components.js?v=22"></script>
 
 <!-- ヒーローのレビューバッジ → お客様の声へスクロール（遅延読込のレイアウト伸長に追従して再整列） -->
 <script>

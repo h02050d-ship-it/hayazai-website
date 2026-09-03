@@ -13,7 +13,7 @@
 
   // 自前アクセス計測（js/hz.js・gtagイベントもミラーする。adblock対策で名前は hz）
   var hz = document.createElement('script');
-  hz.src = '/js/hz.js?v=2';
+  hz.src = '/js/hz.js?v=3';
   document.head.appendChild(hz);
 
   // LINEリンククリック計測
@@ -180,9 +180,51 @@ function loadAiChat() {
   document.body.appendChild(s);
 }
 
+// ブログ記事に「商品への導線」を入れる（記事は最後まで読まれるが商品ページへ進まないため）
+// 記事中: 3つ目のh2の直前に参考価格＋サンプル/枚数計算/価格表。末尾: 既存CTAに枚数計算・取扱店ボタンを追加
+function renderBlogCta() {
+  if (location.pathname.indexOf('/blog/') !== 0) return;
+  const body = document.querySelector('.article-body');
+  if (!body || document.querySelector('.blog-cta-mid')) return;
+  const css = document.createElement('style');
+  css.textContent = [
+    '.blog-cta-mid{background:linear-gradient(135deg,#f8f2ea,#edf5ed);border:2px solid var(--wood-mid,#a8865c);border-radius:12px;padding:20px 22px;margin:36px 0}',
+    '.blog-cta-mid .bcm-h{font-weight:700;color:var(--wood-dark,#3d2b1f);font-size:1rem;margin:0 0 6px}',
+    '.blog-cta-mid p{font-size:0.86rem;color:var(--text-mid,#5a4a3a);line-height:1.9;margin:0 0 14px}',
+    '.blog-cta-mid .bcm-btns{display:flex;gap:10px;flex-wrap:wrap}',
+    '.blog-cta-mid .bcm-btns a{display:inline-block;padding:11px 18px;border-radius:8px;font-size:0.88rem;font-weight:700;text-decoration:none;line-height:1.3}',
+    '.blog-cta-mid .bcm-btns .p{background:var(--wood-dark,#3d2b1f);color:#fff}',
+    '.blog-cta-mid .bcm-btns .s{background:#fff;color:var(--wood-dark,#3d2b1f);border:1.5px solid var(--wood-mid,#a8865c)}',
+    '@media(max-width:600px){.blog-cta-mid .bcm-btns a{flex:1 1 100%;text-align:center}}'
+  ].join('\n');
+  document.head.appendChild(css);
+  const html =
+    '<aside class="blog-cta-mid">' +
+      '<div class="bcm-h">📐 この記事の床材＝国産無垢 桧フローリング 15×108mm（自社工場・超仕上げ）</div>' +
+      '<p>参考価格 節有 <strong>¥9,240／束（8枚・約1.6㎡）〜</strong> 税込（メーカー希望小売価格・取扱店では多くの場合これより割安）。<br>桧の質感・香りは写真では伝わりません。まずは無料サンプルで実物をご確認ください。</p>' +
+      '<div class="bcm-btns">' +
+        '<a class="p" href="../sample.html">無料サンプルを申し込む</a>' +
+        '<a class="s" href="../simulator.html">必要枚数を10秒で計算</a>' +
+        '<a class="s" href="../products.html">価格表を見る</a>' +
+      '</div>' +
+    '</aside>';
+  const h2s = body.querySelectorAll('h2');
+  const anchor = h2s.length >= 3 ? h2s[2] : (h2s.length >= 2 ? h2s[1] : null);
+  if (anchor) anchor.insertAdjacentHTML('beforebegin', html);
+  else body.insertAdjacentHTML('beforeend', html);
+  // 末尾CTA: サンプル1本だけなら枚数計算・取扱店も並べる
+  const endBtns = body.querySelector('.article-cta div');
+  if (endBtns && endBtns.querySelectorAll('a').length === 1) {
+    endBtns.insertAdjacentHTML('beforeend',
+      '<a href="../simulator.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">必要枚数を計算する</a>' +
+      '<a href="../markets.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">お近くの取扱店を探す</a>');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderHeader();
   renderFooter();
   renderFloatingLineButton();
+  renderBlogCta();
   loadAiChat();
 });

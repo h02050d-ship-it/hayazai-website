@@ -33,6 +33,14 @@
     if (pid && path.indexOf('product.html') >= 0) path += '?id=' + pid.slice(0, 40);
   } catch (e) {}
 
+  // 流入コード（FAX/QR/チラシ用 ?f=xxx）。着地ページで受け取り、セッション中は保持する
+  var fcode = '';
+  try {
+    fcode = (new URLSearchParams(location.search).get('f') || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 24);
+    if (fcode) sessionStorage.setItem('hz_f', fcode);
+    else fcode = sessionStorage.getItem('hz_f') || '';
+  } catch (e) {}
+
   function send(obj) {
     obj.sid = sid; obj.vid = vid; obj.p = path;
     var body = JSON.stringify(obj);
@@ -45,7 +53,7 @@
   // ---- ページビュー ----
   var ref = document.referrer || '';
   if (ref.indexOf('//' + location.host) >= 0) ref = ''; // サイト内遷移は流入元にしない
-  send({ e: 'pv', r: ref.slice(0, 300), sw: (screen && screen.width) || 0 });
+  send({ e: 'pv', r: ref.slice(0, 300), sw: (screen && screen.width) || 0, f: fcode });
 
   // ---- スクロール到達率（最大値）----
   var sd = 0;

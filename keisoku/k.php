@@ -126,7 +126,7 @@ function maybeSendDailyDigest_(string $stateDir): void {
     if (is_file($chatLog)) {
         foreach (file($chatLog, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
             $r = json_decode($line, true);
-            if (is_array($r) && ($r['t'] ?? 0) >= $y0 && ($r['t'] ?? 0) < $y1 && ($r['q'] ?? '') !== '') $aiQs[] = $r['q'];
+            if (is_array($r) && ($r['t'] ?? 0) >= $y0 && ($r['t'] ?? 0) < $y1 && ($r['q'] ?? '') !== '' && !preg_match('/\btest\b/i', (string)$r['q'])) $aiQs[] = $r['q'];
         }
     }
 

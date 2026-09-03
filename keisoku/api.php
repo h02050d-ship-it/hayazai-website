@@ -97,8 +97,9 @@ foreach ($events as $r) {
         $dailyMap[$d]['ss'][$sid] = 1;
         $dailyMap[$d]['vs'][$r['vid'] ?? 'na'] = 1;
         $hours[(int)date('G', $r['t'])]++;
-        if (!isset($sess[$sid])) $sess[$sid] = ['pv' => [], 'vid' => $r['vid'] ?? 'na', 'dev' => $r['dev'] ?? 'p', 'ref' => (string)($r['r'] ?? '')];
+        if (!isset($sess[$sid])) $sess[$sid] = ['pv' => [], 'vid' => $r['vid'] ?? 'na', 'dev' => $r['dev'] ?? 'p', 'ref' => (string)($r['r'] ?? ''), 'f' => (string)($r['f'] ?? '')];
         if ($sess[$sid]['ref'] === '' && ($r['r'] ?? '') !== '') $sess[$sid]['ref'] = (string)$r['r'];
+        if ($sess[$sid]['f'] === '' && ($r['f'] ?? '') !== '') $sess[$sid]['f'] = (string)$r['f'];
         $sess[$sid]['pv'][] = ['t' => $r['t'], 'p' => $r['p']];
     } elseif ($r['e'] === 'lv') {
         $p = $r['p'];
@@ -125,14 +126,16 @@ for ($t = $from; $t < $to; $t += 86400) {
 // ---- ページ別（PV・入口・離脱・直帰・平均滞在・平均読了）----
 $pages = [];
 $bounceSessions = 0;
-$funnel = ['top' => 0, 'products' => 0, 'product' => 0, 'cart' => 0, 'order' => 0, 'complete' => 0];
+$funnel = ['top' => 0, 'products' => 0, 'markets' => 0, 'sample' => 0, 'contact' => 0, 'complete' => 0];
+// HPは「市場・取扱店経由」が基本導線（2026-07 市場向け化）。カート直販ではなく
+// トップ→商品・価格→取扱店を探す→サンプル請求→お問い合わせ→送信完了 で見る。
 function funnelStage_(string $p): ?string {
     if ($p === '/index.html') return 'top';
-    if ($p === '/products.html' || $p === '/outlet.html') return 'products';
-    if (strpos($p, '/product.html') === 0 || $p === '/sample.html') return 'product';
-    if ($p === '/cart.html') return 'cart';
-    if ($p === '/order.html') return 'order';
-    if ($p === '/order_complete.html') return 'complete';
+    if ($p === '/products.html' || $p === '/outlet.html' || strpos($p, '/product.html') === 0 || $p === '/simulator.html') return 'products';
+    if ($p === '/markets.html' || $p === '/dealer.html' || $p === '/business.html') return 'markets';
+    if ($p === '/sample.html') return 'sample';
+    if ($p === '/contact.html' || $p === '/cart.html' || $p === '/order.html' || $p === '/market_apply.html') return 'contact';
+    if (preg_match('#_complete\.html$#', $p)) return 'complete';
     return null;
 }
 foreach ($sess as $sid => $s) {
@@ -186,7 +189,8 @@ foreach ($pageList as &$pl) { $pl['name'] = pageName_($pl['p'], $pnPages, $pnPro
 unset($pl);
 
 // ---- 流入元分類 ----
-function refClass_(string $r): string {
+function refClass_(string $r, string $f = ''): string {
+    if ($f !== '') return 'FAX/QR:' . $f;   // ?f=xxx 付きで着地（FAX・チラシ・QRコード）
     if ($r === '') return '直接';
     $h = strtolower(parse_url($r, PHP_URL_HOST) ?: $r);
     if (preg_match('/google\./', $h)) return 'Google検索';
@@ -198,7 +202,7 @@ function refClass_(string $r): string {
 }
 $refs = []; $devs = ['m' => 0, 'p' => 0];
 foreach ($sess as $s) {
-    $k = refClass_($s['ref']);
+    $k = refClass_($s['ref'], (string)($s['f'] ?? ''));
     $refs[$k] = ($refs[$k] ?? 0) + 1;
     $devs[$s['dev'] === 'm' ? 'm' : 'p']++;
 }
@@ -226,7 +230,9 @@ $chatLog = dirname(__DIR__) . '/ai/state/chat_log.jsonl';
 if (is_file($chatLog)) {
     foreach (file($chatLog, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
         $r = json_decode($line, true);
-        if (is_array($r) && ($r['t'] ?? 0) >= $from) $ai[] = ['t' => $r['t'], 'q' => (string)($r['q'] ?? ''), 'a' => (string)($r['a'] ?? '')];
+        if (!is_array($r) || ($r['t'] ?? 0) < $from) continue;
+        if (preg_match('/\btest\b/i', (string)($r['q'] ?? ''))) continue; // 動作確認用の質問は除外
+        $ai[] = ['t' => $r['t'], 'q' => (string)($r['q'] ?? ''), 'a' => (string)($r['a'] ?? '')];
     }
     $ai = array_slice(array_reverse($ai), 0, 100);
 }
