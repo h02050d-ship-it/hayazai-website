@@ -198,16 +198,32 @@ function renderBlogCta() {
     '@media(max-width:600px){.blog-cta-mid .bcm-btns a{flex:1 1 100%;text-align:center}}'
   ].join('\n');
   document.head.appendChild(css);
-  const html =
-    '<aside class="blog-cta-mid">' +
-      '<div class="bcm-h">📐 この記事の床材＝国産無垢 桧フローリング 15×108mm（自社工場・超仕上げ）</div>' +
-      '<p>参考価格 節有 <strong>¥9,240／束（8枚・約1.6㎡）〜</strong> 税込（メーカー希望小売価格・取扱店では多くの場合これより割安）。<br>お部屋の畳数を入れるだけで、必要な枚数・束数がその場で分かります。桧の質感は無料サンプルでもご確認いただけます。</p>' +
-      '<div class="bcm-btns">' +
-        '<a class="p" href="../simulator.html">▶ 必要な枚数・束数を10秒で計算</a>' +
-        '<a class="s" href="../products.html">価格表を見る</a>' +
-        '<a class="s" href="../sample.html">無料サンプルを申し込む</a>' +
-      '</div>' +
-    '</aside>';
+  // お手入れ・補修記事の読者は「これから買う人」ではないので、CTAの中身を変える
+  const CARE_POSTS = [
+    'hinoki-flooring-care', 'shimi-kabi-cleaning', 'hekomi-iron-repair',
+    'sukima-sori-tsukiage', 'robot-cleaner-kaden'
+  ];
+  const slug = location.pathname.split('/').pop().replace('.html', '');
+  const isCare = CARE_POSTS.indexOf(slug) !== -1;
+  const html = isCare
+    ? '<aside class="blog-cta-mid">' +
+        '<div class="bcm-h">🧴 お手入れの疑問と、傷みが進んだときの選択肢</div>' +
+        '<p>お手入れの細かい疑問は「よくある質問」にまとめています。<br>傷みが広い範囲に及ぶ場合は、部分張り替え・全面張り替えのご相談も承ります。当店は国産無垢 桧フローリングを自社工場で製材している林材木店です。</p>' +
+        '<div class="bcm-btns">' +
+          '<a class="p" href="../faq.html">お手入れのよくある質問を見る</a>' +
+          '<a class="s" href="../contact.html">張り替えを相談する</a>' +
+          '<a class="s" href="../products.html">桧フローリングを見る</a>' +
+        '</div>' +
+      '</aside>'
+    : '<aside class="blog-cta-mid">' +
+        '<div class="bcm-h">📐 この記事の床材＝国産無垢 桧フローリング 15×108mm（自社工場・超仕上げ）</div>' +
+        '<p>参考価格 節有 <strong>¥9,240／束（8枚・約1.6㎡）〜</strong> 税込（メーカー希望小売価格・取扱店では多くの場合これより割安）。<br>お部屋の畳数を入れるだけで、必要な枚数・束数がその場で分かります。桧の質感は無料サンプルでもご確認いただけます。</p>' +
+        '<div class="bcm-btns">' +
+          '<a class="p" href="../simulator.html">▶ 必要な枚数・束数を10秒で計算</a>' +
+          '<a class="s" href="../products.html">価格表を見る</a>' +
+          '<a class="s" href="../sample.html">無料サンプルを申し込む</a>' +
+        '</div>' +
+      '</aside>';
   const h2s = body.querySelectorAll('h2');
   const anchor = h2s.length >= 3 ? h2s[2] : (h2s.length >= 2 ? h2s[1] : null);
   if (anchor) anchor.insertAdjacentHTML('beforebegin', html);
