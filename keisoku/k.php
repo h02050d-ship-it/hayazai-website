@@ -3,11 +3,20 @@
 // 林材木店 自前アクセス計測 収集エンドポイント（keisoku=計測。analytics/track名は広告ブロッカー対策で不可）
 // js/hz.js → ここ → keisoku/state/ev_YYYYMM.jsonl（1行1イベント）
 // 個人情報は保存しない（IPはソルト付きハッシュ先頭8桁のみ）。
-// おまけ: 朝7時以降の最初のアクセスで前日ダイジェストをLINEへ送る（遅延トリガー・cron不要）。
+// おまけ: 週1回（月曜の朝・祝日なら最初の営業日）先週分の週間レポをLINEへ送る（2026-09-07 日次→週次）。
 // =====================================================
 date_default_timezone_set('Asia/Tokyo');
 header('Content-Type: application/json; charset=UTF-8');
 header('X-Content-Type-Options: nosniff');
+
+// 週間レポの発火口（GitHub Actions の平日7:05 cron が叩く。送るかは関数側が判断＝二重送信なし）
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'GET' && (string)($_GET['digest'] ?? '') === '1') {
+    $stateDir = __DIR__ . '/state';
+    if (!is_dir($stateDir)) { @mkdir($stateDir, 0755, true); }
+    $out = ['ok' => true];
+    try { $out['digest'] = maybeSendWeeklyDigest_($stateDir); } catch (Throwable $ex) { $out = ['ok' => false, 'err' => $ex->getMessage()]; }
+    echo json_encode($out, JSON_UNESCAPED_UNICODE); exit;
+}
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     http_response_code(405); echo json_encode(['ok' => false]); exit;
@@ -49,6 +58,9 @@ $rec = [
 if ($e === 'pv') {
     $rec['r']  = mb_substr((string)($in['r'] ?? ''), 0, 300);
     $rec['sw'] = max(0, min(9999, (int)($in['sw'] ?? 0)));
+    // ?f= 流入コード（hz.js v3が送る・api.phpが FAX/QR:xxx として集計。ここで落としていたので保存するように）
+    $fc = (string)($in['f'] ?? '');
+    if ($fc !== '' && preg_match('/^[a-zA-Z0-9_-]{1,24}$/', $fc)) $rec['f'] = $fc;
 }
 if ($e === 'lv') {
     $rec['dur'] = max(0, min(1800, (int)($in['dur'] ?? 0)));
@@ -70,94 +82,138 @@ if (!is_dir($stateDir)) { @mkdir($stateDir, 0755, true); }
 
 echo json_encode(['ok' => true]);
 
-// ---- ここから先はレスポンス返却後の後処理（前日ダイジェスト）----
+// ---- ここから先はレスポンス返却後の後処理（週間レポ）----
 if (function_exists('fastcgi_finish_request')) { @fastcgi_finish_request(); }
-try { maybeSendDailyDigest_($stateDir); } catch (Throwable $ex) { /* best-effort */ }
+try { maybeSendWeeklyDigest_($stateDir); } catch (Throwable $ex) { /* best-effort */ }
 
 // =====================================================
-// 前日ダイジェスト: 7:00以降の最初のイベントで1日1回だけ送信。
-// 送信経路は shukka/send.php と同じGAS中継（notify_settingsゲート内蔵・ntype=hp_daily）。
-// 中継キーは keisoku/config.php（GitHub Actions Secretsから生成・リポジトリ非含有）。
-// 前日にPVもAI質問も無ければ送らない（空レポは通知しない）。
+// 週間レポ（2026-09-07 本人指示で日次→週1へ）
+//  ・毎週「月曜の朝」に先週(月〜日)分を1通。月曜が祝日・長期休暇なら、その週の最初の営業日の朝に送る。
+//  ・発火は2経路: ①GitHub Actions の平日7:05 cron が GET ?digest=1 を叩く（確実）
+//                 ②アクセス時の遅延トリガー（cronが落ちた時の保険。7時以降）
+//    どちらも「その週にまだ送っていなければ送る」なので二重送信しない（digest_last.txt に週キー）。
+//  ・送信経路は shukka/send.php と同じGAS中継（notify_settingsゲート内蔵・ntype=hp_daily は種別キーとして据え置き）。
 // =====================================================
-function maybeSendDailyDigest_(string $stateDir): void {
-    if ((int)date('G') < 7) return;
-    $today = date('Y-m-d');
+function hzHolidaysJp_(string $stateDir): array {
+    // 内閣府の祝日をJSON化した公開API（genba GASの土日祝判定と同じ出典）。7日キャッシュ・取得失敗時は古いキャッシュ。
+    $f = $stateDir . '/holidays_jp.json';
+    if (is_file($f) && (time() - (int)filemtime($f)) < 7 * 86400) {
+        $j = json_decode((string)file_get_contents($f), true);
+        if (is_array($j) && $j) return $j;
+    }
+    $ctx = stream_context_create(['http' => ['timeout' => 6]]);
+    $raw = @file_get_contents('https://holidays-jp.github.io/api/v1/date.json', false, $ctx);
+    $j = $raw ? json_decode($raw, true) : null;
+    if (is_array($j) && $j) { @file_put_contents($f, json_encode($j), LOCK_EX); return $j; }
+    if (is_file($f)) { $j = json_decode((string)file_get_contents($f), true); if (is_array($j)) return $j; }
+    return [];
+}
+
+function hzIsBusinessDay_(int $ts, string $stateDir): bool {
+    if ((int)date('N', $ts) >= 6) return false;                 // 土日
+    // 会社の長期休暇（月日で指定・必要に応じて追加）: 年末年始
+    $closed = [['12-29', '12-31'], ['01-01', '01-04']];
+    $md = date('m-d', $ts);
+    foreach ($closed as [$a, $b]) { if ($md >= $a && $md <= $b) return false; }
+    $h = hzHolidaysJp_($stateDir);
+    return !isset($h[date('Y-m-d', $ts)]);
+}
+
+function maybeSendWeeklyDigest_(string $stateDir): array {
+    $now = time();
+    if ((int)date('G', $now) < 7) return ['skip' => 'before7'];
+    if (!hzIsBusinessDay_($now, $stateDir)) return ['skip' => 'restday'];
+
+    $monday = strtotime('monday this week 00:00', $now);       // 今週の月曜（週は月曜始まり）
+    $weekKey = date('o-\WW', $monday);
     $markFile = $stateDir . '/digest_last.txt';
     $last = is_file($markFile) ? trim((string)file_get_contents($markFile)) : '';
-    if ($last === $today) return;
-    @file_put_contents($markFile, $today, LOCK_EX); // 先にマークして二重送信を防ぐ
+    if ($last === $weekKey) return ['skip' => 'sent', 'week' => $weekKey];
+    @file_put_contents($markFile, $weekKey, LOCK_EX);           // 先にマークして二重送信を防ぐ
 
     $cfg = @include __DIR__ . '/config.php';
     $relayKey = is_array($cfg) ? trim((string)($cfg['relay_key'] ?? '')) : '';
-    if ($relayKey === '') return;
+    if ($relayKey === '') return ['skip' => 'no_relay_key'];
 
-    $y0 = strtotime('yesterday 00:00');
-    $y1 = strtotime('today 00:00');
-    $ymd = date('n/j(D)', $y0);
+    $w0 = $monday - 7 * 86400; $w1 = $monday;                  // 先週 月00:00〜今週月00:00
+    $p0 = $w0 - 7 * 86400;                                      // 前々週（比較用）
     $wd = ['Sun'=>'日','Mon'=>'月','Tue'=>'火','Wed'=>'水','Thu'=>'木','Fri'=>'金','Sat'=>'土'];
-    foreach ($wd as $en => $ja) { $ymd = str_replace($en, $ja, $ymd); }
+    $fmt = function (int $ts) use ($wd): string { return date('n/j', $ts) . '(' . $wd[date('D', $ts)] . ')'; };
+    $label = $fmt($w0) . '〜' . $fmt($w1 - 86400);
 
-    // 前日イベント読み込み（月またぎ対応で2ファイル見る）
-    $events = [];
-    foreach (array_unique([date('Ym', $y0), date('Ym', $y1)]) as $ym) {
+    // イベント読み込み（月またぎ対応で該当月のファイルを全部見る）
+    $months = [];
+    for ($t = $p0; $t < $w1 + 86400; $t += 86400) { $months[date('Ym', $t)] = 1; }
+    $cur = ['pv' => 0, 'vid' => [], 'sid' => [], 'pages' => [], 'ev' => [], 'fax' => [], 'daily' => []];
+    $prev = ['pv' => 0, 'vid' => []];
+    foreach (array_keys($months) as $ym) {
         $f = $stateDir . '/ev_' . $ym . '.jsonl';
         if (!is_file($f)) continue;
         foreach (file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
             $r = json_decode($line, true);
-            if (is_array($r) && ($r['t'] ?? 0) >= $y0 && ($r['t'] ?? 0) < $y1) $events[] = $r;
+            if (!is_array($r)) continue;
+            $t = (int)($r['t'] ?? 0);
+            if ($t >= $w0 && $t < $w1) {
+                if (($r['e'] ?? '') === 'pv') {
+                    $cur['pv']++; $cur['vid'][$r['vid'] ?? 'na'] = 1; $cur['sid'][$r['sid'] ?? 'na'] = 1;
+                    $p = (string)($r['p'] ?? '/'); $cur['pages'][$p] = ($cur['pages'][$p] ?? 0) + 1;
+                    $d = date('N', $t); $cur['daily'][$d] = ($cur['daily'][$d] ?? 0) + 1;
+                    if (($r['f'] ?? '') !== '') $cur['fax'][$r['sid'] ?? 'na'] = (string)$r['f'];
+                } elseif (($r['e'] ?? '') === 'ev') {
+                    $x = (string)($r['x'] ?? ''); $cur['ev'][$x] = ($cur['ev'][$x] ?? 0) + 1;
+                }
+            } elseif ($t >= $p0 && $t < $w0 && ($r['e'] ?? '') === 'pv') {
+                $prev['pv']++; $prev['vid'][$r['vid'] ?? 'na'] = 1;
+            }
         }
     }
+    arsort($cur['pages']);
 
-    $pv = 0; $vids = []; $sids = []; $pages = []; $evc = [];
-    foreach ($events as $r) {
-        if ($r['e'] === 'pv') {
-            $pv++; $vids[$r['vid']] = 1; $sids[$r['sid']] = 1;
-            $pages[$r['p']] = ($pages[$r['p']] ?? 0) + 1;
-        } elseif ($r['e'] === 'ev') {
-            $evc[$r['x']] = ($evc[$r['x']] ?? 0) + 1;
-        }
-    }
-    arsort($pages);
-
-    // 前日のAIチャット質問
+    // 先週のAIチャット質問
     $aiQs = [];
     $chatLog = dirname(__DIR__) . '/ai/state/chat_log.jsonl';
     if (is_file($chatLog)) {
         foreach (file($chatLog, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
             $r = json_decode($line, true);
-            if (is_array($r) && ($r['t'] ?? 0) >= $y0 && ($r['t'] ?? 0) < $y1 && ($r['q'] ?? '') !== '' && !preg_match('/\btest\b/i', (string)$r['q'])) $aiQs[] = $r['q'];
+            if (is_array($r) && ($r['t'] ?? 0) >= $w0 && ($r['t'] ?? 0) < $w1 && ($r['q'] ?? '') !== '' && !preg_match('/\btest\b/i', (string)$r['q'])) $aiQs[] = $r['q'];
         }
     }
 
-    // 前日にPVもAI質問も無ければ空レポは送らない（日付マークだけ残す）
-    if ($pv === 0 && !$aiQs) return;
-
-    $text = "📊 HP昨日レポ {$ymd}\n";
-    $text .= '訪問 ' . count($vids) . '人・PV ' . $pv . "\n";
+    $vis = count($cur['vid']); $pvis = count($prev['vid']);
+    $text = "📊 HP週間レポ {$label}\n";
+    $text .= '訪問 ' . $vis . '人・PV ' . $cur['pv'] . '（前週 ' . $pvis . '人・PV ' . $prev['pv'] . "）\n";
+    $dl = [];
+    foreach ([1=>'月',2=>'火',3=>'水',4=>'木',5=>'金',6=>'土',7=>'日'] as $n => $ja) { $dl[] = $ja . ($cur['daily'][$n] ?? 0); }
+    $text .= '日別PV: ' . implode(' ', $dl) . "\n";
+    if ($cur['fax']) {
+        $fc = [];
+        foreach ($cur['fax'] as $sid => $code) { $fc[$code] = ($fc[$code] ?? 0) + 1; }
+        $fl = [];
+        foreach ($fc as $code => $c) { $fl[] = $code . ' ' . $c; }
+        $text .= '📠 FAX/QR着地: ' . implode(' / ', $fl) . "\n";
+    }
     if ($aiQs) {
         $text .= "\n🤖 AIへの質問 " . count($aiQs) . "件:\n";
-        foreach (array_slice($aiQs, 0, 5) as $q) { $text .= '・' . mb_substr($q, 0, 40) . "\n"; }
-        if (count($aiQs) > 5) { $text .= '…ほか' . (count($aiQs) - 5) . "件\n"; }
+        foreach (array_slice($aiQs, 0, 8) as $q) { $text .= '・' . mb_substr($q, 0, 40) . "\n"; }
+        if (count($aiQs) > 8) { $text .= '…ほか' . (count($aiQs) - 8) . "件\n"; }
     }
     $cta = [];
     foreach (['line' => 'LINE', 'form_contact' => '問合せ', 'form_sample' => 'サンプル', 'form_quote' => '見積', 'cart_add' => 'カート', 'tel' => '電話'] as $k => $lab) {
-        if (!empty($evc[$k])) $cta[] = $lab . $evc[$k];
+        if (!empty($cur['ev'][$k])) $cta[] = $lab . $cur['ev'][$k];
     }
     if ($cta) $text .= "\n🎯 CTA: " . implode(' / ', $cta) . "\n";
-    $top = array_slice($pages, 0, 3, true);
+    $top = array_slice($cur['pages'], 0, 5, true);
     if ($top) {
-        // 日本語ページ名（keisoku/pagenames.php）で表示。無ければパスのまま
         $pn = @include __DIR__ . '/pagenames.php';
         $pnPages = is_array($pn) ? ($pn['pages'] ?? []) : [];
         $pnProds = is_array($pn) ? ($pn['products'] ?? []) : [];
         $text .= "\n👀 よく見られたページ:\n";
         foreach ($top as $pg => $c) {
-            $label = $pnPages[$pg] ?? $pg;
+            $lab = $pnPages[$pg] ?? $pg;
             if (!isset($pnPages[$pg]) && preg_match('#^/product\.html\?id=([\w\-]+)#', $pg, $m)) {
-                $label = '商品: ' . ($pnProds[$m[1]] ?? $m[1]);
+                $lab = '商品: ' . ($pnProds[$m[1]] ?? $m[1]);
             }
-            $text .= '・' . $label . '（' . $c . "PV）\n";
+            $text .= '・' . $lab . '（' . $c . "PV）\n";
         }
     }
     $text .= "\n詳細 → https://h02050d-ship-it.github.io/hp-analytics/";
@@ -168,7 +224,7 @@ function maybeSendDailyDigest_(string $stateDir): void {
         'target' => 'daiki',
         'mode'   => 'notify',
         'ntype'  => 'hp_daily',
-        'by'     => 'HPアクセス計測',
+        'by'     => 'HPアクセス計測(週報)',
         'text'   => $text,
     ], JSON_UNESCAPED_UNICODE);
     $ch = curl_init($url);
@@ -180,6 +236,8 @@ function maybeSendDailyDigest_(string $stateDir): void {
         CURLOPT_FOLLOWLOCATION => true, // GASは302で応答を返す
         CURLOPT_TIMEOUT        => 10,
     ]);
-    curl_exec($ch);
+    $res = curl_exec($ch);
+    $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     curl_close($ch);
+    return ['sent' => true, 'week' => $weekKey, 'label' => $label, 'pv' => $cur['pv'], 'vis' => $vis, 'relay' => $code, 'res' => is_string($res) ? mb_substr($res, 0, 120) : null];
 }

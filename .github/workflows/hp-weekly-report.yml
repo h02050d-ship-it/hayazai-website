@@ -1,0 +1,20 @@
+name: HP weekly report trigger
+
+# HPアクセス週間レポ（LINE）の発火用。
+# 平日 7:05 JST（= 前日 22:05 UTC）に keisoku/k.php?digest=1 を叩く。
+# 送るかどうかは k.php 側が判断する（その週に未送信で、今日が営業日=土日祝・年末年始でない、なら送る）。
+# → 月曜の朝に先週分が届く。月曜が祝日なら火曜(最初の営業日)の朝に届く。
+
+on:
+  schedule:
+    - cron: '5 22 * * 0-4'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping weekly digest endpoint
+        run: |
+          curl -sS --max-time 40 "https://hayazai.com/keisoku/k.php?digest=1" || echo "ping failed (k.php側のアクセス時トリガーが保険)"
