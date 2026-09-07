@@ -15,6 +15,7 @@ return [
     '/faq.html' => 'よくある質問・お悩み解決',
     '/favicon_preview.html' => 'ファビコン候補「林」',
     '/gallery.html' => '施工事例',
+    '/gallery.php' => '施工事例（旧ページ）',
     '/header-preview.html' => 'ヘッダーロゴ デザイン10案 比較',
     '/hero_preview.html' => 'ヒーロー画像候補',
     '/index.html' => 'トップページ',

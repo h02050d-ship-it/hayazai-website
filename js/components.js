@@ -201,22 +201,33 @@ function renderBlogCta() {
   const html =
     '<aside class="blog-cta-mid">' +
       '<div class="bcm-h">📐 この記事の床材＝国産無垢 桧フローリング 15×108mm（自社工場・超仕上げ）</div>' +
-      '<p>参考価格 節有 <strong>¥9,240／束（8枚・約1.6㎡）〜</strong> 税込（メーカー希望小売価格・取扱店では多くの場合これより割安）。<br>桧の質感・香りは写真では伝わりません。まずは無料サンプルで実物をご確認ください。</p>' +
+      '<p>参考価格 節有 <strong>¥9,240／束（8枚・約1.6㎡）〜</strong> 税込（メーカー希望小売価格・取扱店では多くの場合これより割安）。<br>お部屋の畳数を入れるだけで、必要な枚数・束数がその場で分かります。桧の質感は無料サンプルでもご確認いただけます。</p>' +
       '<div class="bcm-btns">' +
-        '<a class="p" href="../sample.html">無料サンプルを申し込む</a>' +
-        '<a class="s" href="../simulator.html">必要枚数を10秒で計算</a>' +
+        '<a class="p" href="../simulator.html">▶ 必要な枚数・束数を10秒で計算</a>' +
         '<a class="s" href="../products.html">価格表を見る</a>' +
+        '<a class="s" href="../sample.html">無料サンプルを申し込む</a>' +
       '</div>' +
     '</aside>';
   const h2s = body.querySelectorAll('h2');
   const anchor = h2s.length >= 3 ? h2s[2] : (h2s.length >= 2 ? h2s[1] : null);
   if (anchor) anchor.insertAdjacentHTML('beforebegin', html);
   else body.insertAdjacentHTML('beforeend', html);
-  // 末尾CTA: サンプル1本だけなら枚数計算・取扱店も並べる
+  // 末尾CTA: サンプル1本だけなら枚数計算を主ボタンにし、取扱店も並べる
   const endBtns = body.querySelector('.article-cta div');
   if (endBtns && endBtns.querySelectorAll('a').length === 1) {
+    const only = endBtns.querySelector('a');
+    // サンプル1本だけの記事は、実績のある「枚数計算」を主ボタンに入れ替える
+    if (only && /sample\.html/.test(only.getAttribute('href') || '')) {
+      only.style.background = 'transparent';
+      only.style.color = '#fff';
+      only.style.border = '1.5px solid rgba(255,255,255,0.7)';
+      endBtns.insertAdjacentHTML('afterbegin',
+        '<a href="../simulator.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">▶ 必要枚数を10秒で計算</a>');
+    } else {
+      endBtns.insertAdjacentHTML('beforeend',
+        '<a href="../simulator.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">必要枚数を計算する</a>');
+    }
     endBtns.insertAdjacentHTML('beforeend',
-      '<a href="../simulator.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">必要枚数を計算する</a>' +
       '<a href="../markets.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">お近くの取扱店を探す</a>');
   }
 }
