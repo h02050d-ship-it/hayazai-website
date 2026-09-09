@@ -145,7 +145,7 @@ function maybeSendWeeklyDigest_(string $stateDir): array {
     $months = [];
     for ($t = $p0; $t < $w1 + 86400; $t += 86400) { $months[date('Ym', $t)] = 1; }
     $cur = ['pv' => 0, 'vid' => [], 'sid' => [], 'pages' => [], 'ev' => [], 'fax' => [], 'daily' => []];
-    $prev = ['pv' => 0, 'vid' => []];
+    $prev = ['pv' => 0, 'vid' => [], 'ev' => []];
     foreach (array_keys($months) as $ym) {
         $f = $stateDir . '/ev_' . $ym . '.jsonl';
         if (!is_file($f)) continue;
@@ -162,8 +162,9 @@ function maybeSendWeeklyDigest_(string $stateDir): array {
                 } elseif (($r['e'] ?? '') === 'ev') {
                     $x = (string)($r['x'] ?? ''); $cur['ev'][$x] = ($cur['ev'][$x] ?? 0) + 1;
                 }
-            } elseif ($t >= $p0 && $t < $w0 && ($r['e'] ?? '') === 'pv') {
-                $prev['pv']++; $prev['vid'][$r['vid'] ?? 'na'] = 1;
+            } elseif ($t >= $p0 && $t < $w0) {
+                if (($r['e'] ?? '') === 'pv') { $prev['pv']++; $prev['vid'][$r['vid'] ?? 'na'] = 1; }
+                elseif (($r['e'] ?? '') === 'ev') { $x = (string)($r['x'] ?? ''); $prev['ev'][$x] = ($prev['ev'][$x] ?? 0) + 1; }
             }
         }
     }
@@ -180,29 +181,45 @@ function maybeSendWeeklyDigest_(string $stateDir): array {
     }
 
     $vis = count($cur['vid']); $pvis = count($prev['vid']);
-    $text = "📊 HP週間レポ {$label}\n";
-    $text .= '訪問 ' . $vis . '人・PV ' . $cur['pv'] . '（前週 ' . $pvis . '人・PV ' . $prev['pv'] . "）\n";
-    $dl = [];
-    foreach ([1=>'月',2=>'火',3=>'水',4=>'木',5=>'金',6=>'土',7=>'日'] as $n => $ja) { $dl[] = $ja . ($cur['daily'][$n] ?? 0); }
-    $text .= '日別PV: ' . implode(' ', $dl) . "\n";
+    // ---- 判定（2026-09-09 本人指示「良くなったかどうかを素人にも分かる表現で」）----
+    // 主＝問い合わせにつながった数（問合せ/サンプル/見積/電話/LINE）、従＝来た人の数
+    $CTA = ['form_contact' => '問い合わせ', 'form_sample' => 'サンプル請求', 'form_quote' => '見積依頼', 'tel' => '電話', 'line' => 'LINE'];
+    $cNow = 0; $cPrev = 0; $cParts = []; $pParts = [];
+    foreach ($CTA as $k => $lab) {
+        $n = (int)($cur['ev'][$k] ?? 0); $m = (int)($prev['ev'][$k] ?? 0);
+        $cNow += $n; $cPrev += $m;
+        if ($n) $cParts[] = $lab . $n . '件';
+        if ($m) $pParts[] = $lab . $m . '件';
+    }
+    $vr = $pvis > 0 ? ($vis - $pvis) / $pvis : 0;
+    $vTxt = $pvis === 0 ? '先週の記録なし' : ($vr >= 0.1 ? '増えた' : ($vr <= -0.1 ? '減った' : 'ほぼ同じ'));
+    if ($cNow > $cPrev)      { $verdict = '先週より良くなった'; $why = "問い合わせが{$cPrev}件→{$cNow}件に増えた"; }
+    elseif ($cNow < $cPrev)  { $verdict = '先週より悪くなった'; $why = "問い合わせが{$cPrev}件→{$cNow}件に減った"; }
+    elseif ($vr >= 0.1)      { $verdict = '少し良くなった'; $why = "問い合わせは同じ（{$cNow}件）・来た人が増えた"; }
+    elseif ($vr <= -0.1)     { $verdict = '少し悪くなった'; $why = "問い合わせは同じ（{$cNow}件）・来た人が減った"; }
+    else                     { $verdict = '変わらず'; $why = "問い合わせ{$cNow}件・来た人もほぼ同じ"; }
+    if ($pvis === 0) { $verdict = 'まだ比べられない'; $why = '先週の記録がない'; }
+
+    $text = "📊 HPの1週間 {$label}\n";
+    $text .= "判定: {$verdict}（{$why}）\n\n";
+    $text .= "・来た人 {$vis}人（先週{$pvis}人・{$vTxt}）\n";
+    $text .= '・見られた回数 ' . $cur['pv'] . '回（先週' . $prev['pv'] . "回）\n";
+    $text .= '・問い合わせにつながった数 ' . $cNow . '件' . ($cParts ? '＝' . implode('・', $cParts) : '') . '（先週' . $cPrev . '件' . ($pParts ? '＝' . implode('・', $pParts) : '') . "）\n";
     if ($cur['fax']) {
         $fc = [];
         foreach ($cur['fax'] as $sid => $code) { $fc[$code] = ($fc[$code] ?? 0) + 1; }
         $fl = [];
-        foreach ($fc as $code => $c) { $fl[] = $code . ' ' . $c; }
-        $text .= '📠 FAX/QR着地: ' . implode(' / ', $fl) . "\n";
+        foreach ($fc as $code => $c) { $fl[] = $code . ' ' . $c . '人'; }
+        $text .= '・FAX・チラシのQRから来た人: ' . implode(' / ', $fl) . "\n";
+    } else {
+        $text .= "・FAX・チラシのQRから来た人: 0人\n";
     }
     if ($aiQs) {
-        $text .= "\n🤖 AIへの質問 " . count($aiQs) . "件:\n";
-        foreach (array_slice($aiQs, 0, 8) as $q) { $text .= '・' . mb_substr($q, 0, 40) . "\n"; }
-        if (count($aiQs) > 8) { $text .= '…ほか' . (count($aiQs) - 8) . "件\n"; }
+        $text .= "\n🤖 AIに聞かれたこと " . count($aiQs) . "件:\n";
+        foreach (array_slice($aiQs, 0, 5) as $q) { $text .= '・' . mb_substr($q, 0, 40) . "\n"; }
+        if (count($aiQs) > 5) { $text .= '…ほか' . (count($aiQs) - 5) . "件\n"; }
     }
-    $cta = [];
-    foreach (['line' => 'LINE', 'form_contact' => '問合せ', 'form_sample' => 'サンプル', 'form_quote' => '見積', 'cart_add' => 'カート', 'tel' => '電話'] as $k => $lab) {
-        if (!empty($cur['ev'][$k])) $cta[] = $lab . $cur['ev'][$k];
-    }
-    if ($cta) $text .= "\n🎯 CTA: " . implode(' / ', $cta) . "\n";
-    $top = array_slice($cur['pages'], 0, 5, true);
+    $top = array_slice($cur['pages'], 0, 3, true);
     if ($top) {
         $pn = @include __DIR__ . '/pagenames.php';
         $pnPages = is_array($pn) ? ($pn['pages'] ?? []) : [];
@@ -213,9 +230,14 @@ function maybeSendWeeklyDigest_(string $stateDir): array {
             if (!isset($pnPages[$pg]) && preg_match('#^/product\.html\?id=([\w\-]+)#', $pg, $m)) {
                 $lab = '商品: ' . ($pnProds[$m[1]] ?? $m[1]);
             }
-            $text .= '・' . $lab . '（' . $c . "PV）\n";
+            $text .= '・' . $lab . '（' . $c . "回）\n";
         }
     }
+    // だから何（1行）
+    if ($cNow > 0)         { $next = "→ 問い合わせ{$cNow}件に返事が済んでいるか確認"; }
+    elseif ($vr <= -0.2 && $pvis > 0) { $next = '→ 来た人が2割以上減った。火曜のHP改善ループで原因を見ます'; }
+    else                   { $next = '→ 特にやることなし（火曜のHP改善ループが小さな手直しを続けます）'; }
+    $text .= "\n" . $next . "\n";
     $text .= "\n詳細 → https://h02050d-ship-it.github.io/hp-analytics/";
 
     $url = 'https://script.google.com/macros/s/AKfycbxcvQZVi497obS-nRm4MdN0tYtsaTb03n7FLFWy7oZN2vkItKm7oQO9_85WdJYxGjgaiA/exec';
