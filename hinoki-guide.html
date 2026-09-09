@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>桧フローリング・羽目板 取扱いガイド（等級シールの見方・施工前の養生・お手入れ） | 林材木店</title>
+  <meta name="description" content="束に貼られた等級シールの色と意味、届いてから施工までの養生、張り方のポイント、塗装、日常のお手入れまで。国産桧・超仕上げの床板・羽目板を長く使っていただくための案内です。">
+  <link rel="canonical" href="https://hayazai.com/hinoki-guide.html">
+  <meta name="robots" content="index,follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="株式会社林材木店">
+  <meta property="og:title" content="桧フローリング・羽目板 取扱いガイド | 林材木店">
+  <meta property="og:description" content="等級シールの見方、施工前の養生、張り方、塗装、お手入れ。国産桧・超仕上げの床板・羽目板を長く使っていただくために。">
+  <meta property="og:url" content="https://hayazai.com/hinoki-guide.html">
+  <meta property="og:image" content="https://hayazai.com/images/og/og-image.jpg">
+  <meta property="og:locale" content="ja_JP">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css?v=11">
+
+  <!-- 計測（共通ヘッダー無しの単独ページなので components.js と同じものを直接入れる） -->
+  <script>
+    (function () {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-EQLK2295RN';
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { dataLayer.push(arguments); };
+      gtag('js', new Date());
+      gtag('config', 'G-EQLK2295RN');
+      var hz = document.createElement('script');
+      hz.src = '/js/hz.js?v=3';
+      document.head.appendChild(hz);
+      // 等級シールのQR経由（/s/ からの転送）は専用イベントで数える
+      if (/utm_source=seal/.test(location.search)) {
+        gtag('event', 'qr_seal_view', { page_path: location.pathname });
+      }
+    })();
+  </script>
+
+  <style>
+    /* 単独ページ用の軽いヘッダー・フッター（グローバルナビは出さない） */
+    .g-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px; border-bottom: 1px solid #e8ddd0; background: var(--white);
+    }
+    .g-header .brand { font-family: 'Noto Serif JP', serif; font-weight: 700; color: var(--wood-dark); font-size: 1.05rem; letter-spacing: 0.06em; }
+    .g-header .brand small { display: block; font-family: 'Noto Sans JP', sans-serif; font-weight: 400; font-size: 0.68rem; color: var(--text-light); letter-spacing: 0.12em; }
+    .g-header .tel { font-size: 0.8rem; color: var(--text-mid); text-align: right; line-height: 1.5; }
+    .g-header .tel strong { font-size: 1rem; color: var(--wood-dark); }
+
+    .g-hero { background: var(--wood-pale); padding: 44px 24px 36px; text-align: center; border-bottom: 1px solid #e8ddd0; }
+    .g-hero .eyebrow { display: inline-block; font-size: 0.74rem; letter-spacing: 0.16em; color: var(--green-dark); border: 1px solid var(--green-light); padding: 4px 12px; border-radius: 999px; margin-bottom: 14px; background: #fff; }
+    .g-hero h1 { font-size: clamp(1.3rem, 3.2vw, 1.9rem); color: var(--wood-dark); line-height: 1.5; margin-bottom: 10px; }
+    .g-hero p { color: var(--text-mid); font-size: 0.9rem; max-width: 640px; margin: 0 auto; line-height: 1.9; }
+
+    .g-toc { max-width: 860px; margin: 24px auto 0; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .g-toc a { font-size: 0.8rem; color: var(--wood-dark); background: #fff; border: 1px solid #e3d8c8; border-radius: 999px; padding: 6px 14px; }
+    .g-toc a:hover { background: var(--wood-pale); }
+
+    .g-main { max-width: 860px; margin: 0 auto; padding: 24px 24px 72px; }
+    .g-sec { padding: 40px 0; border-bottom: 1px solid #eee5d8; }
+    .g-sec:last-child { border-bottom: none; }
+    .g-sec h2 { font-size: 1.28rem; color: var(--wood-dark); margin-bottom: 18px; padding-left: 14px; border-left: 4px solid var(--green-mid); line-height: 1.4; }
+    .g-sec h3 { font-size: 1rem; color: var(--wood-dark); margin: 22px 0 8px; }
+    .g-sec p { font-size: 0.93rem; line-height: 1.95; color: var(--text-mid); margin-bottom: 12px; }
+    .g-sec ul { padding-left: 1.2em; margin-bottom: 12px; }
+    .g-sec li { font-size: 0.92rem; line-height: 1.9; color: var(--text-mid); margin-bottom: 4px; }
+    .g-note { background: var(--wood-cream); border-left: 4px solid var(--wood-light); padding: 12px 16px; font-size: 0.86rem; line-height: 1.8; color: var(--text-mid); border-radius: 0 var(--radius) var(--radius) 0; margin: 14px 0; }
+    .g-warn { background: #fff5f3; border-left: 4px solid var(--red); }
+
+    /* 等級カード */
+    .grade-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 8px 0 18px; }
+    .grade-card { border: 1px solid #e8ddd0; border-radius: var(--radius); overflow: hidden; background: #fff; }
+    .grade-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+    .grade-card .gc-head { display: flex; align-items: center; gap: 10px; padding: 10px 12px 4px; }
+    .grade-card .chip { width: 14px; height: 14px; border-radius: 3px; flex: none; }
+    .grade-card .gc-name { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 1.12rem; }
+    .grade-card .gc-alias { font-size: 0.72rem; color: var(--text-light); margin-left: auto; }
+    .grade-card .gc-body { padding: 0 12px 12px; font-size: 0.83rem; line-height: 1.75; color: var(--text-mid); }
+    .grade-sub { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+    .grade-sub div { border: 1px dashed #d9cdbb; border-radius: var(--radius); padding: 10px 12px; font-size: 0.83rem; line-height: 1.7; color: var(--text-mid); }
+    .grade-sub b { font-family: 'Noto Serif JP', serif; font-size: 1rem; }
+
+    table.g-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin: 8px 0 14px; }
+    .g-table th, .g-table td { border: 1px solid #e8ddd0; padding: 8px 10px; text-align: left; vertical-align: top; line-height: 1.6; }
+    .g-table th { background: var(--wood-pale); color: var(--wood-dark); font-weight: 600; white-space: nowrap; }
+
+    .g-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 10px; }
+    .g-links a { display: block; border: 1px solid #e3d8c8; border-radius: var(--radius); padding: 12px 14px; background: #fff; color: var(--wood-dark); font-size: 0.86rem; line-height: 1.6; }
+    .g-links a:hover { background: var(--wood-pale); }
+    .g-links a small { display: block; color: var(--text-light); font-size: 0.74rem; }
+
+    .g-cta { background: var(--green-dark); color: #fff; border-radius: var(--radius); padding: 26px 24px; text-align: center; margin-top: 12px; }
+    .g-cta h3 { color: #fff; margin: 0 0 8px; font-size: 1.05rem; }
+    .g-cta p { color: #e6efe6; font-size: 0.88rem; margin-bottom: 14px; }
+    .g-cta .btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .g-cta .btns a { display: inline-block; background: #fff; color: var(--green-dark); font-weight: 600; padding: 10px 18px; border-radius: 999px; font-size: 0.88rem; }
+    .g-cta .btns a.line { background: #06c755; color: #fff; }
+
+    .g-footer { border-top: 1px solid #e8ddd0; padding: 26px 24px 40px; text-align: center; font-size: 0.8rem; color: var(--text-mid); line-height: 1.9; background: var(--wood-cream); }
+    .g-footer a { color: var(--wood-dark); text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .g-header { padding: 12px 16px; }
+      .g-header .tel { display: none; }
+      .g-main { padding: 16px 16px 56px; }
+      .g-sec { padding: 30px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="g-header">
+  <a class="brand" href="index.html">株式会社 林材木店<small>HAYASHI ZAIMOKUTEN ／ 静岡県磐田市</small></a>
+  <div class="tel">桧フローリング・羽目板 製造工場<br><strong>0538-58-2395</strong></div>
+</header>
+
+<section class="g-hero">
+  <span class="eyebrow">束の等級シールからお越しの方へ</span>
+  <h1>国産桧 超仕上げ<br>フローリング・羽目板 取扱いガイド</h1>
+  <p>この製品は静岡県磐田市の林材木店が製材・加工した桧の板です。等級シールの意味と、届いてから施工・お手入れまでに知っておいていただきたいことをまとめました。</p>
+</section>
+
+<nav class="g-toc" aria-label="目次">
+  <a href="#grade">① 等級シールの見方</a>
+  <a href="#before">② 届いてから施工まで</a>
+  <a href="#install">③ 張り方のポイント</a>
+  <a href="#finish">④ 塗装について</a>
+  <a href="#care">⑤ 日常のお手入れ</a>
+  <a href="#move">⑥ 隙間・反りが出たら</a>
+  <a href="#contact">⑦ ご相談・施工写真</a>
+</nav>
+
+<main class="g-main">
+
+  <!-- ① 等級 -->
+  <section class="g-sec" id="grade">
+    <h2>① 等級シールの見方 — 色と文字が等級です</h2>
+    <p>束に貼ってあるシールの色と等級名は、節（ふし）の量による見た目の区分です。<strong>等級が違っても桧そのものの香り・調湿性・強度は同じ</strong>で、違いは「見た目と希少性」だけ。上位等級ほど丸太から取れる量が少ないため価値が高くなります。</p>
+
+    <div class="grade-grid">
+      <div class="grade-card">
+        <img src="images/grade/grade_setsuari.webp" alt="丸節（節有）の桧フローリング" loading="lazy">
+        <div class="gc-head"><span class="chip" style="background:#d32f2f"></span><span class="gc-name" style="color:#d32f2f">丸節</span><span class="gc-alias">HPでは「節有」</span></div>
+        <div class="gc-body">大小さまざまな生節と埋木が混在。自然素材らしい力強い表情。抜ける恐れのある死に節は埋木処理をしてから出荷しています。</div>
+      </div>
+      <div class="grade-card">
+        <img src="images/grade/grade_kobushi.webp" alt="小節の桧フローリング" loading="lazy">
+        <div class="gc-head"><span class="chip" style="background:#ef6c00"></span><span class="gc-name" style="color:#ef6c00">小節</span><span class="gc-alias">こぶし</span></div>
+        <div class="gc-body">直径20mm以下の埋木のみ。1枚あたり2m材で2個以下・3m/4m材で3個以下に抑えたすっきりした木肌。一番ご注文の多い等級です。</div>
+      </div>
+      <div class="grade-card">
+        <img src="images/grade/grade_tokujosho.webp" alt="特上小の桧フローリング" loading="lazy">
+        <div class="gc-head"><span class="chip" style="background:#8e24aa"></span><span class="gc-name" style="color:#8e24aa">特上小</span><span class="gc-alias">とくじょうこ</span></div>
+        <div class="gc-body">埋木なし。小さな葉節が数か所残る程度で、遠目には無節と見分けがつかない整った木肌です。</div>
+      </div>
+      <div class="grade-card">
+        <img src="images/grade/grade_musetsu.webp" alt="無節の桧フローリング" loading="lazy">
+        <div class="gc-head"><span class="chip" style="background:#1565c0"></span><span class="gc-name" style="color:#1565c0">無節</span><span class="gc-alias">むぶし</span></div>
+        <div class="gc-body">節が一切ない最上級。均一で美しい木肌が続きます。和室・見せ場となる空間に。</div>
+      </div>
+    </div>
+
+    <div class="grade-sub">
+      <div><span class="chip" style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#6a1b9a;vertical-align:middle;margin-right:6px"></span><b style="color:#6a1b9a">無節特上</b><br>無節の中でも木目・色味がとくに揃った選別品。</div>
+      <div><span class="chip" style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#795548;vertical-align:middle;margin-right:6px"></span><b style="color:#795548">生節</b><br>埋木をせず生節（幹と結合した抜けない節）をそのまま活かした等級。</div>
+    </div>
+
+    <div class="g-note">
+      <strong>用語</strong>　生節（いきぶし）＝枝が幹に巻き込まれ、しっかり結合した節。抜けたり穴になったりしません。／ 死に節・抜け節＝枯れ枝が巻き込まれた節で、乾燥すると抜けることがあるもの。／ 埋木（うめき）＝死に節をくり抜き、同じ大きさの木片をはめて平らに仕上げた補修箇所。施工性に影響はありません。
+    </div>
+    <p style="font-size:0.84rem">等級の選び方を写真つきで詳しく → <a href="blog/how-to-choose-grade.html">節有・小節・特上小・無節の違いと選び方</a></p>
+  </section>
+
+  <!-- ② 届いてから -->
+  <section class="g-sec" id="before">
+    <h2>② 届いてから施工まで — 現場に「馴染ませて」から張る</h2>
+    <p>桧の無垢板は、湿度に合わせて幅方向にわずかに伸び縮みします。工場から現場へ移動した直後は、その場所の温湿度にまだ慣れていません。<strong>張る前に数日〜1週間ほど、施工する部屋に置いて馴染ませる（養生する）</strong>と、施工後の隙間・反りがぐっと出にくくなります。</p>
+    <ul>
+      <li>梱包をほどき、風通しよく<strong>施工する部屋の中</strong>に平積みする（桟木を挟むとなお良い）</li>
+      <li><strong>直射日光・雨・結露・エアコンの風の直撃</strong>を避ける。屋外や土間コンクリートへの直置きは避ける</li>
+      <li>新築で床下・壁がまだ湿っている場合は、乾いてから張る</li>
+      <li>張る直前まで、油分の多い手や資材で表面を汚さない（超仕上げの面はそのまま仕上がり面になります）</li>
+    </ul>
+    <div class="g-note g-warn"><strong>注意</strong>　張った直後にオイルやワックスをたっぷり塗る、施工中に水濡れさせる、といったことが反りの最大要因です。急激な含水率の変化を避けてください。</div>
+  </section>
+
+  <!-- ③ 張り方 -->
+  <section class="g-sec" id="install">
+    <h2>③ 張り方のポイント</h2>
+    <table class="g-table">
+      <tr><th>働き幅</th><td>呼び幅120mmの製品は、フローリング（本実）で<strong>108mm</strong>、羽目板（目透かし）で<strong>103mm</strong>が実際に見える幅（働き幅）です。枚数計算・割付はこの寸法で行ってください。呼び幅105mmのフローリングは93mmです。</td></tr>
+      <tr><th>固定</th><td>実（さね）の付け根に隠し釘またはフロア用ビスを斜め打ち。下地にボンドを併用すると鳴き・浮きが出にくくなります。表面からの釘打ちは避けてください。</td></tr>
+      <tr><th>壁際</th><td>壁際・柱まわりには<strong>数mmのクリアランス</strong>を取り、巾木で隠します。膨張時の逃げ場がないと突き上げの原因になります。</td></tr>
+      <tr><th>季節</th><td>梅雨〜夏は板が膨らんでいる時期、冬は縮んでいる時期です。冬場の施工では、夏の膨張を見越して詰めすぎないのがコツです。</td></tr>
+      <tr><th>選別</th><td>同じ等級内でも色味・木目に個体差があります。数束をまぜて張ると仕上がりが均一になります。</td></tr>
+    </table>
+    <p style="font-size:0.84rem">道具と手順を詳しく → <a href="blog/diy-flooring-tips.html">無垢フローリングの張り方（釘・ビス・ボンドの使い分け）</a></p>
+  </section>
+
+  <!-- ④ 塗装 -->
+  <section class="g-sec" id="finish">
+    <h2>④ 塗装について — 無塗装でお届けしています</h2>
+    <p>製品は<strong>超仕上げ（超仕上げ鉋で削った面）・無塗装</strong>の状態です。そのまま使えば桧の香りと足触りが最大限に活き、汚れたらサンドペーパーで削り直せます。保護したい場合は施工後に塗装してください。</p>
+    <ul>
+      <li><strong>オイル・蜜蝋</strong>：質感を残しつつ保護。桧は油分が多い木なので、着色タイプより<strong>クリア系</strong>が向いています。塗りすぎず、余分は必ず拭き取る</li>
+      <li><strong>ウレタン</strong>：水や汚れに強くメンテナンスはほぼ不要。香りと足触りは控えめになります</li>
+      <li><strong>市販の樹脂ワックス</strong>は無垢材に合わず白濁することがあります。使う場合は無垢専用品を</li>
+    </ul>
+    <p style="font-size:0.84rem">仕上げ別の違い → <a href="blog/finish-mutosou-oil-urethane.html">無塗装・オイル・ウレタン、どれを選ぶ？</a></p>
+  </section>
+
+  <!-- ⑤ お手入れ -->
+  <section class="g-sec" id="care">
+    <h2>⑤ 日常のお手入れ</h2>
+    <table class="g-table">
+      <tr><th>ふだん</th><td>掃除機＋乾拭き。柔らかい布で木目に沿って拭くと、皮脂となじんで艶が育ちます</td></tr>
+      <tr><th>汚れたとき</th><td>固く絞った雑巾で水拭き → 乾拭きで水分を取って換気。毎日の水拭きは不要です</td></tr>
+      <tr><th>落ちない汚れ・浅い傷</th><td>無塗装なら240番程度のサンドペーパーで木目に沿って軽く研磨すると新しい木肌が出ます</td></tr>
+      <tr><th>避けること</th><td>水拭きロボット掃除機・スチームクリーナー（高温蒸気と過剰な水分）、樹脂ワックス、水をこぼしたままの放置</td></tr>
+      <tr><th>湿度</th><td>室内湿度<strong>40〜50%前後</strong>が目安。冬は加湿、梅雨〜夏は除湿・換気で安定させると木も穏やかに過ごせます</td></tr>
+    </table>
+    <p style="font-size:0.84rem">完全版 → <a href="blog/hinoki-flooring-care.html">桧フローリングのお手入れ完全ガイド</a>　／　<a href="blog/shimi-kabi-cleaning.html">シミ・カビの落とし方</a></p>
+  </section>
+
+  <!-- ⑥ 隙間・反り -->
+  <section class="g-sec" id="move">
+    <h2>⑥ 隙間・反りが出たら — まず1年、様子を見る</h2>
+    <p>無垢の床は冬に縮んで隙間が開き、夏に膨らんで閉じる、を繰り返します。<strong>張った初年度に出た隙間が翌夏に自然に閉じることは珍しくありません。</strong>四季をひと回りして初めて、その家での「動きの幅」が定まります。</p>
+    <ul>
+      <li>隙間をパテや埋木で<strong>すぐに埋めない</strong>。夏の膨張時に逃げ場を失い、突き上げを招くことがあります</li>
+      <li>反りは、直射日光・エアコン風の直撃・水濡れ放置など「表裏の湿度差」が原因のことがほとんど。原因を取り除いて様子を見る</li>
+      <li>1年経っても戻らない・悪化する場合は、その時点で原因を調べれば的確に対処できます。お気軽にご相談ください</li>
+    </ul>
+    <p style="font-size:0.84rem">仕組みを詳しく → <a href="blog/sukima-sori-tsukiage.html">隙間・反り・突き上げはなぜ起きる？</a></p>
+  </section>
+
+  <!-- ⑦ 相談 -->
+  <section class="g-sec" id="contact">
+    <h2>⑦ ご相談・施工写真のご提供</h2>
+    <p>製品についてのご質問（等級・寸法・施工・お手入れ）は、製造元の林材木店で直接お答えします。ご購入は、お買い上げいただいた市場・材木店さまへお願いいたします。</p>
+    <div class="g-cta">
+      <h3>張り上がった床・壁の写真を送っていただけませんか</h3>
+      <p>製品がどんな空間になったかを知ることが、私たちの次の一枚の励みになります。ご提供いただいた写真はHPの施工事例でご紹介させていただきます。</p>
+      <div class="btns">
+        <a href="photo.html">施工写真を送る</a>
+        <a class="line" href="https://line.me/R/ti/p/@352ngeni" target="_blank" rel="noopener">LINEで質問する</a>
+        <a href="contact.html">メールで問い合わせる</a>
+      </div>
+    </div>
+    <div class="g-links">
+      <a href="company.html">林材木店について<small>静岡県磐田市の桧フローリング・羽目板工場</small></a>
+      <a href="faq.html">よくある質問<small>寸法・施工・お手入れの疑問集</small></a>
+      <a href="gallery.html">施工事例<small>お客様の床・壁の写真</small></a>
+      <a href="blog.html">読みもの<small>桧と無垢材の付き合い方</small></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="g-footer">
+  株式会社 林材木店　静岡県磐田市　TEL 0538-58-2395　FAX 050-3146-7566<br>
+  <a href="index.html">hayazai.com</a>　／　<a href="privacy.html">プライバシーポリシー</a>
+</footer>
+
+</body>
+</html>
