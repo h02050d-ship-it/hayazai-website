@@ -29,6 +29,8 @@ $OPENAI_KEY     = $CONFIG['openai_api_key'] ?? '';
 // 差出人は実在するアドレスを使う（存在しない noreply@ 名義はGmailでなりすまし扱いされ
 // 迷惑メールに入るため 2026-08 に変更）
 const CAMPAIGN_FROM = 'info@hayazai.com';
+// 未返信キュー（人の返信が必要なメッセージを登録し、返信されるまで pending_cron.php が再通知）
+require __DIR__ . '/pending_lib.php';
 
 // --- 署名検証 -------------------------------------------------------
 $body      = file_get_contents('php://input');
@@ -79,36 +81,41 @@ function lineDisplayName(string $userId, string $token): string {
 
 // 人の返信が必要なメッセージ（ウィザードに当たらない自由記述・友だち追加）を
 // 会社メールへ通知する。自動応答が動いていても、担当者の見落としを防ぐため。
-function notifyStaffOfManualMessage(string $userId, string $text, string $token, string $to): void {
+//   $needsReply=true なら未返信キューにも登録（返信されるまで pending_cron.php が再通知）。
+//   件名の改行は必ず1行化する（9/3 の通知は件名に改行が入っていた）。
+function notifyStaffOfManualMessage(string $userId, string $text, string $token, string $to, bool $needsReply = true, string $kind = 'message'): void {
+    global $CHANNEL_SECRET;
     $name = lineDisplayName($userId, $token);
-    $subject = '【公式LINE】' . mb_strimwidth($name . ' さん：' . $text, 0, 40, '…');
-    $body = $name . " さん：\n" . $text
-          . "\n\n▼返信はこちら（チャット画面）\nhttps://chat.line.biz/\n";
+    if ($needsReply) {
+        $rec = pendingAdd($userId, $name, $text, $kind);
+        $subject = pendingSubject($rec, false);
+        $body    = pendingMailBody($rec, $CHANNEL_SECRET, false);
+    } else {
+        $subject = '【公式LINE】' . mb_strimwidth($name . ' さん：' . preg_replace('/\s+/u', ' ', $text), 0, 40, '…');
+        $body = $name . " さん：\n" . $text
+              . "\n\n▼チャット画面\n" . pendingChatUrl($userId) . "\n";
+    }
     @mb_send_mail($to, $subject, $body, 'From: ' . CAMPAIGN_FROM);
 }
 
+// 自動応答を全停止しているとき（AUTO_REPLY_ENABLED=false）の通知。1イベント1通・未返信キューにも登録
 function notifyStaffOfIncoming(array $events, string $token, string $to): void {
-    $lines = [];
     foreach ($events as $ev) {
         $evType = $ev['type'] ?? '';
         if ($evType !== 'message' && $evType !== 'follow') continue;
         $userId = $ev['source']['userId'] ?? '';
-        $name = lineDisplayName($userId, $token);
+        if ($userId === '') continue;
         if ($evType === 'follow') {
-            $lines[] = $name . ' さんが友だち追加しました';
+            notifyStaffOfManualMessage($userId, '（友だち追加がありました）', $token, $to, false);
             continue;
         }
         $m = $ev['message'] ?? [];
         $mtype = $m['type'] ?? '';
         $labels = ['image' => '画像', 'video' => '動画', 'audio' => '音声', 'file' => 'ファイル', 'sticker' => 'スタンプ', 'location' => '位置情報'];
         $content = $mtype === 'text' ? ($m['text'] ?? '') : '［' . ($labels[$mtype] ?? $mtype) . 'が届きました］';
-        $lines[] = $name . ' さん：' . $content;
+        if ($mtype === 'text' && isSmallTalk($content)) { pendingDone($userId); continue; }
+        notifyStaffOfManualMessage($userId, $content, $token, $to, $mtype !== 'sticker');
     }
-    if (!$lines) return;
-    $subject = '【公式LINE】' . mb_strimwidth($lines[0], 0, 40, '…');
-    $body = implode("\n\n", $lines)
-          . "\n\n▼返信はこちら（チャット画面）\nhttps://chat.line.biz/\n";
-    @mb_send_mail($to, $subject, $body, 'From: ' . CAMPAIGN_FROM);
 }
 
 if (!AUTO_REPLY_ENABLED) {
@@ -345,7 +352,13 @@ function notifyQuote(array $state, string $displayName, string $userId, string $
     $b .= "■ 数量・面積: " . ($state['qty'] ?? '-') . "\n";
     $b .= "■ 希望納期: " . ($state['delivery_label'] ?? '-') . "\n";
     $b .= "■ お届け先: " . ($state['address'] ?? '-') . "\n";
-    $b .= "\n※ このお客様へは LINE トーク（{$userId}）から返信してください。\n";
+    // 未返信キューに登録（返信されるまで pending_cron.php が再通知）
+    global $CHANNEL_SECRET;
+    $summary = '見積もり依頼: ' . ($state['product_label'] ?? '-') . '／' . ($state['grade_label'] ?? '-') . '／'
+             . ($state['qty'] ?? '-') . '／' . ($state['delivery_label'] ?? '-') . '／' . ($state['address'] ?? '-');
+    pendingAdd($userId, $displayName, $summary, 'quote');
+    $b .= "\n▼返信はこちら（このお客様のチャット）\n" . pendingChatUrl($userId) . "\n";
+    $b .= "\n▼返信したら押す（再通知が止まります）\n" . pendingDoneUrl($userId, $CHANNEL_SECRET) . "\n";
     @mb_send_mail($staffEmail, '【LINE見積もり依頼】' . ($state['product_label'] ?? ''), $b, 'From: ' . $fromEmail);
 }
 function startQuote(string $replyToken, string $userId, string $token, array $PRODUCTS): void {
@@ -490,7 +503,7 @@ foreach ($payload['events'] as $ev) {
 
     // ---- フォロー（友だち追加）：あいさつはOA機能に任せ、通知だけ出す ----
     if ($type === 'follow') {
-        notifyStaffOfManualMessage($userId, '（友だち追加がありました）', $ACCESS_TOKEN, $STAFF_EMAIL);
+        notifyStaffOfManualMessage($userId, '（友だち追加がありました）', $ACCESS_TOKEN, $STAFF_EMAIL, false);
         continue;
     }
 
@@ -702,7 +715,9 @@ foreach ($payload['events'] as $ev) {
                 } else {
                     $b .= "\n■ AI一次回答: なし（エラーまたは未設定。受付メッセージのみ送信済み）\n";
                 }
-                $b .= "\n※ このお客様へは LINEのチャット（{$userId}）から正式にご返信ください。\n";
+                pendingAdd($userId, $name, "お問い合わせ（{$catLabel}）: " . $question, 'inquiry');
+                $b .= "\n▼返信はこちら（このお客様のチャット）\n" . pendingChatUrl($userId) . "\n";
+                $b .= "\n▼返信したら押す（再通知が止まります）\n" . pendingDoneUrl($userId, $CHANNEL_SECRET) . "\n";
                 @mb_send_mail($STAFF_EMAIL, "【LINEお問い合わせ】{$catLabel}", $b, 'From: ' . $FROM_EMAIL);
                 clearState($userId);
 
@@ -792,6 +807,8 @@ foreach ($payload['events'] as $ev) {
             // ただし ①相づち・お礼 ②24時間以内に案内済み の場合は無言でスルーし、
             // 担当者の手動返信にまかせる（自動返信が会話に割り込まないように）
             if (isSmallTalk($text)) {
+                // お礼・相づちが来た＝こちらの返信は済んでいるとみなし、再通知を止める
+                pendingDone($userId);
                 continue;
             }
             // 人の返信が必要なメッセージ → 会社メールへ通知（案内の有無に関わらず）
