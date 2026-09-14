@@ -210,7 +210,7 @@ function renderBlogCta() {
         '<div class="bcm-h">🧴 お手入れの疑問と、傷みが進んだときの選択肢</div>' +
         '<p>お手入れの細かい疑問は「よくある質問」にまとめています。<br>傷みが広い範囲に及ぶ場合は、部分張り替え・全面張り替えのご相談も承ります。当店は国産無垢 桧フローリングを自社工場で製材している林材木店です。</p>' +
         '<div class="bcm-btns">' +
-          '<a class="p" href="../faq.html">お手入れのよくある質問を見る</a>' +
+          '<a class="p" href="../faq.html#maintenance">お手入れのよくある質問を見る</a>' +
           '<a class="s" href="../contact.html">張り替えを相談する</a>' +
           '<a class="s" href="../products.html">桧フローリングを見る</a>' +
         '</div>' +
