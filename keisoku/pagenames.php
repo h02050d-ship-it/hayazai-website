@@ -43,7 +43,7 @@ return [
     '/blog/hinoki-demerit.html' => 'ブログ: 桧フローリングのデメリット7つを工場が正直に解説。それでも選ばれる理由',
     '/blog/hinoki-flooring-care.html' => 'ブログ: 桧フローリングのお手入れ完全ガイド。日常掃除からオイル再塗装まで',
     '/blog/how-many-sheets.html' => 'ブログ: フローリングは何枚必要？必要枚数の計算方法とロス率の考え方',
-    '/blog/how-to-choose-grade.html' => 'ブログ: 節有・小節・無節の違いは？グレードの選び方完全ガイド',
+    '/blog/how-to-choose-grade.html' => 'ブログ: 桧フローリングの等級とは？無節・特上小・小節・節ありの違いと選び方',
     '/blog/kasanebari-diy.html' => 'ブログ: 既存床に重ね張りDIY。ドアが開かない問題と床高15mmの対処法',
     '/blog/kugi-screw-bond.html' => 'ブログ: フロア釘・ビス・ボンドの使い分け。桧フローリング固定の正解',
     '/blog/mansion-ll45.html' => 'ブログ: マンションで桧の無垢床は可能？LL45遮音規定をクリアする3つの方法',
