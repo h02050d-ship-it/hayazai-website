@@ -70,7 +70,7 @@ $out = '';
 foreach ($items as $it) {
     if (!is_array($it)) continue;
     $e = (string)($it['e'] ?? '');
-    if (!in_array($e, ['open', 'click', 'commit', 'undo', 'leave'], true)) continue;
+    if (!in_array($e, ['open', 'click', 'commit', 'undo', 'leave', 'err'], true)) continue;   // err = netguard.js の通信失敗（2026-09-18・l=理由+action, n=試行回数）
     $rec = ['t' => time(), 'tool' => $tool, 'page' => $page, 'role' => $role, 'sid' => $sid, 'dev' => $dev, 'e' => $e];
     $l = trim(preg_replace('/\s+/u', ' ', (string)($it['l'] ?? '')));
     if ($l !== '') $rec['l'] = mb_substr($l, 0, 30);           // ボタンの表示文字だけ（入力値ではない）
