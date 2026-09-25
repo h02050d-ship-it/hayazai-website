@@ -203,9 +203,22 @@ function renderBlogCta() {
     'hinoki-flooring-care', 'shimi-kabi-cleaning', 'hekomi-iron-repair',
     'sukima-sori-tsukiage', 'robot-cleaner-kaden'
   ];
+  // これから張る人（畳からの改装・重ね張り）は「量と入手先」が次の一手
+  const PREP_POSTS = ['tatami-to-flooring', 'kasanebari-diy'];
   const slug = location.pathname.split('/').pop().replace('.html', '');
   const isCare = CARE_POSTS.indexOf(slug) !== -1;
-  const html = isCare
+  const isPrep = PREP_POSTS.indexOf(slug) !== -1;
+  const html = isPrep
+    ? '<aside class="blog-cta-mid">' +
+        '<div class="bcm-h">📏 この工事に必要な桧フローリングの量と、買える場所</div>' +
+        '<p>6畳（約9.9㎡）なら、15×108mmの桧フローリングで<strong>約7束</strong>が目安です（1束8枚・約1.6㎡、ロス分を含む）。<br>お部屋の畳数を入れるだけで必要な束数がその場で分かります。実際のご購入はお近くの取扱店（木材市場・販売店）でご相談いただけます。当店は国産無垢 桧フローリングを自社工場で製材している林材木店です。</p>' +
+        '<div class="bcm-btns">' +
+          '<a class="p" href="../simulator.html">▶ 必要な束数を10秒で計算</a>' +
+          '<a class="s" href="../markets.html">お近くの取扱店を探す</a>' +
+          '<a class="s" href="../products.html">価格表を見る</a>' +
+        '</div>' +
+      '</aside>'
+    : isCare
     ? '<aside class="blog-cta-mid">' +
         '<div class="bcm-h">🧴 お手入れの疑問と、傷みが進んだときの選択肢</div>' +
         '<p>お手入れの細かい疑問は「よくある質問」にまとめています。<br>傷みが広い範囲に及ぶ場合は、部分張り替え・全面張り替えのご相談も承ります。当店は国産無垢 桧フローリングを自社工場で製材している林材木店です。</p>' +
