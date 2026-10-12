@@ -241,6 +241,19 @@ function renderBlogCta() {
   const anchor = h2s.length >= 3 ? h2s[2] : (h2s.length >= 2 ? h2s[1] : null);
   if (anchor) anchor.insertAdjacentHTML('beforebegin', html);
   else body.insertAdjacentHTML('beforeend', html);
+  // 2026-10-13 K022: これから張る人（畳からの改装・重ね張り）の記事は、末尾も「取扱店＋工場直送の見積」を主にする（サンプルは文中リンクへ）
+  const endCta = body.querySelector('.article-cta');
+  if (isPrep && endCta) {
+    const h3 = endCta.querySelector('h3');
+    const p = endCta.querySelector('p');
+    const btns = endCta.querySelector('div');
+    if (h3) h3.textContent = '🔨 この工事の桧フローリング、お近くの取扱店でご用意できます';
+    if (p) p.innerHTML = '6畳なら<strong>約7束</strong>が目安（1束8枚・約1.6㎡、ロス分を含む）。全国の木材市場・販売店（取扱店）でご購入いただけます。<br>お近くに取扱店がない場合は工場から直接お届けします（送料込みの見積もりを無料でお返しします）。桧の質感は<a href="../sample.html" style="color:#fff;text-decoration:underline;">無料サンプル</a>で、「畳の厚みが58mmだった」等の具体的なご相談はお電話（0538-58-2395）でも承ります。';
+    if (btns) btns.innerHTML =
+      '<a href="../markets.html" class="btn btn-lg" style="background:#fff;color:var(--wood-dark);">お近くの取扱店を探す</a>' +
+      '<a href="../order.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.7);color:#fff;">工場直送の見積もりを依頼</a>';
+    return;
+  }
   // 末尾CTA: サンプル1本だけなら枚数計算を主ボタンにし、取扱店も並べる
   const endBtns = body.querySelector('.article-cta div');
   if (endBtns && endBtns.querySelectorAll('a').length === 1) {
