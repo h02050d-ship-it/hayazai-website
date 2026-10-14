@@ -13,4 +13,5 @@ return [
     'send_pin'             => 'YOUR_PIN',
     'firebase_secret'      => 'YOUR_FIREBASE_DB_SECRET',
     'naisya_relay_key'     => 'YOUR_NAISYA_RELAY_KEY', // 社内通知GAS中継のフルキー（Secrets: SHUKKA_NAISYA_RELAY_KEY）
+    'naito_key'            => 'YOUR_NAITO_KEY',        // 集荷連絡の転送先=内藤GASのSHUKA_KEY（Secrets: SHUKKA_NAITO_KEY）
 ];
