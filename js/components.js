@@ -279,5 +279,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFooter();
   renderFloatingLineButton();
   renderBlogCta();
-  loadAiChat();
+  // loadAiChat(); // 2026-10-19 AIに質問ボタンを撤去（本人依頼）
 });
