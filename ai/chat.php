@@ -6,6 +6,11 @@
 header('Content-Type: application/json; charset=UTF-8');
 header('X-Content-Type-Options: nosniff');
 
+// 2026-10-19 AIチャット停止（本人依頼）: OpenAIへは一切送らずここで終了。再開するならこのブロックを消し、deploy-xserver.yml の ai/config.php 生成を戻す
+http_response_code(410);
+echo json_encode(['error' => 'AIチャットは終了しました。お問い合わせフォーム（https://hayazai.com/contact.html）またはLINEでお問い合わせください。']);
+exit;
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['error' => 'POST only']);

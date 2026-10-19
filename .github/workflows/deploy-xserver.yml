@@ -117,20 +117,7 @@ jobs:
           } > shukka/config.php
           echo "Generated shukka/config.php (token set: $([ -n "$SHUKKA_CHANNEL_ACCESS_TOKEN" ] && echo yes || echo NO))"
 
-      - name: Generate AI chat config (from Secrets, not committed)
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          mkdir -p ai/state
-          {
-            echo '<?php'
-            echo '// 自動生成（GitHub Actions）: 編集しない。値は GitHub Secrets で管理。'
-            echo 'return ['
-            printf "    'api_key' => '%s',\n" "$OPENAI_API_KEY"
-            echo "    'model'   => 'gpt-4o-mini',"
-            echo '];'
-          } > ai/config.php
-          echo "Generated ai/config.php (secret set: $([ -n "$OPENAI_API_KEY" ] && echo yes || echo NO))"
+      # 2026-10-19 AIチャット停止（本人依頼）: ai/config.php を生成しない＝サーバー上のAPIキー入りファイルも rsync --delete で消える
 
       - name: Generate Analytics config (from Secrets, not committed)
         env:
