@@ -37,7 +37,7 @@
 <FilesMatch "\.(bak|tmp|draft|old|orig|swp|md|sh|sql|log)$">
   Require all denied
 </FilesMatch>
-<FilesMatch "^\.env">
+<FilesMatch "^.(env|user.ini)">
   Require all denied
 </FilesMatch>
 
