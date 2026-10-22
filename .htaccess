@@ -48,14 +48,6 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # 2026-10-22 PHP脆弱性 php2shell（CVE-2026-109618/109619）の応急処置
-  # 添付付き送信(multipart)はファイルを受け付ける photos.php だけ通し、他のPHPには届く前に403で止める
-  # PHPを修正版(8.2.35以上)へ切り替えたら外してよい
-  RewriteCond %{REQUEST_METHOD} POST
-  RewriteCond %{HTTP:Content-Type} multipart/ [NC]
-  RewriteCond %{REQUEST_URI} !^/photos\.php$
-  RewriteRule \.php$ - [F,L]
-
   # AIチャットのレート制限状態ファイル（ai/state/）への外部アクセス遮断
   RewriteRule ^ai/state/ - [F,L]
   # 開発用スクリプト（過去の手動デプロイの残骸）を外から読めなくする
