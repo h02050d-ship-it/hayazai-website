@@ -58,6 +58,8 @@
 
   # AIチャットのレート制限状態ファイル（ai/state/）への外部アクセス遮断
   RewriteRule ^ai/state/ - [F,L]
+  # 開発用スクリプト（過去の手動デプロイの残骸）を外から読めなくする
+  RewriteRule ^scripts/ - [F,L]
 
   # FAX・チラシ・QRコード用の短いURL（?f= が計測の流入コードになる。302=着地先を後で差し替え可能）
   RewriteRule ^fax/?$ /dealer.html?f=fax [R=302,L,QSA]
