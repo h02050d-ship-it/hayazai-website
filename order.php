@@ -126,13 +126,13 @@ $shopBody = <<<EOT
 EOT;
 
 // mb_send_mail 設定
-$headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"
+$headers_customer = "From: " . mb_encode_mimeheader(SHOP_NAME, 'UTF-8', 'B') . " <" . SHOP_EMAIL . ">\r\n"
     . "Reply-To: " . SHOP_EMAIL . "\r\n"
     . "Content-Type: text/plain; charset=UTF-8\r\n";
 
 // 差出人は実在する info@hayazai.com（存在しない order-noreply@ 名義はGmailで
 // なりすまし扱いされ迷惑メールに入るため 2026-08 に変更）
-$headers_shop = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\n"
+$headers_shop = "From: " . mb_encode_mimeheader(SHOP_NAME, 'UTF-8', 'B') . " <" . SHOP_EMAIL . ">\r\n"
     . "Reply-To: {$email}\r\n"
     . "Content-Type: text/plain; charset=UTF-8\r\n";
 // エンベロープ送信者もドメインを揃える（SPF/DMARCの整合）

@@ -221,8 +221,8 @@ if ($type === 'sample') {
 // 差出人は実在する info@hayazai.com を使う（存在しない contact-noreply@ 名義は
 // なりすまし扱いされGmailの迷惑メール判定を受けやすいため 2026-08 に変更）。
 // お客様への返信は Reply-To で成立するので運用は変わらない。
-$headers_customer = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">";
-$headers_shop     = "From: " . SHOP_NAME . " <" . SHOP_EMAIL . ">\r\nReply-To: {$email}";
+$headers_customer = "From: " . mb_encode_mimeheader(SHOP_NAME, 'UTF-8', 'B') . " <" . SHOP_EMAIL . ">";
+$headers_shop     = "From: " . mb_encode_mimeheader(SHOP_NAME, 'UTF-8', 'B') . " <" . SHOP_EMAIL . ">\r\nReply-To: {$email}";
 // エンベロープ送信者もドメインを揃える（SPF/DMARCの整合を取り迷惑メール判定を避ける）
 $envelope = '-f ' . SHOP_EMAIL;
 
