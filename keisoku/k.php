@@ -30,7 +30,8 @@ if ($origin !== '' && strpos($origin, 'hayazai.com') === false && strpos($origin
 
 // ボットは保存しない
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
-if ($ua === '' || preg_match('/bot|crawl|spider|slurp|headless|lighthouse|monitor|preview|curl|wget|python|scrapy|phantom|scan|facebookexternal/i', $ua)) {
+require_once __DIR__ . '/botfilter.php';
+if ($ua === '' || preg_match('/bot|crawl|spider|slurp|headless|lighthouse|monitor|preview|curl|wget|python|scrapy|phantom|scan|facebookexternal/i', $ua) || preg_match(HZ_AI_UA_RE, $ua)) {
     echo json_encode(['ok' => true, 'skip' => 'bot']); exit;
 }
 
@@ -146,26 +147,32 @@ function maybeSendWeeklyDigest_(string $stateDir): array {
     for ($t = $p0; $t < $w1 + 86400; $t += 86400) { $months[date('Ym', $t)] = 1; }
     $cur = ['pv' => 0, 'vid' => [], 'sid' => [], 'pages' => [], 'ev' => [], 'fax' => [], 'daily' => []];
     $prev = ['pv' => 0, 'vid' => [], 'ev' => []];
+    $rows = [];
     foreach (array_keys($months) as $ym) {
         $f = $stateDir . '/ev_' . $ym . '.jsonl';
         if (!is_file($f)) continue;
         foreach (file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
             $r = json_decode($line, true);
-            if (!is_array($r)) continue;
-            $t = (int)($r['t'] ?? 0);
-            if ($t >= $w0 && $t < $w1) {
-                if (($r['e'] ?? '') === 'pv') {
-                    $cur['pv']++; $cur['vid'][$r['vid'] ?? 'na'] = 1; $cur['sid'][$r['sid'] ?? 'na'] = 1;
-                    $p = (string)($r['p'] ?? '/'); $cur['pages'][$p] = ($cur['pages'][$p] ?? 0) + 1;
-                    $d = date('N', $t); $cur['daily'][$d] = ($cur['daily'][$d] ?? 0) + 1;
-                    if (($r['f'] ?? '') !== '') $cur['fax'][$r['sid'] ?? 'na'] = (string)$r['f'];
-                } elseif (($r['e'] ?? '') === 'ev') {
-                    $x = (string)($r['x'] ?? ''); $cur['ev'][$x] = ($cur['ev'][$x] ?? 0) + 1;
-                }
-            } elseif ($t >= $p0 && $t < $w0) {
-                if (($r['e'] ?? '') === 'pv') { $prev['pv']++; $prev['vid'][$r['vid'] ?? 'na'] = 1; }
-                elseif (($r['e'] ?? '') === 'ev') { $x = (string)($r['x'] ?? ''); $prev['ev'][$x] = ($prev['ev'][$x] ?? 0) + 1; }
+            if (is_array($r)) $rows[] = $r;
+        }
+    }
+    require_once __DIR__ . '/botfilter.php';
+    $botSids = hzBotSids_($rows); // AI・自動アクセスは数えない
+    foreach ($rows as $r) {
+        if (isset($botSids[(string)($r['sid'] ?? 'na')])) continue;
+        $t = (int)($r['t'] ?? 0);
+        if ($t >= $w0 && $t < $w1) {
+            if (($r['e'] ?? '') === 'pv') {
+                $cur['pv']++; $cur['vid'][$r['vid'] ?? 'na'] = 1; $cur['sid'][$r['sid'] ?? 'na'] = 1;
+                $p = (string)($r['p'] ?? '/'); $cur['pages'][$p] = ($cur['pages'][$p] ?? 0) + 1;
+                $d = date('N', $t); $cur['daily'][$d] = ($cur['daily'][$d] ?? 0) + 1;
+                if (($r['f'] ?? '') !== '') $cur['fax'][$r['sid'] ?? 'na'] = (string)$r['f'];
+            } elseif (($r['e'] ?? '') === 'ev') {
+                $x = (string)($r['x'] ?? ''); $cur['ev'][$x] = ($cur['ev'][$x] ?? 0) + 1;
             }
+        } elseif ($t >= $p0 && $t < $w0) {
+            if (($r['e'] ?? '') === 'pv') { $prev['pv']++; $prev['vid'][$r['vid'] ?? 'na'] = 1; }
+            elseif (($r['e'] ?? '') === 'ev') { $x = (string)($r['x'] ?? ''); $prev['ev'][$x] = ($prev['ev'][$x] ?? 0) + 1; }
         }
     }
     arsort($cur['pages']);

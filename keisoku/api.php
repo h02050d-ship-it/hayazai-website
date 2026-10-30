@@ -81,6 +81,14 @@ foreach (array_keys($months) as $ym) {
     }
 }
 
+// ---- AI・自動アクセスのセッションを除外（判定は botfilter.php）----
+require_once __DIR__ . '/botfilter.php';
+$botSids = hzBotSids_(array_merge($prevEvents, $events));
+$notBot = fn($r) => !isset($botSids[(string)($r['sid'] ?? 'na')]);
+$botCount = count(array_unique(array_map(fn($r) => $r['sid'] ?? 'na', array_filter($events, fn($r) => !$notBot($r)))));
+$events = array_values(array_filter($events, $notBot));
+$prevEvents = array_values(array_filter($prevEvents, $notBot));
+
 // ---- セッション組み立て ----
 // sess[sid] = ['pv'=>[{t,p}], 'vid'=>, 'dev'=>, 'ref'=>初回参照元]
 $sess = []; $pvTotal = 0; $vids = []; $evc = []; $hours = array_fill(0, 24, 0);
@@ -243,6 +251,7 @@ foreach ($dur as $bySid) { foreach ($bySid as $m) { if ($m['dur'] > 0) { $durAll
 
 echo json_encode([
     'ok' => true,
+    'bots' => $botCount, // 除外したAI・自動アクセスのセッション数
     'range' => ['from' => date('Y-m-d', $from), 'to' => date('Y-m-d', $to - 86400), 'days' => $days],
     'total' => [
         // GA4補完日を含む期間は日別の合算（訪問者は日次ユニークの合算＝延べ）で統一する
