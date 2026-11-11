@@ -31,6 +31,11 @@ if (!is_array($data) || empty($data['events'])) { exit; }
 if (function_exists('fastcgi_finish_request')) { fastcgi_finish_request(); }
 
 $KEYWORDS = array('現状', '状況', '一覧', '出荷状況');
+// 集荷連絡（積込の連絡）への自動お礼。2026-11-11 本人指示＝受信から約1分後に送る。
+// 判定は内藤GAS(shuka.js)と同じ: 「積」を含み、取消・不可・問い合わせではない
+$SHUKA_CANCEL_RE = '/無理|間違|できません|出来ません|中止|キャンセル|延期|取り?消|見合わせ|[?？]/u';
+$ACK_TEXT = "ありがとうございます。\n承知いたしました。";
+$ackQueue = array();
 
 foreach ($data['events'] as $ev) {
     if (!isset($ev['type']) || $ev['type'] !== 'message') continue;
@@ -65,8 +70,59 @@ foreach ($data['events'] as $ev) {
         if (mb_strpos($text, '積') !== false) {
             $r = forwardShuka($cfg, $fb, $text, isset($ev['timestamp']) ? $ev['timestamp'] : 0);
             whLog('shuka ' . mb_substr(str_replace("\n", '/', (string)$r), 0, 300));
+            // 加工予定表の出荷日(due)を、内藤の積込日で自動入力（2026-11-11 本人指示）
+            $dr = setShipDueFromShuka($fb, $r);
+            if ($dr !== '') whLog('due ' . $dr);
+            if (!preg_match($SHUKA_CANCEL_RE, $text) && $userId !== '') {
+                $ackQueue[] = array('uid' => $userId, 'ts' => isset($ev['timestamp']) ? (int)$ev['timestamp'] : (int)(microtime(true) * 1000));
+            }
         }
     }
+}
+
+// 集荷連絡へのお礼を、受信から約60秒後にpushで送る（replyTokenは時間が経つと使えないためpush）
+if (count($ackQueue) > 0) {
+    ignore_user_abort(true);
+    @set_time_limit(180);
+    $sentTo = array();
+    foreach ($ackQueue as $q) {
+        if (isset($sentTo[$q['uid']])) continue;   // 同じ人の連投には1回だけ
+        $wait = (int)ceil(($q['ts'] + 60000 - microtime(true) * 1000) / 1000);
+        if ($wait > 0) sleep(min($wait, 70));
+        $res = pushText($token, $q['uid'], $ACK_TEXT);
+        $sentTo[$q['uid']] = true;
+        whLog('ack uid=' . $q['uid'] . ' ' . $res);
+    }
+}
+
+// 内藤GASの判定結果(targets[].itemKeys・shipDate)で、加工予定表 items/<key>/due を積込日にする
+function setShipDueFromShuka($fb, $r){
+    $j = json_decode((string)$r, true);
+    if (!is_array($j) || empty($j['ok']) || !empty($j['skipped'])) return '';
+    $d = isset($j['shipDate']) ? (string)$j['shipDate'] : '';
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $d)) return 'skip(no shipDate)';
+    $done = array();
+    foreach ((isset($j['targets']) && is_array($j['targets'])) ? $j['targets'] : array() as $t) {
+        foreach ((isset($t['itemKeys']) && is_array($t['itemKeys'])) ? $t['itemKeys'] : array() as $k) {
+            if (!is_string($k) || $k === '' || isset($done[$k])) continue;
+            $ok = shkFbPatch($fb, '/items/' . rawurlencode($k), array('due' => $d, 'due_src' => 'naito_line ' . date('Y-m-d H:i')));
+            $done[$k] = $ok ? 'ok' : 'NG';
+        }
+    }
+    if (!$done) return 'skip(no items)';
+    $o = array(); foreach ($done as $k => $v) $o[] = $k . ':' . $v;
+    return $d . ' ' . implode(',', $o);
+}
+function pushText($token, $to, $text){
+    $payload = json_encode(array('to' => $to, 'messages' => array(array('type' => 'text', 'text' => $text))), JSON_UNESCAPED_UNICODE);
+    $ch = curl_init('https://api.line.me/v2/bot/message/push');
+    curl_setopt_array($ch, array(
+        CURLOPT_POST => true, CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'Authorization: Bearer ' . $token),
+        CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15,
+    ));
+    $r = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
+    return $code . ' ' . mb_substr((string)$r, 0, 120);
 }
 
 // 集荷連絡を内藤GAS(shuka.js)へ。加工予定表の「配送=内藤・未出荷」の品目を添える（FAX文面の品目欄になる）
@@ -76,13 +132,14 @@ function forwardShuka($cfg, $fb, $text, $ts){
     $items = array();
     $all = shkFetchItems($fb);
     if (is_array($all)) {
-        foreach ($all as $it) {
+        foreach ($all as $fbKey => $it) {
             if (!is_array($it)) continue;
             if (isset($it['archived']) && $it['archived'] === '1') continue;
             if (shkCarrierNorm($it) !== '内藤') continue;
             $c = trim((string)(isset($it['customer']) ? $it['customer'] : ''));
             if ($c === '') continue;
             $items[] = array(
+                'key'      => (string)$fbKey,   // 加工予定表の行キー（出荷日の自動入力に使う）
                 'customer' => $c,
                 'length'   => isset($it['length']) ? (string)$it['length'] : '',
                 'grade'    => isset($it['grade']) ? (string)$it['grade'] : '',
