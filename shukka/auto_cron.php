@@ -68,15 +68,33 @@ $out = array();
 // ---------- 1. 待機中・送信直後の案を処理 ----------
 foreach ($q['drafts'] as $id => &$d) {
     $st = $d['status'] ?? '';
-    if ($st === 'waiting') {
+    if ($st === 'waiting' || $st === 'hold') {
         // 手動で送られた（全部 shk_sent が付いた／出荷完了・削除された）→ 取りやめ
         $left = array_values(array_filter($d['keys'], function ($k) use ($pend) { return isset($pend[$k]); }));
         if (!$left) { $d['status'] = 'superseded'; $d['done_at'] = $now; $changed = true; $out[] = "$id superseded(手動送信済み)"; continue; }
+        // 保留（返信が修正文として読めなかった）は60分で打ち切り＝送らない（品目は未送信のまま・従来リマインドへ）
+        if ($st === 'hold' && $now - ($d['hold_at'] ?? $now) > 3600) { $d['status'] = 'expired'; $d['done_at'] = $now; $changed = true; $out[] = "$id hold expired"; continue; }
 
         $rep = aqCheckReply($tenryuTok, $d, $DRY);
         if ($rep === null) $d['check_fail'] = ($d['check_fail'] ?? 0) + 1; else $d['check_fail'] = 0;
         if (is_array($rep)) {
             $d['reply_ids'][] = $rep['id']; $changed = true;
+            if ($rep['kind'] === 'unclear') {
+                // 🚨2026-11-12 事故: 質問「ナイスだけど着日何日以降って指定あるっしょ」を修正文として内藤へ送ってしまった。
+                // → 「■ 取引先」と「束」を含む全文でない返信は送らず、自動送信も止めて（保留）確認メールを返す。
+                $d['status'] = 'hold'; $d['hold_at'] = $now;
+                aqMail($DRY, '【内藤運輸LINE】送信を止めています（返信を修正文として読めませんでした・受付 ' . aqShort($id) . '）',
+                    "返信を受け取りましたが、修正後の文章（「■ 取引先」と束数を含む全文）として読み取れなかったため、内藤運輸へは送らず自動送信も止めています。\n\n"
+                  . "受け取った返信:\n「" . $rep['text'] . "」\n\n"
+                  . "▼ どうするか、元のメールに返信してください（60分以内）\n"
+                  . "・修正後の文章を全文で書いて返信 → その文章を送信\n"
+                  . "・「OK」→ 元の内容で送信\n"
+                  . "・「送らない」→ 送らない\n"
+                  . "60分たっても返信がなければ送らずに終わります（品目は未送信のまま・加工予定表の「🚚 出荷依頼」から送れます）。\n\n"
+                  . "元の内容:\n────────\n" . $d['text'] . "\n────────\n");
+                $out[] = "$id hold(unclear reply)";
+                continue;
+            }
             if ($rep['kind'] === 'cancel') {
                 $d['status'] = 'cancelled'; $d['done_at'] = $now;
                 aqMail($DRY, '【内藤運輸LINE】送信を取りやめました（受付 ' . aqShort($id) . '）',
@@ -90,6 +108,7 @@ foreach ($q['drafts'] as $id => &$d) {
             $kind = $rep['kind'] === 'ok' ? 'ok' : 'reply';
             $ok = aqSend($DRY, $lineToken, $fb, $items, $text, array_keys($cands), $relayKey, $kind === 'reply' ? '出荷依頼(修正文・メール返信)' : '出荷依頼(メールでOK)');
             $d['status'] = $ok ? 'sent' : 'failed'; $d['sent_at'] = $now; $d['sent_kind'] = $kind; $d['sent_text'] = $text;
+            if ($ok) $pend = array();   // 送った品目は shk_sent 済み＝この回で新しい案に載せ直さない（11/12 二重案の不具合）
             aqMail($DRY, '【内藤運輸LINE】' . ($ok ? ($kind === 'reply' ? '修正文で送信しました' : '送信しました') : '⚠️送信に失敗しました') . '（受付 ' . aqShort($id) . '）',
                 ($ok ? "内藤運輸（出荷LINE）へ次の内容を送信しました。\n\n" : "LINEの送信に失敗しました。加工予定表の「🚚 出荷依頼」から手動で送ってください。\n\n")
               . "────────\n" . $text . "\n────────\n");
@@ -97,11 +116,13 @@ foreach ($q['drafts'] as $id => &$d) {
             continue;
         }
         // 返信なし → 時間が来たら既定文で送る（GAS確認が3回続けて失敗した時は、それ以上待たずに送る）
+        if ($st === 'hold') { $changed = true; continue; }   // 保留中は時間が来ても送らない
         if ($now >= $d['due']) {
             if ($rep === null && ($d['check_fail'] ?? 0) < 3) { $changed = true; $out[] = "$id due but reply-check failed (" . $d['check_fail'] . ") wait"; continue; }
             $text = aqDefaultText($cands);   // 10分の間に束数などが変わっていれば最新で送る
             $ok = aqSend($DRY, $lineToken, $fb, $items, $text, array_keys($cands), $relayKey, '出荷依頼(10分後自動)');
             $d['status'] = $ok ? 'sent' : 'failed'; $d['sent_at'] = $now; $d['sent_kind'] = 'default'; $d['sent_text'] = $text; $changed = true;
+            if ($ok) $pend = array();
             if (!$ok) {
                 aqMail($DRY, '【内藤運輸LINE】⚠️自動送信に失敗しました（受付 ' . aqShort($id) . '）',
                     "LINEの送信に失敗しました。加工予定表の「🚚 出荷依頼」から手動で送ってください。\nhttps://h02050d-ship-it.github.io/kakou-yotei/\n");
@@ -125,6 +146,11 @@ foreach ($q['drafts'] as $id => &$d) {
                 ($ok ? "既定の内容は送信済みだったため、訂正として次の内容を追加で送りました。\n\n" : "LINEの送信に失敗しました。内藤運輸へ直接連絡してください。\n\n")
               . "────────\n" . $text . "\n────────\n");
             $out[] = "$id corrected ok=" . ($ok ? 1 : 0);
+        } elseif ($rep['kind'] === 'unclear') {
+            aqMail($DRY, '【内藤運輸LINE】返信を訂正文として読めませんでした（送信済み・受付 ' . aqShort($id) . '）',
+                date('H:i', $d['sent_at']) . " に元の内容で送信済みです。返信は訂正文（「■ 取引先」と束数を含む全文）として読めなかったため、内藤運輸へは送っていません。\n\n"
+              . "受け取った返信:\n「" . $rep['text'] . "」\n\n訂正が必要なら全文で返信し直すか、内藤運輸へ直接連絡してください。\n");
+            $out[] = "$id unclear-after-sent notified";
         } elseif ($rep['kind'] === 'cancel') {
             aqMail($DRY, '【内藤運輸LINE】すでに送信済みでした（受付 ' . aqShort($id) . '）',
                 "「送らない」の返信を受け取りましたが、" . date('H:i', $d['sent_at']) . " に送信済みでした。\n取り消しが必要なら内藤運輸へ直接連絡してください。\n");
@@ -136,9 +162,9 @@ unset($d);
 
 // ---------- 2. 新しい品目 → 案を作ってメール ----------
 $inQueue = array();
-foreach ($q['drafts'] as $d) if (in_array($d['status'] ?? '', array('waiting', 'cancelled'), true)) foreach ($d['keys'] as $k) $inQueue[$k] = true;
+foreach ($q['drafts'] as $d) if (in_array($d['status'] ?? '', array('waiting', 'hold', 'cancelled', 'expired', 'cancelled_manual'), true)) foreach ($d['keys'] as $k) $inQueue[$k] = true;
 $hasWaiting = false;
-foreach ($q['drafts'] as $d) if (($d['status'] ?? '') === 'waiting') $hasWaiting = true;
+foreach ($q['drafts'] as $d) if (in_array($d['status'] ?? '', array('waiting', 'hold'), true)) $hasWaiting = true;
 $news = array();
 foreach ($pend as $k => $it) {
     if (isset($inQueue[$k])) continue;
@@ -162,8 +188,9 @@ if ($news && !$hasWaiting && $hm >= 800 && $hm < 1745) {
               . "下の内容で " . date('H:i', $due) . " に内藤運輸（出荷LINE）へ自動送信します。\n\n"
               . "▼ 送信する内容\n────────\n" . $text . "\n────────\n\n"
               . "■ 修正したいとき\n"
-              . "　このメールに返信して、本文に「修正後の文章」を全文で書いてください。\n"
+              . "　このメールに返信して、本文に「修正後の文章」を全文で書いてください（上の文をコピーして直す）。\n"
               . "　→ 書いた文章をそのまま内藤運輸へ送信します（受け取りしだい送信・" . date('H:i', $due) . "を待ちません）。\n"
+              . "　※「■ 取引先」と束数を含まない返信（質問・一言など）は送らず、自動送信も止めて確認メールを返します。\n"
               . "■ 送らないとき\n　「送らない」とだけ書いて返信してください。\n"
               . "■ すぐ送りたいとき\n　「OK」と返信すると、その場で上の内容を送信します。\n\n"
               . "何もしなければ " . date('H:i', $due) . " に上の内容で送信します。\n"
@@ -233,7 +260,9 @@ function aqCheckReply($tok, $d, $dry){
     $one = preg_replace('/[\s　。．.！!]+/u', '', $t);
     if (preg_match('/^(送らない|送信しない|送らないで(ください)?|中止|キャンセル|取り?消し|ストップ|やめて?|止めて?)$/u', $one)) $kind = 'cancel';
     elseif (preg_match('/^(ok|ｏｋ|おけ|オッケー|そのまま|そのままで|そのままでOK|了解|送って|送信して|お願いします|はい)$/iu', $one)) $kind = 'ok';
-    else $kind = 'text';
+    // 修正文として送るのは「■ 取引先」と「束」を含む全文だけ（質問・一言コメントは送らない）
+    elseif (mb_strpos($t, '■') !== false && mb_strpos($t, '束') !== false) $kind = 'text';
+    else $kind = 'unclear';
     if ($dry) echo "[DRYRUN reply] {$cand['id']} kind=$kind\n$t\n";
     return array('id' => $cand['id'], 'kind' => $kind, 'text' => $t);
 }

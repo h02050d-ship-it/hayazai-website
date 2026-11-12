@@ -14,6 +14,26 @@ function shkCustNote($c){
 // 個別案件の注記（2026-11-12 本人指示「ナイス長野みたいに個別の案件はその旨もLINEに」）。
 // 備考に「個別」を含む品目があれば、その部分（例「長野市場個別」）を拾って「※個別案件（長野市場個別）」を付ける。
 // 加工予定表の shkKobetsuNote と同じ規則。
+// 着日の条件（2026-11-12 本人指摘「ナイスだけど着日何日以降って指定あるっしょ」）。
+// ①⋯メニューの着日指定(chaku=ISO＋chaku_kbn) ②備考の日付つき条件（例「11/24以降の納品希望」「9/19着指定」）を品目の行末に付ける。
+// 加工予定表の shkChakuNote と同じ規則。
+function shkChakuNote($it){
+    $out = array();
+    $ck = isset($it['chaku']) ? trim((string)$it['chaku']) : '';
+    if (preg_match('/^\d{4}-(\d{2})-(\d{2})$/', $ck, $m)) {
+        $kb = isset($it['chaku_kbn']) ? trim((string)$it['chaku_kbn']) : '';
+        $out[] = (int)$m[1] . '/' . (int)$m[2] . '着指定' . ($kb !== '' && $kb !== '-' ? '（' . $kb . '）' : '');
+    }
+    $r = isset($it['remark']) ? (string)$it['remark'] : '';
+    foreach (preg_split('/[、。,，・（）()\[\]【】\s　]+/u', $r) as $seg) {
+        $seg = trim($seg);
+        if ($seg === '' || !preg_match('/\d{1,2}\/\d{1,2}/', $seg)) continue;
+        if (!preg_match('/以降|以前|まで|迄|着|納品|希望|指定/u', $seg)) continue;
+        if ($out && mb_strpos($seg, '着指定') !== false && mb_strpos($out[0], '着指定') !== false) continue; // 着日指定と同じものは重ねない
+        if (!in_array($seg, $out, true)) $out[] = $seg;
+    }
+    return implode('・', $out);
+}
 function shkKobetsuNote($arr){
     $seen = array();
     foreach ($arr as $it) {
@@ -146,7 +166,8 @@ function shkBuildMsg($title, $list, $markNew){
             $bun = shkBun($it);
             $nw  = ($markNew && empty($it['shk_sent'])) ? '🆕 ' : '';
             $bunStr = $bun !== null ? (shkNumStr($bun) . '束') : '?束';
-            $lines[] = $nw . shkLenM($it['length']) . ' ' . $bunStr . '（' . (shkDone($it) ? '完了' : '未完了') . '）';
+            $ck = shkChakuNote($it);
+            $lines[] = $nw . shkLenM($it['length']) . ' ' . $bunStr . '（' . (shkDone($it) ? '完了' : '未完了') . '）' . ($ck !== '' ? ' ※' . $ck : '');
         }
         $kb = shkKobetsuNote($arr); if ($kb !== '') $lines[] = $kb;  // 個別案件（ナイス長野 等）
         $note = shkCustNote($c); if ($note !== '') $lines[] = $note; // 取引先ごとの固定注記
@@ -213,7 +234,7 @@ function shkAutoWaitingKeys(){
     $q = is_file($f) ? json_decode((string)@file_get_contents($f), true) : null;
     $out = array();
     if (is_array($q) && isset($q['drafts']) && is_array($q['drafts'])) {
-        foreach ($q['drafts'] as $d) { if (($d['status'] ?? '') === 'waiting') foreach (($d['keys'] ?? array()) as $k) $out[$k] = true; }
+        foreach ($q['drafts'] as $d) { if (in_array($d['status'] ?? '', array('waiting', 'hold'), true)) foreach (($d['keys'] ?? array()) as $k) $out[$k] = true; }
     }
     return $out;
 }
