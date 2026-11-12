@@ -100,6 +100,7 @@ jobs:
           SHUKKA_NOTIFY_USER_IDS: ${{ secrets.SHUKKA_NOTIFY_USER_IDS }}
           SHUKKA_NAISYA_RELAY_KEY: ${{ secrets.SHUKKA_NAISYA_RELAY_KEY }}
           SHUKKA_NAITO_KEY: ${{ secrets.SHUKKA_NAITO_KEY }}
+          SHUKKA_TENRYU_TOKEN: ${{ secrets.SHUKKA_TENRYU_TOKEN }}
         run: |
           {
             echo '<?php'
@@ -113,6 +114,7 @@ jobs:
             printf "    'notify_user_ids'      => '%s',\n" "$SHUKKA_NOTIFY_USER_IDS"
             printf "    'naisya_relay_key'     => '%s',\n" "$SHUKKA_NAISYA_RELAY_KEY"
             printf "    'naito_key'            => '%s',\n" "$SHUKKA_NAITO_KEY"
+            printf "    'tenryu_token'         => '%s',\n" "$SHUKKA_TENRYU_TOKEN"
             echo '];'
           } > shukka/config.php
           echo "Generated shukka/config.php (token set: $([ -n "$SHUKKA_CHANNEL_ACCESS_TOKEN" ] && echo yes || echo NO))"

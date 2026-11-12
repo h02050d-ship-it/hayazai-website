@@ -8,8 +8,26 @@ function shkSkip($c){ return (bool)preg_match('/^(ヤフ|楽天|ネット)/u', t
 // 取引先ごとの固定注記：出荷依頼テキストの当該ブロック最終行に毎回付ける（クライアントのshkCustNoteと一致させる）。
 function shkCustNote($c){
     $x = preg_replace('/[\s　()（）]/u', '', (string)$c);
-    if (mb_strpos($x, 'ニッチ') !== false) return '※8月1日以降着希望';
+    // （ニッチ「※8月1日以降着希望」は期日到来のため削除・加工予定表側は2026-08-03に削除済み）
     return '';
+}
+// 個別案件の注記（2026-11-12 本人指示「ナイス長野みたいに個別の案件はその旨もLINEに」）。
+// 備考に「個別」を含む品目があれば、その部分（例「長野市場個別」）を拾って「※個別案件（長野市場個別）」を付ける。
+// 加工予定表の shkKobetsuNote と同じ規則。
+function shkKobetsuNote($arr){
+    $seen = array();
+    foreach ($arr as $it) {
+        $r = isset($it['remark']) ? (string)$it['remark'] : '';
+        if (mb_strpos($r, '個別') === false) continue;
+        foreach (preg_split('/[、。,，・\/（）()\[\]【】\s　]+/u', $r) as $seg) {
+            $seg = trim($seg);
+            if ($seg !== '' && mb_strpos($seg, '個別') !== false) $seen[$seg] = true;
+        }
+    }
+    if (!$seen) return '';
+    $parts = array_keys($seen);
+    $parts = array_values(array_filter($parts, function($p){ return $p !== '個別' && $p !== '個別案件'; }));
+    return '※個別案件' . ($parts ? '（' . implode('・', $parts) . '）' : '');
 }
 // 自社配送が多く内藤運輸へは出さない取引先（クライアントの既定OFFと一致）→ 出荷通知の対象外。
 // これらは shk_sent が付かなくても cron リマインドの「未送信」に数えない。
@@ -130,6 +148,7 @@ function shkBuildMsg($title, $list, $markNew){
             $bunStr = $bun !== null ? (shkNumStr($bun) . '束') : '?束';
             $lines[] = $nw . shkLenM($it['length']) . ' ' . $bunStr . '（' . (shkDone($it) ? '完了' : '未完了') . '）';
         }
+        $kb = shkKobetsuNote($arr); if ($kb !== '') $lines[] = $kb;  // 個別案件（ナイス長野 等）
         $note = shkCustNote($c); if ($note !== '') $lines[] = $note; // 取引先ごとの固定注記
         $blocks[] = '■ ' . $c . "\n" . implode("\n", $lines);
     }
@@ -139,4 +158,62 @@ function shkBuildMsg($title, $list, $markNew){
     $txt .= "\n\n計" . count($list) . "件（完了" . $done . "／未完了" . $und . "）";
     $txt .= "\n\n※「現状」と送ると、最新の情報をお返しします。";
     return $txt;
+}
+
+// =====================================================
+// 出荷LINE（友だち全員＝内藤運輸）へ broadcast。戻り=[HTTPコード, 応答本文, curlエラー]
+// send.php（手動）と auto_cron.php（10分後自動）で共有。
+// =====================================================
+function shkLineBroadcast($token, $text){
+    if (mb_strlen($text) > 4900) $text = mb_substr($text, 0, 4900);
+    $payload = json_encode(array('messages' => array(array('type' => 'text', 'text' => $text))), JSON_UNESCAPED_UNICODE);
+    $ch = curl_init('https://api.line.me/v2/bot/message/broadcast');
+    curl_setopt_array($ch, array(
+        CURLOPT_POST => true, CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_HTTPHEADER => array('Content-Type: application/json', 'Authorization: Bearer ' . $token),
+        CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15,
+    ));
+    $resp = curl_exec($ch); $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE); $cerr = curl_error($ch); curl_close($ch);
+    @mkdir(__DIR__ . '/state', 0775, true);
+    @file_put_contents(__DIR__ . '/state/send.log', date('c') . " code=$code text=" . str_replace("\n", '/', $text) . "\n", FILE_APPEND);
+    return array($code, $resp, $cerr);
+}
+
+// =====================================================
+// 社内通知LINE（@811hkagd／大樹）へ出荷依頼の控えを転送する。
+// 既存GAS中継（notify_settings ゲート内蔵）へ POST。best-effort：
+// 失敗しても本体には一切影響させない。GASは302で応答を返す仕様のため CURLOPT_FOLLOWLOCATION 必須。
+// =====================================================
+function shkNotifyNaisya_($text, $relayKey, $by = '出荷依頼送信') {
+    // 中継キーは公開リポジトリに置かない（config.php = GitHub Actions Secrets 生成）。未設定なら控え転送だけスキップ。
+    if ($relayKey === '') return 0;
+    $url  = 'https://script.google.com/macros/s/AKfycbxcvQZVi497obS-nRm4MdN0tYtsaTb03n7FLFWy7oZN2vkItKm7oQO9_85WdJYxGjgaiA/exec';
+    $body = json_encode(array(
+        'key' => $relayKey, 'target' => 'daiki', 'mode' => 'notify', 'ntype' => 'shukka', 'by' => $by,
+        'text' => "📦 出荷依頼を送信しました\n\n" . $text,
+    ), JSON_UNESCAPED_UNICODE);
+    $ncode = 0;
+    try {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, array(
+            CURLOPT_POST => true, CURLOPT_POSTFIELDS => $body,
+            CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
+            CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_TIMEOUT => 10,
+        ));
+        curl_exec($ch); $ncode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
+    } catch (\Throwable $e) { $ncode = 0; }
+    @file_put_contents(__DIR__ . '/state/send.log', date('c') . " naisya=$ncode\n", FILE_APPEND);
+    return $ncode;
+}
+
+// 自動送信キュー（auto_cron.php）に載っていて、まだ送っていない品目のキー。
+// cron.php / mail_cron.php の「未送信」リマインドはこの間は数えない（10分以内に自動で送るため）。
+function shkAutoWaitingKeys(){
+    $f = __DIR__ . '/state/auto_queue.json';
+    $q = is_file($f) ? json_decode((string)@file_get_contents($f), true) : null;
+    $out = array();
+    if (is_array($q) && isset($q['drafts']) && is_array($q['drafts'])) {
+        foreach ($q['drafts'] as $d) { if (($d['status'] ?? '') === 'waiting') foreach (($d['keys'] ?? array()) as $k) $out[$k] = true; }
+    }
+    return $out;
 }

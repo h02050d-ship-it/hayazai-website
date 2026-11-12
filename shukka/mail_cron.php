@@ -32,7 +32,8 @@ if ($items === null) {
 }
 
 $pend = array();
-foreach (shkCandidates($items) as $k => $it) { if (empty($it['shk_sent'])) $pend[$k] = $it; }
+$autoWait = shkAutoWaitingKeys(); // 10分後自動送信を待っている品目は数えない
+foreach (shkCandidates($items) as $k => $it) { if (empty($it['shk_sent']) && !isset($autoWait[$k])) $pend[$k] = $it; }
 if (count($pend) === 0) { mcLog('no pending'); echo "no pending\n"; exit(0); }
 
 // 取引先ごとにまとめる（長さ昇順）

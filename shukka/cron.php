@@ -32,7 +32,8 @@ if ($items === null) { cronLog("read failed"); echo "read failed\n"; exit; }
 
 $cands = shkCandidates($items);
 $news = array();
-foreach ($cands as $k => $it) { if (empty($it['shk_sent'])) $news[$k] = $it; }
+$autoWait = shkAutoWaitingKeys(); // 10分後自動送信を待っている品目はリマインドしない
+foreach ($cands as $k => $it) { if (empty($it['shk_sent']) && !isset($autoWait[$k])) $news[$k] = $it; }
 
 $action = 'none';
 if (count($news) > 0) {
