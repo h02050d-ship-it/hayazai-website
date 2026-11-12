@@ -161,14 +161,20 @@ function shkBuildMsg($title, $list, $markNew){
             return $la <=> $lb;
         });
         $lines = array();
-        foreach ($arr as $it) {
+        // 着日条件が取引先の全品目で同じなら、行ごとでなくブロック末尾に1回だけ（例 丸宇京葉 全部「11/16着指定」）
+        // 全品目に共通の部分はブロック末尾に1回、違う部分だけ行末に残す
+        $parts = array_map(function ($it) { $c = shkChakuNote($it); return $c === '' ? array() : explode('・', $c); }, $arr);
+        $common = count($arr) > 1 ? call_user_func_array('array_intersect', array_merge($parts, array($parts[0]))) : array();
+        $common = array_values(array_unique($common));
+        foreach ($arr as $i => $it) {
             if (shkDone($it)) $done++; else $und++;
             $bun = shkBun($it);
             $nw  = ($markNew && empty($it['shk_sent'])) ? '🆕 ' : '';
             $bunStr = $bun !== null ? (shkNumStr($bun) . '束') : '?束';
-            $ck = shkChakuNote($it);
+            $ck = implode('・', array_values(array_diff($parts[$i], $common)));
             $lines[] = $nw . shkLenM($it['length']) . ' ' . $bunStr . '（' . (shkDone($it) ? '完了' : '未完了') . '）' . ($ck !== '' ? ' ※' . $ck : '');
         }
+        if ($common) $lines[] = '※' . implode('・', $common);
         $kb = shkKobetsuNote($arr); if ($kb !== '') $lines[] = $kb;  // 個別案件（ナイス長野 等）
         $note = shkCustNote($c); if ($note !== '') $lines[] = $note; // 取引先ごとの固定注記
         $blocks[] = '■ ' . $c . "\n" . implode("\n", $lines);
