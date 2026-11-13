@@ -249,7 +249,7 @@ if ($DRY) echo "pending=" . count($pend) . " news=" . count($news) . "\n" . impl
 
 // ===== helpers =====
 function aqHowTo(){
-    return "■ 送るとき\n　「OK」と返信してください。上の内容を送信します。\n"
+    return "■ 送るとき\n　「OK」と返信してください（「おｋ」「ｋ」でも可）。上の内容を送信します。\n"
          . "■ 直したいとき\n"
          . "　このメールに返信して、直してほしい内容を「指示」として書いてください。\n"
          . "　（例「ナイス長野は11/24以降着と書いて」「丸宇京葉は今回いらない」）\n"
@@ -372,7 +372,7 @@ function aqCheckReply($tok, $d, $dry){
     if ($t === '') return false;
     $one = preg_replace('/[\s　。．.！!]+/u', '', $t);
     if (preg_match('/^(送らない|送信しない|送らないで(ください)?|中止|キャンセル|取り?消し|ストップ|やめて?|止めて?)$/u', $one)) $kind = 'cancel';
-    elseif (preg_match('/^(ok|ｏｋ|おけ|オッケー|そのまま|そのままで|そのままでOK|了解|送って|送信して|お願いします|はい)$/iu', $one)) $kind = 'ok';
+    elseif (preg_match('/^(ok|k|おk|おけ|おっけ|おっけー|オッケ|オッケー|オケ|おーけー|オーケー|ok(です|でお願いします)?|そのまま|そのままで|そのままでok|了解|りょ|送って|送信して|お願いします|はい)$/u', strtolower(mb_convert_kana($one, 'as')))) $kind = 'ok';   // 全角ｏｋ・ＯＫ・おｋ・ｋ も可（11/13 本人）
     else $kind = 'text';
     if ($dry) echo "[DRYRUN reply] {$cand['id']} kind=$kind\n$t\n";
     return array('id' => $cand['id'], 'kind' => $kind, 'text' => $t);
