@@ -234,7 +234,7 @@ function shkNotifyNaisya_($text, $relayKey, $by = '出荷依頼送信') {
 }
 
 // 自動送信キュー（auto_cron.php）に載っていて、まだ送っていない品目のキー。
-// cron.php / mail_cron.php の「未送信」リマインドはこの間は数えない（10分以内に自動で送るため）。
+// cron.php / mail_cron.php の「未送信」リマインドはこの間は数えない（確認メールでOK待ちのため・その日の18:30で打ち切り）。
 function shkAutoWaitingKeys(){
     $f = __DIR__ . '/state/auto_queue.json';
     $q = is_file($f) ? json_decode((string)@file_get_contents($f), true) : null;

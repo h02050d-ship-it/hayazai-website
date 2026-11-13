@@ -1,19 +1,20 @@
 <?php
 // =====================================================
-// 内藤運輸への出荷LINE「10分後に自動送信」（2026-11-12 本人指示）
+// 内藤運輸への出荷LINE「承認してから送信」（2026-11-12 開始・11/13 本人指示で自動送信をやめ承認制に）
 //  1) 加工予定表に内藤便の新しい品目（出荷タグ＝shk_sent無し）が入ったら、
 //     既定の文面（出荷依頼モーダルの既定と同じ＝未出荷の内藤便すべて・着日条件/個別案件つき）を作り、
-//     info@hayazai.com へ「HH:MM に自動送信します」とメールする（予告メール）。
+//     info@hayazai.com へ「OKで送ります」とメールする（確認メール）。★時間が来ても自動では送らない。
 //  2) 予告メールへの返信を tenryu GAS（info@ の Gmail）で毎分確認する。
 //       ・「OK」       → いまの文をすぐ送信
 //       ・「送らない」 → 送らない（品目は未送信のまま＝従来のリマインドに戻る）
 //       ・それ以外     → 「指示」として扱う。★返信の文をそのまま送ることはしない（11/12 誤送信事故・本人指示）。
 //                        会社PCのコマンド版Claude（shukka_rw/rw_worker.py が rw.php 経由で取りに来る）が
-//                        「いまの文＋指示＋品目データ」から送信文を作り直す → 新しい予告メールで見せて、また10分後に送信。
+//                        「いまの文＋指示＋品目データ」から送信文を作り直す → 新しい確認メールで見せて、OKを待つ。
 //                        作り直せない時（PC停止・ログイン切れ・指示が不明）は送らずに止めて（保留）メールで聞く。
-//       ・何もしない   → 10分後に送信
-//     送信後30分以内の指示は【訂正】文を同じ手順（作り直し→予告→10分後）で送る。
-//  3) 加工予定表から手動で送った場合（shk_sent が付いた）は自動送信を取りやめる。
+//       ・何もしない   → 送らない。その日の18:30で打ち切り（品目は未送信のまま・次の営業日の朝にもう一度確認メール）
+//     OKの時点で加工予定表の内容がメールと変わっていたら、送らずに最新の内容で確認メールを出し直す。
+//     送信後30分以内の指示は【訂正】文を同じ手順（作り直し→確認→OK）で送る。
+//  3) 加工予定表から手動で送った場合（shk_sent が付いた）は確認待ちを取りやめる。
 //  土日祝・年末年始は動かない（pendingIsBusinessDay）。新しい案は 8:00〜17:44 だけ作る。
 // crontab: * 8-18 * * 1-5 /usr/bin/php8.3 ~/hayazai.com/public_html/shukka/auto_cron.php
 // 実行例:  php auto_cron.php dryrun   （メール・LINE・状態保存なし）／ php auto_cron.php status
@@ -25,7 +26,7 @@ date_default_timezone_set('Asia/Tokyo');
 require __DIR__ . '/lib.php';
 require dirname(__DIR__) . '/line/pending_lib.php';   // pendingIsBusinessDay（静的祝日表）
 
-const AQ_DELAY      = 600;   // 10分後に送信
+const AQ_WAIT_END   = 1830;  // 確認待ちはその日の18:30で打ち切り（送らない）
 const AQ_SETTLE     = 120;   // 品目が入ってから2分待って案を作る（入力途中の束数を拾わない・まとめて1通にする）
 const AQ_FIX_WINDOW = 1800;  // 送信後30分は訂正の指示を受け付ける
 const AQ_RW_TIMEOUT = 480;   // AIの作り直しを8分待つ（来なければ保留）
@@ -81,6 +82,14 @@ foreach ($q['drafts'] as $id => &$d) {
             $left = array_values(array_filter($d['keys'], function ($k) use ($pend) { return isset($pend[$k]); }));
             if (!$left) { $d['status'] = 'superseded'; $d['done_at'] = $now; $changed = true; $out[] = "$id superseded(手動送信済み)"; continue; }
         }
+        if ($st === 'waiting' && (date('Ymd', $d['created']) !== date('Ymd', $now) || (int)date('Gi', $now) >= AQ_WAIT_END)) {
+            $d['status'] = 'expired'; $d['done_at'] = $now; $changed = true; $out[] = "$id waiting expired(no OK)";
+            aqMail($DRY, '【内藤運輸LINE】OKが無かったので送っていません（受付 ' . aqShort($id) . '）',
+                "確認メール（件名に $id）に「OK」の返信が無かったため、内藤運輸へは送っていません。\n"
+              . ($fix ? '' : "品目は未送信のままです。次の営業日の朝にもう一度確認メールを出します。\n")
+              . "今日送るときは加工予定表の「🚚 出荷依頼」から送ってください。\n" . AQ_URL . "\n");
+            continue;
+        }
         if ($st === 'hold' && $now - ($d['hold_at'] ?? $now) > AQ_HOLD_MAX) {
             $d['status'] = 'expired'; $d['done_at'] = $now; $changed = true; $out[] = "$id hold expired";
             aqMail($DRY, '【内藤運輸LINE】送らずに終わりました（受付 ' . aqShort($id) . '）',
@@ -102,6 +111,18 @@ foreach ($q['drafts'] as $id => &$d) {
             }
             if ($rep['kind'] === 'ok') {
                 $text = !empty($d['custom']) ? $d['text'] : aqDefaultText($cands);
+                if (empty($d['custom']) && aqBody($text) !== aqBody($d['text'])) {
+                    // 確認メールの後に加工予定表の内容が変わった → 見せていない内容は送らない。最新で確認し直す
+                    $nid = aqNewId($q['drafts'], $newDrafts);
+                    $newDrafts[$nid] = array('id' => $nid, 'created' => $now, 'keys' => $d['keys'], 'text' => $text,
+                        'status' => 'waiting', 'reply_ids' => array(), 'check_fail' => 0, 'parent' => $id);
+                    $d['status'] = 'rewritten'; $d['done_at'] = $now; $d['child'] = $nid;
+                    aqMail($DRY, '【内藤運輸LINE】内容が変わったのでもう一度確認します・OKで送ります ' . $nid,
+                        "「OK」を受け取りましたが、確認メールの後に加工予定表の内容が変わっていたため、まだ送っていません。\n"
+                      . "最新の内容は下のとおりです。\n\n▼ 送信する内容\n────────\n" . $text . "\n────────\n\n" . aqHowTo() . "※前のメールではなく、このメールに返信してください。\n");
+                    $out[] = "$id ok but changed -> reconfirm $nid";
+                    continue;
+                }
                 aqDoSend($d, $text, 'ok', $fix ? array() : array_keys($cands), $fix ? '出荷依頼(訂正・メールでOK)' : '出荷依頼(メールでOK)');
                 $out[] = "$id sent(ok)";
                 continue;
@@ -111,21 +132,7 @@ foreach ($q['drafts'] as $id => &$d) {
             $out[] = "$id rewrite requested";
             continue;
         }
-        if ($st === 'hold') { if ($rep === null) $changed = true; continue; }   // 保留中は時間が来ても送らない
-        if ($now >= $d['due']) {
-            if ($rep === null && ($d['check_fail'] ?? 0) < 3) { $changed = true; $out[] = "$id due but reply-check failed (" . $d['check_fail'] . ") wait"; continue; }
-            if (!empty($d['custom'])) {
-                aqDoSend($d, $d['text'], 'custom', $fix ? array() : array_keys($cands), $fix ? '出荷依頼(訂正・AI作り直し)' : '出荷依頼(AI作り直し・10分後)');
-            } else {
-                $text = aqDefaultText($cands);   // 10分の間に束数などが変わっていれば最新で送る
-                aqDoSend($d, $text, 'default', array_keys($cands), '出荷依頼(10分後自動)');
-                if ($d['status'] === 'sent' && aqBody($text) !== aqBody($d['text'])) {
-                    aqMail($DRY, '【内藤運輸LINE】送信しました（10分の間に内容が変わったため最新で送信・受付 ' . aqShort($id) . '）',
-                        "予告メールの後に加工予定表の内容が変わったため、最新の内容で送信しました。\n\n────────\n" . $text . "\n────────\n");
-                }
-            }
-            $out[] = "$id sent(" . ($d['sent_kind'] ?? '') . ") status=" . $d['status'];
-        } elseif ($rep === null) { $changed = true; }
+        if ($rep === null) $changed = true;   // 時間が来ても送らない（OKの返信だけで送る・11/13 本人指示）
 
     } elseif ($st === 'rewriting') {
         $doneF = $rwDir . '/' . $id . '.done.json';
@@ -148,14 +155,14 @@ foreach ($q['drafts'] as $id => &$d) {
                 // AIが先頭の日付行を落とした時は元の文の1行目を戻す（訂正文は【訂正】で始まるので対象外）
                 if (!$fix && !preg_match('/^\d{4}\/\d{1,2}\/\d{1,2}/u', $res)) $res = strtok($d['text'], "\n") . "\n\n" . $res;
                 $nid = aqNewId($q['drafts'], $newDrafts);
-                $nd = array('id' => $nid, 'created' => $now, 'due' => $now + AQ_DELAY, 'keys' => $d['keys'], 'text' => $res,
+                $nd = array('id' => $nid, 'created' => $now, 'keys' => $d['keys'], 'text' => $res,
                     'custom' => true, 'fix' => $fix, 'parent' => $id, 'status' => 'waiting', 'reply_ids' => array(), 'check_fail' => 0);
                 $newDrafts[$nid] = $nd;
                 $d['status'] = 'rewritten'; $d['done_at'] = $now; $d['child'] = $nid;
-                aqMail($DRY, '【内藤運輸LINE】指示どおり作り直しました。' . date('H:i', $nd['due']) . 'に自動送信します ' . $nid,
+                aqMail($DRY, '【内藤運輸LINE】指示どおり作り直しました・OKで送ります ' . $nid,
                     "指示「" . $d['instr'] . "」をもとに、AIが文章を作り直しました。\n"
-                  . "下の内容で " . date('H:i', $nd['due']) . " に内藤運輸（出荷LINE）へ" . ($fix ? '訂正として' : '') . "自動送信します。\n\n"
-                  . "▼ 送信する内容\n────────\n" . $res . "\n────────\n\n" . aqHowTo($nd['due']) . "※前のメールではなく、このメールに返信してください。\n");
+                  . "下の内容でよければ「OK」と返信してください。内藤運輸（出荷LINE）へ" . ($fix ? '訂正として' : '') . "送信します。\n\n"
+                  . "▼ 送信する内容\n────────\n" . $res . "\n────────\n\n" . aqHowTo() . "※前のメールではなく、このメールに返信してください。\n");
                 $out[] = "$id rewritten -> $nid";
             }
         } elseif ($now - ($d['rw_at'] ?? $now) > AQ_RW_TIMEOUT) {
@@ -176,7 +183,7 @@ foreach ($q['drafts'] as $id => &$d) {
             $out[] = "$id cancel-after-sent notified";
         } elseif ($rep['kind'] === 'text') {
             $nid = aqNewId($q['drafts'], $newDrafts);
-            $fd = array('id' => $nid, 'created' => $now, 'due' => 0, 'keys' => array(), 'text' => $d['sent_text'],
+            $fd = array('id' => $nid, 'created' => $now, 'keys' => array(), 'text' => $d['sent_text'],
                 'custom' => true, 'fix' => true, 'parent' => $id, 'reply_tok' => $id, 'status' => 'waiting', 'reply_ids' => array($rep['id']), 'check_fail' => 0);
             aqRequestRewrite($fd, $rep['text'], true);
             $newDrafts[$nid] = $fd;
@@ -190,7 +197,11 @@ foreach ($newDrafts as $nid => $nd) $q['drafts'][$nid] = $nd;
 
 // ---------- 2. 新しい品目 → 案を作ってメール ----------
 $inQueue = array();
-foreach ($q['drafts'] as $d) if (empty($d['fix']) && in_array($d['status'] ?? '', array('waiting', 'hold', 'rewriting', 'cancelled', 'expired', 'cancelled_manual'), true)) foreach ($d['keys'] as $k) $inQueue[$k] = true;
+foreach ($q['drafts'] as $d) {
+    if (!empty($d['fix']) || !in_array($d['status'] ?? '', array('waiting', 'hold', 'rewriting', 'cancelled', 'expired', 'cancelled_manual'), true)) continue;
+    if (($d['status'] ?? '') === 'expired' && date('Ymd', $d['done_at'] ?? 0) !== date('Ymd', $now)) continue;   // 前の日にOKが無く打ち切った分は、次の営業日にもう一度確認
+    foreach ($d['keys'] as $k) $inQueue[$k] = true;
+}
 $hasWaiting = false;
 foreach ($q['drafts'] as $d) if (empty($d['fix']) && in_array($d['status'] ?? '', array('waiting', 'hold', 'rewriting'), true)) $hasWaiting = true;
 $news = array();
@@ -206,19 +217,19 @@ if ($news && !$hasWaiting && $hm >= 800 && $hm < 1745) {
     $newest = max(array_map(function ($k) use ($q) { return $q['seen'][$k]; }, array_keys($news)));
     if ($now - $newest >= AQ_SETTLE) {
         $id = aqNewId($q['drafts'], array());
-        $due = $now + AQ_DELAY;
         $text = aqDefaultText($cands);
         $newList = array();
         foreach ($news as $it) $newList[] = trim((string)$it['customer']) . ' ' . shkLenM($it['length']) . ' ' . trim((string)($it['grade'] ?? '')) . ' ' . shkNumStr(shkBun($it)) . '束';
         $custs = array_values(array_unique(array_map(function ($it) { return trim((string)$it['customer']); }, $news)));
-        $subject = '【内藤運輸LINE】' . date('H:i', $due) . 'に自動送信します（' . implode('・', $custs) . '） ' . $id;
+        $subject = '【内藤運輸LINE】送信の確認・OKで送ります（' . implode('・', $custs) . '） ' . $id;
         $body = "加工予定表に内藤運輸便の品目が追加されました。\n"
-              . "下の内容で " . date('H:i', $due) . " に内藤運輸（出荷LINE）へ自動送信します。\n\n"
+              . "下の内容でよければ「OK」と返信してください。内藤運輸（出荷LINE）へ送信します。\n"
+              . "★OKの返信が無いかぎり送りません。\n\n"
               . "▼ 送信する内容\n────────\n" . $text . "\n────────\n\n"
-              . aqHowTo($due)
-              . "※加工予定表から手動で送信した場合、自動送信は取りやめます。\n\n"
+              . aqHowTo()
+              . "※加工予定表から手動で送信した場合、この確認は取りやめます。\n\n"
               . "今回新しく入った品目:\n・" . implode("\n・", $newList) . "\n";
-        $q['drafts'][$id] = array('id' => $id, 'created' => $now, 'due' => $due, 'keys' => array_keys($news),
+        $q['drafts'][$id] = array('id' => $id, 'created' => $now, 'keys' => array_keys($news),
             'text' => $text, 'status' => 'waiting', 'reply_ids' => array(), 'check_fail' => 0);
         $ok = aqMail($DRY, $subject, $body);
         if (!$ok && !$DRY) { $q['drafts'][$id]['status'] = 'failed'; $q['drafts'][$id]['err'] = 'mail'; }
@@ -237,16 +248,15 @@ if ($out) aqLog(($DRY ? 'DRY ' : '') . implode(' / ', $out));
 if ($DRY) echo "pending=" . count($pend) . " news=" . count($news) . "\n" . implode("\n", $out) . "\n";
 
 // ===== helpers =====
-function aqHowTo($due){
-    $t = date('H:i', $due);
-    return "■ 直したいとき\n"
+function aqHowTo(){
+    return "■ 送るとき\n　「OK」と返信してください。上の内容を送信します。\n"
+         . "■ 直したいとき\n"
          . "　このメールに返信して、直してほしい内容を「指示」として書いてください。\n"
          . "　（例「ナイス長野は11/24以降着と書いて」「丸宇京葉は今回いらない」）\n"
-         . "　→ AIが指示どおりに文章を作り直し、もう一度このようなメールでお見せしてから送ります。\n"
+         . "　→ AIが指示どおりに文章を作り直し、もう一度このようなメールでお見せします（送るのはOKの後）。\n"
          . "　　返信に書いた文章をそのまま送ることはありません。\n"
-         . "■ 送らないとき\n　「送らない」とだけ書いて返信してください。\n"
-         . "■ すぐ送りたいとき\n　「OK」と返信すると、その場で上の内容を送信します。\n\n"
-         . "何もしなければ " . $t . " に上の内容で送信します。\n"
+         . "■ 送らないとき\n　「送らない」と返信するか、そのまま放っておいてください。\n\n"
+         . "★何もしなければ送りません（今日の18:30で打ち切り・品目は未送信のまま）。\n"
          . "※送信後30分以内に指示を返信した場合は【訂正】文を作って、同じように確認してから送ります。\n";
 }
 function aqDefaultText($cands){ return shkBuildMsg('', array_values($cands), false); }
@@ -262,7 +272,7 @@ function aqMail($dry, $subject, $body){
     if ($dry) { echo "[DRYRUN mail] $subject\n"; return true; }
     return @mb_send_mail(AQ_TO, $subject, $body, 'From: ' . AQ_FROM);
 }
-// 送信して結果を案に書く＋結果メール（既定の自動送信だけは結果メールを出さない＝通知を増やさない）
+// 送信して結果を案に書く＋結果メール
 function aqDoSend(&$d, $text, $kind, $keys, $by){
     global $DRY, $lineToken, $fb, $items, $relayKey, $pend, $now;
     $ok = aqSend($DRY, $lineToken, $fb, $items, $text, $keys, $relayKey, $by);
@@ -271,7 +281,7 @@ function aqDoSend(&$d, $text, $kind, $keys, $by){
     if (!$ok) {
         aqMail($DRY, '【内藤運輸LINE】⚠️送信に失敗しました（受付 ' . aqShort($d['id']) . '）',
             "LINEの送信に失敗しました。加工予定表の「🚚 出荷依頼」から手動で送ってください。\n" . AQ_URL . "\n\n────────\n" . $text . "\n────────\n");
-    } elseif ($kind !== 'default') {
+    } else {
         aqMail($DRY, '【内藤運輸LINE】送信しました（受付 ' . aqShort($d['id']) . '）',
             "内藤運輸（出荷LINE）へ次の内容を送信しました。\n\n────────\n" . $text . "\n────────\n");
     }
@@ -282,7 +292,7 @@ function aqHold(&$d, $why){
     global $DRY, $now;
     $d['status'] = 'hold'; $d['hold_at'] = $now;
     aqMail($DRY, '【内藤運輸LINE】送信を止めています（受付 ' . aqShort($d['id']) . '）',
-        $why . "\n内藤運輸へは送らず、自動送信も止めています。\n\n"
+        $why . "\n内藤運輸へは送っていません。\n\n"
       . (isset($d['instr']) ? "受け取った指示:\n「" . $d['instr'] . "」\n\n" : '')
       . "▼ 予告メール（件名に " . ($d['reply_tok'] ?? $d['id']) . "）に返信してください（60分以内）\n"
       . "・指示を書き直して返信 → もう一度AIが作り直します\n・「OK」→ 下のいまの内容で送信\n・「送らない」→ 送らない\n"
