@@ -35,6 +35,7 @@ function shkChakuNote($it){
     return implode('・', $out);
 }
 function shkKobetsuNote($arr){
+    return '';   // 2026-11-18 本人「内藤だけど個別案件っての削除で」→ 内藤運輸LINEには個別案件の注記を出さない
     $seen = array();
     foreach ($arr as $it) {
         $r = isset($it['remark']) ? (string)$it['remark'] : '';

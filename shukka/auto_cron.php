@@ -249,7 +249,7 @@ if ($DRY) echo "pending=" . count($pend) . " news=" . count($news) . "\n" . impl
 
 // ===== helpers =====
 function aqHowTo(){
-    return "■ 送るとき\n　「OK」と返信してください（「おｋ」「ｋ」でも可）。上の内容を送信します。\n"
+    return "■ 送るとき\n　「OK」と返信してください（「おｋ」「ｋ」や、何も書かない空の返信でも可）。上の内容を送信します。\n"
          . "■ 直したいとき\n"
          . "　このメールに返信して、直してほしい内容を「指示」として書いてください。\n"
          . "　（例「ナイス長野は11/24以降着と書いて」「丸宇京葉は今回いらない」）\n"
@@ -354,6 +354,9 @@ function aqSend($dry, $token, $fb, $items, $text, $keys, $relayKey, $by){
 // tenryu GAS で info@ の返信を確認。戻り: null=確認失敗 / false=新しい返信なし / array(id,kind,text)
 // kind: cancel / ok / text(＝指示。そのまま送らない)
 function aqCheckReply($tok, $d, $dry){
+    // チャットで本人がOKした分（state/ok/<受付番号> を置く）→ OKの返信と同じ扱い（2026-11-18）
+    $okf = __DIR__ . '/state/ok/' . $d['id'];
+    if (!$dry && is_file($okf)) { @unlink($okf); return array('id' => 'chat-ok-' . time(), 'kind' => 'ok', 'text' => 'OK（チャットで本人承認）'); }
     if ($tok === '') return null;
     $url = AQ_TENRYU . '?token=' . urlencode($tok) . '&act=shk_check&tok=' . urlencode($d['reply_tok'] ?? $d['id']) . '&after=' . ($d['created'] * 1000);
     $ch = curl_init($url);
@@ -369,9 +372,9 @@ function aqCheckReply($tok, $d, $dry){
     }
     if ($cand === null) return false;
     $t = trim((string)$cand['text']);
-    if ($t === '') return false;
     $one = preg_replace('/[\s　。．.！!]+/u', '', $t);
-    if (preg_match('/^(送らない|送信しない|送らないで(ください)?|中止|キャンセル|取り?消し|ストップ|やめて?|止めて?)$/u', $one)) $kind = 'cancel';
+    if ($one === '') $kind = 'ok';   // 空の返信（本文なし）もOK（2026-11-18 本人「OKもしくは空白でも」）
+    elseif (preg_match('/^(送らない|送信しない|送らないで(ください)?|中止|キャンセル|取り?消し|ストップ|やめて?|止めて?)$/u', $one)) $kind = 'cancel';
     elseif (preg_match('/^(ok|k|おk|おけ|おっけ|おっけー|オッケ|オッケー|オケ|おーけー|オーケー|ok(です|でお願いします)?|そのまま|そのままで|そのままでok|了解|りょ|送って|送信して|お願いします|はい)$/u', strtolower(mb_convert_kana($one, 'as')))) $kind = 'ok';   // 全角ｏｋ・ＯＫ・おｋ・ｋ も可（11/13 本人）
     else $kind = 'text';
     if ($dry) echo "[DRYRUN reply] {$cand['id']} kind=$kind\n$t\n";
