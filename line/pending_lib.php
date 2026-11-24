@@ -87,6 +87,24 @@ function pendingDone(string $userId): bool {
     if (!is_file($p)) return false;
     return @unlink($p);
 }
+// --- 担当者対応中モード（2026-11-24）---------------------------------
+// 担当者が手動で返信した相手に、その後 AI 一次回答や案内文が割り込むと
+// 二重の返事になって不自然。対応済みリンクを押した相手は一定期間
+// 自動返信を止め、届いたメッセージは通知だけにする（リッチメニューのボタンは通常どおり動く）。
+const HUMAN_MODE_SEC = 3 * 86400;
+function humanModePath(string $userId): string {
+    return dirname(pendingDir()) . '/human_' . pendingSafeId($userId) . '.txt';
+}
+function humanModeSet(string $userId): void {
+    @file_put_contents(humanModePath($userId), (string)time());
+}
+function humanModeActive(string $userId): bool {
+    $p = humanModePath($userId);
+    if (!is_file($p)) return false;
+    $t = (int)trim((string)@file_get_contents($p));
+    return $t > 0 && (time() - $t) < HUMAN_MODE_SEC;
+}
+
 /** @return array<int,array> 古い順 */
 function pendingList(): array {
     $out = [];

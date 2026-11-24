@@ -352,10 +352,12 @@ function notifyQuote(array $state, string $displayName, string $userId, string $
     $b .= "■ 数量・面積: " . ($state['qty'] ?? '-') . "\n";
     $b .= "■ 希望納期: " . ($state['delivery_label'] ?? '-') . "\n";
     $b .= "■ お届け先: " . ($state['address'] ?? '-') . "\n";
+    if (!empty($state['free'])) $b .= "■ ご記入内容（ボタンを使わず直接入力）:\n" . $state['free'] . "\n";
     // 未返信キューに登録（返信されるまで pending_cron.php が再通知）
     global $CHANNEL_SECRET;
     $summary = '見積もり依頼: ' . ($state['product_label'] ?? '-') . '／' . ($state['grade_label'] ?? '-') . '／'
-             . ($state['qty'] ?? '-') . '／' . ($state['delivery_label'] ?? '-') . '／' . ($state['address'] ?? '-');
+             . ($state['qty'] ?? '-') . '／' . ($state['delivery_label'] ?? '-') . '／' . ($state['address'] ?? '-')
+             . (!empty($state['free']) ? '／記入: ' . $state['free'] : '');
     pendingAdd($userId, $displayName, $summary, 'quote');
     $b .= "\n▼返信はこちら（このお客様のチャット）\n" . pendingChatUrl($userId) . "\n";
     $b .= "\n▼返信したら押す（再通知が止まります）\n" . pendingDoneUrl($userId, $CHANNEL_SECRET) . "\n";
@@ -365,7 +367,8 @@ function startQuote(string $replyToken, string $userId, string $token, array $PR
     saveState($userId, ['flow' => 'quote', 'step' => 'product']);
     $items = [];
     foreach ($PRODUCTS as $k => $label) $items[] = qrPostback($label, 'q=product&v=' . $k, $label);
-    replyMessages($replyToken, [textMsg("お見積もりありがとうございます！🌲\nまず、ご希望の商品をお選びください。", $items)], $token);
+    replyMessages($replyToken, [textMsg("お見積もりありがとうございます！🌲\nまず、ご希望の商品を下のボタンからお選びください。\n\n"
+        . "ボタンが出ていない場合は、ご希望の商品・数量（㎡や枚数）・お届け先（市区町村）をこのまま入力して送ってください。", $items)], $token);
 }
 
 // =====================================================================
@@ -654,6 +657,7 @@ foreach ($payload['events'] as $ev) {
             }
             // それ以外の画像は案内（写真受付の停止中は文面を変える）
             notifyStaffOfManualMessage($userId, '［画像が届きました］', $ACCESS_TOKEN, $STAFF_EMAIL);
+            if (humanModeActive($userId)) continue; // 担当者対応中は通知だけ
             $imgGuide = PHOTO_FLOW_ENABLED
                 ? "画像を受け取りました。施工写真のご応募は「施工写真」と送っていただくと受付を開始します🌲"
                 : "画像を受け取りました🌲 担当者が確認してご返信します。";
@@ -700,6 +704,15 @@ foreach ($payload['events'] as $ev) {
             }
 
             // お問い合わせの内容入力 → AI一次回答＋スタッフ通知
+            // 担当者対応中（対応済みリンクを押してから3日間）は AI・案内文を出さず通知だけ。
+            // 人が返事をした後に自動の返事が割り込まないように（2026-11-24）。
+            if (humanModeActive($userId) && $text !== '') {
+                if ($flow !== '') clearState($userId);
+                if (isSmallTalk($text)) { pendingDone($userId); continue; }
+                notifyStaffOfManualMessage($userId, $text, $ACCESS_TOKEN, $STAFF_EMAIL);
+                continue;
+            }
+
             // 2026-11-24: カテゴリ未選択（iq_cat）のまま直接書かれた内容も受け付ける。
             // ボタン（クイックリプライ）はPC版LINEでは表示されず、そこで止まる人がいたため。
             if ($flow === 'inquiry' && ($step === 'iq_detail' || ($step === 'iq_cat' && !isSmallTalk($text))) && $text !== '') {
@@ -756,6 +769,17 @@ foreach ($payload['events'] as $ev) {
                     . "\nお届け先: " . ($state['address'] ?? '-');
                 $items = [qrPostback('この内容で送信', 'q=confirm&v=send', 'この内容で送信'), qrPostback('最初からやり直す', 'q=restart', '最初からやり直す')];
                 replyMessages($replyToken, [textMsg($summary, $items)], $ACCESS_TOKEN);
+                continue;
+            }
+
+            // 見積もりでボタンを押さずに直接書かれた内容（PC版LINEはボタンが出ない）→ そのまま受付
+            if ($flow === 'quote' && in_array($step, ['product', 'grade', 'delivery', 'confirm'], true)
+                && $text !== '' && !isSmallTalk($text)) {
+                $state['free'] = mb_substr($text, 0, 3000);
+                $name = lineDisplayName($userId, $ACCESS_TOKEN);
+                notifyQuote($state, $name, $userId, $STAFF_EMAIL, $FROM_EMAIL);
+                clearState($userId);
+                replyMessages($replyToken, [textMsg("お見積もり依頼を受け付けました！🌲\n内容を確認し、担当者よりこのトークでご連絡します。\n足りない情報があれば、こちらからお伺いします。\n\n営業時間 平日8:00〜17:00\nお急ぎの場合はお電話（0538-58-2395）もどうぞ。")], $ACCESS_TOKEN);
                 continue;
             }
 

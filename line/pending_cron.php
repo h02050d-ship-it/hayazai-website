@@ -97,3 +97,55 @@ foreach (pendingList() as $rec) {
     pendingSave($rec);
 }
 echo "reminded: {$sent}\n";
+
+// ---------------------------------------------------------------------
+//  途中で止まったお客様の通知（2026-11-24）
+//  「お問い合わせ」「見積もり」を押したのに、ボタン選択や入力の途中で
+//  30分以上止まっている人を info@ へ1回だけ知らせる（こちらから声をかけられるように）。
+//  2026-11-24 友だち追加→お問い合わせ→カテゴリボタンで止まった方が出たため。
+// ---------------------------------------------------------------------
+const STALL_AFTER_SEC = 30 * 60;
+const STALL_MAX_AGE   = 3 * 86400; // これより古い放置は知らせない
+$TOKEN = $CONFIG['channel_access_token'] ?? '';
+function stallDisplayName(string $userId, string $token): string {
+    if ($token === '') return '（名前不明）';
+    $ch = curl_init('https://api.line.me/v2/bot/profile/' . rawurlencode($userId));
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $token]]);
+    $d = json_decode((string)curl_exec($ch), true);
+    curl_close($ch);
+    return (is_array($d) && !empty($d['displayName'])) ? $d['displayName'] : '（名前不明）';
+}
+$stallLabels = [
+    'iq_cat' => '「お問い合わせ」を押した後、内容を送らずに止まっています',
+    'iq_detail' => '「お問い合わせ」で用件を選んだ後、内容を送らずに止まっています',
+    'product' => '「見積もり」を押した後、商品を選ばずに止まっています',
+    'grade' => '見積もりの途中（グレード選択）で止まっています',
+    'qty' => '見積もりの途中（数量の入力）で止まっています',
+    'delivery' => '見積もりの途中（納期の選択）で止まっています',
+    'address' => '見積もりの途中（お届け先の入力）で止まっています',
+    'confirm' => '見積もりの最後（送信ボタン）を押さずに止まっています',
+];
+$stalled = 0;
+foreach (glob(dirname(dirname(__DIR__)) . '/line_state/U*.json') ?: [] as $f) {
+    $st = json_decode((string)file_get_contents($f), true);
+    if (!is_array($st) || !empty($st['stall_notified'])) continue;
+    $flow = $st['flow'] ?? ''; $stp = $st['step'] ?? '';
+    if (!in_array($flow, ['inquiry', 'quote'], true) || !isset($stallLabels[$stp])) continue;
+    $idle = $now - (int)filemtime($f);
+    if ($idle < STALL_AFTER_SEC || $idle > STALL_MAX_AGE) continue;
+    $uid  = basename($f, '.json');
+    if (humanModeActive($uid)) continue;
+    $name = stallDisplayName($uid, $TOKEN);
+    $body = $name . " さんが公式LINEで" . $stallLabels[$stp] . "。\n"
+          . "（最後の操作: " . date('n/j H:i', (int)filemtime($f)) . "）\n\n"
+          . "ボタンが見えなかった・入力のしかたが分からなかった可能性があります。\n"
+          . "必要ならチャットから一言お声がけください。\n\n"
+          . "▼チャット画面\n" . pendingChatUrl($uid) . "\n\n"
+          . "▼声をかけたら押す（このお客様には3日間AIの自動返信を出しません）\n" . pendingDoneUrl($uid, $SECRET) . "\n";
+    @mb_send_mail($TO, '【公式LINE】' . $name . ' さんが途中で止まっています', $body, 'From: ' . $FROM);
+    $st['stall_notified'] = $now;
+    @file_put_contents($f, json_encode($st, JSON_UNESCAPED_UNICODE));
+    $stalled++;
+}
+echo "stalled: {$stalled}\n";

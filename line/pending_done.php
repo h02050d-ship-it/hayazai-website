@@ -40,11 +40,14 @@ if (isset($_GET['list'])) {
 if (isset($_GET['all'])) {
     if (!hash_equals(pendingToken('all', $SECRET), $k)) page('無効なリンク', '署名が一致しません。', 403);
     $n = 0;
-    foreach (pendingList() as $r) { if (pendingDone($r['userId'])) $n++; }
-    page('すべて対応済みにしました', $n . '件の再通知を止めました。');
+    foreach (pendingList() as $r) { humanModeSet($r['userId']); if (pendingDone($r['userId'])) $n++; }
+    page('すべて対応済みにしました', $n . "件の再通知を止めました。\n（この方々には3日間、AIや案内文の自動返信を出しません）");
 }
 if ($u === '' || !hash_equals(pendingToken($u, $SECRET), $k)) page('無効なリンク', '署名が一致しません。', 403);
 $rec = pendingLoad($u);
+if (!$rec) humanModeSet($u);
 if (!$rec) page('すでに対応済みです', 'この件の再通知はすでに止まっています。');
 pendingDone($u);
-page('対応済みにしました', ($rec['name'] ?: '（名前不明）') . " さんの件の再通知を止めました。\nありがとうございました。");
+humanModeSet($u);
+page('対応済みにしました', ($rec['name'] ?: '（名前不明）') . " さんの件の再通知を止めました。\n"
+    . "このお客様には3日間、AIや案内文の自動返信を出しません（届いたメッセージは通知だけします）。\nありがとうございました。");
