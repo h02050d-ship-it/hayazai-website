@@ -684,7 +684,10 @@ foreach ($payload['events'] as $ev) {
                 $items = [];
                 foreach ($INQ_CATS as $k => $label) $items[] = qrPostback($label, 'i=cat&v=' . $k, $label);
                 replyMessages($replyToken, [textMsg(
-                    "お問い合わせありがとうございます！🌲\nご用件に近いものを下のボタンからお選びください。", $items)], $ACCESS_TOKEN);
+                    "お問い合わせありがとうございます！🌲\nご質問・ご相談の内容を、このまま入力して送ってください。\n\n"
+                    . "✏️ 画面下の「メッセージを入力」欄から送れます。\n"
+                    . "※メニュー画像で入力欄がかくれているときは、左下のキーボードのマークをタップしてください。\n\n"
+                    . "（下にボタンが出ていれば、ご用件を選んでからでもOKです）", $items)], $ACCESS_TOKEN);
                 continue;
             }
             if (in_array($text, ['キャンセル', 'やめる', '最初から'], true)) {
@@ -697,7 +700,9 @@ foreach ($payload['events'] as $ev) {
             }
 
             // お問い合わせの内容入力 → AI一次回答＋スタッフ通知
-            if ($flow === 'inquiry' && $step === 'iq_detail' && $text !== '') {
+            // 2026-11-24: カテゴリ未選択（iq_cat）のまま直接書かれた内容も受け付ける。
+            // ボタン（クイックリプライ）はPC版LINEでは表示されず、そこで止まる人がいたため。
+            if ($flow === 'inquiry' && ($step === 'iq_detail' || ($step === 'iq_cat' && !isSmallTalk($text))) && $text !== '') {
                 $name = lineDisplayName($userId, $ACCESS_TOKEN);
                 $catLabel = $state['cat_label'] ?? 'その他';
                 $question = mb_substr($text, 0, 3000);
