@@ -143,6 +143,11 @@ function forwardShuka($cfg, $fb, $text, $ts){
                 'customer' => $c,
                 'length'   => isset($it['length']) ? (string)$it['length'] : '',
                 'grade'    => isset($it['grade']) ? (string)$it['grade'] : '',
+                // 市場向けFAXの詳細表記用（品名・厚・幅・入数）11/25
+                'hinmei'   => isset($it['hinmei']) ? (string)$it['hinmei'] : '',
+                'thickness'=> isset($it['thickness']) ? (string)$it['thickness'] : '',
+                'width'    => isset($it['width']) ? (string)$it['width'] : '',
+                'qty'      => isset($it['qty']) ? (string)$it['qty'] : '',
                 'bun'      => shkBun($it),
                 'done'     => shkDone($it),
             );
